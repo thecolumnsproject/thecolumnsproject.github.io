@@ -1,0 +1,63 @@
+@import 'variables';
+@import 'keyframes';
+@import 'bower_components/bourbon/dist/bourbon';
+
+header {
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	width: 100%;
+
+	nav {
+		display: flex;
+		align-items: center;
+
+		ul {
+			list-style-type: none;
+			display: flex;
+			justify-content: center;
+			padding: 0;
+			margin: 0;
+
+			li {
+				height: 22px; width: 22px;
+				border: 1px solid $secondary-color;
+				border-radius: 50%;
+				margin: 0 4px;
+				@include transition (all .2s ease-in-out);
+				cursor: pointer;
+
+				&:hover {
+					-webkit-animation: pop-out .4s ease-in-out;
+				}
+
+				&:active {
+					-webkit-animation: pop-in .1s ease-in-out;	
+					// background-color: $primary-color;
+					// border-color: $primary-color;
+
+					// i {
+					// 	color: #fff;
+					// }
+				}
+
+				i {
+					text-align: center;
+					display: inline-block;
+					line-height: 22px;
+					width: 22px;
+					font-size: 10px;
+					margin-top: 1px;
+					color: $primary-color;
+					@include transition (all .2s ease-in-out);
+
+					&:hover {						
+						// color: #fff;
+					}
+				}
+			}
+		}
+	}
+}

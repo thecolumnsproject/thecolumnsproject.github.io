@@ -1,0 +1,80 @@
+@-webkit-keyframes pop-out {
+  0% {
+    -webkit-transform: scale(1); }
+
+  50% {
+    -webkit-transform: scale(1.1); }
+
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pop-in {
+  0% {
+    -webkit-transform: scale(1); }
+
+  50% {
+    -webkit-transform: scale(0.9); }
+
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; }
+
+  50% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1.0; }
+
+  100% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; } }
+#query-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%; }
+  #query-box #query-form {
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    position: relative; }
+    #query-box #query-form:before {
+      content: '';
+      height: 16px;
+      width: 16px;
+      background-color: #fff;
+      position: absolute;
+      border-radius: 50%;
+      border: 4px solid #89c0d8;
+      top: 18px;
+      left: 6px; }
+    #query-box #query-form:after {
+      content: '';
+      height: 8px;
+      width: 8px;
+      background-color: #3e97bd;
+      position: absolute;
+      border-radius: 50%;
+      top: 26px;
+      left: 14px;
+      -webkit-animation: pulsate 2s ease-out;
+      -webkit-animation-iteration-count: infinite;
+      opacity: 0; }
+  #query-box #query {
+    appearance: none;
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    width: 50%;
+    height: 50px;
+    padding: 5px 0 5px 44px;
+    font-size: 24px;
+    margin: auto;
+    font-family: 'Heiti TC';
+    line-height: 50px;
+    color: #3a3a3a; }
+    #query-box #query::-webkit-input-placeholder {
+      color: #ccc; }
+    #query-box #query:active, #query-box #query:focus {
+      border: none;
+      outline: none; }

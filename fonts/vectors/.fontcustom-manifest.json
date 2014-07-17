@@ -1,0 +1,51 @@
+{
+  "checksum": {
+    "previous": "00766d538223a96ef34310405008d586f8535bb56c1a74434adfb07f620be696",
+    "current": "00766d538223a96ef34310405008d586f8535bb56c1a74434adfb07f620be696"
+  },
+  "fonts": [
+    "..//columns-font_00766d538223a96ef34310405008d586.ttf",
+    "..//columns-font_00766d538223a96ef34310405008d586.svg",
+    "..//columns-font_00766d538223a96ef34310405008d586.woff",
+    "..//columns-font_00766d538223a96ef34310405008d586.eot"
+  ],
+  "glyphs": {
+    "plus": {
+      "codepoint": 61696,
+      "source": "./plus.svg"
+    },
+    "user": {
+      "codepoint": 61697,
+      "source": "./user.svg"
+    }
+  },
+  "options": {
+    "autowidth": false,
+    "config": "fontcustom.yml",
+    "css_selector": ".icon-{{glyph}}",
+    "debug": false,
+    "font_name": "columns-font",
+    "force": false,
+    "input": {
+      "templates": ".",
+      "vectors": "."
+    },
+    "no_hash": false,
+    "output": {
+      "css": "../../css",
+      "fonts": "../",
+      "preview": "../../css"
+    },
+    "preprocessor_path": "",
+    "quiet": false,
+    "skip_first": false,
+    "templates": [
+      "css",
+      "preview"
+    ]
+  },
+  "templates": [
+    "../../css/columns-font.css",
+    "../../css/columns-font-preview.html"
+  ]
+}

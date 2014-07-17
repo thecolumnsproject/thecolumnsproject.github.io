@@ -4,20 +4,27 @@
 
 header {
 	height: 60px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	@include display(flex);
+	@include justify-content(center);
+	@include align-items(center);
+	// display: flex;
+	// justify-content: center;
+	// align-items: center;
 	position: fixed;
 	width: 100%;
 
 	nav {
-		display: flex;
-		align-items: center;
+		// display: flex;
+		// align-items: center;
+		@include display(flex);
+		@include align-items(center);
 
 		ul {
 			list-style-type: none;
-			display: flex;
-			justify-content: center;
+			// display: flex;
+			// justify-content: center;
+			@include display(flex);
+			@include justify-content(center);
 			padding: 0;
 			margin: 0;
 

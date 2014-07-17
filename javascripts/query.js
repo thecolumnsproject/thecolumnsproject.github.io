@@ -81,7 +81,7 @@ $(function() {
 					}
 
 					if (index == numRows-1) {
-						newRow();
+						newRow(); 
 					}
 				});
 			} else {

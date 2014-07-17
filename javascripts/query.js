@@ -10,7 +10,7 @@ $(function() {
 	});
 
 	function performSearch(query) {
-		$.get('http://localhost:8080/api/columns?query=' + query, function(data) {
+		$.get(config.api.host + '/columns?query=' + query, function(data) {
 			// $("#results").append(JSON.stringify(data));
 			parseResults(data);
 		});
@@ -81,7 +81,7 @@ $(function() {
 					}
 
 					if (index == numRows-1) {
-						newRow(); 
+						newRow();
 					}
 				});
 			} else {

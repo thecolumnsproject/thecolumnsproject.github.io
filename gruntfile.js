@@ -36,6 +36,9 @@ module.exports = function(grunt) {
 			handlebars: {
 				files: '**/*.hbs',
 				tasks: ['handlebars']
+			},
+			javascript: {
+				files: '**/*.js',
 			}
 		}
 	});

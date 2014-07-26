@@ -22,9 +22,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
-  var buffer = "";
-  buffer += "\n	<td>"
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+  var buffer = "", stack1;
+  buffer += "\n	<td data-value='"
+    + escapeExpression(((stack1 = (depth0 && depth0.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "'>"
+    + escapeExpression(((stack1 = (depth0 && depth0.formatted_value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n	";
   return buffer;
   }
@@ -42,5 +44,5 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<table id='results-table'>\n	<thead>\n		<th>Date</th>\n		<th>Entity</th>\n	</thead>\n	<tbody></tbody>\n</table>";
+  return "<table id='results-table'>\n	<thead>\n		<th>Date</th>\n	</thead>\n	<tbody></tbody>\n</table>";
   });

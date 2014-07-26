@@ -3,18 +3,14 @@
 @import 'bower_components/bourbon/dist/bourbon';
 
 #query-box {
-	// display: flex;
-	// justify-content: space-around;
-	// align-items: center;
 	@include display(flex);
-	@include justify-content(space-around);
+	@include justify-content(flex-start);
 	@include align-items(center);
 	height: 100%;
+	margin-left: 8px;
 
 	#query-form {
-		width: 50%;
-		// display: flex;
-		// justify-content: space-around;
+		@include flex(1);
 		@include display(flex);
 		@include justify-content(space-around);
 		position: relative;
@@ -49,16 +45,15 @@
 		appearance: none;
 		border: none;
 		outline: none;
-		// flex-grow: 1;
 		@include flex(1);
 
 		width: 50%;
 		height: 50px;
 		padding: 5px 0 5px 44px;
-		font-size: 24px;
+		font-size: 20px;
 		margin: auto;
 		font-family: 'Heiti TC';
-		line-height: 50px;
+		line-height: 24px;
 		color: $text-color;
 
 		&::-webkit-input-placeholder {

@@ -10,6 +10,7 @@
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/header.css" rel="stylesheet">
 	<link href="css/query.css" rel="stylesheet">	
+	<link href="css/results.css" rel="stylesheet">	
 
 	<!-- Vendor Javascript -->
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -27,20 +28,19 @@
 </head>
 <body>
 	<header>
+		<div id="query-box">
+				<form id='query-form'>
+					<input type="text" id="query" placeholder="Hi Jeremy, what would you like to know?" autofocus="autofocus" autocomplete="off">
+				</form>
+		</div>
+
 		<nav>
 			<ul>
-				<li><i class="icon-plus"></i></li>
-				<li><i class="icon-user"></i></li>
+				<!-- <li><i class="icon-plus"></i></li> -->
+				<!-- <li><i class="icon-user"></i></li> -->
 			</ul>
 		</nav>
 	</header>
-
-
-	<div id="query-box">
-			<form id='query-form'>
-				<input type="text" id="query" placeholder="Hi Jeremy, what would you like to know?" autofocus="autofocus" autocomplete="off">
-			</form>
-	</div>
 
 	<section id="results">
 		

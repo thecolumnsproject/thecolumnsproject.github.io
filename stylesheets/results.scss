@@ -1,0 +1,42 @@
+@import 'variables';
+@import 'keyframes';
+@import 'bower_components/bourbon/dist/bourbon';
+
+#results {
+	padding-top: 60px;
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+
+
+		td, th {
+			text-align: center;
+			padding: 8px 12px;
+			border: 1px solid #ebebeb;
+		}
+
+		th {
+			text-transform:capitalize;
+			color: #c5c5c5;
+			font-weight: 400;
+			padding: 16px 12px;
+		}
+
+		tr {
+
+			td {
+				color: #3E97BD;
+			}
+
+			td:first-child {
+				color: #c5c5c5;
+			}
+
+			td:nth-child(2) {
+				color: #75C7D1;
+				text-transform:capitalize;
+			}
+		}
+	}
+}

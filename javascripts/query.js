@@ -23,6 +23,7 @@ $(function() {
 		// $table = createTable();
 
 		results.columns.unshift(results.type);
+		results.columns.unshift('date');
 		for(column in results.columns) {
 			addColumnAtIndex(results.columns[column].replace('_', ' '), column);
 		}
@@ -45,7 +46,7 @@ $(function() {
 
 	function createTable() {
 		var table = Columns.Templates['templates/table.hbs'];
-		$("#results").empty();
+		$("#results").empty().removeClass('upload');
 		$("#results").append(table());
 	}
 
@@ -53,7 +54,7 @@ $(function() {
 		index = parseInt(index);
 		var template = Columns.Templates['templates/column.hbs'];
 		var html = template({name: column});
-		if ($("#results-table th").length - 1 > index) {
+		if ($("#results-table th").length > index) {
 			$("#results-table th").get[index].before(html);
 		} else {
 			$("#results-table thead tr").append(html);

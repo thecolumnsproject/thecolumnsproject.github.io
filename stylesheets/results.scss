@@ -4,6 +4,7 @@
 
 #results {
 	padding-top: 60px;
+	width: 100%;
 
 	table {
 		width: 100%;
@@ -21,6 +22,66 @@
 			color: #c5c5c5;
 			font-weight: 400;
 			padding: 16px 12px;
+
+			input {
+				// color: #c5c5c5;
+				// font-size: 16px;
+				// font-weight: 400;
+				// text-align: center;
+				// font-family: 'Heiti TC';
+				// border: none;
+				// border-bottom: 1px solid $secondary-color;
+				// appearance: none;
+
+				&:focus {
+					outline-color: $secondary-color;
+					// color: $text-color;
+				}
+			}
+		}
+
+		&.editable {
+			tr {
+				td:first-child {
+					color: #3E97BD;
+				}
+
+				td:nth-child(2) {
+					color: #3E97BD;
+					text-transform:capitalize;
+				}
+
+				td.entity {
+					color: #75C7D1;
+				}
+
+				td.date {
+					color: #c5c5c5;
+				}
+			}
+		}
+
+		th.editable {
+			position: relative;
+			padding-right: 36px;
+			text-align: left;
+
+			i {
+				position: absolute;
+				right: 12px;
+				top: 20px;
+				cursor: pointer;
+			}
+
+			input[type='checkbox'] {
+
+			}
+
+			label {
+				text-transform:none;
+				font-size: 11px;
+				color: $text-color;
+			}
 		}
 
 		tr {
@@ -38,5 +99,50 @@
 				text-transform:capitalize;
 			}
 		}
+	}
+}
+
+footer {
+	@include display(flex);
+	@include justify-content(flex-start);
+	@include align-items(center);
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+
+	#publish {
+		$background-color: fade-out($primary-color, .1);
+		@include display(flex);
+		@include justify-content(center);
+		@include align-items(center);
+		width: 100%;
+		height: 60px;
+		background-color: $background-color;
+		color: #fff;
+		cursor: pointer;
+		font-size: 18px;
+
+		&:hover {
+			background-color: darken($background-color, 10%);
+		}
+
+		i {
+			font-size: 24px;
+			margin-right: 24px;
+		}
+
+		span {
+			position: relative;
+			top: 5px;
+		}
+	}
+}
+
+.upload + footer{
+	footer {
+		@include display(flex);
+		@include justify-content(flex-start);
+		@include align-items(center);
 	}
 }

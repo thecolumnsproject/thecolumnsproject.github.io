@@ -12,7 +12,7 @@
 
 
 		td, th {
-			text-align: center;
+			text-align: left;
 			padding: 8px 12px;
 			border: 1px solid #ebebeb;
 		}
@@ -100,12 +100,34 @@
 			}
 		}
 	}
+
+	.no-data, .error-data {
+		display: none;
+
+		position: absolute;
+		height: 100%;
+		width: 100%;
+
+		i {
+			font-size: 64px;
+			color: #c5c5c5;
+			margin-bottom: 12px;
+		}
+
+		color: #c5c5c5;
+		font-size: 18px;
+
+		&.active {
+			@include display(flex);
+			@include justify-content(center);
+			@include flex-direction(column);
+			@include align-items(center);
+		}
+	}
 }
 
 footer {
-	@include display(flex);
-	@include justify-content(flex-start);
-	@include align-items(center);
+	display: none;
 	width: 100%;
 	position: fixed;
 	bottom: 0;

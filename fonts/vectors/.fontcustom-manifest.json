@@ -1,15 +1,19 @@
 {
   "checksum": {
-    "previous": "d8d1d5f64b5df9649cba076bb897d9aa3331151f0c6130f7c271cf552b431f7a",
-    "current": "d8d1d5f64b5df9649cba076bb897d9aa3331151f0c6130f7c271cf552b431f7a"
+    "previous": "66b51ef0feaee268e20c42cd30bb5777b038bab97867c6c76dabf1e7e54d1e9d",
+    "current": "66b51ef0feaee268e20c42cd30bb5777b038bab97867c6c76dabf1e7e54d1e9d"
   },
   "fonts": [
-    "..//columns-font_d8d1d5f64b5df9649cba076bb897d9aa.ttf",
-    "..//columns-font_d8d1d5f64b5df9649cba076bb897d9aa.svg",
-    "..//columns-font_d8d1d5f64b5df9649cba076bb897d9aa.woff",
-    "..//columns-font_d8d1d5f64b5df9649cba076bb897d9aa.eot"
+    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.ttf",
+    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.svg",
+    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.woff",
+    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.eot"
   ],
   "glyphs": {
+    "columns": {
+      "codepoint": 61700,
+      "source": "./columns.svg"
+    },
     "plus": {
       "codepoint": 61696,
       "source": "./plus.svg"

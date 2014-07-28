@@ -33,8 +33,9 @@ $(function() {
 		
 		// Set up the table
 		var table = Columns.Templates['templates/table.hbs'];
-		$("#results").empty().addClass('upload');
-		$("#results").append(table({editable: true}));
+		$("#results").addClass('upload');
+		$("#results .table-container").empty();
+		$("#results .table-container").append(table({editable: true}));
 
 		// Render the rows
 		for (index in data) {

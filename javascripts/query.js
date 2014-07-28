@@ -14,8 +14,23 @@ $(function() {
 	function performSearch(query) {
 		$.get(config.api.host + '/columns?query=' + query, function(data) {
 			// $("#results").append(JSON.stringify(data));
+			console.log(data);
 			createTable();
-			parseResults(data);
+			if (data.status == 'success') {
+				$(".error-data").removeClass('active');
+
+				if (data.data == null) {
+					$(".no-data").addClass('active');
+					removeTable();
+				} else {
+					$(".no-data").removeClass('active');
+					parseResults(data.data);
+				}
+
+			} else {
+				$(".error-data").addClass('active');
+				removeTable();
+			}
 		});
 	}
 
@@ -38,16 +53,25 @@ $(function() {
 
 		for(entity in results.entities) {
 			entity = results.entities[entity];
-			for(column in entity.columns) {
-				addRowForEntityAndColumn(entity, entity.columns[column]);
+			if (entity.columns.length == 0) {
+				addEntityForType(entity, results.type);
+			} else {
+				for(column in entity.columns) {
+					addRowForEntityAndColumn(entity, entity.columns[column]);
+				}
 			}
 		}
 	}
 
 	function createTable() {
+		removeTable();
 		var table = Columns.Templates['templates/table.hbs'];
-		$("#results").empty().removeClass('upload');
-		$("#results").append(table());
+		$("#results .table-container").append(table());
+	}
+
+	function removeTable() {
+		$("#results .table-container").empty();
+		$("#results").removeClass('upload');
 	}
 
 	function addColumnAtIndex(column, index) {
@@ -61,14 +85,34 @@ $(function() {
 		}
 	}
 
+	function addEntityForType(entity, type) {
+		var position = indexForColumnName(type);
+		values = [];
+		for (var i = 0 ; i < $("#results-table th").length ; i++) {
+			switch (i) {
+				case position:
+					values.push({
+						value: entity.name,
+						formatted_value: formattedName(entity.name)
+					});
+					break;
+				default:
+					values.push({
+						value: '',
+						formatted_value: ''
+					});
+			}
+		}
+		var html = Columns.Templates['templates/row.hbs'];
+		$("#results-table tbody").append(html({values: values}));
+	}
+
 	function addRowForEntityAndColumn(entity, column) {
 		for(row in column.rows) {
 			var row = column.rows[row];
 
 			// Get the column number for this data
-			var haystack = $("#results-table th").get();
-			var needle = $("#results-table th:contains(" + column.name.replace('_', ' ') + ")").get()[0];
-			var position = haystack.indexOf(needle); 
+			var position = indexForColumnName(column.name);
 
 			// Does a row for this entity and timestamp exist?
 			var key = row.timestamp + " " + entity.name;
@@ -107,7 +151,7 @@ $(function() {
 							case 1:
 								values.push({
 									value: entity.name,
-									formatted_value: entity.name
+									formatted_value: formattedName(entity.name)
 								});
 								break;
 							case position:
@@ -127,6 +171,16 @@ $(function() {
 					$("#results-table tbody").append(html({values: values}));
 			}
 		}
+	}
+
+	function indexForColumnName(columnName) {
+		var haystack = $("#results-table th").get();
+		var needle = $("#results-table th:contains(" + columnName.replace('_', ' ') + ")").get()[0];
+		return haystack.indexOf(needle); 
+	}
+
+	function formattedName(name) {
+		return name.replace('_', ' ');
 	}
 
 });

@@ -7,6 +7,9 @@ $(function() {
 
 	$("#query-form").submit(function () {
 		var query = $(this).find("#query").val();
+		$(".searching-data").addClass('active');
+		$(".error-data").removeClass('active');
+		$(".no-data").removeClass('active');
 		performSearch(query);
 		return false;
 	});
@@ -16,6 +19,7 @@ $(function() {
 			// $("#results").append(JSON.stringify(data));
 			console.log(data);
 			createTable();
+			$(".searching-data").removeClass('active');
 			if (data.status == 'success') {
 				$(".error-data").removeClass('active');
 

@@ -74,18 +74,19 @@
     #results table tr td:nth-child(2) {
       color: #75C7D1;
       text-transform: capitalize; }
-  #results .no-data, #results .error-data {
+  #results .no-data, #results .error-data, #results .searching-data {
     display: none;
     position: absolute;
     height: 100%;
     width: 100%;
+    z-index: 1;
     color: #c5c5c5;
     font-size: 18px; }
-    #results .no-data i, #results .error-data i {
-      font-size: 64px;
+    #results .no-data i, #results .error-data i, #results .searching-data i {
+      font-size: 50px;
       color: #c5c5c5;
       margin-bottom: 12px; }
-    #results .no-data.active, #results .error-data.active {
+    #results .no-data.active, #results .error-data.active, #results .searching-data.active {
       display: -webkit-box;
       display: -moz-box;
       display: box;
@@ -118,6 +119,11 @@
       -o-align-items: center;
       align-items: center;
       -ms-flex-align: center; }
+  #results .searching-data i {
+    height: 50px;
+    width: 50px;
+    background-image: url("../images/loading.gif");
+    background-size: contain; }
 
 footer {
   display: none;

@@ -1,13 +1,13 @@
 {
   "checksum": {
-    "previous": "66b51ef0feaee268e20c42cd30bb5777b038bab97867c6c76dabf1e7e54d1e9d",
-    "current": "66b51ef0feaee268e20c42cd30bb5777b038bab97867c6c76dabf1e7e54d1e9d"
+    "previous": "3c285961346e14f6bbd7119c4c6234a21cf55c21e9ee13bc045651fed1d5949c",
+    "current": "3c285961346e14f6bbd7119c4c6234a21cf55c21e9ee13bc045651fed1d5949c"
   },
   "fonts": [
-    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.ttf",
-    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.svg",
-    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.woff",
-    "..//columns-font_66b51ef0feaee268e20c42cd30bb5777.eot"
+    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.ttf",
+    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.svg",
+    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.woff",
+    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.eot"
   ],
   "glyphs": {
     "columns": {

@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "columns-font";
-  src: url("../fonts/columns-font_66b51ef0feaee268e20c42cd30bb5777.eot");
-  src: url("../fonts/columns-font_66b51ef0feaee268e20c42cd30bb5777.eot?#iefix") format("embedded-opentype"),
-       url("../fonts/columns-font_66b51ef0feaee268e20c42cd30bb5777.woff") format("woff"),
-       url("../fonts/columns-font_66b51ef0feaee268e20c42cd30bb5777.ttf") format("truetype"),
-       url("../fonts/columns-font_66b51ef0feaee268e20c42cd30bb5777.svg#columns-font") format("svg");
+  src: url("../fonts/columns-font_3c285961346e14f6bbd7119c4c6234a2.eot");
+  src: url("../fonts/columns-font_3c285961346e14f6bbd7119c4c6234a2.eot?#iefix") format("embedded-opentype"),
+       url("../fonts/columns-font_3c285961346e14f6bbd7119c4c6234a2.woff") format("woff"),
+       url("../fonts/columns-font_3c285961346e14f6bbd7119c4c6234a2.ttf") format("truetype"),
+       url("../fonts/columns-font_3c285961346e14f6bbd7119c4c6234a2.svg#columns-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "columns-font";
-    src: url("../fonts/columns-font_66b51ef0feaee268e20c42cd30bb5777.svg#columns-font") format("svg");
+    src: url("../fonts/columns-font_3c285961346e14f6bbd7119c4c6234a2.svg#columns-font") format("svg");
   }
 }
 

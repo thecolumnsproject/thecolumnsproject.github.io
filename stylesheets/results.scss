@@ -101,15 +101,16 @@
 		}
 	}
 
-	.no-data, .error-data {
+	.no-data, .error-data, .searching-data {
 		display: none;
 
 		position: absolute;
 		height: 100%;
 		width: 100%;
+		z-index: 1;
 
 		i {
-			font-size: 64px;
+			font-size: 50px;
 			color: #c5c5c5;
 			margin-bottom: 12px;
 		}
@@ -122,6 +123,15 @@
 			@include justify-content(center);
 			@include flex-direction(column);
 			@include align-items(center);
+		}
+	}
+
+	.searching-data {
+		i {
+			height: 50px;
+			width: 50px;
+			background-image: url("../images/loading.gif");
+			background-size: contain;
 		}
 	}
 }

@@ -5,6 +5,8 @@ $(function() {
 
 	// performSearch('startup tax incorp');
 
+	var lastEntityIndex = 0;
+
 	$("#query-form").submit(function () {
 		var query = $(this).find("#query").val();
 		if (query == '') {
@@ -26,6 +28,7 @@ $(function() {
 			// $("#results").append(JSON.stringify(data));
 			console.log(data);
 			createTable();
+			lastEntityIndex = 0;
 			$(".searching-data").removeClass('active');
 			if (data.status == 'success') {
 				$(".error-data").removeClass('active');
@@ -63,6 +66,12 @@ $(function() {
 		// });
 
 		for(entity in results.entities) {
+
+			if (entity > lastEntityIndex + 100) {
+				lastEntityIndex = entity;
+				break;
+			}
+
 			entity = results.entities[entity];
 			if (entity.columns.length == 0) {
 				addEntityForType(entity, results.type);

@@ -32,7 +32,7 @@
 	<header>
 		<div id="query-box">
 				<form id='query-form'>
-					<input type="text" id="query" placeholder="Hi Jeremy, what would you like to know?" autofocus="autofocus" autocomplete="off">
+					<input type="text" id="query" placeholder="Hi, what would you like to know about?" autofocus="autofocus" autocomplete="off">
 				</form>
 		</div>
 
@@ -40,6 +40,10 @@
 			<ul>
 				<!-- <li><i class="icon-plus"></i></li> -->
 				<!-- <li><i class="icon-user"></i></li> -->
+				<li class="upload-data">
+					<input type="file" accept='text/csv' id='upload-data' value='Upload Data'>
+					<i class="icon-upload"></i> Upload
+				</li>
 			</ul>
 		</nav>
 	</header>
@@ -48,11 +52,28 @@
 		<div class="table-container">
 			
 		</div>
-		<div class="searching-data active">
+		<div class="welcome active">
+			<i class="icon-columns"></i>
+			<span>Well, hello there.</span>
+		</div>
+		<div class="searching-data">
 			<i class="loading">
 				
 			</i>
 			Searching...
+		</div>
+		<!-- <div class="uploading-data active">
+			<div>
+				<i class="icon-columns full"></i>
+				<i class="icon-columns progress"></i>
+				<span>Uploading Data...</span>
+			</div>
+		</div> -->
+		<div class="uploading-data">
+			<i class="loading">
+				
+			</i>
+			Uploading Data...
 		</div>
 		<div class="no-data">
 			<i class="icon-columns"></i>

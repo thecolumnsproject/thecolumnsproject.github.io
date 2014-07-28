@@ -1,4 +1,4 @@
-var uploadedData;
+var uploadedData = [];
 var deletedColumns = [];
 var entityColumn;
 var dateColumn;
@@ -19,14 +19,41 @@ $(function() {
 		// var formData = new FormData();
 		// formData.append('file', files[0]);
 
-		Papa.parse(files[0], {
+		parseFile(files[0]);
+		return false;
+	}
+
+	$("#upload-data").change(function() {
+		parseFile(this.files[0]);
+	});
+
+	function parseFile(file) {
+		// Set up the view
+		$(".welcome").removeClass('active');
+		$(".searching-data").removeClass('active');
+		$(".error-data").removeClass('active');
+		$(".no-data").removeClass('active');
+		$(".uploading-data").addClass('active');
+
+		Papa.parse(file, {
+			worker: true,
+			step: function(row) {
+				if (row.meta.lines == 1) {
+					console.log(row);
+				}
+				uploadedData.push(row.data[0]);
+				// updateProgress(row.meta.lines);
+			},
 			complete: function(results) {
-				uploadedData = results.data;
 				renderData(uploadedData);
 			}
 		});
+	}
 
-		return false;
+	function updateProgress(total) {
+		var percentage = uploadedData.length / total;
+		var newHeight = percentage * $(".uploading-data .progress").height();
+		$(".uploading-data .full").css('height', newHeight = 'px');
 	}
 
 	function renderData(data) {
@@ -65,6 +92,8 @@ $(function() {
 				$("#results-table tbody").append(html({values: values}));
 			}
 		}
+
+		$(".uploading-data").removeClass('active');
 
 		// Handle editing of column names
 		$('#results-table th input').blur(function() {

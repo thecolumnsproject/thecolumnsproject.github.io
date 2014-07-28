@@ -7,10 +7,17 @@ $(function() {
 
 	$("#query-form").submit(function () {
 		var query = $(this).find("#query").val();
-		$(".searching-data").addClass('active');
+		if (query == '') {
+			$(".welcome").addClass('active');
+			$(".searching-data").removeClass('active');
+			removeTable();
+		} else {
+			$(".welcome").removeClass('active');
+			$(".searching-data").addClass('active');
+			performSearch(query);
+		}
 		$(".error-data").removeClass('active');
 		$(".no-data").removeClass('active');
-		performSearch(query);
 		return false;
 	});
 

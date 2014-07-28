@@ -68,6 +68,54 @@ header {
 						// color: #fff;
 					}
 				}
+
+				&.upload-data {
+					color: $primary-color;
+					font-weight: 400;
+					// font-size: 14px;
+					position: relative;
+					border: none;
+					margin-right: 64px;
+
+					@include display(flex);
+					@include align-items(center);
+
+					&:hover {
+						border: none;
+						background-color: #fff;
+
+						i {
+							color: $primary-color;
+						}
+					}
+
+					i {
+						border: 1px solid $secondary-color;
+						border-radius: 50%;
+						display: block;
+						min-width: 22px;
+						margin-right: 8px;
+
+						&:hover {
+							background-color: $primary-color;
+							color: #fff;
+						}
+					}
+
+					input {
+						cursor: pointer;
+						position: absolute;
+						top: 0px;
+						left: 0;
+						opacity: 0;
+					}
+
+					input:hover + i {
+						background-color: $primary-color;
+						color: #fff;
+						cursor: pointer;
+					}
+				}
 			}
 		}
 	}

@@ -1,13 +1,13 @@
 {
   "checksum": {
-    "previous": "3c285961346e14f6bbd7119c4c6234a21cf55c21e9ee13bc045651fed1d5949c",
-    "current": "3c285961346e14f6bbd7119c4c6234a21cf55c21e9ee13bc045651fed1d5949c"
+    "previous": "3257d08fa9cc2d85a7ff54469819e862f4a768503aa77eee1852ee43834f0131",
+    "current": "3257d08fa9cc2d85a7ff54469819e862f4a768503aa77eee1852ee43834f0131"
   },
   "fonts": [
-    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.ttf",
-    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.svg",
-    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.woff",
-    "..//columns-font_3c285961346e14f6bbd7119c4c6234a2.eot"
+    "..//columns-font_3257d08fa9cc2d85a7ff54469819e862.ttf",
+    "..//columns-font_3257d08fa9cc2d85a7ff54469819e862.svg",
+    "..//columns-font_3257d08fa9cc2d85a7ff54469819e862.woff",
+    "..//columns-font_3257d08fa9cc2d85a7ff54469819e862.eot"
   ],
   "glyphs": {
     "columns": {
@@ -21,6 +21,10 @@
     "publish": {
       "codepoint": 61699,
       "source": "./publish.svg"
+    },
+    "upload": {
+      "codepoint": 61701,
+      "source": "./upload.svg"
     },
     "user": {
       "codepoint": 61697,

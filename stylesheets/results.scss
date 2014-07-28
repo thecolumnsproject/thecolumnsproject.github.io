@@ -204,35 +204,103 @@
 footer {
 	display: none;
 	width: 100%;
+	height: 60px;
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	z-index: 1;
 
 	#publish {
-		$background-color: fade-out($primary-color, .1);
-		@include display(flex);
-		@include justify-content(center);
-		@include align-items(center);
+		// @include display(flex);
+		// @include justify-content(center);
+		// @include align-items(center);
+		// @include flex-direction(column);
 		width: 100%;
 		height: 60px;
-		background-color: $background-color;
-		color: #fff;
-		cursor: pointer;
-		font-size: 18px;
+		position: relative;
 
-		&:hover {
-			background-color: darken($background-color, 10%);
+		> div {
+			position: absolute;
+			top:0;
+			left: 0;
+			@include transition (all .2s ease-in-out);
+			$background-color: fade-out($primary-color, .1);
+			@include display(flex);
+			@include justify-content(center);
+			@include align-items(center);
+			width: 100%;
+			height: 60px;
+			background-color: $background-color;
+			color: #fff;
+			cursor: pointer;
+			font-size: 18px;
+
+			&:hover {
+				background-color: darken($background-color, 10%);
+			}
+
+			i {
+				font-size: 24px;
+				margin-right: 24px;
+			}
+
+			span {
+				position: relative;
+				top: 5px;
+			}
+
+			&.publishing, &.published {
+				background-color: fade-out(#fff, .1);
+				color: $primary-color;
+				height: 59px;
+				border-top: 1px solid #ebebeb;
+
+				span {
+					top: 2px;
+				}
+			}
+
+			&.publishing {
+				i {
+					height: 24px;
+					width: 24px;
+					background-image: url("../images/loading.gif");
+					background-size: contain;
+				}
+			}
 		}
 
-		i {
-			font-size: 24px;
-			margin-right: 24px;
+		&.publish {
+			.publish {
+				opacity: 1;
+				visibility: visible;
+			}
+			.publishing, .published {
+				opacity: 0;
+				visibility: hidden;
+			}
 		}
 
-		span {
-			position: relative;
-			top: 5px;
+		&.publishing {
+			.publishing {
+				opacity: 1;
+				visibility: visible;
+			}
+			.publish, .published {
+				opacity: 0;
+				visibility: hidden;
+			}
+		}
+
+		&.published {
+			.published {
+				opacity: 1;
+				visibility: visible;
+			}
+			.publish, .publishing {
+				opacity: 0;
+				visibility: hidden;
+			}
 		}
 	}
 }

@@ -94,6 +94,7 @@ $(function() {
 		}
 
 		$(".uploading-data").removeClass('active');
+		updatePublishButton('publish');
 
 		// Handle editing of column names
 		$('#results-table th input').blur(function() {
@@ -169,6 +170,8 @@ $(function() {
 			return;
 		}
 
+		updatePublishButton('publishing');
+
 		// Prepare the data for publish
 		var columnNames = uploadedData[0];
 		var type = columnNames[entityColumn];
@@ -215,14 +218,25 @@ $(function() {
 					if ($("#results-table tbody tr").length == entityCount) {
 						publishData.data['entities'] = entities;
 
+
 						$.post(config.api.host + '/columns', publishData, function(data) {
 							console.log(data);
+							if (data.status == 'success') {
+								updatePublishButton('published');
+							} else {
+								alert('Whoops, something went wrong. Mind uploading again?');
+							}
 						});
 					}
 				}
 			});
 
 		});
-
 	});
+
+	function updatePublishButton(mode) {
+		var $button = $("#publish");
+		$button.removeClass('publish').removeClass('publishing').removeClass('published');
+		$button.addClass(mode);
+	}
 });

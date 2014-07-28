@@ -104,13 +104,15 @@ $(function() {
 				case position:
 					values.push({
 						value: entity.name,
-						formatted_value: formattedName(entity.name)
+						formatted_value: formattedName(entity.name),
+						original_column: i
 					});
 					break;
 				default:
 					values.push({
 						value: '',
-						formatted_value: ''
+						formatted_value: '',
+						original_column: i
 					});
 			}
 		}
@@ -156,25 +158,29 @@ $(function() {
 							case 0:
 								values.push({
 									value: row.timestamp,
-									formatted_value: new Date(row.timestamp).getFullYear()
+									formatted_value: new Date(row.timestamp).getFullYear(),
+									original_column: i
 								});
 								break;
 							case 1:
 								values.push({
 									value: entity.name,
-									formatted_value: formattedName(entity.name)
+									formatted_value: formattedName(entity.name),
+									original_column: i
 								});
 								break;
 							case position:
 								values.push({
 									value: row.value,
-									formatted_value: row.value
+									formatted_value: row.value,
+									original_column: i
 								});
 								break;
 							default:
 								values.push({
 									value: '',
-									formatted_value: ''
+									formatted_value: '',
+									original_column: i
 								});
 						}
 					}

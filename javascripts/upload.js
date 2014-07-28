@@ -1,4 +1,5 @@
 var uploadedData = [];
+var headers = [];
 var deletedColumns = [];
 var entityColumn;
 var dateColumn;
@@ -64,6 +65,8 @@ $(function() {
 		$("#results .table-container").empty();
 		$("#results .table-container").append(table({editable: true}));
 
+		headers = data[0];
+
 		// Render the rows
 		for (index in data) {
 
@@ -76,7 +79,7 @@ $(function() {
 				for (i in row) {
 					var item = row[i];
 					var template = Columns.Templates['templates/column-editable.hbs'];
-					var html = template({name: item});
+					var html = template({name: item, original_column: i});
 					$("#results-table thead tr").append(html);
 				}
 			} else {
@@ -85,7 +88,8 @@ $(function() {
 					var value = row[i];
 					values.push({
 						value: value,
-						formatted_value: value
+						formatted_value: value,
+						original_column: i
 					});
 				}
 				var html = Columns.Templates['templates/row.hbs'];
@@ -97,25 +101,34 @@ $(function() {
 		updatePublishButton('publish');
 
 		// Handle editing of column names
-		$('#results-table th input').blur(function() {
-			var index = $('#results-table th input').index(this);
-			uploadedData[0][index] = $(this).val();
+		$('#results-table th input[type="text"]').blur(function() {
+			var index = $(this).parent('th').data('original-column');
+			// uploadedData[0][index] = $(this).val();
+			headers[index] = $(this).val();
+
 		});
 
 		// Handle deleting columns
 		$('#results-table th .delete-column').click(function() {
 			var index = $('#results-table th .delete-column').index(this);
 			var columnIndex = index + 1;
-			deletedColumns.push(index);
 
 			// Remove displayed columns
 			$("#results-table tr th:nth-child(" + columnIndex + ")").remove();
 			$("#results-table tr td:nth-child(" + columnIndex + ")").remove();
 
 			// Remove actual data
-			for (row in uploadedData) {
-				uploadedData[row].splice(index, 1);
-			}
+			// for (row in uploadedData) {
+			// 	uploadedData[row].splice(index, 1);
+			// }
+
+			var deletionIndex = $(this).parents('th').data('original-column');
+			deletedColumns.push(deletionIndex);
+
+			// headers.splice(index, 1);
+
+			updateEntityColumn();
+			updateDateColumn();
 		});
 
 		// Handle setting the entity type
@@ -123,7 +136,7 @@ $(function() {
 			var index = $('#results-table th .entity-type').index(this);
 			var rowIndex = index + 1;
 			if (this.checked) {
-				entityColumn = index;
+				entityColumn = $(this).parents('th').data('original-column');
 				$("#results-table tr td:nth-child(" + rowIndex + ")").addClass('entity');
 
 				// Uncheck all the other boxes
@@ -145,7 +158,7 @@ $(function() {
 			var index = $('#results-table th .date').index(this);
 			var rowIndex = index + 1;
 			if (this.checked) {
-				dateColumn = index;
+				dateColumn = $(this).parents('th').original-column;
 				$("#results-table tr td:nth-child(" + rowIndex + ")").addClass('date');
 
 				// Uncheck all the other boxes
@@ -161,6 +174,24 @@ $(function() {
 				$("#results-table tr td:nth-child(" + rowIndex + ")").removeClass('date');
 			}
 		});
+
+		function updateEntityColumn() {
+			var $checkbox = $('#results-table th .entity-type:checked');
+			if (index > -1) {
+				entityColumn = $checkbox.parents('th').data('original-column');
+			} else {
+				entityColumn = null
+			}
+		}
+
+		function updateDateColumn() {
+			var $checkbox = $('#results-table th .date:checked');
+			if (index > -1) {
+				dateColumn = $checkbox.parents('th').data('original-column');;
+			} else {
+				dateColumn = null
+			}
+		}
 	}
 
 	$("#publish").click(function() {
@@ -173,8 +204,7 @@ $(function() {
 		updatePublishButton('publishing');
 
 		// Prepare the data for publish
-		var columnNames = uploadedData[0];
-		var type = columnNames[entityColumn];
+		var type = headers[entityColumn];
 		var date;
 		var fallbackDate = new Date();
 		var publishData = {
@@ -184,26 +214,30 @@ $(function() {
 		};
 		var entities = [];
 		var entityCount = 0;
-		$("#results-table tbody tr").each(function(index, row) {
+
+		for(index in uploadedData) {
+			if (index == 0) continue;
+			row = uploadedData[index];
 			if (dateColumn != null && dateColumn != undefined) {
-				date = $(row).find('td:nth-child(' + (dateColumn + 1) + ')').data('value');
+				date = new Date(row[dateColumn]);
 			} else {
 				date = fallbackDate;
 			}
 
 			var data = {
-				name: $(row).find('td:nth-child(' + (entityColumn + 1)+ ')').data('value'),
+				name: row[entityColumn],
 				columns: []
 			}
 
 			var cellCount = 0;
-			$(row).find("td").each(function(index, cell) {
-				if (index == dateColumn || index == entityColumn) return;
+			for(i in row) {
+				if (i == dateColumn || i == entityColumn) continue;
+				if (deletedColumns.indexOf(parseInt(i)) > -1) continue;
 
 				var column = {
-					name: columnNames[index],
+					name: headers[i],
 					rows: [{
-						value: $(cell).data('value'),
+						value: row[i],
 						timestamp: date,
 						identifiers: {}
 					}]
@@ -211,13 +245,13 @@ $(function() {
 				data.columns.push(column);
 				cellCount++;
 
-				if ($(row).find("td").length - 1 == cellCount) {
+				if (row.length - deletedColumns.length - 1 == cellCount) {
 					entities.push(data);
 					entityCount++;
 
-					if ($("#results-table tbody tr").length == entityCount) {
+					if (uploadedData.length - 1 == entityCount) {
 						publishData.data['entities'] = entities;
-
+						console.log(publishData);
 
 						$.post(config.api.host + '/columns', publishData, function(data) {
 							console.log(data);
@@ -229,9 +263,58 @@ $(function() {
 						});
 					}
 				}
-			});
+			}
+		}
 
-		});
+
+		// $("#results-table tbody tr").each(function(index, row) {
+		// 	if (dateColumn != null && dateColumn != undefined) {
+		// 		date = $(row).find('td:nth-child(' + (dateColumn + 1) + ')').data('value');
+		// 	} else {
+		// 		date = fallbackDate;
+		// 	}
+
+		// 	var data = {
+		// 		name: $(row).find('td:nth-child(' + (entityColumn + 1)+ ')').data('value'),
+		// 		columns: []
+		// 	}
+
+		// 	var cellCount = 0;
+		// 	$(row).find("td").each(function(index, cell) {
+		// 		if (index == dateColumn || index == entityColumn) return;
+
+		// 		var column = {
+		// 			name: columnNames[index],
+		// 			rows: [{
+		// 				value: $(cell).data('value'),
+		// 				timestamp: date,
+		// 				identifiers: {}
+		// 			}]
+		// 		};
+		// 		data.columns.push(column);
+		// 		cellCount++;
+
+		// 		if ($(row).find("td").length - 1 == cellCount) {
+		// 			entities.push(data);
+		// 			entityCount++;
+
+		// 			if ($("#results-table tbody tr").length == entityCount) {
+		// 				publishData.data['entities'] = entities;
+
+
+		// 				$.post(config.api.host + '/columns', publishData, function(data) {
+		// 					console.log(data);
+		// 					if (data.status == 'success') {
+		// 						updatePublishButton('published');
+		// 					} else {
+		// 						alert('Whoops, something went wrong. Mind uploading again?');
+		// 					}
+		// 				});
+		// 			}
+		// 		}
+		// 	});
+
+		// });
 	});
 
 	function updatePublishButton(mode) {

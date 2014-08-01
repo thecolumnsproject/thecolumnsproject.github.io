@@ -31,7 +31,7 @@ $(function() {
 		var windowHeight = $(window).height();
 		var windowScrollPosition = $(window).scrollTop();
 		var lastRowPosition = $("#results-table tr").last().position().top;
-		console.log([windowHeight, windowScrollPosition, lastRowPosition].join(', '));
+		// console.log([windowHeight, windowScrollPosition, lastRowPosition].join(', '));
 
 		if ( $("#results-table tr").last().position().top - $(window).height() - $(window).scrollTop() < 100) {
 			isGettingResults = true;
@@ -91,7 +91,7 @@ $(function() {
 		columns.unshift(type);
 		columns.unshift('date');
 		for(column in columns) {
-			addColumnAtIndex(columns[column].replace(/ /g, '_'), column);
+			addColumnAtIndex(columns[column].replace(/_/g, ' '), column);
 		}
 	}
 
@@ -120,7 +120,7 @@ $(function() {
 		results.columns.unshift(results.type);
 		results.columns.unshift('date');
 		for(column in results.columns) {
-			addColumnAtIndex(results.columns[column].replace('_', ' '), column);
+			addColumnAtIndex(results.columns[column].replace(/_/g, ' '), column);
 		}
 
 		// results.columns.forEach(function(column, index) {
@@ -267,12 +267,12 @@ $(function() {
 
 	function indexForColumnName(columnName) {
 		var haystack = $("#results-table th").get();
-		var needle = $("#results-table th:contains(" + columnName.replace('_', ' ') + ")").get()[0];
+		var needle = $("#results-table th:contains(" + columnName.replace(/_/g, ' ') + ")").get()[0];
 		return haystack.indexOf(needle); 
 	}
 
 	function formattedName(name) {
-		return name.replace('_', ' ');
+		return name.replace(/_/g, ' '); 
 	}
 
 });

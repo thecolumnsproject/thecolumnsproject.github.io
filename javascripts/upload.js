@@ -212,11 +212,12 @@ $(function() {
 		var uploadWorker = new Worker('javascripts/workers/upload-data.js');
 		uploadWorker.onmessage = function(e) {
 			console.log(e.data);
-			// if (e.data.status == 'success') {
-			// 	updatePublishButton('published');
-			// } else {
-			// 	alert('Whoops, something went wrong. Mind uploading again?');
-			// }
+			if (e.data.status == 'success') {
+				updatePublishButton('published');
+			} else {
+				alert('Whoops, something went wrong. Mind uploading again?');
+				updatePublishButton('publish');
+			}
 
 		};
 

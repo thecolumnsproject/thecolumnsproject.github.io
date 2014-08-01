@@ -1,3 +1,4 @@
+var uploadedDataArrayBuffer;
 var uploadedData = [];
 var headers = [];
 var deletedColumns = [];
@@ -35,6 +36,12 @@ $(function() {
 		$(".error-data").removeClass('active');
 		$(".no-data").removeClass('active');
 		$(".uploading-data").addClass('active');
+
+		var reader = new FileReader();
+		reader.onloadend = function(e) {
+			uploadedDataArrayBuffer = e.target.result;
+		};
+		reader.readAsArrayBuffer(file);
 
 		Papa.parse(file, {
 			worker: true,
@@ -158,7 +165,7 @@ $(function() {
 			var index = $('#results-table th .date').index(this);
 			var rowIndex = index + 1;
 			if (this.checked) {
-				dateColumn = $(this).parents('th').original-column;
+				dateColumn = $(this).parents('th').data('original-column');
 				$("#results-table tr td:nth-child(" + rowIndex + ")").addClass('date');
 
 				// Uncheck all the other boxes
@@ -202,69 +209,96 @@ $(function() {
 		}
 
 		updatePublishButton('publishing');
+		var uploadWorker = new Worker('javascripts/workers/upload-data.js');
+		uploadWorker.onmessage = function(e) {
+			console.log(e.data);
+			// if (e.data.status == 'success') {
+			// 	updatePublishButton('published');
+			// } else {
+			// 	alert('Whoops, something went wrong. Mind uploading again?');
+			// }
 
-		// Prepare the data for publish
-		var type = headers[entityColumn];
-		var date;
-		var fallbackDate = new Date();
-		var publishData = {
-			data: {
-				type: type
-			}
 		};
-		var entities = [];
-		var entityCount = 0;
 
-		for(index in uploadedData) {
-			if (index == 0) continue;
-			row = uploadedData[index];
-			if (dateColumn != null && dateColumn != undefined) {
-				date = new Date(row[dateColumn]);
-			} else {
-				date = fallbackDate;
-			}
+		// uploadWorker.postMessage({
+		// 	uploadedDataArrayBuffer: uploadedDataArrayBuffer
+		// 	headers: headers,
+		// 	deletedColumns: deletedColumns,
+		// 	entityColumn: entityColumn,
+		// 	dateColumn: dateColumn
+		// }, [uploadedDataArrayBuffer]);
 
-			var data = {
-				name: row[entityColumn],
-				columns: []
-			}
+		uploadWorker.postMessage({
+			uploadedData: uploadedData,
+			headers: headers,
+			deletedColumns: deletedColumns,
+			entityColumn: entityColumn,
+			dateColumn: dateColumn
+		});
 
-			var cellCount = 0;
-			for(i in row) {
-				if (i == dateColumn || i == entityColumn) continue;
-				if (deletedColumns.indexOf(parseInt(i)) > -1) continue;
+		// // Prepare the data for publish
+		// var type = headers[entityColumn];
+		// var date;
+		// var fallbackDate = new Date();
+		// var publishData = {
+		// 	data: {
+		// 		type: type
+		// 	}
+		// };
+		// var entities = [];
+		// var entityCount = 0;
 
-				var column = {
-					name: headers[i],
-					rows: [{
-						value: row[i],
-						timestamp: date,
-						identifiers: {}
-					}]
-				};
-				data.columns.push(column);
-				cellCount++;
+		// for(index in uploadedData) {
+		// 	console.log(index);
+		// 	if (index == 0) continue;
+		// 	row = uploadedData[index];
+		// 	if (dateColumn != null && dateColumn != undefined) {
+		// 		date = new Date(row[dateColumn]);
+		// 	} else {
+		// 		date = fallbackDate;
+		// 	}
 
-				if (row.length - deletedColumns.length - 1 == cellCount) {
-					entities.push(data);
-					entityCount++;
+		// 	var data = {
+		// 		name: row[entityColumn],
+		// 		columns: []
+		// 	}
 
-					if (uploadedData.length - 1 == entityCount) {
-						publishData.data['entities'] = entities;
-						console.log(publishData);
+		// 	var cellCount = 0;
+		// 	for(i in row) {
+		// 		if (i == dateColumn || i == entityColumn) continue;
+		// 		if (deletedColumns.indexOf(parseInt(i)) > -1) continue;
 
-						$.post(config.api.host + '/columns', publishData, function(data) {
-							console.log(data);
-							if (data.status == 'success') {
-								updatePublishButton('published');
-							} else {
-								alert('Whoops, something went wrong. Mind uploading again?');
-							}
-						});
-					}
-				}
-			}
-		}
+		// 		var column = {
+		// 			name: headers[i],
+		// 			rows: [{
+		// 				value: row[i],
+		// 				timestamp: date,
+		// 				identifiers: {}
+		// 			}]
+		// 		};
+		// 		data.columns.push(column);
+		// 		cellCount++;
+
+		// 		if (row.length - deletedColumns.length - 1 == cellCount) {
+		// 			entities.push(data);
+		// 			entityCount++;
+
+		// 			if (uploadedData.length - 1 == entityCount) {
+		// 				publishData.data['entities'] = entities;
+		// 				console.log(publishData);
+
+		// 				$.post(config.api.host + '/columns', publishData, function(data) {
+		// 					console.log(data);
+		// 					if (data.status == 'success') {
+		// 						updatePublishButton('published');
+		// 					} else {
+		// 						alert('Whoops, something went wrong. Mind uploading again?');
+		// 					}
+		// 				});
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 
 		// $("#results-table tbody tr").each(function(index, row) {

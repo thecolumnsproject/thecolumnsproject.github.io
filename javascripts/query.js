@@ -6,6 +6,8 @@ $(function() {
 	// performSearch('startup tax incorp');
 
 	var lastEntityIndex = 0;
+	var currentPage = 0;
+	var isGettingResults = false;
 
 	$("#query-form").submit(function () {
 		var query = $(this).find("#query").val();
@@ -23,12 +25,27 @@ $(function() {
 		return false;
 	});
 
+	// Catch when we've scrolled far enough to get more data
+	$(window).scroll(function(e) {
+		if (isGettingResults || $("#results").hasClass('upload') || $("#results-table tr").length == 0) return;
+		var windowHeight = $(window).height();
+		var windowScrollPosition = $(window).scrollTop();
+		var lastRowPosition = $("#results-table tr").last().position().top;
+		console.log([windowHeight, windowScrollPosition, lastRowPosition].join(', '));
+
+		if ( $("#results-table tr").last().position().top - $(window).height() - $(window).scrollTop() < 100) {
+			isGettingResults = true;
+			getMoreResults($("#query").val());
+		}
+	});
+
 	function performSearch(query) {
-		$.get(config.api.host + '/columns?query=' + query, function(data) {
+		$.get(config.api.host + '/columns?query=' + query + "&page=0", function(data) {
 			// $("#results").append(JSON.stringify(data));
 			console.log(data);
 			createTable();
 			lastEntityIndex = 0;
+			var results = data.data;
 			$(".searching-data").removeClass('active');
 			if (data.status == 'success') {
 				$(".error-data").removeClass('active');
@@ -38,7 +55,9 @@ $(function() {
 					removeTable();
 				} else {
 					$(".no-data").removeClass('active');
-					parseResults(data.data);
+					// parseResults(data.data);
+					parseColumns(results.columns, results.type);
+					parseEntities(results.entities, results.type);
 				}
 
 			} else {
@@ -46,6 +65,53 @@ $(function() {
 				removeTable();
 			}
 		});
+	}
+
+	function getMoreResults(query) {
+		$('.searching-data').addClass('active additional');
+		$(".error-data").removeClass('active additional');
+		$.get(config.api.host + '/columns?query=' + query + "&page=" + (currentPage + 1), function(data) {
+			// $("#results").append(JSON.stringify(data));
+			console.log(data);
+			lastEntityIndex = 0;
+			isGettingResults = false;
+			var results = data.data;			
+			$('.searching-data').removeClass('active additional');
+			if (data.status == 'success' && data.data != null) {
+				$(".no-data").removeClass('active');
+				currentPage++;
+				parseEntities(results.entities, results.type);
+			} else {
+				$(".error-data").addClass('active additional');
+			}
+		});
+	}
+
+	function parseColumns(columns, type) {
+		columns.unshift(type);
+		columns.unshift('date');
+		for(column in columns) {
+			addColumnAtIndex(columns[column].replace(/ /g, '_'), column);
+		}
+	}
+
+	function parseEntities(entities, type) {
+		for(entity in entities) {
+
+			if (entity > lastEntityIndex + 100) {
+				lastEntityIndex = entity;
+				break;
+			}
+
+			entity = entities[entity];
+			if (entity.columns.length == 0) {
+				addEntityForType(entity, type);
+			} else {
+				for(column in entity.columns) {
+					addRowForEntityAndColumn(entity, entity.columns[column]);
+				}
+			}
+		}
 	}
 
 	function parseResults(results) {

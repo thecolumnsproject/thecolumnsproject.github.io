@@ -110,6 +110,8 @@
 		width: 100%;
 		z-index: 1;
 
+		text-align: center;
+
 		i {
 			font-size: 50px;
 			color: #c5c5c5;
@@ -125,6 +127,28 @@
 			@include flex-direction(column);
 			@include align-items(center);
 		}
+
+		&.additional {
+			@include display(flex);
+			@include justify-content(center);
+			@include flex-direction(column);
+			@include align-items(center);
+
+			i {
+				font-size: 24px;
+				margin-bottom: 12px;
+			}
+
+			span {
+				display: none;
+			}
+		}
+	}
+
+	.error-data.additional {
+		i {
+			color: red;
+		}
 	}
 
 	.searching-data, .uploading-data {
@@ -133,6 +157,19 @@
 			width: 50px;
 			background-image: url("../images/loading.gif");
 			background-size: contain;
+		}
+
+		&.additional {
+			height: 60px;
+			i {
+				height: 24px;
+				width: 24px;
+				margin-bottom: 2px;
+			}
+
+			span {
+				display: none;
+			}
 		}
 	}
 

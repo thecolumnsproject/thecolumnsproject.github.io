@@ -1,4 +1,4 @@
-var env = 'local';
+var env = 'development';
 var config = {
 	local: {
 		api: {

@@ -4,6 +4,8 @@ var headers = [];
 var deletedColumns = [];
 var entityColumn;
 var dateColumn;
+var filterColumns = [];
+var MAX_ROWS = 1000;
 
 $(function() {
 
@@ -46,14 +48,21 @@ $(function() {
 		Papa.parse(file, {
 			worker: true,
 			step: function(row) {
-				if (row.meta.lines == 1) {
-					console.log(row);
+				if (row.meta.lines > MAX_ROWS) {
+					// console.log(row);
 				}
 				uploadedData.push(row.data[0]);
 				// updateProgress(row.meta.lines);
 			},
 			complete: function(results) {
-				renderData(uploadedData);
+				if (uploadedData.length > MAX_ROWS) {
+					$(".welcome").addClass('active');
+					$(".uploading-data").removeClass('active');
+					uploadedData = [];
+					alert("Shoot, we can't handle that much data. Mind choosing a file with less than 1000 rows?");
+				} else {
+					renderData(uploadedData);
+				}
 			}
 		});
 	}
@@ -182,6 +191,20 @@ $(function() {
 			}
 		});
 
+		// Handle setting filter columns
+		$('#results-table th .filter').change(function() {
+			var index = $('#results-table th .filter').index(this);
+			var rowIndex = index + 1;
+			if (this.checked) {
+				filterColumns.push($(this).parents('th').data('original-column'));
+				$("#results-table tr td:nth-child(" + rowIndex + ")").addClass('filter');
+			} else {
+				var indexToRemove = filterColumns.indexOf($(this).parents('th').data('original-column'));
+				filterColumns.splice(indexToRemove, 1);
+				$("#results-table tr td:nth-child(" + rowIndex + ")").removeClass('filter');
+			}
+		});
+
 		function updateEntityColumn() {
 			var $checkbox = $('#results-table th .entity-type:checked');
 			if (index > -1) {
@@ -212,7 +235,8 @@ $(function() {
 		var uploadWorker = new Worker('javascripts/workers/upload-data.js');
 		uploadWorker.onmessage = function(e) {
 			console.log(e.data);
-			if (e.data.status == 'success') {
+			data = JSON.parse(e.data);
+			if (data['status'] == 'success') {
 				updatePublishButton('published');
 			} else {
 				alert('Whoops, something went wrong. Mind uploading again?');
@@ -234,7 +258,8 @@ $(function() {
 			headers: headers,
 			deletedColumns: deletedColumns,
 			entityColumn: entityColumn,
-			dateColumn: dateColumn
+			dateColumn: dateColumn,
+			filterColumns: filterColumns
 		});
 
 		// // Prepare the data for publish

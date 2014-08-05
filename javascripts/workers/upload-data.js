@@ -21,7 +21,8 @@ self.onmessage = function(e) {
 		headers = e.data.headers,
 		deletedColumns = e.data.deletedColumns,
 		entityColumn = e.data.entityColumn,
-		dateColumn = e.data.dateColumn
+		dateColumn = e.data.dateColumn,
+		filterColumns = e.data.filterColumns
 
 
 	// Prepare the data for publish
@@ -37,6 +38,9 @@ self.onmessage = function(e) {
 	var entitiesHash = {};
 	var entityCount = 0;
 	var cellCountReductionForDateColumn = dateColumn == null || dateColumn == undefined ? 0 : 1;
+	var identifierColumns = filterColumns.map(function(index) {
+		return headers[index]
+	});
 
 	for(index in uploadedData) {
 		if (index == 0) continue;
@@ -62,17 +66,24 @@ self.onmessage = function(e) {
 		for(i in row) {	
 			if (i == dateColumn || i == entityColumn) continue;
 			if (deletedColumns.indexOf(parseInt(i)) > -1) continue;
+			if (filterColumns.indexOf(parseInt(i)) > -1) continue;
 
 			var columnName = headers[i];
 			if ( !(columnName in columnsHash) ) {
 				columnsHash[columnName] = [];
 			}
 
-			columnsHash[columnName].push({
+			var data = {
 				value: row[i],
 				timestamp: date,
 				identifiers: {}
-			});
+			};
+
+			for(idIndex in identifierColumns) {
+				data.identifiers[identifierColumns[idIndex]] = row[filterColumns[idIndex]];
+			}
+
+			columnsHash[columnName].push(data);
 
 			// var column = {
 			// 	name: headers[i],
@@ -86,7 +97,7 @@ self.onmessage = function(e) {
 			// data.columns.push(column);
 			cellCount++;
 
-			if (row.length - deletedColumns.length - 1 - cellCountReductionForDateColumn == cellCount) {
+			if (row.length - deletedColumns.length - 1 - cellCountReductionForDateColumn - identifierColumns.length == cellCount) {
 				// entities.push(data);
 				entitiesHash[entityName] = columnsHash;
 				entityCount++;

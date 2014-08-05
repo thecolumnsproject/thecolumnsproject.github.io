@@ -52,9 +52,11 @@
       color: #3E97BD;
       text-transform: capitalize; }
     #results table.editable tr td.entity {
-      color: #75C7D1; }
+      color: #FF964C; }
     #results table.editable tr td.date {
       color: #c5c5c5; }
+    #results table.editable tr td.filter {
+      color: #75C7D1; }
     #results table th.editable {
       position: relative;
       padding-right: 36px;
@@ -153,7 +155,8 @@
       -ms-align-items: center;
       -o-align-items: center;
       align-items: center;
-      -ms-flex-align: center; }
+      -ms-flex-align: center;
+      height: 60px; }
       #results .no-data.additional i, #results .error-data.additional i, #results .searching-data.additional i, #results .welcome.additional i, #results .uploading-data.additional i {
         font-size: 24px;
         margin-bottom: 12px; }

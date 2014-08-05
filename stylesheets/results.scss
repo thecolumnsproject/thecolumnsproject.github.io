@@ -53,11 +53,15 @@
 				}
 
 				td.entity {
-					color: #75C7D1;
+					color: #FF964C;
 				}
 
 				td.date {
 					color: #c5c5c5;
+				}
+
+				td.filter {
+					color: #75C7D1;
 				}
 			}
 		}
@@ -133,6 +137,7 @@
 			@include justify-content(center);
 			@include flex-direction(column);
 			@include align-items(center);
+			height: 60px;
 
 			i {
 				font-size: 24px;

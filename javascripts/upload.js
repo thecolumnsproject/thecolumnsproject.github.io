@@ -55,14 +55,14 @@ $(function() {
 				// updateProgress(row.meta.lines);
 			},
 			complete: function(results) {
-				if (uploadedData.length > MAX_ROWS) {
-					$(".welcome").addClass('active');
-					$(".uploading-data").removeClass('active');
-					uploadedData = [];
-					alert("Shoot, we can't handle that much data. Mind choosing a file with less than 1000 rows?");
-				} else {
+				// if (uploadedData.length > MAX_ROWS) {
+				// 	$(".welcome").addClass('active');
+				// 	$(".uploading-data").removeClass('active');
+				// 	uploadedData = [];
+				// 	alert("Shoot, we can't handle that much data. Mind choosing a file with less than 1000 rows?");
+				// } else {
 					renderData(uploadedData);
-				}
+				// }
 			}
 		});
 	}

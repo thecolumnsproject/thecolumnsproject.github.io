@@ -41,6 +41,15 @@ self.onmessage = function(e) {
 	var identifierColumns = filterColumns.map(function(index) {
 		return headers[index]
 	});
+	var finalHeaders = [];
+
+	for (h in headers) {
+		if (h == dateColumn || h == entityColumn) continue;
+		if (deletedColumns.indexOf(parseInt(h)) > -1) continue;
+		if (filterColumns.indexOf(parseInt(h)) > -1) continue;
+		finalHeaders.push(headers[h]);
+	}
+	publishData.data['columns'] = finalHeaders;
 
 	for(index in uploadedData) {
 		if (index == 0) continue;
@@ -112,10 +121,10 @@ self.onmessage = function(e) {
 				if (uploadedData.length - 1 == entityCount) {
 					for (eName in entitiesHash) {
 						var clmns = [];
-						for (cName in columnsHash) {
+						for (cName in entitiesHash[eName]) {
 							clmns.push({
 								name: cName,
-								rows: columnsHash[cName]
+								rows: entitiesHash[eName][cName]
 							});
 						}
 						entities.push({

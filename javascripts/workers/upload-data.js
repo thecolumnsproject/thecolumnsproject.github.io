@@ -57,8 +57,9 @@ self.onmessage = function(e) {
 		row = uploadedData[index];
 		if (dateColumn != null && dateColumn != undefined) {
 			date = new Date(row[dateColumn]);
+			date = date.toISOString();
 		} else {
-			date = fallbackDate;
+			date = null;
 		}
 
 		var entityName = row[entityColumn];
@@ -84,7 +85,7 @@ self.onmessage = function(e) {
 
 			var data = {
 				value: row[i],
-				timestamp: date.toISOString(),
+				timestamp: date,
 				identifiers: {}
 			};
 

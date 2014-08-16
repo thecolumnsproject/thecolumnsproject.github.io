@@ -16,6 +16,7 @@ $(function() {
 	var masterColumns;
 	var masterEntities;
 	var masterType;
+	var identifierTerminator = '__';
 
 	$("#query-form").submit(function () {
 		var query = $(this).find("#query").val();
@@ -272,8 +273,8 @@ $(function() {
 			// Create any new identifier columns that are needed
 			var keyString = '';
 			if (row.identifier_columns != '') {
-				for (idIndex in row.identifier_columns.split(',')) {
-					var columnName = row.identifier_columns.split(',')[idIndex];
+				for (idIndex in row.identifier_columns.split(identifierTerminator)) {
+					var columnName = row.identifier_columns.split(identifierTerminator)[idIndex];
 					addIdentifierColumn(columnName);
 					keyString += ' ' + formattedName(columnName);
 				}
@@ -290,8 +291,8 @@ $(function() {
 					var $columns = $(value).find('td');
 					var tempKey = $($columns[0]).data('value') + " " + $($columns[1]).data('value');
 					if (row.identifier_columns != '') {
-						for (idIndex in row.identifier_columns.split(',')) {
-							var cName = row.identifier_columns.split(',')[idIndex];;
+						for (idIndex in row.identifier_columns.split(identifierTerminator)) {
+							var cName = row.identifier_columns.split(identifierTerminator)[idIndex];;
 							var idIndex = indexForColumnName(cName);
 							tempKey += ' ' + $($columns[idIndex]).data('value');
 						}
@@ -363,10 +364,10 @@ $(function() {
 
 				// Add the identifier column data
 				if (row.identifier_columns != '') {
-					var cNames = row.identifier_columns.split(',');
+					var cNames = row.identifier_columns.split(identifierTerminator);
 					for (i in cNames) {
 						var cName = cNames[i];;
-						var idValue = row.identifier_values.split(',')[i];
+						var idValue = row.identifier_values.split(identifierTerminator)[i];
 						var idIndex = indexForColumnName(cName);
 						values[idIndex] = {
 							value: idValue,

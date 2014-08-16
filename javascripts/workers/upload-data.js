@@ -84,7 +84,7 @@ self.onmessage = function(e) {
 
 			var data = {
 				value: row[i],
-				timestamp: date,
+				timestamp: date.toISOString(),
 				identifiers: {}
 			};
 

@@ -271,10 +271,12 @@ $(function() {
 
 			// Create any new identifier columns that are needed
 			var keyString = '';
-			for (idIndex in row.identifier_columns.split(',')) {
-				var columnName = row.identifier_columns.split(',')[idIndex];
-				addIdentifierColumn(columnName);
-				keyString += ' ' + formattedName(columnName);
+			if (row.identifier_columns != '') {
+				for (idIndex in row.identifier_columns.split(',')) {
+					var columnName = row.identifier_columns.split(',')[idIndex];
+					addIdentifierColumn(columnName);
+					keyString += ' ' + formattedName(columnName);
+				}
 			}
 
 			// Get the column number for this data
@@ -287,10 +289,12 @@ $(function() {
 				$rows.each(function(index, value) {
 					var $columns = $(value).find('td');
 					var tempKey = $($columns[0]).data('value') + " " + $($columns[1]).data('value');
-					for (idIndex in row.identifier_columns.split(',')) {
-						var cName = row.identifier_columns.split(',')[idIndex];;
-						var idIndex = indexForColumnName(cName);
-						tempKey += ' ' + $($columns[idIndex]).data('value');
+					if (row.identifier_columns != '') {
+						for (idIndex in row.identifier_columns.split(',')) {
+							var cName = row.identifier_columns.split(',')[idIndex];;
+							var idIndex = indexForColumnName(cName);
+							tempKey += ' ' + $($columns[idIndex]).data('value');
+						}
 					}
 
 					// If yes, add the new data to the same row
@@ -358,15 +362,17 @@ $(function() {
 				}
 
 				// Add the identifier column data
-				var cNames = row.identifier_columns.split(',');
-				for (i in cNames) {
-					var cName = row.identifier_columns.split(',')[i];;
-					var idValue = row.identifier_values.split(',')[i];
-					var idIndex = indexForColumnName(cName);
-					values[idIndex] = {
-						value: idValue,
-						formatted_value: idValue,
-						original_column: idIndex
+				if (row.identifier_columns != '') {
+					var cNames = row.identifier_columns.split(',');
+					for (i in cNames) {
+						var cName = cNames[i];;
+						var idValue = row.identifier_values.split(',')[i];
+						var idIndex = indexForColumnName(cName);
+						values[idIndex] = {
+							value: idValue,
+							formatted_value: idValue,
+							original_column: idIndex
+						}
 					}
 				}
 

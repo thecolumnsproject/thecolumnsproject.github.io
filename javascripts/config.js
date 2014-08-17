@@ -7,7 +7,7 @@ var config = {
 	}, 
 	development: {
 		api: {
-			host: 'http://pacific-basin-8034.herokuapp.com/api'
+			host: 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api'
 		}
 	}
 }[env];

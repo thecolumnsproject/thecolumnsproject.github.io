@@ -51,18 +51,6 @@
 					color: #3E97BD;
 					text-transform:capitalize;
 				}
-
-				td.entity {
-					color: #FF964C;
-				}
-
-				td.date {
-					color: #c5c5c5;
-				}
-
-				td.filter {
-					color: #75C7D1;
-				}
 			}
 		}
 
@@ -96,12 +84,24 @@
 			}
 
 			td:first-child {
-				color: #c5c5c5;
+				// color: #c5c5c5;
 			}
 
 			td:nth-child(2) {
-				color: #75C7D1;
+				// color: #75C7D1;
 				text-transform:capitalize;
+			}
+
+			td.entity {
+				color: #FF964C;
+			}
+
+			td.date {
+				color: #c5c5c5;
+			}
+
+			td.filter {
+				color: #75C7D1;
 			}
 		}
 	}

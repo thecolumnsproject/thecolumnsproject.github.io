@@ -51,12 +51,6 @@
     #results table.editable tr td:nth-child(2) {
       color: #3E97BD;
       text-transform: capitalize; }
-    #results table.editable tr td.entity {
-      color: #FF964C; }
-    #results table.editable tr td.date {
-      color: #c5c5c5; }
-    #results table.editable tr td.filter {
-      color: #75C7D1; }
     #results table th.editable {
       position: relative;
       padding-right: 36px;
@@ -72,11 +66,14 @@
         color: #3a3a3a; }
     #results table tr td {
       color: #3E97BD; }
-    #results table tr td:first-child {
-      color: #c5c5c5; }
     #results table tr td:nth-child(2) {
-      color: #75C7D1;
       text-transform: capitalize; }
+    #results table tr td.entity {
+      color: #FF964C; }
+    #results table tr td.date {
+      color: #c5c5c5; }
+    #results table tr td.filter {
+      color: #75C7D1; }
   #results .no-data, #results .error-data, #results .searching-data, #results .welcome, #results .uploading-data {
     display: none;
     position: absolute;

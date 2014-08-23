@@ -64,6 +64,8 @@ $(function() {
 			console.log(data);
 			createTable();
 			lastEntityIndex = 0;
+			displayedRows = 0;
+			numOfIdentifierColumns = 0;
 			var results = data.data;
 			$(".searching-data").removeClass('active');
 			if (data.status == 'success') {
@@ -224,19 +226,20 @@ $(function() {
 		var cell = template({
 						value: '',
 						formatted_value: '',
-						original_column: ''
+						original_column: '',
+						type: 'filter'
 					});
 		var $rows = $("#results-table tbody tr");
-			if ($rows.length > 0) {
-				$rows.each(function(index, row) {
-					if ($(row).find('td').length > index) {
-						$($(row).find('td').get(index)).before(cell);
-					} else {
-						$(row).append(cell);
-					}
-				});
-			}
+		if ($rows.length > 0) {
+			$rows.each(function(index, row) {
+				if ($(row).find('td').length > index) {
+					$($(row).find('td').get(index)).before(cell);
+				} else {
+					$(row).append(cell);
+				}
+			});
 		}
+	}
 
 	function addEntityForType(entity, type) {
 		var position = indexForColumnName(type);
@@ -247,14 +250,16 @@ $(function() {
 					values.push({
 						value: entity.name,
 						formatted_value: formattedName(entity.name),
-						original_column: i
+						original_column: i,
+						type: 'entity'
 					});
 					break;
 				default:
 					values.push({
 						value: '',
 						formatted_value: '',
-						original_column: i
+						original_column: i,
+						type: 'data'
 					});
 			}
 		}
@@ -276,7 +281,8 @@ $(function() {
 				for (idIndex in row.identifier_columns.split(identifierTerminator)) {
 					var columnName = row.identifier_columns.split(identifierTerminator)[idIndex];
 					addIdentifierColumn(columnName);
-					keyString += ' ' + formattedName(columnName);
+					var i = indexForColumnName(columnName);
+					keyString += ' ' + row.identifier_values.split(identifierTerminator)[idIndex];
 				}
 			}
 
@@ -336,28 +342,32 @@ $(function() {
 							values.push({
 								value: row.timestamp,
 								formatted_value: new Date(row.timestamp).getFullYear(),
-								original_column: i
+								original_column: i,
+								type: 'date'
 							});
 							break;
 						case 1:
 							values.push({
 								value: entity.name,
 								formatted_value: formattedName(entity.name),
-								original_column: i
+								original_column: i,
+								type: 'entity'
 							});
 							break;
 						case position:
 							values.push({
 								value: row.value,
 								formatted_value: row.value,
-								original_column: i
+								original_column: i,
+								type: 'data'
 							});
 							break;
 						default:
 							values.push({
 								value: '',
 								formatted_value: '',
-								original_column: i
+								original_column: i,
+								type: 'data'
 							});
 					}
 				}
@@ -372,7 +382,8 @@ $(function() {
 						values[idIndex] = {
 							value: idValue,
 							formatted_value: idValue,
-							original_column: idIndex
+							original_column: idIndex,
+							type: 'filter'
 						}
 					}
 				}

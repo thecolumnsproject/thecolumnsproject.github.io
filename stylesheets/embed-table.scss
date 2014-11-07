@@ -1,0 +1,168 @@
+@import 'variables';
+@import 'keyframes';
+@import 'bower_components/bourbon/dist/bourbon';
+
+$table-container-height:		120px;
+$table-container-padding: 		20px;
+
+$table-header-height:			30px;
+$table-header-padding-y:		15px;
+
+$table-row-offset-top:			5px;
+$table-row-box-shadow:			0px 2px 4px rgba(0,0,0,0.2);
+
+$columns-table-accent-color: 	#69A368;
+
+.columns-table-container {
+	height: 95px;
+	@include calc(width, '100% - #{$table-container-padding} * 2');
+	background: $gray-lightest;
+	border: 1px solid $gray-light;
+	padding: $table-container-padding;
+}
+
+.columns-table-container.expanded {
+	position: fixed;
+	// top: 0;
+	@include calc(height, '100% - #{$table-container-padding} * 2');
+
+	.columns-table {
+		margin-top: 20px;
+	}
+} 
+
+.columns-table {
+	position: relative;
+	height: $table-container-height - (2 * $table-container-padding);
+	margin: 0;
+}
+
+.columns-table-row {
+	height: 60px;
+	width: 100%;
+	background: #fff;
+	border: $gray-lighter;
+	position: absolute;
+	top: $table-row-offset-top * 2
+}
+
+/* The top three rows should show
+ * as a preview of the full stack
+ */
+
+@mixin table-row-top {
+	box-shadow: $table-row-box-shadow;
+}
+
+.columns-table-row:nth-child(1) {
+	@include table-row-top;
+	z-index: 3;
+	top: $table-row-offset-top * 0;
+}
+
+.columns-table-row:nth-child(2) {
+	@include table-row-top;
+	z-index: 2;
+	top: $table-row-offset-top * 1;
+}
+
+.columns-table-row:nth-child(3) {
+	@include table-row-top;
+	z-index: 1;
+	// top: $table-row-offset-top * 2;
+}
+
+.columns-table-header {
+	@include display(flex);
+	@include justify-content(space-between);
+	@include align-items(center);
+	position: relative;
+	height: $table-header-height;
+	padding: $table-header-padding-y 0px;
+	border-bottom: 1px solid $gray-lighter;
+}
+
+.columns-table-header-name {
+	@include display(flex);
+	@include flex-direction(column);
+	@include justify-content(flex-start);
+	@include align-items(flex-start);
+}
+
+.columns-table-title {
+	color: $gray-darkest;
+	font-size: 24px; 
+	font-weight: bold;
+}
+
+.columns-table-subtitle {
+	color: $gray;
+	font-size: 14px;
+}
+
+.columns-table-header-controls {
+	@include display(flex);
+	@include justify-content(flex-start);
+	@include align-items(center);
+}
+
+.columns-table-header-button {
+	height: $table-header-height;
+	font-size: 12px;
+	color: $gray-dark;
+	text-transform: uppercase;
+	padding: 0 12px;
+	// font-weight: bold;
+	@include appearance(none);
+	border: none;
+	outline: none;
+	background: none;
+}
+
+.columns-table-close-button {
+	color: $columns-table-accent-color;
+	border-left: 1px solid $gray-lighter;
+}
+
+.columns-table-header-icon {
+	font-size: 18px;
+}
+
+.columns-table-footer {
+	@include display(flex);
+	@include justify-content(flex-end);
+	@include align-items(center);
+	position: relative;
+	padding: 0 4px;
+	padding-top: 6px;
+	font-size: 10px;
+	color: $gray-light;
+}
+
+.columns-table-source {
+	margin-right: auto;
+	@include display(flex);
+	@include align-items(center);
+}
+
+.columns-table-items-count {
+	text-transform: uppercase;
+}
+
+.columns-table-expand {
+	color: $columns-table-accent-color;
+	// margin-left: 12px;
+}
+
+.columns-table-footer-icon {
+	color: $gray-light;
+	font-size: 14px;
+}
+
+.columns-table-footer-icon.columns-logo {
+	margin-left: 12px;
+}
+
+.columns-table-footer-icon.columns-verified-source-icon {
+	margin-right: 6px;
+}

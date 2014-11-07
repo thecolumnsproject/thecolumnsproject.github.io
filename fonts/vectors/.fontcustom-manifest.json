@@ -1,22 +1,46 @@
 {
   "checksum": {
-    "previous": "784834e04d91055cfd0add77ff79d187de9fa5c83baa0ad9d26ca3c764851408",
-    "current": "784834e04d91055cfd0add77ff79d187de9fa5c83baa0ad9d26ca3c764851408"
+    "previous": "4aec04694cecf6c78b1e08c356a9c579c199839dec2bdd2f707f4a998cd2c146",
+    "current": "4aec04694cecf6c78b1e08c356a9c579c199839dec2bdd2f707f4a998cd2c146"
   },
   "fonts": [
-    "..//columns-font_784834e04d91055cfd0add77ff79d187.ttf",
-    "..//columns-font_784834e04d91055cfd0add77ff79d187.svg",
-    "..//columns-font_784834e04d91055cfd0add77ff79d187.woff",
-    "..//columns-font_784834e04d91055cfd0add77ff79d187.eot"
+    "..//columns-font_4aec04694cecf6c78b1e08c356a9c579.ttf",
+    "..//columns-font_4aec04694cecf6c78b1e08c356a9c579.svg",
+    "..//columns-font_4aec04694cecf6c78b1e08c356a9c579.woff",
+    "..//columns-font_4aec04694cecf6c78b1e08c356a9c579.eot"
   ],
   "glyphs": {
+    "angle-right": {
+      "codepoint": 61703,
+      "source": "./angle-right.svg"
+    },
     "check": {
       "codepoint": 61702,
       "source": "./check.svg"
     },
+    "circle-check-open": {
+      "codepoint": 61704,
+      "source": "./circle-check-open.svg"
+    },
+    "circle-popout-open": {
+      "codepoint": 61705,
+      "source": "./circle-popout-open.svg"
+    },
+    "circle-x-open": {
+      "codepoint": 61706,
+      "source": "./circle-x-open.svg"
+    },
     "columns": {
       "codepoint": 61700,
       "source": "./columns.svg"
+    },
+    "equalizer": {
+      "codepoint": 61710,
+      "source": "./equalizer.svg"
+    },
+    "medium-popout": {
+      "codepoint": 61707,
+      "source": "./medium-popout.svg"
     },
     "plus": {
       "codepoint": 61696,
@@ -25,6 +49,14 @@
     "publish": {
       "codepoint": 61699,
       "source": "./publish.svg"
+    },
+    "search": {
+      "codepoint": 61708,
+      "source": "./search.svg"
+    },
+    "triangle-right": {
+      "codepoint": 61709,
+      "source": "./triangle-right.svg"
     },
     "upload": {
       "codepoint": 61701,
@@ -44,6 +76,10 @@
     "config": "fontcustom.yml",
     "css_selector": ".icon-{{glyph}}",
     "debug": false,
+    "font_ascent": 448,
+    "font_descent": 64,
+    "font_design_size": 16,
+    "font_em": 512,
     "font_name": "columns-font",
     "force": false,
     "input": {
@@ -58,7 +94,6 @@
     },
     "preprocessor_path": "",
     "quiet": false,
-    "skip_first": false,
     "templates": [
       "css",
       "preview"

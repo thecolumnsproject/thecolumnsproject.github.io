@@ -12,4 +12,8 @@ body {
   color: #3a3a3a;
   font-family: 'Heiti TC'; }
 
+.translateY-reset {
+  transform: translateY(0px) !important;
+  /* override inline style translateY */ }
+
 /*# sourceMappingURL=style.css.map */

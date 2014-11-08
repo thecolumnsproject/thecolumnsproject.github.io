@@ -12,7 +12,7 @@ $(function() {
 		originalRows = [];
 
 	// Animation constants
-	var ANIMATION_DURATION = 300;
+	var ANIMATION_DURATION = 500;
 
 	// UI Constants
 	var ROW_OFFSET = 5;

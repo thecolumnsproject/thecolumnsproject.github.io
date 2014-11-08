@@ -103,6 +103,9 @@
   border: #ebebeb;
   z-index: 1; }
 
+.columns-table-row.expanded:last-child {
+  border-bottom: none; }
+
 .columns-table-row.expanded {
   border: none;
   /* Remove the table-row-top borders */
@@ -279,7 +282,7 @@
   padding: 0 4px;
   padding-top: 6px;
   font-size: 10px;
-  color: #cccccc; }
+  color: #ababab; }
 
 .columns-table-source {
   margin-right: auto;
@@ -307,7 +310,7 @@
   color: #69A368; }
 
 .columns-table-footer-icon {
-  color: #ebebeb;
+  color: #cccccc;
   font-size: 14px; }
 
 .columns-table-footer-icon.columns-logo {

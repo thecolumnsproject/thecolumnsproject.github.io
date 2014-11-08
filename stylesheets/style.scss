@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'bower_components/bourbon/dist/bourbon';
 
 html {
 	height: 100%;
@@ -18,6 +19,6 @@ body {
 }
 
 .translateY-reset {
-	transform: translateY(0px) !important; /* override inline style translateY */
+	@include transform(translateY(0px) !important); /* override inline style translateY */
 }
 

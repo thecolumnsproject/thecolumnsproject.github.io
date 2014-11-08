@@ -13,6 +13,10 @@ body {
   font-family: 'Heiti TC'; }
 
 .translateY-reset {
+  -webkit-transform: translateY(0px) !important;
+  -moz-transform: translateY(0px) !important;
+  -ms-transform: translateY(0px) !important;
+  -o-transform: translateY(0px) !important;
   transform: translateY(0px) !important;
   /* override inline style translateY */ }
 

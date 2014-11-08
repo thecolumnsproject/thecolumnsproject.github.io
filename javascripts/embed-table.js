@@ -46,8 +46,6 @@ $(function() {
 	// 	e.stopPropagation();
 	// });
 
-
-
 	// Methods to expand a table
 	// from to its original position
 	// to full-screen

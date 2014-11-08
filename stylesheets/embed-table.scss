@@ -40,7 +40,8 @@ $columns-table-accent-color: 	#69A368;
 	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
 	position: fixed;
 	top: 0;
-	@include calc(height, '100% - #{$table-container-padding} * 2');
+	// @include calc(height, '100% - #{$table-container-padding} * 2');
+	height: 100% !important; /* Override the height set via animation */
 	overflow: scroll;
 
 	.columns-table-wrapper {

@@ -66,8 +66,8 @@
 .columns-table-container.expanded {
   position: fixed;
   top: 0;
-  height: -webkit-calc(100% - 20px * 2);
-  height: calc(100% - 20px * 2);
+  height: 100% !important;
+  /* Override the height set via animation */
   overflow: scroll; }
   .columns-table-container.expanded .columns-table-wrapper {
     height: auto; }

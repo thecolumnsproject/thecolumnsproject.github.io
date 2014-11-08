@@ -16,7 +16,7 @@ $columns-table-accent-color: 	#69A368;
 .columns-table-container {
 	width: 100%;
 	background: $gray-lightest;
-	border: 1px solid $gray-light;
+	border: 1px solid $gray-lighter;
 }
 
 .columns-table-wrapper {
@@ -52,6 +52,7 @@ $columns-table-accent-color: 	#69A368;
 		margin-top: 60px;
 		// transform: translateY(0px) !important; /* Remove the expansion animation transform */
 		height: auto;
+		border: 1px solid $gray-lighter;
 	}
 }
 
@@ -197,7 +198,7 @@ $columns-table-accent-color: 	#69A368;
 }
 
 .columns-table-footer-icon {
-	color: $gray-light;
+	color: $gray-lighter;
 	font-size: 14px;
 }
 

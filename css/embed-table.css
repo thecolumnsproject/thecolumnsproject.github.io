@@ -26,7 +26,7 @@
 .columns-table-container {
   width: 100%;
   background: #fafafa;
-  border: 1px solid #cccccc; }
+  border: 1px solid #ebebeb; }
 
 .columns-table-wrapper {
   width: -webkit-calc(100% - 20px * 2);
@@ -73,7 +73,8 @@
     height: auto; }
   .columns-table-container.expanded .columns-table {
     margin-top: 60px;
-    height: auto; }
+    height: auto;
+    border: 1px solid #ebebeb; }
 
 .columns-table-row {
   height: 60px;
@@ -306,7 +307,7 @@
   color: #69A368; }
 
 .columns-table-footer-icon {
-  color: #cccccc;
+  color: #ebebeb;
   font-size: 14px; }
 
 .columns-table-footer-icon.columns-logo {

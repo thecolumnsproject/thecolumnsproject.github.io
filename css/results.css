@@ -2,24 +2,30 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(1.1); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(0.9); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
+
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
+
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
@@ -41,10 +47,7 @@
       padding: 16px 12px; }
       #results table th input:focus {
         outline-color: #89c0d8; }
-    #results table.editable tr td:first-child {
-      color: #3E97BD; }
     #results table.editable tr td:nth-child(2) {
-      color: #3E97BD;
       text-transform: capitalize; }
     #results table th.editable {
       position: relative;
@@ -281,7 +284,7 @@ footer {
         top: 5px; }
       footer #publish > div.publishing, footer #publish > div.published {
         background-color: rgba(255, 255, 255, 0.9);
-        color: #3E97BD;
+        color: #3e97bd;
         height: 59px;
         border-top: 1px solid #ebebeb; }
         footer #publish > div.publishing span, footer #publish > div.published span {
@@ -336,5 +339,3 @@ footer {
   -o-align-items: center;
   align-items: center;
   -ms-flex-align: center; }
-
-/*# sourceMappingURL=results.css.map */

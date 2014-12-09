@@ -1,0 +1,10 @@
+<div class='row-group' data-direction='row'>
+	{{#each this.values}}
+		{{#ifIsGroup this.type}}
+			{{> group this}}
+		{{/ifIsGroup}}
+		{{#ifIsSingle this.type}}
+			{{> column this}}
+		{{/ifIsSingle}}
+	{{/each}}
+</div>

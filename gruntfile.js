@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 					namespace: "Columns.Templates"
 				},
 				files: {
-					"templates/templates.js": "templates/*.hbs"
+					"templates/templates.js": "templates/**/*.hbs"
 				}
 			}
 		},

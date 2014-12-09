@@ -1,5 +1,112 @@
 $(function() {
 
+	var DUMMY_DATA = {
+		source: 'Lubin Truth Institute',
+		title: 'Friends of Mine',
+		sort_by_column: 'age',
+		layout: {
+			values: [{
+				type: 'group',
+				flex_direction: 'row',
+				values: [{
+					type: 'group',
+					flex_direction: 'column',
+					values: [{
+						type: 'single',
+						column: '{{this.first_name}}'
+					}, {
+						type: 'single',
+						column: '{{this.last_name}}'
+					}]
+				},{
+					type: 'single',
+					column: '{{this.hometown}}'
+				}]
+			},
+			{
+				type: 'group',
+				flex_direction: 'column',
+				values: [{
+					type: 'single',
+					column: '{{this.age}}'
+				}, {
+					type: 'single',
+					column: '{{this.unit}}'
+				}]
+			}]
+		},
+		data: [{
+			first_name: 'Jeremy',
+			last_name: 'Lubin',
+			hometown: 'Princeton',
+			age: 27,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Amir',
+			last_name: 'Kanpurwala',
+			hometown: 'Princeton',
+			age: 27,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Jeff',
+			last_name: 'LaFlam',
+			hometown: 'Raliegh',
+			age: 28,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Phil',
+			last_name: 'Chacko',
+			hometown: 'Princeton',
+			age: 28,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Albert',
+			last_name: 'Choi',
+			hometown: 'Raliegh',
+			age: 13,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Kelly',
+			last_name: 'Fee',
+			hometown: 'Chicago',
+			age: 27,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Elaine',
+			last_name: 'Zelby',
+			hometown: 'Chicago',
+			age: 27,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Kousha',
+			last_name: 'Navidar',
+			hometown: 'Albany',
+			age: 26,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Jess',
+			last_name: 'Schwartz',
+			hometown: 'Mechanicsburg',
+			age: 28,
+			unit: 'Years'
+		},
+		{
+			first_name: 'Craig',
+			last_name: 'Hosang',
+			hometown: 'Alameda',
+			age: 28,
+			unit: 'Years'
+		}]
+	};
+
 	// Table Expansion
 	// -------------------
 
@@ -9,7 +116,7 @@ $(function() {
 
 	// Storage variables for resetting positions
 	var originalBackground = {},
-		originalRows = [];
+	originalRows = [];
 
 	// Animation constants
 	var ANIMATION_DURATION = 350;
@@ -18,9 +125,77 @@ $(function() {
 	var ROW_OFFSET = 5;
 
 	// UI Management classes
-	var EXPANDED_CLASS = 'expanded',
+	var TABLE_CLASS = 'columns-table-widget',
+		EXPANDED_CLASS = 'expanded',
 		ANIMATING_CLASS = 'velocity-animating';
 
+
+	// Table Creation
+	// -------------------
+
+	// Table should be created on page load
+	// Create a custom layout template for this data set
+	// Create a header based on the table title and configuration
+	// Create a row for each value
+	// Create a footer based on the source and item count
+
+	function createTable(data) {
+		var $table = $('.' + TABLE_CLASS);
+
+		// Set up Handlebars partials, helpers and templates
+		generateHandlebarsHelpers();
+		generateHandlebarsPartials();
+		generateRowLayout(data.layout);
+
+		// Generate table layouts
+		var header = createHeader(data.title, data.sort_by_column);
+		var body = createBody(data.data, data.source, data.data.length);
+
+		// Render table components
+		$table.append(header);
+		$table.append(body);
+	}
+
+	function createHeader(title, sort_by_column) {
+		var header = Columns.Templates['templates/embed-table/header.hbs'];
+		return header({title: title, sort_by_column: sort_by_column});
+	}
+
+	function createBody(rows, layout, source, item_count) {
+		var body = Columns.Templates['templates/embed-table/body.hbs'];
+		return body({
+			rows: rows,
+			footer: {
+				source: source,
+				item_count: item_count
+			}
+		});
+	}
+
+	function generateRowLayout(layout) {
+		var row_layout = Columns.Templates['templates/embed-table/row-layout.hbs']({layout: layout});
+		var row_template = Handlebars.compile(row_layout);
+		Handlebars.registerPartial('row_layout', row_template);
+	}
+
+	function generateHandlebarsPartials() {
+		Handlebars.registerPartial('row', Columns.Templates['templates/embed-table/row.hbs']);
+		Handlebars.registerPartial('group', Columns.Templates['templates/embed-table/row-group.hbs']);
+		Handlebars.registerPartial('column', Columns.Templates['templates/embed-table/row-value.hbs']);
+		Handlebars.registerPartial('footer', Columns.Templates['templates/embed-table/footer.hbs']);
+	}
+
+	function generateHandlebarsHelpers() {
+		Handlebars.registerHelper('ifIsGroup', function(type, options) {
+			return type == 'group' ? options.fn(this) : options.inverse(this);
+		});
+
+		Handlebars.registerHelper('ifIsSingle', function(type, options) {
+			return type == 'single' ? options.fn(this) : options.inverse(this);
+		});
+	}
+
+	createTable(DUMMY_DATA);
 
 
 	// Bind the table and its components
@@ -53,9 +228,9 @@ $(function() {
 
 	function expandTable($table) {
 		var $parent = $table.parents('.columns-table-widget');
-			$bg = $parent.find('.columns-table-container'),
-			$rows = $parent.find('.columns-table-row'),
-			$header = $parent.find('.columns-table-header');
+		$bg = $parent.find('.columns-table-container'),
+		$rows = $parent.find('.columns-table-row'),
+		$header = $parent.find('.columns-table-header');
 
 		expandTableBackground($table, $bg);
 		expandTableRows($table, $rows);
@@ -144,15 +319,15 @@ $(function() {
 		var offsetY = (index * rowHeight);
 		switch (index) {
 			case 0:
-				break;
+			break;
 			case 1:
-				offsetY -= ROW_OFFSET;
-				break;
+			offsetY -= ROW_OFFSET;
+			break;
 			case 2:
-				offsetY -= ROW_OFFSET * 2;
-				break;
+			offsetY -= ROW_OFFSET * 2;
+			break;
 			default:
-				offsetY -= ROW_OFFSET * 2;
+			offsetY -= ROW_OFFSET * 2;
 		}
 
 		$row.velocity({
@@ -160,7 +335,7 @@ $(function() {
 		}, {
 			duration: ANIMATION_DURATION,
 			begin: function(elements) {
-					$row.removeClass('translateY-reset');
+				$row.removeClass('translateY-reset');
 			},
 			complete: function(elements) {
 				$row.addClass(EXPANDED_CLASS);
@@ -177,9 +352,9 @@ $(function() {
 
 	function collapseTable($table) {
 		var $parent = $table.parents('.columns-table-widget');
-			$bg = $parent.find('.columns-table-container'),
-			$rows = $parent.find('.columns-table-row'),
-			$header = $parent.find('.columns-table-header');
+		$bg = $parent.find('.columns-table-container'),
+		$rows = $parent.find('.columns-table-row'),
+		$header = $parent.find('.columns-table-header');
 
 		collapseTableHeader($table, $header);
 		collapseTableBackground($table, $bg);

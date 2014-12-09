@@ -1,0 +1,215 @@
+@import 'variables';
+@import 'keyframes';
+@import 'bower_components/bourbon/dist/bourbon';
+
+$table-container-height:		120px;
+$table-container-padding: 		20px;
+
+$table-header-height:			30px;
+$table-header-padding-y:		15px;
+
+$table-row-offset-top:			5px;
+$table-row-box-shadow:			0px 2px 4px rgba(0,0,0,0.2);
+
+$columns-table-accent-color: 	#69A368;
+
+.columns-table-container {
+	width: 100%;
+	background: $gray-lightest;
+	border: 1px solid $gray-lighter;
+}
+
+.columns-table-wrapper {
+	@include calc(width, '100% - #{$table-container-padding} * 2');
+	height: 95px;
+	// @include calc(height, '100% - #{$table-header-height} - #{$table-header-padding-y} * 2');
+	@include display(flex);
+	@include flex-direction(column);
+	@include justify-content(flex-start);
+	position: relative;
+	padding: $table-container-padding;
+}
+
+.columns-table {
+	position: relative;
+	height: $table-container-height - (2 * $table-container-padding);
+	margin: 0;
+}
+
+.columns-table-container.expanded {
+	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
+	position: fixed;
+	top: 0;
+	// @include calc(height, '100% - #{$table-container-padding} * 2');
+	height: 100% !important; /* Override the height set via animation */
+	overflow: scroll;
+
+	.columns-table-wrapper {
+		height: auto;
+	}
+
+	.columns-table {
+		margin-top: 60px;
+		// transform: translateY(0px) !important; /* Remove the expansion animation transform */
+		height: auto;
+		border: 1px solid $gray-lighter;
+	}
+}
+
+.columns-table-row {
+	height: 60px;
+	width: 100%;
+	background: #fff;
+	position: absolute;
+	top: $table-row-offset-top * 2
+}
+
+/* The top three rows should show
+ * as a preview of the full stack
+ */
+
+@mixin table-row-top {
+	box-shadow: $table-row-box-shadow;
+	border: $gray-lighter;
+}
+
+.columns-table-row:nth-child(1) {
+	@include table-row-top;
+	z-index: 3;
+	top: $table-row-offset-top * 0;
+}
+
+.columns-table-row:nth-child(2) {
+	@include table-row-top;
+	z-index: 2;
+	top: $table-row-offset-top * 1;
+}
+
+.columns-table-row:nth-child(3) {
+	@include table-row-top;
+	z-index: 1;
+	// top: $table-row-offset-top * 2;
+}
+
+.columns-table-row.expanded:last-child {
+	border-bottom: none;
+}
+
+.columns-table-row.expanded {
+	border: none; /* Remove the table-row-top borders */
+	border-bottom: 1px solid $gray-lighter;
+
+	box-shadow: none; /* Remove the table-row-top box shadow */
+	top: 0px; /* Remove the table-top-row layout spacing */
+
+	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
+	position:relative;
+}
+
+.columns-table-header {
+	@include display(flex);
+	@include justify-content(space-between);
+	@include align-items(center);
+	position: fixed;
+	top: 0; left: 0;
+	height: $table-header-height;
+	@include calc(width, '100% - #{$table-container-padding} * 2');
+	padding: $table-header-padding-y $table-container-padding;
+	border-bottom: 1px solid $gray-lighter;
+	background: $gray-lightest;
+	z-index: 999;
+
+	opacity: 0;
+	pointer-events: none;
+}
+
+.columns-table-header.expanded {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.columns-table-header-name {
+	@include display(flex);
+	@include flex-direction(column);
+	@include justify-content(flex-start);
+	@include align-items(flex-start);
+}
+
+.columns-table-title {
+	color: $gray-darkest;
+	font-size: 24px; 
+	font-weight: bold;
+}
+
+.columns-table-subtitle {
+	color: $gray;
+	font-size: 14px;
+}
+
+.columns-table-header-controls {
+	@include display(flex);
+	@include justify-content(flex-start);
+	@include align-items(center);
+}
+
+.columns-table-header-button {
+	height: $table-header-height;
+	font-size: 12px;
+	color: $gray-dark;
+	text-transform: uppercase;
+	padding: 0 12px;
+	// font-weight: bold;
+	@include appearance(none);
+	border: none;
+	outline: none;
+	background: none;
+}
+
+.columns-table-close-button {
+	color: $columns-table-accent-color;
+	border-left: 1px solid $gray-lighter;
+	padding-right: 0;
+}
+
+.columns-table-header-icon {
+	font-size: 18px;
+}
+
+.columns-table-footer {
+	@include display(flex);
+	@include justify-content(flex-end);
+	@include align-items(center);
+	position: relative;
+	padding: 0 4px;
+	padding-top: 6px;
+	font-size: 10px;
+	color: $gray;
+}
+
+.columns-table-source {
+	margin-right: auto;
+	@include display(flex);
+	@include align-items(center);
+}
+
+.columns-table-items-count {
+	text-transform: uppercase;
+}
+
+.columns-table-expand {
+	color: $columns-table-accent-color;
+	// margin-left: 12px;
+}
+
+.columns-table-footer-icon {
+	color: $gray-light;
+	font-size: 14px;
+}
+
+.columns-table-footer-icon.columns-logo {
+	margin-left: 12px;
+}
+
+.columns-table-footer-icon.columns-verified-source-icon {
+	margin-right: 6px;
+}

@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'bower_components/bourbon/dist/bourbon';
 
 html {
 	height: 100%;
@@ -15,5 +16,9 @@ body {
 	color: $text-color;
 
 	font-family: 'Heiti TC';
+}
+
+.translateY-reset {
+	@include transform(translateY(0px) !important); /* override inline style translateY */
 }
 

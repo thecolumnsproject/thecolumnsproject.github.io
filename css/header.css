@@ -2,24 +2,30 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(1.1); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(0.9); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
+
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
+
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
@@ -106,7 +112,7 @@ header {
         transition: all 0.2s ease-in-out;
         cursor: pointer; }
         header nav ul li:hover {
-          background-color: #3E97BD; }
+          background-color: #3e97bd; }
           header nav ul li:hover i {
             color: #fff; }
         header nav ul li i {
@@ -115,12 +121,12 @@ header {
           line-height: 22px;
           width: 22px;
           font-size: 10px;
-          color: #3E97BD;
+          color: #3e97bd;
           -webkit-transition: all 0.2s ease-in-out;
           -moz-transition: all 0.2s ease-in-out;
           transition: all 0.2s ease-in-out; }
         header nav ul li.upload-data {
-          color: #3E97BD;
+          color: #3e97bd;
           font-weight: 400;
           position: relative;
           border: none;
@@ -145,7 +151,7 @@ header {
             border: none;
             background-color: #fff; }
             header nav ul li.upload-data:hover i {
-              color: #3E97BD; }
+              color: #3e97bd; }
           header nav ul li.upload-data i {
             border: 1px solid #89c0d8;
             border-radius: 50%;
@@ -153,7 +159,7 @@ header {
             min-width: 22px;
             margin-right: 8px; }
             header nav ul li.upload-data i:hover {
-              background-color: #3E97BD;
+              background-color: #3e97bd;
               color: #fff; }
           header nav ul li.upload-data input {
             cursor: pointer;
@@ -162,8 +168,6 @@ header {
             left: 0;
             opacity: 0; }
           header nav ul li.upload-data input:hover + i {
-            background-color: #3E97BD;
+            background-color: #3e97bd;
             color: #fff;
             cursor: pointer; }
-
-/*# sourceMappingURL=header.css.map */

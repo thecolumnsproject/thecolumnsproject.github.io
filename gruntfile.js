@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 					namespace: "Columns.Templates"
 				},
 				files: {
-					"templates/templates.js": "templates/*.hbs"
+					"templates/templates.js": "templates/**/*.hbs"
 				}
 			}
 		},
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
 				tasks: ['handlebars']
 			},
 			javascript: {
-				files: '**/*.js',
+				files: 'javascripts/**/*.js',
 			}
 		}
 	});
@@ -47,5 +47,5 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-handlebars');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('default');
+	grunt.registerTask('default', ['sass', 'handlebars', 'watch']);
 }

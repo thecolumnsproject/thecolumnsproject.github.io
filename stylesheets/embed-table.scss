@@ -222,6 +222,8 @@ $columns-table-accent-color: 	#69A368;
 
 .row-group {
 	@include display(flex);
+	@include justify-content(space-between);
+	@include align-items(center);
 }
 
 .row-group[data-flex-direction='row'] {
@@ -230,4 +232,16 @@ $columns-table-accent-color: 	#69A368;
 
 .row-group[data-flex-direction='column'] {
 	@include flex-direction(column);
+}
+
+.row-group[data-align-items='flex-start'] {
+	@include align-items(flex-start);
+}
+
+.row-group[data-align-items='center'] {
+	@include align-items(center);
+}
+
+.row-group[data-align-items='flex-end'] {
+	@include align-items(flex-end);
 }

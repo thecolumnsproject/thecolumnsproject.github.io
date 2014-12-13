@@ -5,36 +5,67 @@ $(function() {
 		title: 'Friends of Mine',
 		sort_by_column: 'age',
 		layout: {
-			style: {
-				padding: '12px'
-			},
+			style: [{
+				property: 'padding',
+				value: '12px'
+			}],
 			values: [{
 				type: 'group',
-				flex_direction: 'column',
+				layout: [{
+					property: 'flex-direction',
+					value: 'column'
+				}, {
+					property: 'align-items',
+					value: 'flex-start'
+				}],
 				values: [{
-					type: 'group',
-					flex_direction: 'row',
-					values: [{
-						type: 'single',
-						column: '{{this.first_name}}'
-					}, {
-						type: 'single',
-						column: '{{this.last_name}}'
-					}]
+					type: 'single',
+					style: [{
+						property: 'color',
+						value: '#3a3a3a'
+					}],
+					data: '{{this.first_name}} {{this.last_name}}'
 				},{
 					type: 'single',
-					column: '{{this.hometown}}'
+					data: '{{this.hometown}}',
+					style: [{
+						property: 'color',
+						value: '#888'
+					},{
+						property: 'font-size',
+						value: '14px'
+					}]
 				}]
 			},
 			{
 				type: 'group',
-				flex_direction: 'column',
+				layout: [{
+					property: 'flex-direction',
+					value: 'column'
+				}, {
+					property: 'align-items',
+					value: 'flex-end'
+				}],
 				values: [{
 					type: 'single',
-					column: '{{this.age}}'
+					data: '{{this.age}}',
+					style: [{
+						property: 'color',
+						value: '#3a3a3a'
+					},{
+						property: 'font-size',
+						value: '24px'
+					}]
 				}, {
 					type: 'single',
-					column: '{{this.unit}}'
+					data: '{{this.unit}}',
+					style: [{
+						property: 'color',
+						value: '#ababab'
+					},{
+						property: 'font-size',
+						value: '10px'
+					}]
 				}]
 			}]
 		},
@@ -186,6 +217,8 @@ $(function() {
 		Handlebars.registerPartial('group', Columns.Templates['templates/embed-table/row-group.hbs']);
 		Handlebars.registerPartial('column', Columns.Templates['templates/embed-table/row-value.hbs']);
 		Handlebars.registerPartial('footer', Columns.Templates['templates/embed-table/footer.hbs']);
+		Handlebars.registerPartial('layout', Columns.Templates['templates/embed-table/layout.hbs']);
+		Handlebars.registerPartial('style', Columns.Templates['templates/embed-table/style.hbs']);
 	}
 
 	function generateHandlebarsHelpers() {

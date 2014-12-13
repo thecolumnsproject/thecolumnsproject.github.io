@@ -161,7 +161,8 @@ $(function() {
 	// UI Management classes
 	var TABLE_CLASS = 'columns-table-widget',
 		EXPANDED_CLASS = 'expanded',
-		ANIMATING_CLASS = 'velocity-animating';
+		ANIMATING_CLASS = 'velocity-animating',
+		$TABLE = $('.' + TABLE_CLASS);
 
 
 	// Table Creation
@@ -174,20 +175,31 @@ $(function() {
 	// Create a footer based on the source and item count
 
 	function createTable(data) {
-		var $table = $('.' + TABLE_CLASS);
 
 		// Set up Handlebars partials, helpers and templates
 		generateHandlebarsHelpers();
 		generateHandlebarsPartials();
 		generateRowLayout(data.layout);
 
+		// Position table correctly given the size of the screen
+		// and reposition on resize events
+		positionTable();
+		$(window).resize(positionTable);
+
 		// Generate table layouts
 		var header = createHeader(data.title, data.sort_by_column);
 		var body = createBody(data.data, data.source, data.data.length);
 
 		// Render table components
-		$table.append(header);
-		$table.append(body);
+		$TABLE.append(header);
+		$TABLE.append(body);
+	}
+
+	function positionTable() {
+		$TABLE.css({
+			'width': $(window).width(),
+			'margin-left': -$TABLE.offset().left
+		});
 	}
 
 	function createHeader(title, sort_by_column) {

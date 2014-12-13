@@ -1,4 +1,4 @@
-<div class='row-group' data-direction='row'>
+<div class='row-group' data-flex-direction='{{this.flex_direction}}' style='{{#each this.style}}{{@index}}:{{this}};{{/each}}'>
 	{{#each this.values}}
 		{{#ifIsGroup this.type}}
 			{{> group this}}

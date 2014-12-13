@@ -213,3 +213,21 @@ $columns-table-accent-color: 	#69A368;
 .columns-table-footer-icon.columns-verified-source-icon {
 	margin-right: 6px;
 }
+
+/* In-cell styling
+ * ------------------
+ * These styles correspond to properties
+ * determined by the user-defined template
+ */
+
+.row-group {
+	@include display(flex);
+}
+
+.row-group[data-flex-direction='row'] {
+	@include flex-direction(row);
+}
+
+.row-group[data-flex-direction='column'] {
+	@include flex-direction(column);
+}

@@ -5,12 +5,15 @@ $(function() {
 		title: 'Friends of Mine',
 		sort_by_column: 'age',
 		layout: {
+			style: {
+				padding: '12px'
+			},
 			values: [{
 				type: 'group',
-				flex_direction: 'row',
+				flex_direction: 'column',
 				values: [{
 					type: 'group',
-					flex_direction: 'column',
+					flex_direction: 'row',
 					values: [{
 						type: 'single',
 						column: '{{this.first_name}}'
@@ -161,7 +164,7 @@ $(function() {
 		return header({title: title, sort_by_column: sort_by_column});
 	}
 
-	function createBody(rows, layout, source, item_count) {
+	function createBody(rows, source, item_count) {
 		var body = Columns.Templates['templates/embed-table/body.hbs'];
 		return body({
 			rows: rows,

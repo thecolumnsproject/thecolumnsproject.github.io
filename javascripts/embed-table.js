@@ -300,13 +300,12 @@ $(function() {
 		$bg = $parent.find('.columns-table-container'),
 		$rows = $parent.find('.columns-table-row'),
 		$header = $parent.find('.columns-table-header');
-		// $footer = $parent.find('.columns-table-footer');
+		$footer = $parent.find('.columns-table-footer');
 
-		expandTableBackground($table, $bg);
+		expandTableBackground($table, $bg, $rows, $header, $footer);
 		expandTableRows($table, $rows);
 		expandTableBody($table);
 		expandTableHeader($table, $header);
-		// expandTableFooter($table, $footer);
 	}
 
 	function expandTableHeader($table, $header) {
@@ -322,19 +321,21 @@ $(function() {
 		});
 	}
 
-	// function expandTableFooter($table, $footer) {
-	// }
-
-	function expandTableBackground($table, $bg) {
+	function expandTableBackground($table, $bg, $rows, $header, $footer) {
 
 		// Save values to be used upon reset
 		originalBackground['height'] = $bg.height();
 		originalBackground['positionY'] = $bg.offset().top;
 
 		// Calculate new background position
-		var bgOffsetTop = -$bg.offset().top;
-		var bgHeight = $(window).height();
+		var bgOffsetTop = -$bg.offset().top + $(window).scrollTop();
 		var bgWidth = $(window).width();
+
+		// The background should be as tall as necessary to fit all the rows
+		// but the screen height at minimum
+		var bgHeight = $bg.height() + $header.height() + $footer.height() + ( $rows.height() * ($rows.length - 1) );
+		var bgHeight = bgHeight < $(window).height ?  $(window).height : bgHeight;
+
 		$bg.velocity({
 			height: bgHeight, 			/* Fill the entire screen */
 			translateY: bgOffsetTop 	/* Move to the top of the screen */

@@ -77,6 +77,13 @@ $(function() {
 			unit: 'Years'
 		},
 		{
+			first_name: 'Jess',
+			last_name: 'Schwartz',
+			hometown: 'Mechanicsburg',
+			age: 28,
+			unit: 'Years'
+		},
+		{
 			first_name: 'Amir',
 			last_name: 'Kanpurwala',
 			hometown: 'Princeton',
@@ -123,13 +130,6 @@ $(function() {
 			last_name: 'Navidar',
 			hometown: 'Albany',
 			age: 26,
-			unit: 'Years'
-		},
-		{
-			first_name: 'Jess',
-			last_name: 'Schwartz',
-			hometown: 'Mechanicsburg',
-			age: 28,
 			unit: 'Years'
 		},
 		{

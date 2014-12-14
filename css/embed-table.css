@@ -309,6 +309,11 @@
 .columns-table-expand {
   color: #69A368; }
 
+.columns-table-footer {
+  -webkit-transition: opacity 0.15s;
+  -moz-transition: opacity 0.15s;
+  transition: opacity 0.15s; }
+
 .columns-table-footer-icon {
   color: #cccccc;
   font-size: 14px; }
@@ -318,6 +323,14 @@
 
 .columns-table-footer-icon.columns-verified-source-icon {
   margin-right: 6px; }
+
+/* Animation styling
+ * ------------------
+ * These styles specify the position and look
+ * of elements while animations are occuring
+ */
+.expanding .columns-table-footer {
+  opacity: 0; }
 
 /* In-cell styling
  * ------------------

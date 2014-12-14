@@ -34,6 +34,9 @@ $(function() {
 					},{
 						property: 'font-size',
 						value: '14px'
+					}, {
+						property: 'margin-top',
+						value: '4px'
 					}]
 				}]
 			},
@@ -161,6 +164,7 @@ $(function() {
 	// UI Management classes
 	var TABLE_CLASS = 'columns-table-widget',
 		EXPANDED_CLASS = 'expanded',
+		EXPANDING_CLASS = 'expanding',
 		ANIMATING_CLASS = 'velocity-animating',
 		$TABLE = $('.' + TABLE_CLASS);
 
@@ -295,11 +299,13 @@ $(function() {
 		$bg = $parent.find('.columns-table-container'),
 		$rows = $parent.find('.columns-table-row'),
 		$header = $parent.find('.columns-table-header');
+		// $footer = $parent.find('.columns-table-footer');
 
 		expandTableBackground($table, $bg);
 		expandTableRows($table, $rows);
 		expandTableBody($table);
 		expandTableHeader($table, $header);
+		// expandTableFooter($table, $footer);
 	}
 
 	function expandTableHeader($table, $header) {
@@ -314,6 +320,9 @@ $(function() {
 			}
 		});
 	}
+
+	// function expandTableFooter($table, $footer) {
+	// }
 
 	function expandTableBackground($table, $bg) {
 
@@ -331,9 +340,11 @@ $(function() {
 		},{
 			duration: ANIMATION_DURATION,
 			begin: function(elements) {
+				$bg.addClass(EXPANDING_CLASS);
 				$bg.removeClass('translateY-reset');
 			},
 			complete: function(elements) {
+				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass(EXPANDED_CLASS);
 				$bg.addClass('translateY-reset');
 			}
@@ -364,8 +375,10 @@ $(function() {
 	function expandTableRows($table, $rows) {
 
 		// Calculate the new position for each row
+		var duration = ANIMATION_DURATION / $rows.length;
 		$rows.each(function(index, row) {
 			var $row = $(row);
+			var delay = (index - 1) * duration;
 
 			// Save original row data
 			originalRows[index] = {
@@ -373,11 +386,11 @@ $(function() {
 			}
 
 			// Animate the rows
-			expandTableRowAtIndex($table, $row, index);
+			expandTableRowAtIndex($table, $row, index, duration, delay);
 		});
 	}
 
-	function expandTableRowAtIndex($table, $row, index) {
+	function expandTableRowAtIndex($table, $row, index, duration, delay) {
 
 		var rowHeight = $row.outerHeight();
 		var offsetY = (index * rowHeight);
@@ -397,7 +410,8 @@ $(function() {
 		$row.velocity({
 			translateY: offsetY /* Move each row down into its natural position */
 		}, {
-			duration: ANIMATION_DURATION,
+			duration: duration,
+			delay: delay,
 			begin: function(elements) {
 				$row.removeClass('translateY-reset');
 			},
@@ -408,6 +422,17 @@ $(function() {
 		});
 	}
 
+	// Define table animation sequences
+	// var expandTableSequence = [
+	// 	{
+	// 		// Background
+	// 		elements: $parent.find('.columns-table-container'),
+	// 		properties: {
+	// 			height: bgHeight, 			/* Fill the entire screen */
+	// 			translateY: bgOffsetTop 	/* Move to the top of the screen */
+	// 		}
+	// 	}
+	// ]
 
 
 	// Methods to collapse a table
@@ -453,10 +478,12 @@ $(function() {
 		},{
 			duration: ANIMATION_DURATION,
 			begin: function(elements) {
+				$bg.addClass(EXPANDING_CLASS);
 				$bg.removeClass('translateY-reset');
 				$bg.removeClass(EXPANDED_CLASS);
 			},
 			complete: function(elements) {
+				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass('translateY-reset');
 			}
 		});
@@ -484,12 +511,15 @@ $(function() {
 	}
 
 	function collapseTableRows($table, $rows) {
+
+		var duration = ANIMATION_DURATION / $rows.length;
 		$rows.each(function(index, row) {
-			collapseTableRowAtIndex($table, $(row), index);
+			var delay = (index - 1) * duration;
+			collapseTableRowAtIndex($table, $(row), index, duration, delay);
 		});
 	}
 
-	function collapseTableRowAtIndex($table, $row, index) {
+	function collapseTableRowAtIndex($table, $row, index, duration, delay) {
 
 		// Calculate the old position for each row
 		var newPosition = originalRows[index].positionY - $row.offset().top;
@@ -499,7 +529,8 @@ $(function() {
 			translateY: 0
 
 		}, {
-			duration: ANIMATION_DURATION,
+			duration: duration,
+			delay: delay,
 			begin: function(elements) {
 				$row.removeClass('translateY-reset');
 				$row.removeClass(EXPANDED_CLASS);

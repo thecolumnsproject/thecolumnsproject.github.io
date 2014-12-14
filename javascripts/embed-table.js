@@ -159,7 +159,8 @@ $(function() {
 	var ANIMATION_DURATION = 350;
 
 	// UI Constants
-	var ROW_OFFSET = 5;
+	var ROW_OFFSET = 5,
+		ROW_DELAY = ANIMATION_DURATION * 0.01;
 
 	// UI Management classes
 	var TABLE_CLASS = 'columns-table-widget',
@@ -375,10 +376,9 @@ $(function() {
 	function expandTableRows($table, $rows) {
 
 		// Calculate the new position for each row
-		var duration = ANIMATION_DURATION / $rows.length;
+		var duration = ANIMATION_DURATION - ( ($rows.length - 1) * ROW_DELAY );
 		$rows.each(function(index, row) {
 			var $row = $(row);
-			var delay = (index - 1) * duration;
 
 			// Save original row data
 			originalRows[index] = {
@@ -386,11 +386,11 @@ $(function() {
 			}
 
 			// Animate the rows
-			expandTableRowAtIndex($table, $row, index, duration, delay);
+			expandTableRowAtIndex($table, $row, index, duration);
 		});
 	}
 
-	function expandTableRowAtIndex($table, $row, index, duration, delay) {
+	function expandTableRowAtIndex($table, $row, index, duration) {
 
 		var rowHeight = $row.outerHeight();
 		var offsetY = (index * rowHeight);
@@ -411,7 +411,7 @@ $(function() {
 			translateY: offsetY /* Move each row down into its natural position */
 		}, {
 			duration: duration,
-			delay: delay,
+			delay: ROW_DELAY,
 			begin: function(elements) {
 				$row.removeClass('translateY-reset');
 			},
@@ -512,14 +512,13 @@ $(function() {
 
 	function collapseTableRows($table, $rows) {
 
-		var duration = ANIMATION_DURATION / $rows.length;
+		var duration = ANIMATION_DURATION - ( ($rows.length - 1) * ROW_DELAY );
 		$rows.each(function(index, row) {
-			var delay = (index - 1) * duration;
-			collapseTableRowAtIndex($table, $(row), index, duration, delay);
+			collapseTableRowAtIndex($table, $(row), index, duration);
 		});
 	}
 
-	function collapseTableRowAtIndex($table, $row, index, duration, delay) {
+	function collapseTableRowAtIndex($table, $row, index, duration) {
 
 		// Calculate the old position for each row
 		var newPosition = originalRows[index].positionY - $row.offset().top;
@@ -530,7 +529,7 @@ $(function() {
 
 		}, {
 			duration: duration,
-			delay: delay,
+			delay: ROW_DELAY,
 			begin: function(elements) {
 				$row.removeClass('translateY-reset');
 				$row.removeClass(EXPANDED_CLASS);

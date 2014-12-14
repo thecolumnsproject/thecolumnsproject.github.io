@@ -164,6 +164,8 @@ $(function() {
 
 	// UI Management classes
 	var TABLE_CLASS = 'columns-table-widget',
+		TABLE_BODY_SELECTOR = '.columns-table',
+		TABLE_ROW_SELECTOR = '.columns-table-row',
 		EXPANDED_CLASS = 'expanded',
 		EXPANDING_CLASS = 'expanding',
 		ANIMATING_CLASS = 'velocity-animating',
@@ -181,6 +183,8 @@ $(function() {
 
 	function createTable(data) {
 
+		var numRows = data.data.length;
+
 		// Set up Handlebars partials, helpers and templates
 		generateHandlebarsHelpers();
 		generateHandlebarsPartials();
@@ -193,11 +197,14 @@ $(function() {
 
 		// Generate table layouts
 		var header = createHeader(data.title, data.sort_by_column);
-		var body = createBody(data.data, data.source, data.data.length);
+		var body = createBody(data.data, data.source, numRows);
 
 		// Render table components
 		$TABLE.append(header);
 		$TABLE.append(body);
+
+		// Set any dynamic sizing or positioning values
+		$(TABLE_BODY_SELECTOR).css({height: getTableHeight(numRows, $(TABLE_ROW_SELECTOR).height())});
 
 		// Make the table bounce on scroll
 		// $TABLE.find('.columns-table-container').fancy_scroll({
@@ -205,9 +212,18 @@ $(function() {
 		// });
 	}
 
+	function getTableHeight(numRows, rowHeight) {
+
+		// Calculate the table height
+		// for the number of rows it contains
+		// in contacted mode
+		var offsetAmount = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+		return rowHeight + offsetAmount;
+	}
+
 	function positionTable() {
 
-		// Don't do anything if the table is already the width of the screen
+		// Don't do anything else if the table is already the width of the screen
 		if ($TABLE.width() == $(window).width()) {
 			return;
 		}

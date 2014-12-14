@@ -21,7 +21,7 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table-wrapper {
 	@include calc(width, '100% - #{$table-container-padding} * 2');
-	height: 95px;
+	// height: 95px;
 	// @include calc(height, '100% - #{$table-header-height} - #{$table-header-padding-y} * 2');
 	@include display(flex);
 	@include flex-direction(column);
@@ -32,7 +32,7 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table {
 	position: relative;
-	height: $table-container-height - (2 * $table-container-padding);
+	// height: $table-container-height - (2 * $table-container-padding);
 	margin: 0;
 }
 
@@ -51,17 +51,18 @@ $columns-table-accent-color: 	#69A368;
 	.columns-table {
 		margin-top: 60px;
 		// transform: translateY(0px) !important; /* Remove the expansion animation transform */
-		height: auto;
+		height: auto !important; /* Override the custom height given on load */
 		border: 1px solid $gray-lighter;
 	}
 }
 
 .columns-table-row {
-	height: 60px;
+	// height: 60px;
 	width: 100%;
 	background: #fff;
 	position: absolute;
-	top: $table-row-offset-top * 2
+	top: $table-row-offset-top * 2;
+	overflow: hidden;
 }
 
 /* The top three rows should show

@@ -31,7 +31,6 @@
 .columns-table-wrapper {
   width: -webkit-calc(100% - 20px * 2);
   width: calc(100% - 20px * 2);
-  height: 95px;
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -60,7 +59,6 @@
 
 .columns-table {
   position: relative;
-  height: 80px;
   margin: 0; }
 
 .columns-table-container.expanded {
@@ -73,15 +71,16 @@
     height: auto; }
   .columns-table-container.expanded .columns-table {
     margin-top: 60px;
-    height: auto;
+    height: auto !important;
+    /* Override the custom height given on load */
     border: 1px solid #ebebeb; }
 
 .columns-table-row {
-  height: 60px;
   width: 100%;
   background: #fff;
   position: absolute;
-  top: 10px; }
+  top: 10px;
+  overflow: hidden; }
 
 /* The top three rows should show
  * as a preview of the full stack

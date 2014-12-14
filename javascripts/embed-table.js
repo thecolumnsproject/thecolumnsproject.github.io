@@ -150,7 +150,7 @@ $(function() {
 
 	// Storage variables for resetting positions
 	var originalBackground = {},
-	originalRows = [];
+		originalRows = [];
 
 	// Animation constants
 	var ANIMATION_DURATION = 350;
@@ -196,10 +196,26 @@ $(function() {
 	}
 
 	function positionTable() {
-		$TABLE.css({
-			'width': $(window).width(),
-			'margin-left': -$TABLE.offset().left
-		});
+
+		// Don't do anything if the table is already the width of the screen
+		if ($TABLE.width() == $(window).width()) {
+			return;
+		}
+
+		// Set up the new css properties for the table
+		properties = {
+			'width': $(window).width()
+		}
+
+		// Only move the table if it's not aligned with the left side of the screen
+		var offset = $TABLE.offset().left;
+		if (offset != 0) {
+			properties['margin-left'] = -offset
+		}
+
+		// Make the table the width of the window
+		// and left align it with the window 
+		$TABLE.css(properties);
 	}
 
 	function createHeader(title, sort_by_column) {

@@ -224,9 +224,19 @@ $columns-table-accent-color: 	#69A368;
  * of elements while animations are occuring
  */
 
- .expanding .columns-table-footer {
+.expanding .columns-table-footer {
  	opacity: 0;
- }
+}
+
+/* Expanded styling
+ * ------------------
+ * These styles specify the position and look
+ * of elements while the table is expanded
+ */
+
+.body.table-expanded {
+	overflow: hidden;
+}
 
 /* In-cell styling
  * ------------------

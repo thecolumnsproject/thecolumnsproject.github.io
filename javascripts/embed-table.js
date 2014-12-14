@@ -349,6 +349,7 @@ $(function() {
 				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass(EXPANDED_CLASS);
 				$bg.addClass('translateY-reset');
+				$('body').addClass('table-expanded');
 			}
 		});
 	}
@@ -486,6 +487,7 @@ $(function() {
 			complete: function(elements) {
 				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass('translateY-reset');
+				$('body').removeClass('table-expanded');
 			}
 		});
 	}

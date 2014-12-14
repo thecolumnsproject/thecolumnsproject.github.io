@@ -234,8 +234,9 @@ $columns-table-accent-color: 	#69A368;
  * of elements while the table is expanded
  */
 
-.body.table-expanded {
+html.table-expanded {
 	overflow: hidden;
+	-webkit-overflow-scrolling: none;
 }
 
 /* In-cell styling

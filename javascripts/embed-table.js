@@ -198,6 +198,11 @@ $(function() {
 		// Render table components
 		$TABLE.append(header);
 		$TABLE.append(body);
+
+		// Make the table bounce on scroll
+		// $TABLE.find('.columns-table-container').fancy_scroll({
+		// 	animation: "bounce"
+		// });
 	}
 
 	function positionTable() {
@@ -349,7 +354,7 @@ $(function() {
 				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass(EXPANDED_CLASS);
 				$bg.addClass('translateY-reset');
-				$('body').addClass('table-expanded');
+				$('html').addClass('table-expanded');
 			}
 		});
 	}
@@ -487,7 +492,7 @@ $(function() {
 			complete: function(elements) {
 				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass('translateY-reset');
-				$('body').removeClass('table-expanded');
+				$('html').removeClass('table-expanded');
 			}
 		});
 	}

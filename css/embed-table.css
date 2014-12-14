@@ -337,8 +337,9 @@
  * These styles specify the position and look
  * of elements while the table is expanded
  */
-.body.table-expanded {
-  overflow: hidden; }
+html.table-expanded {
+  overflow: hidden;
+  -webkit-overflow-scrolling: none; }
 
 /* In-cell styling
  * ------------------

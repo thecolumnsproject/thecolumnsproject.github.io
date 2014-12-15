@@ -232,6 +232,9 @@ $(function() {
 		introduceTable(numRows);
 		introduceRows();
 
+		// Set up DOM events on the table
+		setupTableEvents();
+
 		// Remove the loading class after the screen repaints
 		setTimeout(function() {
 			$TABLE.removeClass(LOADING_CLASS);
@@ -359,30 +362,26 @@ $(function() {
 		})
 	}
 
-	createTable();
-	setTimeout(function() {
-		populateTable(DUMMY_DATA)
-	}, 1000);
-
-
 	// Bind the table and its components
 	// to various tap handling events
 	// ---------------------------------
 
-	$(".columns-table").hammer({domEvents: true}).bind('tap', function(e) {
-		$table = $(this);
-		if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-			expandTable($table);
-		}
-	});
+	function setupTableEvents() {
+		$(".columns-table").hammer({domEvents: true}).bind('tap', function(e) {
+			$table = $(this);
+			if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+				expandTable($table);
+			}
+		});
 
-	$(".columns-table-close-button").hammer({domEvents: true}).bind('tap', function(e) {
-		var $parent = $(this).parents('.columns-table-widget');
-		var $table = $parent.find('.columns-table');
-		if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-			collapseTable($table);
-		}
-	});
+		$(".columns-table-close-button").hammer({domEvents: true}).bind('tap', function(e) {
+			var $parent = $(this).parents('.columns-table-widget');
+			var $table = $parent.find('.columns-table');
+			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+				collapseTable($table);
+			}
+		});
+	}
 
 	// $(".columns-table").hammer({domEvents: true}).bind('pan', function(e) {
 	// 	e.stopPropagation();
@@ -640,5 +639,10 @@ $(function() {
 			}
 		});
 	}
+
+	createTable();
+	setTimeout(function() {
+		populateTable(DUMMY_DATA)
+	}, 1000);
 
 });

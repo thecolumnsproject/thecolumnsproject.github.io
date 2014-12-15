@@ -2,7 +2,7 @@
 @import 'keyframes';
 @import 'bower_components/bourbon/dist/bourbon';
 
-$table-container-height:		120px;
+$table-container-height:		100px;
 $table-container-padding: 		20px;
 
 $table-header-height:			30px;
@@ -12,6 +12,10 @@ $table-row-offset-top:			5px;
 $table-row-box-shadow:			0px 2px 4px rgba(0,0,0,0.2);
 
 $columns-table-accent-color: 	#69A368;
+
+.columns-table-widget {
+	position: relative;
+}
 
 .columns-table-container {
 	width: 100%;
@@ -32,28 +36,8 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table {
 	position: relative;
-	// height: $table-container-height - (2 * $table-container-padding);
+	min-height: $table-container-height - (2 * $table-container-padding);
 	margin: 0;
-}
-
-.columns-table-container.expanded {
-	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
-	position: fixed;
-	top: 0;
-	// @include calc(height, '100% - #{$table-container-padding} * 2');
-	height: 100% !important; /* Override the height set via animation */
-	overflow: scroll;
-
-	.columns-table-wrapper {
-		height: auto;
-	}
-
-	.columns-table {
-		margin-top: 60px;
-		// transform: translateY(0px) !important; /* Remove the expansion animation transform */
-		height: auto !important; /* Override the custom height given on load */
-		border: 1px solid $gray-lighter;
-	}
 }
 
 .columns-table-row {
@@ -92,21 +76,6 @@ $columns-table-accent-color: 	#69A368;
 	// top: $table-row-offset-top * 2;
 }
 
-.columns-table-row.expanded:last-child {
-	border-bottom: none;
-}
-
-.columns-table-row.expanded {
-	border: none; /* Remove the table-row-top borders */
-	border-bottom: 1px solid $gray-lighter;
-
-	box-shadow: none; /* Remove the table-row-top box shadow */
-	top: 0px; /* Remove the table-top-row layout spacing */
-
-	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
-	position:relative;
-}
-
 .columns-table-header {
 	@include display(flex);
 	@include justify-content(space-between);
@@ -122,11 +91,6 @@ $columns-table-accent-color: 	#69A368;
 
 	opacity: 0;
 	pointer-events: none;
-}
-
-.columns-table-header.expanded {
-	opacity: 1;
-	pointer-events: auto;
 }
 
 .columns-table-header-name {
@@ -219,6 +183,34 @@ $columns-table-accent-color: 	#69A368;
 	margin-right: 6px;
 }
 
+/* Placeholder styling
+ * ------------------
+ * These styles specify the position and look
+ * of loading and error indicators in the table
+ */
+
+.columns-table-loading {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	@include display(flex);
+	@include justify-content(center);
+	@include align-items(center);
+}
+
+.columns-table-loading-img {
+	height: 20px;
+	margin-right: 12px;
+}
+
+.columns-table-loading-text {
+	color: $gray;
+	font-size: 14px;
+}	
+
+
 /* Animation styling
  * ------------------
  * These styles specify the position and look
@@ -240,6 +232,46 @@ html.table-expanded {
 	-webkit-overflow-scrolling: none;
 }
 
+.columns-table-container.expanded {
+	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
+	position: fixed;
+	top: 0;
+	// @include calc(height, '100% - #{$table-container-padding} * 2');
+	height: 100% !important; /* Override the height set via animation */
+	overflow: scroll;
+}
+
+.expanded .columns-table-wrapper {
+	height: auto;
+}
+
+.expanded .columns-table {
+	margin-top: 60px;
+	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
+	height: auto !important; /* Override the custom height given on load */
+	border: 1px solid $gray-lighter;
+}
+
+.columns-table-row.expanded:last-child {
+	border-bottom: none;
+}
+
+.columns-table-row.expanded {
+	border: none; /* Remove the table-row-top borders */
+	border-bottom: 1px solid $gray-lighter;
+
+	box-shadow: none; /* Remove the table-row-top box shadow */
+	top: 0px; /* Remove the table-top-row layout spacing */
+
+	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
+	position:relative;
+}
+
+.columns-table-header.expanded {
+	opacity: 1;
+	pointer-events: auto;
+}
+
 /* In-cell styling
  * ------------------
  * These styles correspond to properties
@@ -250,24 +282,24 @@ html.table-expanded {
 	@include display(flex);
 	@include justify-content(space-between);
 	@include align-items(center);
-}
 
-.row-group[data-flex-direction='row'] {
-	@include flex-direction(row);
-}
+	&[data-flex-direction='row'] {
+		@include flex-direction(row);
+	}
 
-.row-group[data-flex-direction='column'] {
-	@include flex-direction(column);
-}
+	&[data-flex-direction='column'] {
+		@include flex-direction(column);
+	}
 
-.row-group[data-align-items='flex-start'] {
-	@include align-items(flex-start);
-}
+	&[data-align-items='flex-start'] {
+		@include align-items(flex-start);
+	}
 
-.row-group[data-align-items='center'] {
-	@include align-items(center);
-}
+	&[data-align-items='center'] {
+		@include align-items(center);
+	}
 
-.row-group[data-align-items='flex-end'] {
-	@include align-items(flex-end);
+	&[data-align-items='flex-end'] {
+		@include align-items(flex-end);
+	}
 }

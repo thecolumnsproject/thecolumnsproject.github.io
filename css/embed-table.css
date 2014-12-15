@@ -23,6 +23,9 @@
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
+.columns-table-widget {
+  position: relative; }
+
 .columns-table-container {
   width: 100%;
   background: #fafafa;
@@ -59,21 +62,8 @@
 
 .columns-table {
   position: relative;
+  min-height: 60px;
   margin: 0; }
-
-.columns-table-container.expanded {
-  position: fixed;
-  top: 0;
-  height: 100% !important;
-  /* Override the height set via animation */
-  overflow: scroll; }
-  .columns-table-container.expanded .columns-table-wrapper {
-    height: auto; }
-  .columns-table-container.expanded .columns-table {
-    margin-top: 60px;
-    height: auto !important;
-    /* Override the custom height given on load */
-    border: 1px solid #ebebeb; }
 
 .columns-table-row {
   width: 100%;
@@ -101,19 +91,6 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border: #ebebeb;
   z-index: 1; }
-
-.columns-table-row.expanded:last-child {
-  border-bottom: none; }
-
-.columns-table-row.expanded {
-  border: none;
-  /* Remove the table-row-top borders */
-  border-bottom: 1px solid #ebebeb;
-  box-shadow: none;
-  /* Remove the table-row-top box shadow */
-  top: 0px;
-  /* Remove the table-top-row layout spacing */
-  position: relative; }
 
 .columns-table-header {
   display: -webkit-box;
@@ -153,10 +130,6 @@
   z-index: 999;
   opacity: 0;
   pointer-events: none; }
-
-.columns-table-header.expanded {
-  opacity: 1;
-  pointer-events: auto; }
 
 .columns-table-header-name {
   display: -webkit-box;
@@ -323,6 +296,51 @@
 .columns-table-footer-icon.columns-verified-source-icon {
   margin-right: 6px; }
 
+/* Placeholder styling
+ * ------------------
+ * These styles specify the position and look
+ * of loading and error indicators in the table
+ */
+.columns-table-loading {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  box-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  box-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -o-align-items: center;
+  align-items: center;
+  -ms-flex-align: center; }
+
+.columns-table-loading-img {
+  height: 20px;
+  margin-right: 12px; }
+
+.columns-table-loading-text {
+  color: #ababab;
+  font-size: 14px; }
+
 /* Animation styling
  * ------------------
  * These styles specify the position and look
@@ -339,6 +357,39 @@
 html.table-expanded {
   overflow: hidden;
   -webkit-overflow-scrolling: none; }
+
+.columns-table-container.expanded {
+  position: fixed;
+  top: 0;
+  height: 100% !important;
+  /* Override the height set via animation */
+  overflow: scroll; }
+
+.expanded .columns-table-wrapper {
+  height: auto; }
+
+.expanded .columns-table {
+  margin-top: 60px;
+  height: auto !important;
+  /* Override the custom height given on load */
+  border: 1px solid #ebebeb; }
+
+.columns-table-row.expanded:last-child {
+  border-bottom: none; }
+
+.columns-table-row.expanded {
+  border: none;
+  /* Remove the table-row-top borders */
+  border-bottom: 1px solid #ebebeb;
+  box-shadow: none;
+  /* Remove the table-row-top box shadow */
+  top: 0px;
+  /* Remove the table-top-row layout spacing */
+  position: relative; }
+
+.columns-table-header.expanded {
+  opacity: 1;
+  pointer-events: auto; }
 
 /* In-cell styling
  * ------------------
@@ -371,56 +422,51 @@ html.table-expanded {
   -o-align-items: center;
   align-items: center;
   -ms-flex-align: center; }
-
-.row-group[data-flex-direction='row'] {
-  -webkit-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  box-orient: horizontal;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  flex-direction: row;
-  -ms-flex-direction: row; }
-
-.row-group[data-flex-direction='column'] {
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  box-orient: vertical;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  flex-direction: column;
-  -ms-flex-direction: column; }
-
-.row-group[data-align-items='flex-start'] {
-  -webkit-box-align: start;
-  -moz-box-align: start;
-  box-align: start;
-  -webkit-align-items: flex-start;
-  -moz-align-items: flex-start;
-  -ms-align-items: flex-start;
-  -o-align-items: flex-start;
-  align-items: flex-start;
-  -ms-flex-align: start; }
-
-.row-group[data-align-items='center'] {
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  box-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
-  -ms-flex-align: center; }
-
-.row-group[data-align-items='flex-end'] {
-  -webkit-box-align: end;
-  -moz-box-align: end;
-  box-align: end;
-  -webkit-align-items: flex-end;
-  -moz-align-items: flex-end;
-  -ms-align-items: flex-end;
-  -o-align-items: flex-end;
-  align-items: flex-end;
-  -ms-flex-align: end; }
+  .row-group[data-flex-direction='row'] {
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-direction: row; }
+  .row-group[data-flex-direction='column'] {
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-direction: column; }
+  .row-group[data-align-items='flex-start'] {
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    box-align: start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    -ms-align-items: flex-start;
+    -o-align-items: flex-start;
+    align-items: flex-start;
+    -ms-flex-align: start; }
+  .row-group[data-align-items='center'] {
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -o-align-items: center;
+    align-items: center;
+    -ms-flex-align: center; }
+  .row-group[data-align-items='flex-end'] {
+    -webkit-box-align: end;
+    -moz-box-align: end;
+    box-align: end;
+    -webkit-align-items: flex-end;
+    -moz-align-items: flex-end;
+    -ms-align-items: flex-end;
+    -o-align-items: flex-end;
+    align-items: flex-end;
+    -ms-flex-align: end; }
 
 /*# sourceMappingURL=embed-table.css.map */

@@ -196,10 +196,12 @@ $(function() {
 		$(window).resize(positionTable);
 
 		// Generate table layouts
+		var loading = createLoading();
 		var header = createHeader(data.title, data.sort_by_column);
 		var body = createBody(data.data, data.source, numRows);
 
 		// Render table components
+		$TABLE.append(loading);
 		$TABLE.append(header);
 		$TABLE.append(body);
 
@@ -210,6 +212,11 @@ $(function() {
 		// $TABLE.find('.columns-table-container').fancy_scroll({
 		// 	animation: "bounce"
 		// });
+	}
+
+	function populateTable(data) {
+		
+		var numRows = data.data.length;
 	}
 
 	function getTableHeight(numRows, rowHeight) {
@@ -242,6 +249,11 @@ $(function() {
 		// Make the table the width of the window
 		// and left align it with the window 
 		$TABLE.css(properties);
+	}
+
+	function createLoading() {
+		var loading = Columns.Templates['templates/embed-table/loading.hbs'];
+		return loading();
 	}
 
 	function createHeader(title, sort_by_column) {

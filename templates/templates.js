@@ -57,26 +57,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 this["Columns"]["Templates"]["templates/embed-table/body.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, self=this;
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "";
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n						";
-  stack1 = self.invokePartial(partials.row, 'row', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					";
-  return buffer;
-  }
 
-  buffer += "<div class=\"columns-table-container\">\n			<section class=\"columns-table-wrapper\">\n				<div class=\"columns-table\">\n					";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.rows), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					\n\n				</div>\n				\n				";
-  stack1 = self.invokePartial(partials.footer, 'footer', (depth0 && depth0.footer), helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			</section>\n		</div>";
+  buffer += "<div class=\"columns-table-container\">\n			<section class=\"columns-table-wrapper\">\n				<div class=\"columns-table\">\n					\n				</div>\n				\n			</section>\n		</div>";
   return buffer;
   });
 
@@ -142,6 +127,15 @@ function program1(depth0,data) {
   if (!helpers.layout) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
   if(stack1 || stack1 === 0) { return stack1; }
   else { return ''; }
+  });
+
+this["Columns"]["Templates"]["templates/embed-table/loading.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"columns-table-loading\">\n	<img src=\"images/loading-gray.gif\" class='columns-table-loading-img'>\n	<span class=\"columns-table-loading-text\">Loading data...</span>\n</div>";
   });
 
 this["Columns"]["Templates"]["templates/embed-table/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -231,6 +225,26 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
 
 
   stack1 = self.invokePartial(partials.row_layout, 'row_layout', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  });
+
+this["Columns"]["Templates"]["templates/embed-table/rows.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var stack1, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	";
+  stack1 = self.invokePartial(partials.row, 'row', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }
+
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.rows), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { return stack1; }
   else { return ''; }
   });

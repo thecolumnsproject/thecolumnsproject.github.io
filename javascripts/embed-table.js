@@ -181,42 +181,53 @@ $(function() {
 	// Create a row for each value
 	// Create a footer based on the source and item count
 
-	function createTable(data) {
-
-		var numRows = data.data.length;
+	function createTable() {
 
 		// Set up Handlebars partials, helpers and templates
 		generateHandlebarsHelpers();
 		generateHandlebarsPartials();
-		generateRowLayout(data.layout);
 
 		// Position table correctly given the size of the screen
 		// and reposition on resize events
 		positionTable();
 		$(window).resize(positionTable);
 
-		// Generate table layouts
+		// Generate table skeleton
 		var loading = createLoading();
-		var header = createHeader(data.title, data.sort_by_column);
-		var body = createBody(data.data, data.source, numRows);
+		var body = createBody();
 
 		// Render table components
 		$TABLE.append(loading);
-		$TABLE.append(header);
 		$TABLE.append(body);
-
-		// Set any dynamic sizing or positioning values
-		$(TABLE_BODY_SELECTOR).css({height: getTableHeight(numRows, $(TABLE_ROW_SELECTOR).height())});
 
 		// Make the table bounce on scroll
 		// $TABLE.find('.columns-table-container').fancy_scroll({
 		// 	animation: "bounce"
 		// });
+
+		
 	}
 
 	function populateTable(data) {
 		
 		var numRows = data.data.length;
+
+		// Set up Handlebars partials, helpers and templates
+		generateRowLayout(data.layout);
+
+		// Generate table layouts with data
+		var header = createHeader(data.title, data.sort_by_column);
+		var rows = createRows(data.data);
+		var footer = createFooter(data.source, numRows);
+
+		// Render table components with data
+		$TABLE.prepend(header);
+		var $tableBody = $(TABLE_BODY_SELECTOR);
+		$tableBody.append(rows);
+		$tableBody.after(footer);
+
+		// Set any dynamic sizing or positioning values
+		$(TABLE_BODY_SELECTOR).css({height: getTableHeight(numRows, $(TABLE_ROW_SELECTOR).height())});
 	}
 
 	function getTableHeight(numRows, rowHeight) {
@@ -261,14 +272,21 @@ $(function() {
 		return header({title: title, sort_by_column: sort_by_column});
 	}
 
-	function createBody(rows, source, item_count) {
+	function createBody() {
 		var body = Columns.Templates['templates/embed-table/body.hbs'];
-		return body({
-			rows: rows,
-			footer: {
-				source: source,
-				item_count: item_count
-			}
+		return body();
+	}
+
+	function createRows(rows) {
+		var rowsTemplate = Columns.Templates['templates/embed-table/rows.hbs'];
+		return rowsTemplate({rows: rows});
+	}
+
+	function createFooter(source, item_count) {
+		var footer = Columns.Templates['templates/embed-table/footer.hbs'];
+		return footer({
+			source: source,
+			item_count: item_count
 		});
 	}
 
@@ -297,7 +315,8 @@ $(function() {
 		});
 	}
 
-	createTable(DUMMY_DATA);
+	createTable();
+	populateTable(DUMMY_DATA);
 
 
 	// Bind the table and its components

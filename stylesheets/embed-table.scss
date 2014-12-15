@@ -47,6 +47,7 @@ $columns-table-accent-color: 	#69A368;
 	position: absolute;
 	top: $table-row-offset-top * 2;
 	overflow: hidden;
+	@include transition(opacity 0.15s);
 }
 
 /* The top three rows should show
@@ -146,9 +147,10 @@ $columns-table-accent-color: 	#69A368;
 	@include align-items(center);
 	position: relative;
 	padding: 0 4px;
-	padding-top: 6px;
+	padding-top: 10px;
 	font-size: 10px;
 	color: $gray;
+	@include transition(opacity 0.15s);
 }
 
 .columns-table-source {
@@ -164,10 +166,6 @@ $columns-table-accent-color: 	#69A368;
 .columns-table-expand {
 	color: $columns-table-accent-color;
 	// margin-left: 12px;
-}
-
-.columns-table-footer {
-	@include transition(opacity 0.15s);
 }
 
 .columns-table-footer-icon {
@@ -208,7 +206,15 @@ $columns-table-accent-color: 	#69A368;
 .columns-table-loading-text {
 	color: $gray;
 	font-size: 14px;
+}
+
+.loading .columns-table-row {
+	opacity: 0;
 }	
+
+.loading .columns-table-footer {
+	opacity: 0;
+}
 
 
 /* Animation styling

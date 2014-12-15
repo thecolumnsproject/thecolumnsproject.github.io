@@ -2,24 +2,30 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(1.1); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(0.9); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
+
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
+
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
@@ -70,7 +76,10 @@
   background: #fff;
   position: absolute;
   top: 10px;
-  overflow: hidden; }
+  overflow: hidden;
+  -webkit-transition: opacity 0.15s;
+  -moz-transition: opacity 0.15s;
+  transition: opacity 0.15s; }
 
 /* The top three rows should show
  * as a preview of the full stack
@@ -217,7 +226,7 @@
   background: none; }
 
 .columns-table-close-button {
-  color: #69A368;
+  color: #69a368;
   border-left: 1px solid #ebebeb;
   padding-right: 0; }
 
@@ -252,9 +261,12 @@
   -ms-flex-align: center;
   position: relative;
   padding: 0 4px;
-  padding-top: 6px;
+  padding-top: 10px;
   font-size: 10px;
-  color: #ababab; }
+  color: #ababab;
+  -webkit-transition: opacity 0.15s;
+  -moz-transition: opacity 0.15s;
+  transition: opacity 0.15s; }
 
 .columns-table-source {
   margin-right: auto;
@@ -279,12 +291,7 @@
   text-transform: uppercase; }
 
 .columns-table-expand {
-  color: #69A368; }
-
-.columns-table-footer {
-  -webkit-transition: opacity 0.15s;
-  -moz-transition: opacity 0.15s;
-  transition: opacity 0.15s; }
+  color: #69a368; }
 
 .columns-table-footer-icon {
   color: #cccccc;
@@ -340,6 +347,12 @@
 .columns-table-loading-text {
   color: #ababab;
   font-size: 14px; }
+
+.loading .columns-table-row {
+  opacity: 0; }
+
+.loading .columns-table-footer {
+  opacity: 0; }
 
 /* Animation styling
  * ------------------
@@ -468,5 +481,3 @@ html.table-expanded {
     -o-align-items: flex-end;
     align-items: flex-end;
     -ms-flex-align: end; }
-
-/*# sourceMappingURL=embed-table.css.map */

@@ -168,6 +168,7 @@ $(function() {
 		TABLE_ROW_SELECTOR = '.columns-table-row',
 		EXPANDED_CLASS = 'expanded',
 		EXPANDING_CLASS = 'expanding',
+		LOADING_CLASS = 'loading',
 		ANIMATING_CLASS = 'velocity-animating',
 		$TABLE = $('.' + TABLE_CLASS);
 
@@ -197,7 +198,7 @@ $(function() {
 		var body = createBody();
 
 		// Render table components
-		$TABLE.append(loading);
+		$TABLE.append(loading).addClass(LOADING_CLASS);
 		$TABLE.append(body);
 
 		// Make the table bounce on scroll
@@ -227,7 +228,14 @@ $(function() {
 		$tableBody.after(footer);
 
 		// Set any dynamic sizing or positioning values
-		$(TABLE_BODY_SELECTOR).css({height: getTableHeight(numRows, $(TABLE_ROW_SELECTOR).height())});
+		// and animate the various components in
+		introduceTable(numRows);
+		introduceRows();
+
+		// Remove the loading class after the screen repaints
+		setTimeout(function() {
+			$TABLE.removeClass(LOADING_CLASS);
+		}, 100);
 	}
 
 	function getTableHeight(numRows, rowHeight) {
@@ -315,8 +323,46 @@ $(function() {
 		});
 	}
 
+	// Methods to animate table data
+	// into place once it's been downloaded
+	// ------------------------------
+
+	function introduceTable(numRows) {
+		var $table = $(TABLE_BODY_SELECTOR);
+
+		$table.velocity({
+			height: getTableHeight(numRows, $(TABLE_ROW_SELECTOR).height())
+		}, {
+			duration: ANIMATION_DURATION,
+		});
+	}
+
+	function introduceRows() {
+		var $rows = $(TABLE_ROW_SELECTOR);
+		var delay = ANIMATION_DURATION / 3;
+		$.each($rows, function(index, row) {
+
+			// Only animate the two drooping rows
+			if (index > 0 && index <= 2) {
+				var $row = $(row);
+				$row.velocity({
+					translateY: 5
+				}, {
+					duration: ANIMATION_DURATION / 6,
+					delay: delay * index
+				}).velocity({
+					translateY: 0
+				}, {
+					duration: ANIMATION_DURATION / 6
+				});
+			}
+		})
+	}
+
 	createTable();
-	populateTable(DUMMY_DATA);
+	setTimeout(function() {
+		populateTable(DUMMY_DATA)
+	}, 1000);
 
 
 	// Bind the table and its components

@@ -382,35 +382,35 @@ $(function() {
 	// ---------------------------------
 
 	function setupTableEvents() {
-		// $(".columns-table").hammer({domEvents: true}).bind('tap', function(e) {
-		// 	$table = $(this);
-		// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-		// 		expandTable($table);
-		// 	}
-		// });
-
-		$(".columns-table").click(function(e) {
+		$(".columns-table").hammer({domEvents: true}).bind('tap', function(e) {
 			$table = $(this);
 			if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
 				expandTable($table);
 			}
 		});
 
-		// $(".columns-table-close-button").hammer({domEvents: true}).bind('tap', function(e) {
-		// 	var $parent = $(this).parents('.columns-table-widget');
-		// 	var $table = $parent.find('.columns-table');
-		// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-		// 		collapseTable($table);
+		// $(".columns-table").click(function(e) {
+		// 	$table = $(this);
+		// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+		// 		expandTable($table);
 		// 	}
 		// });
 
-		$(".columns-table-close-button").click(function(e) {
+		$(".columns-table-close-button").hammer({domEvents: true}).bind('tap', function(e) {
 			var $parent = $(this).parents('.columns-table-widget');
 			var $table = $parent.find('.columns-table');
 			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
 				collapseTable($table);
 			}
 		});
+
+		// $(".columns-table-close-button").click(function(e) {
+		// 	var $parent = $(this).parents('.columns-table-widget');
+		// 	var $table = $parent.find('.columns-table');
+		// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+		// 		collapseTable($table);
+		// 	}
+		// });
 	}
 
 	// $(".columns-table").hammer({domEvents: true}).bind('pan', function(e) {

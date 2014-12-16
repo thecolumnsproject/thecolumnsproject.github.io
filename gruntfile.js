@@ -27,8 +27,8 @@ module.exports = function(grunt) {
 				src: [
 					'javascripts/embed-table-intro.js',
 					'bower_components/jquery/dist/jquery.min.js',
-					// 'bower_components/hammerjs/hammer.min.js',
-					// 'bower_components/jquery-hammerjs/jquery.hammer.js',
+					'bower_components/hammerjs/hammer.min.js',
+					'bower_components/jquery-hammerjs/jquery.hammer.js',
 					'bower_components/velocity/velocity.min.js',
 					// 'bower_components/velocity/velocity.ui.min.js',
 					'bower_components/handlebars/handlebars.min.js',

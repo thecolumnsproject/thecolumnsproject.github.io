@@ -43,7 +43,7 @@
 
 .columns-table-widget {
   position: relative;
-  font-family: 'Heiti TC'; }
+  font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif; }
 
 .columns-table-container {
   width: 100%;

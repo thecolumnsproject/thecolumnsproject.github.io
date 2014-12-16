@@ -1,5 +1,7 @@
 @import 'variables';
+@import 'fonts';
 @import 'keyframes';
+@import 'utils';
 @import 'bower_components/bourbon/dist/bourbon';
 
 $table-container-height:		100px;
@@ -15,6 +17,7 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table-widget {
 	position: relative;
+	font-family: 'Heiti TC';
 }
 
 .columns-table-container {
@@ -48,6 +51,7 @@ $columns-table-accent-color: 	#69A368;
 	top: $table-row-offset-top * 2;
 	overflow: hidden;
 	@include transition(opacity 0.15s);
+	@include transition(box-shadow 0.15s);
 }
 
 /* The top three rows should show

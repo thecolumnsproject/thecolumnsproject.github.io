@@ -155,14 +155,14 @@ $(function() {
 	var originalBackground = {},
 		originalRows = [];
 
-	// Animation constants
+	// Animation Constants
 	var ANIMATION_DURATION = 350;
 
 	// UI Constants
 	var ROW_OFFSET = 5,
 		ROW_DELAY = ANIMATION_DURATION * 0.01;
 
-	// UI Management classes
+	// UI Management Classes
 	var TABLE_CLASS = 'columns-table-widget',
 		TABLE_BODY_SELECTOR = '.columns-table',
 		TABLE_ROW_SELECTOR = '.columns-table-row',
@@ -171,6 +171,9 @@ $(function() {
 		LOADING_CLASS = 'loading',
 		ANIMATING_CLASS = 'velocity-animating',
 		$TABLE = $('.' + TABLE_CLASS);
+
+	// File System Constants
+	var CSS_PATH = 'css/embed-table.css';
 
 
 	// Table Creation
@@ -187,6 +190,11 @@ $(function() {
 		// Set up Handlebars partials, helpers and templates
 		generateHandlebarsHelpers();
 		generateHandlebarsPartials();
+
+		// Get the CSS and add it to the DOM
+		getTableStyle(function(data) {
+			$TABLE.after($('<style>', {html: data}));
+		});
 
 		// Position table correctly given the size of the screen
 		// and reposition on resize events
@@ -207,6 +215,13 @@ $(function() {
 		// });
 
 		
+	}
+
+	function getTableStyle(callback) {
+		$.get(CSS_PATH, function(data) {
+			console.log(data);
+			callback(data);
+		});
 	}
 
 	function populateTable(data) {
@@ -367,14 +382,29 @@ $(function() {
 	// ---------------------------------
 
 	function setupTableEvents() {
-		$(".columns-table").hammer({domEvents: true}).bind('tap', function(e) {
+		// $(".columns-table").hammer({domEvents: true}).bind('tap', function(e) {
+		// 	$table = $(this);
+		// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+		// 		expandTable($table);
+		// 	}
+		// });
+
+		$(".columns-table").click(function(e) {
 			$table = $(this);
 			if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
 				expandTable($table);
 			}
 		});
 
-		$(".columns-table-close-button").hammer({domEvents: true}).bind('tap', function(e) {
+		// $(".columns-table-close-button").hammer({domEvents: true}).bind('tap', function(e) {
+		// 	var $parent = $(this).parents('.columns-table-widget');
+		// 	var $table = $parent.find('.columns-table');
+		// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+		// 		collapseTable($table);
+		// 	}
+		// });
+
+		$(".columns-table-close-button").click(function(e) {
 			var $parent = $(this).parents('.columns-table-widget');
 			var $table = $parent.find('.columns-table');
 			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {

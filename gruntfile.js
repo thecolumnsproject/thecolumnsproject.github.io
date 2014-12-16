@@ -22,6 +22,23 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		concat: {
+			dist: {
+				src: [
+					'javascripts/embed-table-intro.js',
+					'bower_components/jquery/dist/jquery.min.js',
+					// 'bower_components/hammerjs/hammer.min.js',
+					// 'bower_components/jquery-hammerjs/jquery.hammer.js',
+					'bower_components/velocity/velocity.min.js',
+					// 'bower_components/velocity/velocity.ui.min.js',
+					'bower_components/handlebars/handlebars.min.js',
+					'templates/templates.js',
+					'javascripts/embed-table.js',
+					'javascripts/embed-table-outro.js'
+				],
+				dest: 'public/embed-table.js'
+			}
+		},
 		watch: {
 			options: {
 				livereload: true,
@@ -39,6 +56,7 @@ module.exports = function(grunt) {
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',
+				tasks: ['concat']
 			}
 		}
 	});
@@ -46,6 +64,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-handlebars');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 
-	grunt.registerTask('default', ['sass', 'handlebars', 'watch']);
+	grunt.registerTask('default', ['sass', 'handlebars', 'concat', 'watch']);
 }

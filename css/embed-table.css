@@ -1,4 +1,8 @@
 /* Grays */
+@import url(../css/columns-font.css);
+@font-face {
+  font-family: Heiti TC;
+  src: url(../fonts/STHeitiTC-Light.ttf); }
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
@@ -29,8 +33,17 @@
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
+.translateY-reset {
+  -webkit-transform: translateY(0px) !important;
+  -moz-transform: translateY(0px) !important;
+  -ms-transform: translateY(0px) !important;
+  -o-transform: translateY(0px) !important;
+  transform: translateY(0px) !important;
+  /* override inline style translateY */ }
+
 .columns-table-widget {
-  position: relative; }
+  position: relative;
+  font-family: 'Heiti TC'; }
 
 .columns-table-container {
   width: 100%;
@@ -79,7 +92,10 @@
   overflow: hidden;
   -webkit-transition: opacity 0.15s;
   -moz-transition: opacity 0.15s;
-  transition: opacity 0.15s; }
+  transition: opacity 0.15s;
+  -webkit-transition: box-shadow 0.15s;
+  -moz-transition: box-shadow 0.15s;
+  transition: box-shadow 0.15s; }
 
 /* The top three rows should show
  * as a preview of the full stack

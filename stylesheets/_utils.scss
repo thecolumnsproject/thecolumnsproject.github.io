@@ -1,0 +1,5 @@
+@import 'bower_components/bourbon/dist/bourbon';
+
+.translateY-reset {
+	@include transform(translateY(0px) !important); /* override inline style translateY */
+} 

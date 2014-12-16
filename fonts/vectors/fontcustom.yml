@@ -6,7 +6,7 @@
 
 font_name: columns-font
 css_selector: .icon-{{glyph}}
-preprocessor_path: ""
+preprocessor_path: "fonts/"
 autowidth: false
 no_hash: false
 force: false
@@ -30,6 +30,7 @@ input:
 output:
   fonts: ../                              # required
   css: ../../css
+  # scss: ../../stylesheets 
   preview: ../../css
   #my-custom-template.yml: path/to/template/output
 

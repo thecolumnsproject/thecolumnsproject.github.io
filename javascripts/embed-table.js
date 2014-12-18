@@ -153,7 +153,8 @@ $(function() {
 
 	// Storage variables for resetting positions
 	var originalBackground = {},
-		originalRows = [];
+		originalRows = [],
+		$originalSibling;
 
 	// Animation Constants
 	var ANIMATION_DURATION = 350;
@@ -163,17 +164,30 @@ $(function() {
 		ROW_DELAY = ANIMATION_DURATION * 0.01;
 
 	// UI Management Classes
-	var TABLE_CLASS = 'columns-table-widget',
+	var TABLE_SELECTOR = '.columns-table-widget',
 		TABLE_BODY_SELECTOR = '.columns-table',
 		TABLE_ROW_SELECTOR = '.columns-table-row',
+		PLACEHOLDER_CLASS = 'columns-table-placeholder',
 		EXPANDED_CLASS = 'expanded',
 		EXPANDING_CLASS = 'expanding',
+		RELOCATED_CLASS = 'relocated',
 		LOADING_CLASS = 'loading',
 		ANIMATING_CLASS = 'velocity-animating',
-		$TABLE = $('.' + TABLE_CLASS);
+		$TABLE;
 
 	// File System Constants
-	var CSS_PATH = 'css/embed-table.css';
+	var ROOT_PATH = 'http://127.0.0.1/';
+	// if (env) {
+	// 	switch (env) {
+	// 		case 'local':
+	// 			ROOT_PATH = 'http://localhost/'
+	// 			break;
+	// 		default:
+	// 			ROOT_PATH = 'https://thecolumnsproject.github.io/';
+	// 	}
+	// }
+	CSS_PATH = ROOT_PATH + 'css/embed-table.css',
+	IMG_PATH = ROOT_PATH + 'images/';
 
 
 	// Table Creation
@@ -192,16 +206,23 @@ $(function() {
 		generateHandlebarsPartials();
 
 		// Get the CSS and add it to the DOM
-		getTableStyle(function(data) {
-			$TABLE.after($('<style>', {html: data}));
-		});
+		// getTableStyle(function(data) {
+		// 	$TABLE.after($('<style>', {html: data}));
+		// });
+		getTableStyle();
+
+		// Generate table skeleton
+		// var skeleton = createSkeleton();
+		// var script = getScript();
+		// script.parentNode.insertBefore(skeleton, script);
+		$TABLE = $(TABLE_SELECTOR);
 
 		// Position table correctly given the size of the screen
 		// and reposition on resize events
 		positionTable();
 		$(window).resize(positionTable);
 
-		// Generate table skeleton
+		// Generate table structure
 		var loading = createLoading();
 		var body = createBody();
 
@@ -218,10 +239,16 @@ $(function() {
 	}
 
 	function getTableStyle(callback) {
-		$.get(CSS_PATH, function(data) {
-			console.log(data);
-			callback(data);
-		});
+		// $.get(CSS_PATH, function(data) {
+		// 	console.log(data);
+		// 	callback(data);
+		// });
+		var style = document.createElement('link');
+		style.rel = 'stylesheet';
+		style.type = 'text/css';
+		style.href = CSS_PATH;
+		style.media = 'all';
+		document.head.appendChild(style);
 	}
 
 	function populateTable(data) {
@@ -268,7 +295,7 @@ $(function() {
 	function positionTable() {
 
 		// Don't do anything else if the table is already the width of the screen
-		if ($TABLE.width() == $(window).width()) {
+		if ($TABLE.width() == $(window).width() || $TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)) {
 			return;
 		}
 
@@ -288,9 +315,14 @@ $(function() {
 		$TABLE.css(properties);
 	}
 
+	function createSkeleton() {
+		var skeleton = Columns.Templates['templates/embed-table/skeleton.hbs'];
+		return skeleton();
+	}
+
 	function createLoading() {
 		var loading = Columns.Templates['templates/embed-table/loading.hbs'];
-		return loading();
+		return loading({img_path: IMG_PATH});
 	}
 
 	function createHeader(title, sort_by_column) {
@@ -314,6 +346,18 @@ $(function() {
 			source: source,
 			item_count: item_count
 		});
+	}
+
+	function getScript() {
+		
+		// Find all the scripts generaged by us
+		var scripts = document.getElementsByTagName('script');
+		for (var i = 0; i < scripts.length ; i++) {
+			var script = scripts[i];
+			if (script.src.search(ROOT_PATH) > -1) {
+				return script;
+			}
+		}
 	}
 
 	function generateRowLayout(layout) {
@@ -401,6 +445,10 @@ $(function() {
 			var $table = $parent.find('.columns-table');
 			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
 				collapseTable($table);
+
+				// Prevent the dom from doing any other conflicting stuff
+				e.stopPropagation();
+				e.preventDefault();
 			}
 		});
 
@@ -428,6 +476,30 @@ $(function() {
 		$rows = $parent.find('.columns-table-row'),
 		$header = $parent.find('.columns-table-header');
 		$footer = $parent.find('.columns-table-footer');
+
+		// First move the table to the outermost part of the DOM
+		// while maintaining its visual position
+		// add a placeholder
+		// and make sure we're the highest z-index in the land
+
+		console.log(highestZIndex('*'));
+
+		var offsets = {
+			top: $parent.offset().top,
+			position: 'fixed',
+			'z-index': highestZIndex('*') + 1
+		};
+		
+		// Replace the table with a same-height placeholder
+		var placeholder = document.createElement('div');
+		placeholder.className = PLACEHOLDER_CLASS;
+		placeholder.style.height = $parent.height() + 'px';
+		placeholder.style.width = $parent.width() + 'px';
+		$originalSibling = $parent.siblings('script').first();
+		$parent.appendTo('body');
+		// $parent.addClass(RELOCATED_CLASS);
+		$parent.css(offsets);
+		$originalSibling.before(placeholder);
 
 		expandTableBackground($table, $bg, $rows, $header, $footer);
 		expandTableRows($table, $rows);
@@ -477,6 +549,7 @@ $(function() {
 				$bg.addClass(EXPANDED_CLASS);
 				$bg.addClass('translateY-reset');
 				$('html').addClass('table-expanded');
+				$TABLE.removeClass(RELOCATED_CLASS);
 			}
 		});
 	}
@@ -574,6 +647,17 @@ $(function() {
 		$rows = $parent.find('.columns-table-row'),
 		$header = $parent.find('.columns-table-header');
 
+		// First move the table back to its original DOM position
+		// while maintaining its visual position
+		// and remove the placeholder
+		var offsets = {
+			top: 0,
+			position: 'relative',
+			'z-index': 0
+		};
+		// $parent.addClass(RELOCATED_CLASS);
+		$parent.insertBefore($originalSibling);
+
 		collapseTableHeader($table, $header);
 		collapseTableBackground($table, $bg);
 		collapseTableBody($table);
@@ -615,6 +699,14 @@ $(function() {
 				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass('translateY-reset');
 				$('html').removeClass('table-expanded');
+				$TABLE.css({
+					top: 0,
+					position: 'relative',
+					'z-index': 0
+				});
+				$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
+				$TABLE.removeClass(RELOCATED_CLASS);
+				positionTable();
 			}
 		});
 	}
@@ -668,6 +760,25 @@ $(function() {
 				$row.addClass('translateY-reset');
 			}
 		});
+	}
+
+	// Utility methods
+	// ------------------------------
+
+	function highestZIndex(elem)
+	{
+		var elems = document.getElementsByTagName(elem);
+		var highest = 0;
+		for (var i = 0; i < elems.length; i++)
+		{
+			var zindex=document.defaultView.getComputedStyle(elems[i],null).getPropertyValue("z-index");
+			zindex = parseInt(zindex);
+			if ((zindex > highest) && !isNaN(zindex))
+			{
+				highest = zindex;
+			}
+		}
+		return highest;
 	}
 
 	createTable();

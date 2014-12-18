@@ -220,6 +220,17 @@ $columns-table-accent-color: 	#69A368;
 	opacity: 0;
 }
 
+/* Relocated styling
+ * ------------------
+ * These styles specify the position and look
+ * of the table while it's been repositioned
+ * to the bottom of the DOM
+ */
+
+.columns-table-widget.relocated {
+	position: fixed;
+}
+
 
 /* Animation styling
  * ------------------

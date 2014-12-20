@@ -212,9 +212,13 @@ $(function() {
 		getTableStyle();
 
 		// Generate table skeleton
-		// var skeleton = createSkeleton();
-		// var script = getScript();
-		// script.parentNode.insertBefore(skeleton, script);
+		var skeleton = createSkeleton();
+		var script = getScript();
+
+		var tmpDiv = document.createElement('div');
+		tmpDiv.innerHTML = skeleton;
+
+		script.parentNode.insertBefore(tmpDiv.firstChild, script);
 		$TABLE = $(TABLE_SELECTOR);
 
 		// Position table correctly given the size of the screen
@@ -235,7 +239,10 @@ $(function() {
 		// 	animation: "bounce"
 		// });
 
-		
+		// Prevent ghost clicks while the table is open
+		PreventGhostClick(document, function() {
+			return $TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)
+		});
 	}
 
 	function getTableStyle(callback) {
@@ -294,10 +301,10 @@ $(function() {
 
 	function positionTable() {
 
-		// Don't do anything else if the table is already the width of the screen
-		if ($TABLE.width() == $(window).width() || $TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)) {
-			return;
-		}
+		// Don't do anything else if the table is in expand mode
+		// if ($TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)) {
+		// 	return;
+		// }
 
 		// Set up the new css properties for the table
 		properties = {
@@ -307,7 +314,7 @@ $(function() {
 		// Only move the table if it's not aligned with the left side of the screen
 		var offset = $TABLE.offset().left;
 		if (offset != 0) {
-			properties['margin-left'] = -offset
+			properties['margin-left'] = -offset 
 		}
 
 		// Make the table the width of the window
@@ -426,7 +433,7 @@ $(function() {
 	// ---------------------------------
 
 	function setupTableEvents() {
-		$(".columns-table").hammer({domEvents: true}).bind('tap', function(e) {
+		$(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
 			$table = $(this);
 			if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
 				expandTable($table);
@@ -440,7 +447,7 @@ $(function() {
 		// 	}
 		// });
 
-		$(".columns-table-close-button").hammer({domEvents: true}).bind('tap', function(e) {
+		$(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
 			var $parent = $(this).parents('.columns-table-widget');
 			var $table = $parent.find('.columns-table');
 			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
@@ -486,18 +493,21 @@ $(function() {
 
 		var offsets = {
 			top: $parent.offset().top,
-			position: 'fixed',
-			'z-index': highestZIndex('*') + 1
+			'margin-left': 0,
+			position: 'absolute',
+			'z-index': (highestZIndex('*') + 1)
 		};
+
+		console.log($parent.offset().top);
 		
 		// Replace the table with a same-height placeholder
 		var placeholder = document.createElement('div');
 		placeholder.className = PLACEHOLDER_CLASS;
-		placeholder.style.height = $parent.height() + 'px';
-		placeholder.style.width = $parent.width() + 'px';
+		placeholder.style.height = $parent.height();
+		placeholder.style.width = $parent.width();
 		$originalSibling = $parent.siblings('script').first();
 		$parent.appendTo('body');
-		// $parent.addClass(RELOCATED_CLASS);
+		$parent.addClass(RELOCATED_CLASS);
 		$parent.css(offsets);
 		$originalSibling.before(placeholder);
 
@@ -505,6 +515,8 @@ $(function() {
 		expandTableRows($table, $rows);
 		expandTableBody($table);
 		expandTableHeader($table, $header);
+
+		positionTable();
 	}
 
 	function expandTableHeader($table, $header) {
@@ -542,14 +554,17 @@ $(function() {
 			duration: ANIMATION_DURATION,
 			begin: function(elements) {
 				$bg.addClass(EXPANDING_CLASS);
+				$TABLE.addClass(EXPANDING_CLASS);
 				$bg.removeClass('translateY-reset');
 			},
 			complete: function(elements) {
 				$bg.removeClass(EXPANDING_CLASS);
 				$bg.addClass(EXPANDED_CLASS);
+				$TABLE.removeClass(EXPANDING_CLASS);
+				$TABLE.addClass(EXPANDED_CLASS);
 				$bg.addClass('translateY-reset');
 				$('html').addClass('table-expanded');
-				$TABLE.removeClass(RELOCATED_CLASS);
+				// $TABLE.removeClass(RELOCATED_CLASS);
 			}
 		});
 	}
@@ -658,10 +673,14 @@ $(function() {
 		// $parent.addClass(RELOCATED_CLASS);
 		$parent.insertBefore($originalSibling);
 
-		collapseTableHeader($table, $header);
-		collapseTableBackground($table, $bg);
-		collapseTableBody($table);
-		collapseTableRows($table, $rows);
+		// setTimeout(function() {
+			collapseTableHeader($table, $header);
+			collapseTableBackground($table, $bg);
+			collapseTableBody($table);
+			collapseTableRows($table, $rows);
+		// }, 0);
+
+		positionTable();
 	}
 
 	function collapseTableHeader($table, $header) {
@@ -694,6 +713,8 @@ $(function() {
 				$bg.addClass(EXPANDING_CLASS);
 				$bg.removeClass('translateY-reset');
 				$bg.removeClass(EXPANDED_CLASS);
+				$TABLE.removeClass(EXPANDED_CLASS);
+				$TABLE.addClass(EXPANDING_CLASS);
 			},
 			complete: function(elements) {
 				$bg.removeClass(EXPANDING_CLASS);
@@ -706,7 +727,7 @@ $(function() {
 				});
 				$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
 				$TABLE.removeClass(RELOCATED_CLASS);
-				positionTable();
+				$TABLE.removeClass(EXPANDING_CLASS);
 			}
 		});
 	}

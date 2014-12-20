@@ -61,7 +61,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "";
 
 
-  buffer += "<div class=\"columns-table-container\">\n			<section class=\"columns-table-wrapper\">\n				<div class=\"columns-table\">\n					\n				</div>\n				\n			</section>\n		</div>";
+  buffer += "	<div class=\"columns-table-container\">\n		<div class=\"columns-table-wrapper\">\n			<div class=\"columns-table\">\n				\n			</div>\n			\n		</div>\n	</div>";
   return buffer;
   });
 
@@ -260,7 +260,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"columns-table-widget\"></div>";
+  return "<div class=\"columns-table-widget cleanslate\"></div>";
   });
 
 this["Columns"]["Templates"]["templates/embed-table/style.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

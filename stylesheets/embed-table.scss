@@ -1,3 +1,4 @@
+// @import '../bower_components/cleanslate/cleanslate.css';
 @import 'variables';
 @import 'fonts';
 @import 'keyframes';
@@ -18,12 +19,18 @@ $columns-table-accent-color: 	#69A368;
 .columns-table-widget {
 	position: relative;
 	font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
-}
 
-.columns-table-container {
-	width: 100%;
-	background: $gray-lightest;
-	border: 1px solid $gray-lighter;
+		.columns-table-container {
+		width: 100%;
+		background: $gray-lightest;
+		border: 1px solid $gray-lighter;
+	}
+
+	* {
+		box-sizing: content-box;
+		font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+		line-height: normal;
+ 	}
 }
 
 .columns-table-wrapper {
@@ -228,7 +235,8 @@ $columns-table-accent-color: 	#69A368;
  */
 
 .columns-table-widget.relocated {
-	position: fixed;
+	// position: fixed;
+	// margin-left: 0; /* We need to override 
 }
 
 
@@ -254,10 +262,10 @@ html.table-expanded {
 }
 
 .columns-table-container.expanded {
-	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
+	// transform: translateY(0px); /* Remove the expansion animation transform */
 	position: fixed;
 	top: 0;
-	// @include calc(height, '100% - #{$table-container-padding} * 2');
+	// @include calc(height, '100% - #{$table-container-padding} * 2' !important);
 	height: 100% !important; /* Override the height set via animation */
 	overflow: scroll;
 }

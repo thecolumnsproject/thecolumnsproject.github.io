@@ -44,11 +44,14 @@
 .columns-table-widget {
   position: relative;
   font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif; }
-
-.columns-table-container {
-  width: 100%;
-  background: #fafafa;
-  border: 1px solid #ebebeb; }
+  .columns-table-widget .columns-table-container {
+    width: 100%;
+    background: #fafafa;
+    border: 1px solid #ebebeb; }
+  .columns-table-widget * {
+    box-sizing: content-box;
+    font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+    line-height: normal; }
 
 .columns-table-wrapper {
   width: -webkit-calc(100% - 20px * 2);
@@ -376,9 +379,6 @@
  * of the table while it's been repositioned
  * to the bottom of the DOM
  */
-.columns-table-widget.relocated {
-  position: fixed; }
-
 /* Animation styling
  * ------------------
  * These styles specify the position and look

@@ -43,7 +43,9 @@
 
 .columns-table-widget {
   position: relative;
-  font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif; }
+  box-sizing: content-box;
+  font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+  max-width: none !important; }
   .columns-table-widget .columns-table-container {
     width: 100%;
     background: #fafafa;
@@ -51,7 +53,8 @@
   .columns-table-widget * {
     box-sizing: content-box;
     font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
-    line-height: normal; }
+    line-height: normal;
+    max-width: none !important; }
 
 .columns-table-wrapper {
   width: -webkit-calc(100% - 20px * 2);

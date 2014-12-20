@@ -18,7 +18,9 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table-widget {
 	position: relative;
+	box-sizing: content-box;
 	font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+	max-width: none !important;
 
 		.columns-table-container {
 		width: 100%;
@@ -30,6 +32,7 @@ $columns-table-accent-color: 	#69A368;
 		box-sizing: content-box;
 		font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
 		line-height: normal;
+		max-width: none !important;
  	}
 }
 

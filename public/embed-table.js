@@ -715,15 +715,11 @@ $(function() {
 		generateHandlebarsPartials();
 
 		// Get the CSS and add it to the DOM
-		// getTableStyle(function(data) {
-		// 	$TABLE.after($('<style>', {html: data}));
-		// });
 		getTableStyle();
 
 		// Generate table skeleton
 		var skeleton = createSkeleton();
 		var script = getScript();
-
 		var tmpDiv = document.createElement('div');
 		tmpDiv.innerHTML = skeleton;
 
@@ -754,11 +750,7 @@ $(function() {
 		});
 	}
 
-	function getTableStyle(callback) {
-		// $.get(CSS_PATH, function(data) {
-		// 	console.log(data);
-		// 	callback(data);
-		// });
+	function getTableStyle() {
 		var style = document.createElement('link');
 		style.rel = 'stylesheet';
 		style.type = 'text/css';

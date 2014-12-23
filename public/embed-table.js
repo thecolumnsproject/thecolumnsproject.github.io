@@ -462,6 +462,84 @@ function program1(depth0,data) {
   return buffer;
   });
 
+this["Columns"]["Templates"]["templates/layout/column.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<span class=\"layout-column\" draggable='true'>\n	"
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + "\n</span>";
+  return buffer;
+  });
+
+this["Columns"]["Templates"]["templates/layout/columns.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var buffer = "", stack1, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n		";
+  stack1 = self.invokePartial(partials['layout-column'], 'layout-column', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	";
+  return buffer;
+  }
+
+  buffer += "<div class=\"layout-columns\">\n	";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.columns), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</div>";
+  return buffer;
+  });
+
+this["Columns"]["Templates"]["templates/layout/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"layout-template-row-group\">\n			\n</div>	";
+  });
+
+this["Columns"]["Templates"]["templates/layout/row-value.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, self=this, functionType="function", escapeExpression=this.escapeExpression;
+
+function program1(depth0,data) {
+  
+  
+  return "placeholder";
+  }
+
+  buffer += "<span class=\"layout-template-row-value ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">";
+  if (helper = helpers.data) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.data); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</span>";
+  return buffer;
+  });
+
+this["Columns"]["Templates"]["templates/layout/template.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var buffer = "", stack1, self=this;
+
+
+  buffer += "<div class=\"layout-template\">\n	<div class=\"layout-template-row\">\n		";
+  stack1 = self.invokePartial(partials['layout-row-group'], 'layout-row-group', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "	\n	</div>\n</div>";
+  return buffer;
+  });
+
 this["Columns"]["Templates"]["templates/row.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -715,11 +793,15 @@ $(function() {
 		generateHandlebarsPartials();
 
 		// Get the CSS and add it to the DOM
+		// getTableStyle(function(data) {
+		// 	$TABLE.after($('<style>', {html: data}));
+		// });
 		getTableStyle();
 
 		// Generate table skeleton
 		var skeleton = createSkeleton();
 		var script = getScript();
+
 		var tmpDiv = document.createElement('div');
 		tmpDiv.innerHTML = skeleton;
 
@@ -750,7 +832,11 @@ $(function() {
 		});
 	}
 
-	function getTableStyle() {
+	function getTableStyle(callback) {
+		// $.get(CSS_PATH, function(data) {
+		// 	console.log(data);
+		// 	callback(data);
+		// });
 		var style = document.createElement('link');
 		style.rel = 'stylesheet';
 		style.type = 'text/css';

@@ -10,7 +10,8 @@ $(function() {
 	];
 
 	// Store the currently dragging item
-	var DRAGGING_ITEM;
+	var DRAGGING_ITEM,
+		DROPPABLE_ITEMS = [];
 
 	// UI Constants
 	var ROW_VALUE_CLASS = 'layout-template-row-value',
@@ -31,8 +32,16 @@ $(function() {
 	$("#layout").append(template());
 
 	// Set up drag and drop
+	$('.layout-column').draggable({
+		revert: true,
+		revertDuration: 200,
+		helper: 'clone',
+		opacity: .2
+	});
+
+
 	$('.layout-column').on('dragstart', function(e) {
-		e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
+		// e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
 		DRAGGING_ITEM = this;
 	});
 
@@ -40,53 +49,104 @@ $(function() {
 	// 	console.log(e.originalEvent.clientX);
 	// });
 
-	$('.layout-column').on('dragend', function(e) {
+	$('.layout-column').on('dragstop', function(e) {
 
 		// Remove any existing placeholders
-		$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
 		$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
+		$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
 
 		// Reset the dragging data
 		DRAGGING_ITEM = undefined;
+		console.log('dragend');
 	});
 
-	$('.layout-template-row-group').on('dragover', function(e) {
-		
-		// Remove any existing placeholders
-		$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
-		$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
+	$('.layout-column').on('drag', function(e) {
 
-		// Determine where to put the placeholder
-		positionDropForDragEventInParentWithPlaceholder(e, $(this), true);
+		if (DROPPABLE_ITEMS.length > 0) {
+			// Remove any existing placeholders
+			$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
+			$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
 
-		e.preventDefault();
-		e.stopPropagation();
-
+			// Determine where to put the placeholder
+			var droppable = DROPPABLE_ITEMS[DROPPABLE_ITEMS.length - 1];
+			positionDropForDragEventInParentWithPlaceholder(e, $(droppable), true)
+		}
 	});
 
+	function setupGroupDraggingListeners($group) {
+		$group.droppable();
 
-	$('.layout-template-row-group').on('dragenter', function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		// $(this).addClass('dragover');
+		// $group.on('dragover', function(e) {
+			
+		// 	// Remove any existing placeholders
+		// 	$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
+		// 	$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
 
-		console.log('drag started in ' + $(e.target).html());
-	});
+		// 	// Determine where to put the placeholder
+		// 	positionDropForDragEventInParentWithPlaceholder(e, $(this), true);
 
-	$('.layout-template-row-group').on('dragleave', function(e) {
-		// $(this).removeClass('dragover');
-		console.log('drag ended in ' + $(e.target).html());
-	});
+		// 	e.preventDefault();
+		// 	e.stopPropagation();
 
-	$('.layout-template-row-group').on('drop', function(e) {
-		e.preventDefault();
-		e.stopPropagation();
+		// });
 
-		// Drop the element
-		positionDropForDragEventInParentWithPlaceholder(e, $(this), false);
-		// $(this).removeClass('dragover');
 
-	});
+		$group.on('dropover', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			if (DROPPABLE_ITEMS.indexOf(this) == -1) {
+				DROPPABLE_ITEMS.push(this);
+			}
+
+			// $(this).addClass('dragover');
+			if ($group.hasClass('placeholder')) {
+				console.log('drag started in:');
+				console.log($(this));
+			}
+		});
+
+		$group.on('dropout', function(e) {
+			// $(this).removeClass('dragover');
+
+			// Remove any existing placeholders
+			$(this).children('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
+			$(this).children('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
+
+			var index = DROPPABLE_ITEMS.indexOf(this);
+			if (index > -1) {
+				DROPPABLE_ITEMS.splice(index, 1);
+			}
+
+			if ($group.hasClass('placeholder')) {
+				console.log('drag ended in:');
+				console.log($(this));
+			}
+		});
+
+		$group.on('drop', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			// Only do stuff if this is the most recently dragged upon item
+			if (DROPPABLE_ITEMS.indexOf(this) < DROPPABLE_ITEMS.length - 1) {
+				return;
+			}
+
+			// Remove any existing placeholders
+			$(this).children('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
+			$(this).children('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
+
+			DROPPABLE_ITEMS = [];
+
+			// Drop the element
+			positionDropForDragEventInParentWithPlaceholder(e, $(this), false);
+			// $(this).removeClass('dragover');
+			console.log('drop');
+
+		});
+	}
+	setupGroupDraggingListeners($('.' + ROW_GROUP_CLASS));
 
 	// Template Querying Functions
 	// ----------------------------
@@ -110,7 +170,8 @@ $(function() {
 	function positionDropForDragEventInParentWithPlaceholder(event, $parent, placeholder) {
 
 		// Get all the items in the group
-		var $children = $parent.children();
+		// var rowPlaceholderSelector = "." + ROW_VALUE_CLASS + "." + ROW_VALUE_PLACEHOLDER_CLASS;
+		var $children = $parent.children().not('.' + ROW_VALUE_PLACEHOLDER_CLASS);
 
 		// If there aren't any children,
 		// just insert the placeholder at the beginning
@@ -166,7 +227,12 @@ $(function() {
 						property: 'flex-direction',
 						value: direction
 					}]
-				}));
+				})).parent();
+
+				// If this is going to be a permanent group, setup drop events
+				if (!placeholder) {
+					setupGroupDraggingListeners($parent);
+				}
 
 				// Check whether the drag is before of after the intersecting element
 				if (dragOffset >= childMiddle) {

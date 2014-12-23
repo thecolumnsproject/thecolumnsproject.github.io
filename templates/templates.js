@@ -295,7 +295,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<span class=\"layout-column\" draggable='true'>\n	"
+  buffer += "<span class=\"layout-column\">\n	"
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
     + "\n</span>";
   return buffer;

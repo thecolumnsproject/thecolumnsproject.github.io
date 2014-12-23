@@ -38,7 +38,7 @@
 
 .layout-template-row {
 	width: 50%;
-	min-height: 120px;
+	min-height: 60px;
 	border: 1px solid $gray-lighter;
 	background-color: $gray-lightest;
 	padding: 12px;
@@ -64,4 +64,30 @@
 
 .layout-template-row-value.placeholder {
 	color: fade-out($primary-color, .5);
+}
+
+.layout-template-row-group {
+	@include display(flex);
+	@include justify-content(space-between);
+	@include align-items(center);
+
+	&[data-flex-direction='row'] {
+		@include flex-direction(row);
+	}
+
+	&[data-flex-direction='column'] {
+		@include flex-direction(column);
+	}
+
+	&[data-align-items='flex-start'] {
+		@include align-items(flex-start);
+	}
+
+	&[data-align-items='center'] {
+		@include align-items(center);
+	}
+
+	&[data-align-items='flex-end'] {
+		@include align-items(flex-end);
+	}
 }

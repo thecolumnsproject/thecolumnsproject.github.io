@@ -498,11 +498,31 @@ function program1(depth0,data) {
 
 this["Columns"]["Templates"]["templates/layout/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var buffer = "", stack1, self=this;
+
+function program1(depth0,data) {
   
+  
+  return "placeholder";
+  }
 
+function program3(depth0,data) {
+  
+  var stack1;
+  stack1 = self.invokePartial(partials.layout, 'layout', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
 
-  return "<div class=\"layout-template-row-group\">\n			\n</div>	";
+  buffer += "<div class=\"layout-template-row-group ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\"\n			";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.layout), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n</div>	";
+  return buffer;
   });
 
 this["Columns"]["Templates"]["templates/layout/row-value.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

@@ -148,7 +148,7 @@
   box-sizing: border-box;
   border: 1px solid transparent; }
 
-.layout-template-row-group.dragover {
+.layout-template-row-group.placeholder {
   border: 1px dashed #3e97bd;
   background-color: rgba(62, 151, 189, 0.1); }
 

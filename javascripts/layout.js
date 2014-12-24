@@ -16,8 +16,12 @@ $(function() {
 	// UI Constants
 	var ROW_VALUE_CLASS = 'layout-template-row-value',
 		ROW_VALUE_PLACEHOLDER_CLASS = 'placeholder',
+		ROW_VALUE_SELECTOR = '.' + ROW_VALUE_CLASS,
+		ROW_VALUE_PLACEHOLDER_SELECTOR = ROW_VALUE_SELECTOR + '.' + ROW_GROUP_PLACEHOLDER_CLASS,
 		ROW_GROUP_CLASS = 'layout-template-row-group',
-		ROW_GROUP_PLACEHOLDER_CLASS = 'placeholder';
+		ROW_GROUP_PLACEHOLDER_CLASS = 'placeholder',
+		ROW_GROUP_SELECTOR = '.' + ROW_GROUP_CLASS,
+		ROW_GROUP_PLACEHOLDER_SELECTOR = ROW_GROUP_SELECTOR + '.' + ROW_GROUP_PLACEHOLDER_CLASS;
 
 	// Set up the columns options
 	Handlebars.registerPartial('layout-column', Columns.Templates['templates/layout/column.hbs']);
@@ -56,6 +60,7 @@ $(function() {
 		$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
 
 		// Reset the dragging data
+		$(ROW_GROUP_SELECTOR).removeClass('dragover');
 		DRAGGING_ITEM = undefined;
 		console.log('dragend');
 	});
@@ -63,13 +68,19 @@ $(function() {
 	$('.layout-column').on('drag', function(e) {
 
 		if (DROPPABLE_ITEMS.length > 0) {
+
 			// Remove any existing placeholders
 			$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
 			$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
 
 			// Determine where to put the placeholder
 			var droppable = DROPPABLE_ITEMS[DROPPABLE_ITEMS.length - 1];
-			positionDropForDragEventInParentWithPlaceholder(e, $(droppable), true)
+			positionDropForDragEventInParentWithPlaceholder(e, $(droppable), true);
+
+			// Make sure that only the correct group is highlighted
+			$(ROW_GROUP_SELECTOR).removeClass('dragover');
+			$(droppable).addClass('dragover');
+
 		}
 	});
 
@@ -99,11 +110,10 @@ $(function() {
 				DROPPABLE_ITEMS.push(this);
 			}
 
+			// Make sure that only this class has the dragover appearance
+			$(ROW_GROUP_SELECTOR).removeClass('dragover');
+			console.log(this);
 			// $(this).addClass('dragover');
-			if ($group.hasClass('placeholder')) {
-				console.log('drag started in:');
-				console.log($(this));
-			}
 		});
 
 		$group.on('dropout', function(e) {
@@ -116,11 +126,6 @@ $(function() {
 			var index = DROPPABLE_ITEMS.indexOf(this);
 			if (index > -1) {
 				DROPPABLE_ITEMS.splice(index, 1);
-			}
-
-			if ($group.hasClass('placeholder')) {
-				console.log('drag ended in:');
-				console.log($(this));
 			}
 		});
 
@@ -147,6 +152,16 @@ $(function() {
 		});
 	}
 	setupGroupDraggingListeners($('.' + ROW_GROUP_CLASS));
+
+	function setupGroupPlaceholderListeners($group) {
+		$group.mouseenter(function() {
+			$(this).parent().removeClass('dragover');
+		});
+
+		$group.mouseleave(function() {
+			$(this).parent().addClass('dragover');
+		});
+	}
 
 	// Template Querying Functions
 	// ----------------------------
@@ -185,7 +200,7 @@ $(function() {
 		// Loop through each child until we find
 		// the one that we're just to the left of
 		var $previousChild;
-		var dragThreshold = .5;
+		var dragThreshold = 0.5;
 		$children.each(function(index, child) {
 			$child = $(child);
 
@@ -199,12 +214,32 @@ $(function() {
 			var childMiddleX = childEdgeLeft + ($child.width() * dragThreshold);
 			var childMiddleY = childEdgeTop + ($child.height() * dragThreshold);
 
+			// Add a small buffer around groups so that it's possible to hover
+			// over both elements within as well as the group itself.
+			// We'll reduce the size of children in the direction of the group
+			// in order to acheive this.
+			var buffer = 0.2,
+				bufferX,
+				bufferY,
+				direction = $parent.data('flex-direction') || 'row';
+
+			if (direction == 'row') {
+				bufferX = $child.width() * buffer;
+				bufferY = 0;
+			} else {
+				bufferX = 0;
+				bufferY = $child.height() * buffer;
+			}
+
 			// If we're intersecting directly with this child,
 			// set it as the new intersect child
-			if (childEdgeLeft <= dragOffsetX &&
-				childEdgeRight >= dragOffsetX &&
-				childEdgeTop <= dragOffsetY &&
-				childEdgeBottom >= dragOffsetY) {
+			if (childEdgeLeft + bufferX <= dragOffsetX &&
+				childEdgeRight - bufferX>= dragOffsetX &&
+				childEdgeTop + bufferY <= dragOffsetY &&
+				childEdgeBottom - bufferY >= dragOffsetY) {
+
+				// Reset the previous child
+				$previousChild = undefined;
 
 				var wrapper = Columns.Templates['templates/layout/row-group.hbs'];
 
@@ -212,11 +247,16 @@ $(function() {
 				// has the opposite cross-axis as the parent
 				// and that we look for previous children based on the
 				// correct axis
-				var direction = 'column';
-				var dragOffset = dragOffsetY;
-				var childMiddle = childMiddleY;
-				if ($parent.data('flex-direction') == direction) {
-					direction = 'row';
+				var dragOffset,
+					childMiddle,
+					childDirection;
+
+				if (direction == 'row') {
+					childDirection = 'column';
+					dragOffset = dragOffsetY;
+					childMiddle = childMiddleY;
+				} else {
+					childDirection = 'row';
 					dragOffset = dragOffsetX;
 					childMiddle = childMiddleX;
 				}
@@ -225,16 +265,18 @@ $(function() {
 					placeholder: placeholder,
 					layout: [{
 						property: 'flex-direction',
-						value: direction
+						value: childDirection
 					}]
 				})).parent();
 
 				// If this is going to be a permanent group, setup drop events
-				if (!placeholder) {
+				if (placeholder) {
+					// DROPPABLE_ITEMS.push($parent);
+				} else {
 					setupGroupDraggingListeners($parent);
 				}
 
-				// Check whether the drag is before of after the intersecting element
+				// Check whether the drag is before or after the intersecting element
 				if (dragOffset >= childMiddle) {
 					$previousChild = $child;
 				}
@@ -244,9 +286,20 @@ $(function() {
 
 			} else {
 
+				var dragOffset,
+					childMiddle;
+
+				if (direction == 'row') {
+					dragOffset = dragOffsetX;
+					childMiddle = childMiddleX;
+				} else {
+					dragOffset = dragOffsetY;
+					childMiddle = childMiddleY;
+				}
+
 				// If we're more than the drag treshold past the child
 				// set this as the new previous child
-				if (dragOffsetX >= childMiddleX) {
+				if (dragOffset >= childMiddle) {
 					$previousChild = $child;
 				}
 

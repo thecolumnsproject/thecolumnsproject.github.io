@@ -16,6 +16,7 @@ $(function() {
 	// UI Constants
 	var ROW_VALUE_CLASS = 'layout-template-row-value',
 		ROW_VALUE_PLACEHOLDER_CLASS = 'placeholder',
+		ROW_VALUE_INACTIVE_CLASS = 'inactive',
 		ROW_VALUE_SELECTOR = '.' + ROW_VALUE_CLASS,
 		ROW_VALUE_PLACEHOLDER_SELECTOR = ROW_VALUE_SELECTOR + '.' + ROW_GROUP_PLACEHOLDER_CLASS,
 		ROW_GROUP_CLASS = 'layout-template-row-group',
@@ -49,14 +50,6 @@ $(function() {
 			// e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
 			DRAGGING_ITEM = this;
 			$(this).addClass('inactive');
-		});
-
-		$columns.on('dragstop', function(e, ui) {
-			// Did we end up dropping the element
-			// DRAGGING_ITEM = this;
-			// $(this).addClass('inactive');
-			// Keep the original item inactive
-			
 		});
 
 		$columns.on('dragstop', function(e) {
@@ -112,12 +105,39 @@ $(function() {
 		$value.on('dragstart', function(e) {
 			// e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
 			DRAGGING_ITEM = this;
-			$(this).remove();
+			$(this).addClass('inactive');
+
+			// If this there's only one item left in the surrouning group, dissolve the group.
+			// Unless the parent group is the very first group in the cell.
+			// We check for three items because one is the item being dragged, the second is its handle
+			// and the third is the lonely remaining item in the group that will now be single
+			var $children = $(this).parent().children();
+			if ($children.length == 3 && !$(this).parent().parent().hasClass('layout-template-row')) {
+				$children.unwrap();
+			}
 		});
 
-		// $value.on('drag', function() {
-		// 	var $matches = 
-		// });
+		$value.on('drag', function(e) {
+			if (DROPPABLE_ITEMS.length > 0) {
+
+				// Remove any existing placeholders
+				$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
+				$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
+
+				// Determine where to put the placeholder
+				var droppable = DROPPABLE_ITEMS[DROPPABLE_ITEMS.length - 1];
+				positionDropForDragEventInParentWithPlaceholder(e, $(droppable), true);
+
+				// Make sure that only the correct group is highlighted
+				$(ROW_GROUP_SELECTOR).removeClass('dragover');
+				$(droppable).addClass('dragover');
+
+			}
+		});
+
+		$value.on('dragstop', function(e) {
+			$(this).remove();
+		});
 	}
 
 	// $('.layout-column').on('drag', function(e) {
@@ -224,7 +244,7 @@ $(function() {
 		}
 
 		// Also don't do anything if we just dropped into a template
-		var $dropped = $(".layout-template-row-value:contains('" + DRAGGING_ITEM.innerHTML + "')");
+		var $dropped = $(".layout-template-row-value:contains('" + DRAGGING_ITEM.innerHTML + "')").not('.' + ROW_VALUE_INACTIVE_CLASS);
 		if ($dropped.length > 0) {
 			return;
 		}
@@ -288,15 +308,16 @@ $(function() {
 		} else {
 			$parent.prepend($placeholder);
 		}
-
-
 	}
 
 	function positionDropForDragEventInParentWithPlaceholder(event, $parent, placeholder) {
 
 		// Get all the items in the group
 		// var rowPlaceholderSelector = "." + ROW_VALUE_CLASS + "." + ROW_VALUE_PLACEHOLDER_CLASS;
-		var $children = $parent.children().not('.' + ROW_VALUE_PLACEHOLDER_CLASS);
+		var $children = $parent.children()
+						.not('.' + ROW_VALUE_PLACEHOLDER_CLASS)
+						.not('.' + ROW_VALUE_INACTIVE_CLASS)
+						.not('.ui-draggable-dragging');
 
 		// If there aren't any children,
 		// just insert the placeholder at the beginning

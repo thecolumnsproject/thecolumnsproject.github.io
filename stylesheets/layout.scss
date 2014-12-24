@@ -76,6 +76,10 @@
 	color: fade-out($primary-color, .5);
 }
 
+.layout-template-row-value.inactive {
+	display:none;
+}
+
 .layout-template-row-group {
 	@include display(flex);
 	@include justify-content(space-between);

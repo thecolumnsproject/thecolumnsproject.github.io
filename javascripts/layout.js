@@ -36,53 +36,93 @@ $(function() {
 	$("#layout").append(template());
 
 	// Set up drag and drop
-	$('.layout-column').draggable({
-		revert: true,
-		revertDuration: 200,
-		helper: 'clone',
-		opacity: .2
-	});
+	function setupDragForColumns($columns) {
+		$columns.draggable({
+			revert: 'invalid',
+			revertDuration: 200,
+			helper: 'clone',
+			opacity: .2,
+			cancel: '.inactive'
+		});
 
+		$columns.on('dragstart', function(e) {
+			// e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
+			DRAGGING_ITEM = this;
+			$(this).addClass('inactive');
+		});
 
-	$('.layout-column').on('dragstart', function(e) {
-		// e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
-		DRAGGING_ITEM = this;
-	});
+		$columns.on('dragstop', function(e, ui) {
+			// Did we end up dropping the element
+			// DRAGGING_ITEM = this;
+			// $(this).addClass('inactive');
+			// Keep the original item inactive
+			
+		});
+
+		$columns.on('dragstop', function(e) {
+			
+			var $matches = $(".layout-template-row-value:contains('" + $(this).text() + "')");
+			if ($matches.length == 0) {
+				$(this).removeClass('inactive');
+			}
+			
+			// Remove any existing placeholders
+			$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
+			$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
+
+			// Reset the dragging data
+			$(ROW_GROUP_SELECTOR).removeClass('dragover');
+			DRAGGING_ITEM = undefined;
+			console.log('dragend');
+		});
+
+		$columns.on('drag', function(e) {
+
+			if (DROPPABLE_ITEMS.length > 0) {
+
+				// Remove any existing placeholders
+				$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
+				$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
+
+				// Determine where to put the placeholder
+				var droppable = DROPPABLE_ITEMS[DROPPABLE_ITEMS.length - 1];
+				positionDropForDragEventInParentWithPlaceholder(e, $(droppable), true);
+
+				// Make sure that only the correct group is highlighted
+				$(ROW_GROUP_SELECTOR).removeClass('dragover');
+				$(droppable).addClass('dragover');
+
+			}
+		});
+
+	}
+	setupDragForColumns($('.layout-column'));
+
+	function setupDragforValue($value) {
+		$value.draggable({
+			revert: 'invalid',
+			revertDuration: 200,
+			helper: function() {
+				var column = Columns.Templates['templates/layout/column.hbs']
+				return column($value.text());
+			},
+			opacity: .2
+		});
+
+		$value.on('dragstart', function(e) {
+			// e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
+			DRAGGING_ITEM = this;
+			$(this).remove();
+		});
+
+		// $value.on('drag', function() {
+		// 	var $matches = 
+		// });
+	}
 
 	// $('.layout-column').on('drag', function(e) {
 	// 	console.log(e.originalEvent.clientX);
 	// });
-
-	$('.layout-column').on('dragstop', function(e) {
-
-		// Remove any existing placeholders
-		$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
-		$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
-
-		// Reset the dragging data
-		$(ROW_GROUP_SELECTOR).removeClass('dragover');
-		DRAGGING_ITEM = undefined;
-		console.log('dragend');
-	});
-
-	$('.layout-column').on('drag', function(e) {
-
-		if (DROPPABLE_ITEMS.length > 0) {
-
-			// Remove any existing placeholders
-			$('.' + ROW_VALUE_CLASS + '.' + ROW_VALUE_PLACEHOLDER_CLASS).remove();
-			$('.' + ROW_GROUP_CLASS + '.' + ROW_GROUP_PLACEHOLDER_CLASS).children().unwrap();
-
-			// Determine where to put the placeholder
-			var droppable = DROPPABLE_ITEMS[DROPPABLE_ITEMS.length - 1];
-			positionDropForDragEventInParentWithPlaceholder(e, $(droppable), true);
-
-			// Make sure that only the correct group is highlighted
-			$(ROW_GROUP_SELECTOR).removeClass('dragover');
-			$(droppable).addClass('dragover');
-
-		}
-	});
 
 	function setupGroupDraggingListeners($group) {
 		$group.droppable();
@@ -103,8 +143,6 @@ $(function() {
 
 
 		$group.on('dropover', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
 
 			if (DROPPABLE_ITEMS.indexOf(this) == -1) {
 				DROPPABLE_ITEMS.push(this);
@@ -130,8 +168,6 @@ $(function() {
 		});
 
 		$group.on('drop', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
 
 			// Only do stuff if this is the most recently dragged upon item
 			if (DROPPABLE_ITEMS.indexOf(this) < DROPPABLE_ITEMS.length - 1) {
@@ -147,11 +183,81 @@ $(function() {
 			// Drop the element
 			positionDropForDragEventInParentWithPlaceholder(e, $(this), false);
 			// $(this).removeClass('dragover');
+
 			console.log('drop');
 
 		});
 	}
 	setupGroupDraggingListeners($('.' + ROW_GROUP_CLASS));
+
+	$('body').droppable({
+		accept: ROW_VALUE_SELECTOR
+	});
+	$('body').on('dropover', function() {
+
+		// Don't do anything if we're over a template droppable
+		// if (DROPPABLE_ITEMS.length > 0) {
+		// 	return;
+		// }
+
+		// // Find the original token
+		// var $matches = $(".layout-column:contains('" + DRAGGING_ITEM.innerHTML + "')");
+		// $matches.addClass('placeholder');
+	});
+
+	$('body').on('dropout', function() {
+
+		// Don't do anything if we're over a template droppable
+	// 	if (DROPPABLE_ITEMS.length > 0) {
+	// 		return;
+	// 	}
+
+	// 	var $matches = $(".layout-column:contains('" + DRAGGING_ITEM.innerHTML + "')");
+	// 	$matches.removeClass('placeholder');
+	});
+
+	$('body').on('drop', function(e, ui) {
+
+		// Don't do anything if we're over a template droppable
+		if (DROPPABLE_ITEMS.length > 0) {
+			return;
+		}
+
+		// Also don't do anything if we just dropped into a template
+		var $dropped = $(".layout-template-row-value:contains('" + DRAGGING_ITEM.innerHTML + "')");
+		if ($dropped.length > 0) {
+			return;
+		}
+
+		// Find the original token
+		var $match = $(".layout-column:contains('" + DRAGGING_ITEM.innerHTML + "')").first();
+
+		// Find the position of the original token
+		var originalPosition = {
+			top: $match.offset().top,
+			left: $match.offset().left
+		};
+
+		// Animate the helper to the position
+		var $helper = $(ui.helper).clone();
+		$helper.css({
+			position: 'fixed',
+			top: $(ui.helper).offset().top,
+			left: $(ui.helper).offset().left
+		});
+		$helper.appendTo('.layout-columns');
+		$helper.velocity({
+			translateX: originalPosition.left - $helper.offset().left,
+			translateY: originalPosition.top - $helper.offset().top
+		}, {
+			duration: 200,
+			complete: function() {
+				$match.removeClass('placeholder');
+				$match.removeClass('inactive');
+				$helper.remove();
+			}
+		});
+	});
 
 	function setupGroupPlaceholderListeners($group) {
 		$group.mouseenter(function() {
@@ -175,11 +281,15 @@ $(function() {
 
 	function insertDropBeforeElementInParentWithPlaceholder($previous, $parent, placeholder) {
 		var placeholder = createDropWithPlaceholder(placeholder);
+		var $placeholder = $(placeholder);
+		setupDragforValue($placeholder);
 		if ($previous) {
-			$previous.after(placeholder);
+			$previous.after($placeholder);
 		} else {
-			$parent.prepend(placeholder);
+			$parent.prepend($placeholder);
 		}
+
+
 	}
 
 	function positionDropForDragEventInParentWithPlaceholder(event, $parent, placeholder) {

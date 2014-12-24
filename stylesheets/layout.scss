@@ -29,6 +29,15 @@
 	@include align-items(center);
 }
 
+.layout-column.inactive {
+	opacity: .3;
+}
+
+.layout-column.placeholder {
+	border-color: $primary-color;
+	background-color: fade-out($primary-color, .9);
+}
+
 .layout-template {
 	width: 100%;
 	// height: 100%;

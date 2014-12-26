@@ -499,7 +499,7 @@ function program1(depth0,data) {
 this["Columns"]["Templates"]["templates/layout/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, self=this;
+  var buffer = "", stack1, helper, options, self=this, helperMissing=helpers.helperMissing, functionType="function", blockHelperMissing=helpers.blockHelperMissing;
 
 function program1(depth0,data) {
   
@@ -515,19 +515,68 @@ function program3(depth0,data) {
   else { return ''; }
   }
 
-  buffer += "<div class=\"layout-template-row-group ";
+function program5(depth0,data) {
+  
+  var stack1;
+  stack1 = self.invokePartial(partials.style, 'style', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
+
+function program7(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n				";
+  stack1 = (helper = helpers.ifIsGroup || (depth0 && depth0.ifIsGroup),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifIsGroup", (depth0 && depth0.type), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n				";
+  stack1 = (helper = helpers.ifIsSingle || (depth0 && depth0.ifIsSingle),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifIsSingle", (depth0 && depth0.type), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n			";
+  return buffer;
+  }
+function program8(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n					";
+  stack1 = self.invokePartial(partials['layout-row-group'], 'layout-row-group', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n				";
+  return buffer;
+  }
+
+function program10(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n					";
+  stack1 = self.invokePartial(partials['layout-row-value'], 'layout-row-value', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n				";
+  return buffer;
+  }
+
+  buffer += "<div class=\"layout-template-row-group \n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"\n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.layout), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n</div>	";
+  buffer += "\n			";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.style), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n			";
+  options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}
+  if (helper = helpers.values) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.values); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.values) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</div>	";
   return buffer;
   });
 
 this["Columns"]["Templates"]["templates/layout/row-value.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
   var buffer = "", stack1, helper, self=this, functionType="function", escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
@@ -536,14 +585,17 @@ function program1(depth0,data) {
   return "placeholder";
   }
 
-  buffer += "<span class=\"layout-template-row-value ";
+  buffer += "<span class=\"layout-template-row-value \n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">";
+  buffer += "\"\n			";
+  stack1 = self.invokePartial(partials.style, 'style', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n			";
   if (helper = helpers.data) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.data); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>";
+    + "\n</span>";
   return buffer;
   });
 

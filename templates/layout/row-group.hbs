@@ -1,3 +1,13 @@
-<div class="layout-template-row-group {{#if placeholder}}placeholder{{/if}}"
-			{{#if layout}}{{> layout}}{{/if}}>
+<div class="layout-template-row-group 
+			{{#if placeholder}}placeholder{{/if}}"
+			{{#if layout}}{{> layout}}{{/if}}
+			{{#if style}}{{> style}}{{/if}}>
+			{{#values}}
+				{{#ifIsGroup type}}
+					{{> layout-row-group}}
+				{{/ifIsGroup}}
+				{{#ifIsSingle type}}
+					{{> layout-row-value}}
+				{{/ifIsSingle}}
+			{{/values}}
 </div>	

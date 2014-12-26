@@ -176,8 +176,8 @@ $(function() {
 		$TABLE;
 
 	// File System Constants
-	// var ROOT_PATH = 'http://127.0.0.1/';
-	var ROOT_PATH = 'https://thecolumnsproject.github.io/';
+	var ROOT_PATH = 'http://127.0.0.1/';
+	// var ROOT_PATH = 'https://thecolumnsproject.github.io/';
 	// if (env) {
 	// 	switch (env) {
 	// 		case 'local':

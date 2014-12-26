@@ -1,18 +1,30 @@
 {
   "checksum": {
-    "previous": "ac13e907badeba1097eca06bfe0c88b5e9be4467f3117630f58f295332f34c9d",
-    "current": "ac13e907badeba1097eca06bfe0c88b5e9be4467f3117630f58f295332f34c9d"
+    "previous": "0a99f7f0dcec5b49521d788d0d91efcd6d00b9f60c425d2920c838d825212ac7",
+    "current": "0a99f7f0dcec5b49521d788d0d91efcd6d00b9f60c425d2920c838d825212ac7"
   },
   "fonts": [
-    "..//columns-font_ac13e907badeba1097eca06bfe0c88b5.ttf",
-    "..//columns-font_ac13e907badeba1097eca06bfe0c88b5.svg",
-    "..//columns-font_ac13e907badeba1097eca06bfe0c88b5.woff",
-    "..//columns-font_ac13e907badeba1097eca06bfe0c88b5.eot"
+    "..//columns-font_0a99f7f0dcec5b49521d788d0d91efcd.ttf",
+    "..//columns-font_0a99f7f0dcec5b49521d788d0d91efcd.svg",
+    "..//columns-font_0a99f7f0dcec5b49521d788d0d91efcd.woff",
+    "..//columns-font_0a99f7f0dcec5b49521d788d0d91efcd.eot"
   ],
   "glyphs": {
     "angle-right": {
       "codepoint": 61703,
       "source": "./angle-right.svg"
+    },
+    "arrow-up": {
+      "codepoint": 61711,
+      "source": "./arrow-up.svg"
+    },
+    "caret-down": {
+      "codepoint": 61730,
+      "source": "./caret-down.svg"
+    },
+    "caret-up": {
+      "codepoint": 61731,
+      "source": "./caret-up.svg"
     },
     "check": {
       "codepoint": 61702,
@@ -38,6 +50,46 @@
       "codepoint": 61710,
       "source": "./equalizer.svg"
     },
+    "group": {
+      "codepoint": 61712,
+      "source": "./group.svg"
+    },
+    "image": {
+      "codepoint": 61713,
+      "source": "./image.svg"
+    },
+    "layout-horizontal": {
+      "codepoint": 61735,
+      "source": "./layout-horizontal.svg"
+    },
+    "layout-vertical": {
+      "codepoint": 61736,
+      "source": "./layout-vertical.svg"
+    },
+    "link": {
+      "codepoint": 61714,
+      "source": "./link.svg"
+    },
+    "margin-bottom": {
+      "codepoint": 61732,
+      "source": "./margin-bottom.svg"
+    },
+    "margin-left": {
+      "codepoint": 61733,
+      "source": "./margin-left.svg"
+    },
+    "margin-right": {
+      "codepoint": 61734,
+      "source": "./margin-right.svg"
+    },
+    "margin-top": {
+      "codepoint": 61715,
+      "source": "./margin-top.svg"
+    },
+    "margin-top-2": {
+      "codepoint": 61716,
+      "source": "./margin-top 2.svg"
+    },
     "medium-popout": {
       "codepoint": 61707,
       "source": "./medium-popout.svg"
@@ -46,13 +98,49 @@
       "codepoint": 61696,
       "source": "./plus.svg"
     },
+    "position-bottom": {
+      "codepoint": 61737,
+      "source": "./position-bottom.svg"
+    },
+    "position-center": {
+      "codepoint": 61717,
+      "source": "./position-center.svg"
+    },
+    "position-left": {
+      "codepoint": 61718,
+      "source": "./position-left.svg"
+    },
+    "position-right": {
+      "codepoint": 61719,
+      "source": "./position-right.svg"
+    },
+    "position-top": {
+      "codepoint": 61738,
+      "source": "./position-top.svg"
+    },
     "publish": {
       "codepoint": 61699,
       "source": "./publish.svg"
     },
+    "publish-table": {
+      "codepoint": 61720,
+      "source": "./publish-table.svg"
+    },
     "search": {
       "codepoint": 61708,
       "source": "./search.svg"
+    },
+    "tap": {
+      "codepoint": 61721,
+      "source": "./tap.svg"
+    },
+    "tap-action": {
+      "codepoint": 61722,
+      "source": "./tap-action.svg"
+    },
+    "text": {
+      "codepoint": 61723,
+      "source": "./text.svg"
     },
     "triangle-right": {
       "codepoint": 61709,
@@ -66,9 +154,33 @@
       "codepoint": 61697,
       "source": "./user.svg"
     },
+    "vertical": {
+      "codepoint": 61724,
+      "source": "./vertical.svg"
+    },
     "x": {
       "codepoint": 61698,
       "source": "./x.svg"
+    },
+    "x-2": {
+      "codepoint": 61725,
+      "source": "./x 2.svg"
+    },
+    "x-3": {
+      "codepoint": 61726,
+      "source": "./x 3.svg"
+    },
+    "x-4": {
+      "codepoint": 61727,
+      "source": "./x 4.svg"
+    },
+    "x-5": {
+      "codepoint": 61728,
+      "source": "./x 5.svg"
+    },
+    "x-6": {
+      "codepoint": 61729,
+      "source": "./x 6.svg"
     }
   },
   "options": {

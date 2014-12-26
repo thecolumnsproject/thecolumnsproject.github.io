@@ -23,7 +23,7 @@ module.exports = function(grunt) {
 			}
 		},
 		concat: {
-			dist: {
+			embed: {
 				src: [
 					'javascripts/embed-table-intro.js',
 					'bower_components/jquery/dist/jquery.min.js',
@@ -41,6 +41,13 @@ module.exports = function(grunt) {
 					'javascripts/embed-table-outro.js'
 				],
 				dest: 'public/embed-table.js'
+			},
+			styling: {
+				src: [
+					'javascripts/styling/components/*.js',
+					'javascripts/styling/types.js'
+				],
+				dest: 'compiled-javascripts/styling/compiled-data.js'
 			}
 		},
 		watch: {

@@ -1,0 +1,29 @@
+<div class="style-component" data-component-index='{{index}}'>
+	<div class="style-component-header">
+		<i class="icon-{{type}}"></i>
+		<span class="style-component-title">{{name}}</span>
+	</div>
+	<div class="style-component-body">
+		{{#styles}}
+		<div class="style-component-section">
+			<div class="style-component-section-title">
+				{{title}}
+			</div>
+			<div class="style-component-section-rows">
+				{{#rows}}
+					{{#items}}
+						{{#ifIsInput kind}}
+							{{> input}}
+						{{/ifIsInput}}
+						{{#ifIsSegmentedButton kind}}
+							{{> segmented-button}}
+						{{/ifIsSegmentedButton}}
+						<label>{{label}}</label>
+					{{/items}}
+				{{/rows}}
+			</div>
+		</div>
+		{{/styles}}
+		{{!-- {{{partial type this}}} --}}
+	</div>
+</div>

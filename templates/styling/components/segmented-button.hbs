@@ -1,0 +1,8 @@
+<div class="style-component-section-row-segmentedButton {{kind}}" {{#if property}}data-property='{{property}}'{{/if}}>
+	{{#buttons}}
+		<button data-property='{{property}}' data-active-value='{{values.active}}' data-inactive-value='{{values.inactive}}'>
+			{{#if icon}}<i class="icon-{{icon}}"></i>{{/if}}
+			{{#if text}}<span></span>{{/if}}
+		</button>
+	{{/buttons}}
+</div>

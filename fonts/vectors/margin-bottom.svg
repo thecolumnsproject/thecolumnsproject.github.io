@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>margin-bottom</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="margin-bottom" sketch:type="MSArtboardGroup" fill="#000000">
+            <path d="M43.0623022,65.0535489 L43.0623022,39.1717347 L30.0033734,39.1717347 C28.8989889,39.1717347 28.5904673,38.5043511 29.3265574,37.6671171 L48.6177518,15.7251803 C49.3483411,14.894203 50.5308459,14.8898096 51.2631043,15.7200775 L70.6853286,37.7418806 C71.4157271,38.5700397 71.1184157,39.2413953 70.0093748,39.2413954 L57.074672,39.2413961 L57.0332223,65.0281583 L43.0623022,65.0535489 Z M15,75.001168 L85,75.001168 L85,85.001168 L15,85.001168 L15,75.001168 Z" id="Path-17" sketch:type="MSShapeGroup" transform="translate(50.000000, 50.050412) rotate(-180.000000) translate(-50.000000, -50.050412) "></path>
+        </g>
+    </g>
+</svg>

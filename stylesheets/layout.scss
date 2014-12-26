@@ -2,8 +2,24 @@
 @import 'keyframes';
 @import 'bower_components/bourbon/dist/bourbon';
 
+#editor {
+	@include display(flex);
+	@include align-items(center);
+	@include justify-content(space-between);
+	height: 100%;
+}
+
 #layout {
 	height: 100%;
+	@include flex-grow(1);
+	@include display(flex);
+	@include align-items(center);
+}
+
+#columns {
+	height: 100%;
+	width: 320px;
+	@include flex-grow(0);
 	@include display(flex);
 	@include align-items(center);
 }
@@ -85,23 +101,28 @@
 	@include justify-content(space-between);
 	@include align-items(center);
 
-	&[data-flex-direction='row'] {
+	&[data-flex-direction='row'],
+	&[layout-flex-direction='row'] {
 		@include flex-direction(row);
 	}
 
-	&[data-flex-direction='column'] {
+	&[data-flex-direction='column'],
+	&[layout-flex-direction='column'] {
 		@include flex-direction(column);
 	}
 
-	&[data-align-items='flex-start'] {
+	&[data-align-items='flex-start'],
+	&[layout-align-items='flex-start'] {
 		@include align-items(flex-start);
 	}
 
-	&[data-align-items='center'] {
+	&[data-align-items='center'],
+	&[layout-align-items='center'] {
 		@include align-items(center);
 	}
 
-	&[data-align-items='flex-end'] {
+	&[data-align-items='flex-end'],
+	&[layout-align-items='flex-end'] {
 		@include align-items(flex-end);
 	}
 }

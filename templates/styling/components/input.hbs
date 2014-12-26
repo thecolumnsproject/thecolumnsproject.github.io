@@ -1,0 +1,18 @@
+<div class="style-component-section-row-input">
+	{{#if prependIcon}}
+		<div class="style-component-section-row-input-prepend">
+			<i class="icon-{{prependIcon}}"></i>
+		</div>
+	{{/if}}
+	<input type="{{type}}" data-property='{{property}}'/>
+	{{#if appendControls}}
+		<div class="style-component-section-row-input-append">
+			<button class='increment'>
+				<i class="icon-caret-up"></i>
+			</button>
+			<button class='decrement'>
+				<i class="icon-caret-down"></i>
+			</button>
+		</div>
+	{{/if}}
+</div>

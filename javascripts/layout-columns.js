@@ -1,13 +1,13 @@
-$(function() {
+// Add dummy columns to the page
+var DATA = [
+	'First Name',
+	'Last Name',
+	'Hometown',
+	'Age',
+	'Unit'
+];
 
-	// Add dummy columns to the page
-	var DATA = [
-		'First Name',
-		'Last Name',
-		'Hometown',
-		'Age',
-		'Unit'
-	];
+$(function() {
 
 	// Store the currently dragging item
 	var DRAGGING_ITEM,
@@ -27,7 +27,7 @@ $(function() {
 	// Set up the columns options
 	Handlebars.registerPartial('layout-column', Columns.Templates['templates/layout/column.hbs']);
 	var columns = Columns.Templates['templates/layout/columns.hbs'];
-	$("#layout").append(columns({columns: DATA}));
+	$("#columns").append(columns({columns: DATA}));
 
 	// Set up the layout template
 	Handlebars.registerPartial('layout-row-group', Columns.Templates['templates/layout/row-group.hbs']);
@@ -190,7 +190,7 @@ $(function() {
 		$group.on('drop', function(e) {
 
 			// Only do stuff if this is the most recently dragged upon item
-			if (DROPPABLE_ITEMS.indexOf(this) < DROPPABLE_ITEMS.length - 1) {
+			if (DROPPABLE_ITEMS.length == 0 || DROPPABLE_ITEMS.indexOf(this) < DROPPABLE_ITEMS.length - 1) {
 				return;
 			}
 
@@ -300,14 +300,23 @@ $(function() {
 	}
 
 	function insertDropBeforeElementInParentWithPlaceholder($previous, $parent, placeholder) {
-		var placeholder = createDropWithPlaceholder(placeholder);
-		var $placeholder = $(placeholder);
+		var template = createDropWithPlaceholder(placeholder);
+		var $placeholder = $(template);
+
 		setupDragforValue($placeholder);
 		if ($previous) {
 			$previous.after($placeholder);
 		} else {
 			$parent.prepend($placeholder);
 		}
+
+		if (!placeholder) {
+			Columns.Layout.update();
+		}
+
+		// Add listeners for styling purposes
+		// SEE layout-style.js
+		Columns.setupTemplateListeners($placeholder);
 	}
 
 	function positionDropForDragEventInParentWithPlaceholder(event, $parent, placeholder) {

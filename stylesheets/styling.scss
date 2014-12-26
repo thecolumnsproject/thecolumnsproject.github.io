@@ -1,0 +1,25 @@
+@import 'variables';
+@import 'keyframes';
+@import 'bower_components/bourbon/dist/bourbon';
+
+#styling {
+	height: 100%;
+	width: 320px;
+	@include flex-grow(0);
+	@include display(flex);
+	@include align-items(center);
+}
+
+[data-property='align-items'] {
+	button i {
+		display: block;
+		@include transition(all 0.2s ease-in-out);
+		@include transform(rotate(0deg));
+	}
+}
+
+[data-property='align-items'].column {
+	button i {
+		@include transform(rotate(90deg));
+	}
+}

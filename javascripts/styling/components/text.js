@@ -7,26 +7,34 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: true,
 			label: 'Size',
-			property: 'font-size'
+			property: {
+				name: 'font-size'
+			}
 		}, {
 			kind: 'multiple-segmented-button',
 			label: 'Style',
 			buttons: [{
-				property: 'font-weight',
+				property: {
+					name: 'font-weight'
+				},
 				values: {
 					active: 'bold',
 					inactive: 'normal'
 				},
 				icon: 'bold'
 			}, {
-				property: 'font-style',
+				property: {
+					name:'font-style'
+				},
 				values: {
 					active: 'italic',
 					inactive: 'normal'
 				},
 				icon: 'italic'
 			}, {
-				property: 'text-decoration',
+				property: {
+					name:'text-decoration'
+				},
 				values: {
 					active: 'underline',
 					inactive: 'none'
@@ -41,30 +49,23 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: false,
 			label: 'Color',
-			property: 'color',
+			property: {
+				name:'color'
+			}
 		}, {
 			kind: 'single-segmented-button',
 			label: 'Alignment',
+			property: {
+				name: 'text-align'
+			},
 			buttons: [{
-				property: 'text-align',
-				values: {
-					active: 'left',
-					inactive: 'left'
-				},
+				value: 'left',
 				icon: 'text-align-left'
 			}, {
-				property: 'text-align',
-				values: {
-					active: 'center',
-					inactive: 'center'
-				},
+				value: 'center',
 				icon: 'text-align-center'
 			}, {
-				property: 'text-align',
-				values: {
-					active: 'right',
-					inactive: 'right'
-				},
+				value: 'right',
 				icon: 'text-align-right'
 			}]
 		}]

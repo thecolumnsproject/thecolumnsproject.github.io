@@ -7,28 +7,36 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-top',
 			appendControls: true,
 			label: 'Top',
-			property: 'margin-top'
+			property: {
+				name:'margin-top'
+			}
 		}, {
 			kind: 'input',
 			type: 'tel',
 			prependIcon: 'margin-bottom',
 			appendControls: true,
 			label: 'Bottom',
-			property: 'margin-bottom'
+			property: {
+				name:'margin-bottom'
+			}
 		}, {
 			kind: 'input',
 			type: 'tel',
 			prependIcon: 'margin-left',
 			appendControls: true,
 			label: 'Left',
-			property: 'margin-left'
+			property: {
+				name:'margin-left'
+			}
 		}, {
 			kind: 'input',
 			type: 'tel',
 			prependIcon: 'margin-right',
 			appendControls: true,
 			label: 'Right',
-			property: 'margin-right'
+			property: {
+				name:'margin-right'
+			}
 		}]
 	}]
 };

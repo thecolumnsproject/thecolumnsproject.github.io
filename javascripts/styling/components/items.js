@@ -4,46 +4,30 @@ Columns.styleData.components['items'] = {
 		items: [{
 			kind: 'single-segmented-button',
 			label: 'Layout',
-			property: 'flex-direction',
+			property: {
+				name:'flex-direction'
+			},
 			buttons: [{
-				property: 'flex-direction',
-				values: {
-					active: 'row',
-					inactive: 'row'
-				},
+				value: 'row',
 				icon: 'layout-horizontal'
 			}, {
-				property: 'flex-direction',
-				values: {
-					active: 'column',
-					inactive: 'column'
-				},
+				value: 'column',
 				icon: 'layout-vertical'
 			}]
 		}, {
 			kind: 'single-segmented-button',
 			label: 'Position',
-			property: 'align-items',
+			property: {
+				name:'align-items'
+			},
 			buttons: [{
-				property: 'align-items',
-				values: {
-					active: 'flex-start',
-					inactive: 'flex-start'
-				},
+				value: 'flex-start',
 				icon: 'position-left'
 			}, {
-				property: 'align-items',
-				values: {
-					active: 'center',
-					inactive: 'center'
-				},
+				value: 'center',
 				icon: 'position-center'
 			}, {
-				property: 'align-items',
-				values: {
-					active: 'flex-end',
-					inactive: 'flex-end'
-				},
+				value: 'flex-end',
 				icon: 'position-right'
 			}]
 		}]

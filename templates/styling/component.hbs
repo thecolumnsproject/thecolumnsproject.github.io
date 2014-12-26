@@ -15,9 +15,12 @@
 						{{#ifIsInput kind}}
 							{{> input}}
 						{{/ifIsInput}}
-						{{#ifIsSegmentedButton kind}}
-							{{> segmented-button}}
-						{{/ifIsSegmentedButton}}
+						{{#ifIsSingleSegmentedButton kind}}
+							{{> single-segmented-button}}
+						{{/ifIsSingleSegmentedButton}}
+						{{#ifIsMultipleSegmentedButton kind}}
+							{{> multiple-segmented-button}}
+						{{/ifIsMultipleSegmentedButton}}
 						<label>{{label}}</label>
 					{{/items}}
 				{{/rows}}

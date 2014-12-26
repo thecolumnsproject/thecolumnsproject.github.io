@@ -93,11 +93,16 @@ Columns.Styling = new function() {
 		$(_this.STYLE_COMPONENT_SELECTOR).remove();
 		var component = Columns.Templates['templates/styling/component.hbs'];
 		items.forEach(function(item, i) {
+			var type = Columns.Items.getItemType(item);
+
+			// Assign all current values for item type
+			_this.populateCurrentValues(item);
+
 			$('#styling').append(component({
 				index: i,
-				type: Columns.Items.getItemType(item),
+				type: type,
 				name: Columns.Items.getItemName(item),
-				styles: Columns.styleData.types[Columns.Items.getItemType(item)]
+				styles: Columns.styleData.types[type]
 			}));
 
 			if (i == items.length - 1) {
@@ -105,6 +110,36 @@ Columns.Styling = new function() {
 			}
 		});
 	};
+
+	this.populateCurrentValues = function(item) {
+
+		function traverseData(data) {
+			Object.keys(data).forEach(function(key, i) {
+				if (key == 'property') {
+					var value;
+					var existingStyles = $(item).data('style');
+					if (existingStyles) {
+						existingStyles.every(function(style, i) {
+							if (style.property == data[key]['name']) {
+								value = style.value;
+								return false;
+							}
+						});
+					}
+					data[key]['current_value'] = value || $(item).css(data[key]['name']);
+				} else {
+					if (typeof data[key] == 'object') {
+						traverseData(data[key]);
+					}
+				}
+			});
+		}
+
+		var type = Columns.Items.getItemType(item);
+		var data = Columns.styleData.types[type];
+		traverseData(data);
+
+	}
 
 	this.connectStyleComponents = function() {
 		var _this = this;
@@ -154,25 +189,28 @@ Columns.Styling = new function() {
 		// --------------
 		$(_this.STYLE_COMPONENT_SEGMENTED_BUTTON_SELECTOR).find('button').click(function() {
 			// If this is a single segmented button, unselect all siblings
+			var $segmentedButton = $(this).parents(_this.STYLE_COMPONENT_SEGMENTED_BUTTON_SELECTOR);
+			var property = $segmentedButton.data('property') || $(this).data('property');
 			var properties = {};
-			if ($(this).parents(_this.STYLE_COMPONENT_SEGMENTED_BUTTON_SELECTOR).hasClass('single-segmented-button')) {
-				$(this).siblings().removeClass('active').each(function(i, sibling) {
-					properties[$(sibling).data('property')] = $(sibling).data('inactive-value');
-				});
+
+			if ($segmentedButton.hasClass('single-segmented-button')) {
+				$(this).siblings().removeClass('active');
 			}
 
 			// Toggle this button's active state and add its property to the hash
-			if ($(this).hasClass('active')) {
-				properties[$(this).data('property')] = $(this).data('inactive-value');
+			if (!$(this).hasClass('active')) {
+				properties[property] = $(this).data('value') || $(this).data('active-value');
 			} else {
-				properties[$(this).data('property')] = $(this).data('active-value');
+				if ($segmentedButton.hasClass('multiple-segmented-button')) {
+					properties[property] = $(this).data('inactive-value');
+				}
 			}
 
 			// Special handler for switching item position buttons from left-right to top-bottom and vice versa
 			// TODO improve logic for locating the align-items control
-			if ($(this).data('property') == 'flex-direction') {
-				var $positionButton = $(this).parents(_this.STYLE_COMPONENT_SEGMENTED_BUTTON_SELECTOR).siblings("[data-property='align-items']");
-				switch ($(this).data('active-value')) {
+			if (property == 'flex-direction') {
+				var $positionButton = $segmentedButton.siblings("[data-property='align-items']");
+				switch ($(this).data('value')) {
 					case 'row':
 						$positionButton.addClass('row');
 						$positionButton.removeClass('column');
@@ -243,7 +281,8 @@ Columns.Styling = new function() {
 	this.setupHandlebars = function() {
 		Handlebars.registerPartial('text-component', Columns.Templates['templates/styling/components/text.hbs']);
 		Handlebars.registerPartial('input', Columns.Templates['templates/styling/components/input.hbs']);
-		Handlebars.registerPartial('segmented-button', Columns.Templates['templates/styling/components/segmented-button.hbs']);
+		Handlebars.registerPartial('single-segmented-button', Columns.Templates['templates/styling/components/single-segmented-button.hbs']);
+		Handlebars.registerPartial('multiple-segmented-button', Columns.Templates['templates/styling/components/multiple-segmented-button.hbs']);
 
 		// Handlebars helper to determine which style template to show
 		// Handlebars.registerHelper('partial', function(name, ctx, hash) {
@@ -254,11 +293,19 @@ Columns.Styling = new function() {
 		// });
 
 		Handlebars.registerHelper('ifIsInput', function(kind, options) {
-			return kind == 'input' ? options.fn(this) : options.inverse(this)
+			return kind == 'input' ? options.fn(this) : options.inverse(this);
 		});
 
-		Handlebars.registerHelper('ifIsSegmentedButton', function(kind, options) {
-			return kind == 'single-segmented-button' || kind == 'multiple-segmented-button' ? options.fn(this) : options.inverse(this)
+		Handlebars.registerHelper('ifIsSingleSegmentedButton', function(kind, options) {
+			return kind == 'single-segmented-button' ? options.fn(this) : options.inverse(this);
+		});
+
+		Handlebars.registerHelper('ifIsMultipleSegmentedButton', function(kind, options) {
+			return kind == 'multiple-segmented-button' ? options.fn(this) : options.inverse(this);
+		});
+
+		Handlebars.registerHelper('ifIsCurrentValue', function(value, currentValue, options) {
+			return value == currentValue ? options.fn(this) : options.inverse(this);
 		});
 	};
 };

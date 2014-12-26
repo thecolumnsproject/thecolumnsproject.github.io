@@ -4,7 +4,7 @@
 			<i class="icon-{{prependIcon}}"></i>
 		</div>
 	{{/if}}
-	<input type="{{type}}" data-property='{{property}}'/>
+	<input type="{{type}}" data-property='{{property.name}}' value='{{property.current_value}}'/>
 	{{#if appendControls}}
 		<div class="style-component-section-row-input-append">
 			<button class='increment'>

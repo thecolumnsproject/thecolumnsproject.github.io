@@ -4,46 +4,30 @@ Columns.styleData.components['items'] = {
 		items: [{
 			kind: 'single-segmented-button',
 			label: 'Layout',
-			property: 'flex-direction',
+			property: {
+				name:'flex-direction'
+			},
 			buttons: [{
-				property: 'flex-direction',
-				values: {
-					active: 'row',
-					inactive: 'row'
-				},
+				value: 'row',
 				icon: 'layout-horizontal'
 			}, {
-				property: 'flex-direction',
-				values: {
-					active: 'column',
-					inactive: 'column'
-				},
+				value: 'column',
 				icon: 'layout-vertical'
 			}]
 		}, {
 			kind: 'single-segmented-button',
 			label: 'Position',
-			property: 'align-items',
+			property: {
+				name:'align-items'
+			},
 			buttons: [{
-				property: 'align-items',
-				values: {
-					active: 'flex-start',
-					inactive: 'flex-start'
-				},
+				value: 'flex-start',
 				icon: 'position-left'
 			}, {
-				property: 'align-items',
-				values: {
-					active: 'center',
-					inactive: 'center'
-				},
+				value: 'center',
 				icon: 'position-center'
 			}, {
-				property: 'align-items',
-				values: {
-					active: 'flex-end',
-					inactive: 'flex-end'
-				},
+				value: 'flex-end',
 				icon: 'position-right'
 			}]
 		}]
@@ -58,28 +42,36 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-top',
 			appendControls: true,
 			label: 'Top',
-			property: 'margin-top'
+			property: {
+				name:'margin-top'
+			}
 		}, {
 			kind: 'input',
 			type: 'tel',
 			prependIcon: 'margin-bottom',
 			appendControls: true,
 			label: 'Bottom',
-			property: 'margin-bottom'
+			property: {
+				name:'margin-bottom'
+			}
 		}, {
 			kind: 'input',
 			type: 'tel',
 			prependIcon: 'margin-left',
 			appendControls: true,
 			label: 'Left',
-			property: 'margin-left'
+			property: {
+				name:'margin-left'
+			}
 		}, {
 			kind: 'input',
 			type: 'tel',
 			prependIcon: 'margin-right',
 			appendControls: true,
 			label: 'Right',
-			property: 'margin-right'
+			property: {
+				name:'margin-right'
+			}
 		}]
 	}]
 };
@@ -92,26 +84,34 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: true,
 			label: 'Size',
-			property: 'font-size'
+			property: {
+				name: 'font-size'
+			}
 		}, {
 			kind: 'multiple-segmented-button',
 			label: 'Style',
 			buttons: [{
-				property: 'font-weight',
+				property: {
+					name: 'font-weight'
+				},
 				values: {
 					active: 'bold',
 					inactive: 'normal'
 				},
 				icon: 'bold'
 			}, {
-				property: 'font-style',
+				property: {
+					name:'font-style'
+				},
 				values: {
 					active: 'italic',
 					inactive: 'normal'
 				},
 				icon: 'italic'
 			}, {
-				property: 'text-decoration',
+				property: {
+					name:'text-decoration'
+				},
 				values: {
 					active: 'underline',
 					inactive: 'none'
@@ -126,30 +126,23 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: false,
 			label: 'Color',
-			property: 'color',
+			property: {
+				name:'color'
+			}
 		}, {
 			kind: 'single-segmented-button',
 			label: 'Alignment',
+			property: {
+				name: 'text-align'
+			},
 			buttons: [{
-				property: 'text-align',
-				values: {
-					active: 'left',
-					inactive: 'left'
-				},
+				value: 'left',
 				icon: 'text-align-left'
 			}, {
-				property: 'text-align',
-				values: {
-					active: 'center',
-					inactive: 'center'
-				},
+				value: 'center',
 				icon: 'text-align-center'
 			}, {
-				property: 'text-align',
-				values: {
-					active: 'right',
-					inactive: 'right'
-				},
+				value: 'right',
 				icon: 'text-align-right'
 			}]
 		}]

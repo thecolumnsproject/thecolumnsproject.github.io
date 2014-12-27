@@ -11,6 +11,7 @@ Columns.Styling = new function() {
 
 	// UI Constants
 	this.STYLE_COMPONENT_SELECTOR = '.' + 'style-component';
+	this.STLYE_COMPONENT_ROW_ITEM_SELECTOR = '.' + 'style-component-section-row-item';
 	this.STYLE_COMPONENT_INPUT_SELECTOR = '.' + 'style-component-section-row-input';
 	this.STYLE_COMPONENT_SEGMENTED_BUTTON_SELECTOR = '.' + 'style-component-section-row-segmentedButton';
 
@@ -41,7 +42,7 @@ Columns.Styling = new function() {
 		if ($template.hasClass(Columns.Template.ROW_VALUE_CLASS)) {
 			$template.click(function(e) {
 				var item = Columns.Items.getItemForTemplate($template.get(0));
-				_this._currentItems = [item];
+				// _this._currentItems = [item];
 				_this.updateStyling(item);
 
 				// Don't pass the click on to the encompassing group
@@ -51,7 +52,7 @@ Columns.Styling = new function() {
 
 		if ($template.hasClass(Columns.Template.ROW_GROUP_CLASS)) {
 			$template.click(function() {
-				_this._currentItems = [this];
+				// _this._currentItems = [this];
 				_this.updateStyling(this);
 			});
 		}
@@ -67,8 +68,8 @@ Columns.Styling = new function() {
 			// } else {
 			// 	_this._currentItems = [this];
 			// }
-			_this._currentItems = [this];
-			_this.updateStyling(_this._currentItems[0]);
+			// _this._currentItems = [this];
+			_this.updateStyling(this);
 		});
 	};
 
@@ -81,8 +82,9 @@ Columns.Styling = new function() {
 		var _this = this;
 		$(Columns.Items.LAYOUT_COLUMN_SELECTOR + '.styling').removeClass('styling');
 		$(item).addClass('styling');
-		var items = [item];
 		var template = Columns.Template.getTemplateForItem(item) || item;
+		var items = [template];
+		this._currentItems = [template];
 		var $parents = $(template).parents();
 		$parents.each(function(i, parent) {
 			if ($(parent).hasClass(Columns.Template.ROW_GROUP_CLASS)) {
@@ -219,20 +221,41 @@ Columns.Styling = new function() {
 			// Special handler for switching item position buttons from left-right to top-bottom and vice versa
 			// TODO improve logic for locating the align-items control
 			if (property == 'flex-direction') {
-				var $positionButton = $segmentedButton.siblings("[data-property='align-items']");
-				switch ($(this).data('value')) {
-					case 'row':
-						$positionButton.addClass('row');
-						$positionButton.removeClass('column');
-						break;
-					case 'column':
-						$positionButton.addClass('column');
-						$positionButton.removeClass('row');
-						break;
-				}
+				// var $positionButton = $segmentedButton.parents(_this.STLYE_COMPONENT_ROW_ITEM_SELECTOR).siblings().find("[data-property='align-items']");
+				// switch ($(this).data('value')) {
+				// 	case 'row':
+				// 		$positionButton.addClass('row');
+				// 		$positionButton.removeClass('column');
+				// 		break;
+				// 	case 'column':
+				// 		$positionButton.addClass('column');
+				// 		$positionButton.removeClass('row');
+				// 		break;
+				// }
+				setupItemsPositionButtons($segmentedButton);
 			}
 
 			_this.updateCurrentItemWithProperties(this, properties);
+		});
+
+		// Special handler for switching item position buttons from left-right to top-bottom and vice versa
+		// TODO improve logic for locating the align-items control
+		function setupItemsPositionButtons($layoutButton) {
+			var $positionButton = $layoutButton.parents(_this.STLYE_COMPONENT_ROW_ITEM_SELECTOR)
+									.siblings().find("[data-property='align-items']");
+			switch ($layoutButton.find('button.active').data('value')) {
+				case 'row':
+					$positionButton.addClass('row');
+					$positionButton.removeClass('column');
+					break;
+				case 'column':
+					$positionButton.addClass('column');
+					$positionButton.removeClass('row');
+					break;
+			}
+		}
+		$("[data-property='flex-direction']").each(function(i, button) {
+			setupItemsPositionButtons($(button));
 		});
 	};
 

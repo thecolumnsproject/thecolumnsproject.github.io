@@ -189,7 +189,9 @@ Columns.Styling = new function() {
 			// Parse the number and the unit
 			var substrings = _this.getValueSubstrings(value);
 			var number = isNaN(substrings.number) ? 0 : substrings.number;
-			number = number <= 0 ? 1 : number;
+			if ($input.data('negative') == false) {
+				number = number <= 0 ? 1 : number;
+			}
 			var unit = substrings.unit == '' ? 'px' : substrings.unit;
 			var newValue = (number - 1) + unit;
 			$input.val(newValue).trigger('change');

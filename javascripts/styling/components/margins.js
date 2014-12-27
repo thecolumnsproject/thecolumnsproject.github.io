@@ -4,6 +4,7 @@ Columns.styleData.components['margins'] = {
 		items: [{
 			kind: 'input',
 			type: 'tel',
+			canBeNegative: true,
 			prependIcon: 'margin-top',
 			appendControls: true,
 			label: 'Top',
@@ -13,6 +14,7 @@ Columns.styleData.components['margins'] = {
 		}, {
 			kind: 'input',
 			type: 'tel',
+			canBeNegative: true,
 			prependIcon: 'margin-bottom',
 			appendControls: true,
 			label: 'Bottom',
@@ -24,6 +26,7 @@ Columns.styleData.components['margins'] = {
 		items: [{
 			kind: 'input',
 			type: 'tel',
+			canBeNegative: true,
 			prependIcon: 'margin-left',
 			appendControls: true,
 			label: 'Left',
@@ -33,6 +36,7 @@ Columns.styleData.components['margins'] = {
 		}, {
 			kind: 'input',
 			type: 'tel',
+			canBeNegative: true,
 			prependIcon: 'margin-right',
 			appendControls: true,
 			label: 'Right',

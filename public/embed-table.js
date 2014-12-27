@@ -802,6 +802,10 @@ function program7(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' value='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "' data-negative='";
+  if (helper = helpers.canBeNegative) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.canBeNegative); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "'/>\n	";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.appendControls), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }

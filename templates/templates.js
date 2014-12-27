@@ -117,6 +117,14 @@ function program1(depth0,data) {
   if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
+    + "' layout-";
+  if (helper = helpers.property) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.property); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "='";
+  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "'\n";
   return buffer;
   }
@@ -432,7 +440,7 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
   var buffer = "", stack1, self=this;
 
 
-  buffer += "<div class=\"layout-template\">\n	<div class=\"layout-template-row master\">\n		";
+  buffer += "<div class=\"layout-template\">\n	<div class=\"layout-template-row master empty\">\n		";
   stack1 = self.invokePartial(partials['layout-row-group'], 'layout-row-group', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "	\n	</div>\n</div>";
@@ -651,10 +659,10 @@ function program3(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.active)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'\n				data-inactive-value='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.inactive)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'\n				";
+    + "'\n				class=\"";
   stack1 = (helper = helpers.ifIsCurrentValue || (depth0 && depth0.ifIsCurrentValue),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.active), ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options) : helperMissing.call(depth0, "ifIsCurrentValue", ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.active), ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n			";
+  buffer += "\">\n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.icon), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n			";
@@ -724,10 +732,10 @@ function program3(depth0,data,depth1) {
   if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "' ";
+    + "' class=\"";
   stack1 = (helper = helpers.ifIsCurrentValue || (depth0 && depth0.ifIsCurrentValue),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.value), ((stack1 = (depth1 && depth1.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options) : helperMissing.call(depth0, "ifIsCurrentValue", (depth0 && depth0.value), ((stack1 = (depth1 && depth1.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += " >\n			";
+  buffer += "\">\n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.icon), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n			";

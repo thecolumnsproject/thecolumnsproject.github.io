@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>italic</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="italic" sketch:type="MSArtboardGroup" fill="#000000">
+            <path d="M41.6696109,15 L41.6696109,19.375 L52.7103575,19.375 C54.0352471,19.375 54.5033747,20.25 54.5033747,21.5625 L38.0791601,78.4375 C37.6375302,79.75 36.3656362,80.625 35.0407466,80.625 L24,80.625 L24,85 L59.3303891,85 L59.3303891,80.625 L48.2896425,80.625 C46.9647529,80.625 46.4966253,79.75 46.4966253,78.4375 L62.9208399,21.5625 C63.3624698,20.25 64.6299475,19.375 65.9592534,19.375 L77,19.375 L77,15 L41.6696109,15 L41.6696109,15 Z" id="Shape" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

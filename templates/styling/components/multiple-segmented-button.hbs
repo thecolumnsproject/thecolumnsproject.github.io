@@ -3,7 +3,7 @@
 		<button data-property='{{property.name}}'
 				data-active-value='{{values.active}}'
 				data-inactive-value='{{values.inactive}}'
-				{{#ifIsCurrentValue values.active property.current_value}}active{{/ifIsCurrentValue}}>
+				class="{{#ifIsCurrentValue values.active property.current_value}}active{{/ifIsCurrentValue}}">
 			{{#if icon}}<i class="icon-{{icon}}"></i>{{/if}}
 			{{#if text}}<span></span>{{/if}}
 		</button>

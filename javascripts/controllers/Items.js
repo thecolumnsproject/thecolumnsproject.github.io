@@ -25,7 +25,7 @@ Columns.Items = new function() {
 			revert: 'invalid',
 			revertDuration: 200,
 			helper: 'clone',
-			opacity: .2,
+			// opacity: .2,
 			cancel: '.inactive'
 		});
 
@@ -86,13 +86,13 @@ Columns.Items = new function() {
 			}
 
 			// Also don't do anything if we just dropped into a template
-			var $dropped = $(Columns.Template.ROW_VALUE_SELECTOR + ":contains('" + Columns.Template.DRAGGING_ITEM.innerHTML.trim() + "')").not('.' + Columns.Template.ROW_VALUE_INACTIVE_CLASS);
+			var $dropped = $(Columns.Template.ROW_VALUE_SELECTOR + ":contains('" + _this.getItemName(Columns.Template.DRAGGING_ITEM) + "')").not('.' + Columns.Template.ROW_VALUE_INACTIVE_CLASS);
 			if ($dropped.length > 0) {
 				return;
 			}
 
 			// Find the original token
-			var $match = $(_this.LAYOUT_COLUMN_SELECTOR + ":contains('" + Columns.Template.DRAGGING_ITEM.innerHTML.trim() + "')").first();
+			var $match = $(_this.LAYOUT_COLUMN_SELECTOR + ":contains('" + _this.getItemName(Columns.Template.DRAGGING_ITEM) + "')").first();
 
 			// Find the position of the original token
 			var originalPosition = {
@@ -134,8 +134,8 @@ Columns.Items = new function() {
 	this.getItemName = function(item) {
 		var $item = $(item);
 		if ($item.hasClass(Columns.Template.ROW_VALUE_CLASS) || $item.hasClass(this.ITEM_CLASS)) {
-			return item.innerHTML;
-		} else if ($item.hasClass('master')) {
+			return $(item).text().trim();
+		} else if ($item.parent().hasClass('master')) {
 			return 'Row';
 		} else {
 			return 'Group';
@@ -143,7 +143,7 @@ Columns.Items = new function() {
 	};
 
 	this.getItemForTemplate = function(template) {
-		var $item = $(this.ITEM_SELECTOR + ":contains('" + template.innerHTML.trim() + "')");
+		var $item = $(this.ITEM_SELECTOR + ":contains('" + $(template).text().trim() + "')");
 		if ($item.length > 0) {
 			return $item.get(0);
 		} else {

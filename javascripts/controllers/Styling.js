@@ -26,6 +26,11 @@ Columns.Styling = new function() {
 		this.setupItemListeners($(Columns.Items.LAYOUT_COLUMN_SELECTOR));
 	};
 
+	this.initWithItem = function(item) {
+		this.init();
+		this.updateStyling(item);
+	};
+
 	// Every time an item is clicked,
 	// either in the list of items or on the canvas,
 	// update the current item and update the styling area.
@@ -74,8 +79,11 @@ Columns.Styling = new function() {
 	// 3) Connect each component's value with the selected item
 	this.updateStyling = function(item) {
 		var _this = this;
+		$(Columns.Items.LAYOUT_COLUMN_SELECTOR + '.styling').removeClass('styling');
+		$(item).addClass('styling');
 		var items = [item];
-		var $parents = $(item).parents();
+		var template = Columns.Template.getTemplateForItem(item) || item;
+		var $parents = $(template).parents();
 		$parents.each(function(i, parent) {
 			if ($(parent).hasClass(Columns.Template.ROW_GROUP_CLASS)) {
 				items.push(parent);
@@ -83,7 +91,7 @@ Columns.Styling = new function() {
 			}
 
 			if (i == $parents.length - 1) {
-				_this.renderStyleComponents(items);
+				_this.renderStyleComponents(items.reverse());
 			}
 		});
 	}
@@ -99,7 +107,7 @@ Columns.Styling = new function() {
 			_this.populateCurrentValues(item);
 
 			$('#styling').append(component({
-				index: i,
+				index: (items.length - 1) - i,
 				type: type,
 				name: Columns.Items.getItemName(item),
 				styles: Columns.styleData.types[type]
@@ -200,9 +208,11 @@ Columns.Styling = new function() {
 			// Toggle this button's active state and add its property to the hash
 			if (!$(this).hasClass('active')) {
 				properties[property] = $(this).data('value') || $(this).data('active-value');
+				$(this).addClass('active');
 			} else {
 				if ($segmentedButton.hasClass('multiple-segmented-button')) {
 					properties[property] = $(this).data('inactive-value');
+					$(this).removeClass('active');
 				}
 			}
 
@@ -223,7 +233,6 @@ Columns.Styling = new function() {
 			}
 
 			_this.updateCurrentItemWithProperties(this, properties);
-			$(this).toggleClass('active');
 		});
 	};
 

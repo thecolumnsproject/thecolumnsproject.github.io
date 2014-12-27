@@ -1,0 +1,4 @@
+Columns['styleData'] = {
+	components: {},
+	types: {}
+};

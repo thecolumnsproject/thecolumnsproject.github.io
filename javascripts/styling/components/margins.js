@@ -1,5 +1,5 @@
 Columns.styleData.components['margins'] = {
-	title: 'Inner Spacing',
+	title: 'Spacing',
 	rows: [{
 		items: [{
 			kind: 'input',

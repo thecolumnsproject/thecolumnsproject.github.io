@@ -1,3 +1,7 @@
+Columns['styleData'] = {
+	components: {},
+	types: {}
+};
 Columns.styleData.components['items'] = {
 	title: 'Items',
 	rows: [{
@@ -34,7 +38,7 @@ Columns.styleData.components['items'] = {
 	}]
 }
 Columns.styleData.components['margins'] = {
-	title: 'Inner Spacing',
+	title: 'Spacing',
 	rows: [{
 		items: [{
 			kind: 'input',

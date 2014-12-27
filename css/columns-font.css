@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "columns-font";
-  src: url("../fonts/columns-font_0a99f7f0dcec5b49521d788d0d91efcd.eot");
-  src: url("../fonts/columns-font_0a99f7f0dcec5b49521d788d0d91efcd.eot?#iefix") format("embedded-opentype"),
-       url("../fonts/columns-font_0a99f7f0dcec5b49521d788d0d91efcd.woff") format("woff"),
-       url("../fonts/columns-font_0a99f7f0dcec5b49521d788d0d91efcd.ttf") format("truetype"),
-       url("../fonts/columns-font_0a99f7f0dcec5b49521d788d0d91efcd.svg#columns-font") format("svg");
+  src: url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.eot");
+  src: url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.eot?#iefix") format("embedded-opentype"),
+       url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.woff") format("woff"),
+       url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.ttf") format("truetype"),
+       url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.svg#columns-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "columns-font";
-    src: url("../fonts/columns-font_0a99f7f0dcec5b49521d788d0d91efcd.svg#columns-font") format("svg");
+    src: url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.svg#columns-font") format("svg");
   }
 }
 
@@ -25,6 +25,7 @@
 [data-icon]:before,
 .icon-angle-right:before,
 .icon-arrow-up:before,
+.icon-bold:before,
 .icon-caret-down:before,
 .icon-caret-up:before,
 .icon-check:before,
@@ -35,6 +36,7 @@
 .icon-equalizer:before,
 .icon-group:before,
 .icon-image:before,
+.icon-italic:before,
 .icon-layout-horizontal:before,
 .icon-layout-vertical:before,
 .icon-link:before,
@@ -56,7 +58,11 @@
 .icon-tap:before,
 .icon-tap-action:before,
 .icon-text:before,
+.icon-text-align-center:before,
+.icon-text-align-left:before,
+.icon-text-align-right:before,
 .icon-triangle-right:before,
+.icon-underline:before,
 .icon-upload:before,
 .icon-user:before,
 .icon-vertical:before,
@@ -82,6 +88,7 @@
 
 .icon-angle-right:before { content: "\f107"; }
 .icon-arrow-up:before { content: "\f10f"; }
+.icon-bold:before { content: "\f12b"; }
 .icon-caret-down:before { content: "\f122"; }
 .icon-caret-up:before { content: "\f123"; }
 .icon-check:before { content: "\f106"; }
@@ -92,6 +99,7 @@
 .icon-equalizer:before { content: "\f10e"; }
 .icon-group:before { content: "\f110"; }
 .icon-image:before { content: "\f111"; }
+.icon-italic:before { content: "\f12c"; }
 .icon-layout-horizontal:before { content: "\f127"; }
 .icon-layout-vertical:before { content: "\f128"; }
 .icon-link:before { content: "\f112"; }
@@ -113,7 +121,11 @@
 .icon-tap:before { content: "\f119"; }
 .icon-tap-action:before { content: "\f11a"; }
 .icon-text:before { content: "\f11b"; }
+.icon-text-align-center:before { content: "\f12e"; }
+.icon-text-align-left:before { content: "\f12f"; }
+.icon-text-align-right:before { content: "\f130"; }
 .icon-triangle-right:before { content: "\f10d"; }
+.icon-underline:before { content: "\f12d"; }
 .icon-upload:before { content: "\f105"; }
 .icon-user:before { content: "\f101"; }
 .icon-vertical:before { content: "\f11c"; }

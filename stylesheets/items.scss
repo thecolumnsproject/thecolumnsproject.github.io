@@ -1,8 +1,10 @@
 @import 'variables';
 @import 'keyframes';
+@import 'z-index';
 @import 'bower_components/bourbon/dist/bourbon';
 
 #columns {
+	// @include calc(height, '100% - 80px');
 	height: 100%;
 	width: 320px;
 	@include flex-grow(0);
@@ -32,6 +34,26 @@ $layout-column-width: 278px;
 	color: $gray-75;
 	@include display(flex);
 	@include align-items(center);
+	cursor: pointer;
+	@include transition(opacity 0.2s);
+}
+
+.layout-column.styling {
+	border-color: fade-out($primary-color, .6);
+	.layout-column-icon {
+		color: $secondary-color;
+	}
+}
+
+.layout-column.ui-draggable-dragging {
+	// opacity: .6;
+	box-shadow: 0px 0px 4px 0px $gray-20;
+	border-color: $primary-color;
+	z-index: $dragging-column-index;
+
+	&.droppable {
+		opacity: 0.2;
+	}
 }
 
 .layout-column-icon {
@@ -41,7 +63,8 @@ $layout-column-width: 278px;
 }
 
 .layout-column.inactive {
-	opacity: .3;
+	color: $gray-30;
+	cursor: pointer;
 }
 
 .layout-column.placeholder {

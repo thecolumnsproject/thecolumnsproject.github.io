@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>text-align-left</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="text-align-left" sketch:type="MSArtboardGroup" fill="#000000">
+            <path d="M15,20 C15,17.2385763 17.2362844,15 20.0053221,15 L49.9946779,15 C52.759041,15 55,17.2441952 55,20 C55,22.7614237 52.7637156,25 49.9946779,25 L20.0053221,25 C17.240959,25 15,22.7558048 15,20 Z M15,40 C15,37.2385763 17.2301197,35 20.0061354,35 L79.9938646,35 C82.7586768,35 85,37.2441952 85,40 C85,42.7614237 82.7698803,45 79.9938646,45 L20.0061354,45 C17.2413232,45 15,42.7558048 15,40 Z M15,60 C15,57.2385763 17.245531,55 20.0000319,55 L59.9999681,55 C62.7614095,55 65,57.2441952 65,60 C65,62.7614237 62.754469,65 59.9999681,65 L20.0000319,65 C17.2385905,65 15,62.7558048 15,60 Z M15,80 C15,77.2385763 17.2425656,75 19.9995286,75 L70.0004714,75 C72.7616348,75 75,77.2441952 75,80 C75,82.7614237 72.7574344,85 70.0004714,85 L19.9995286,85 C17.2383652,85 15,82.7558048 15,80 Z" id="Rectangle-15" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

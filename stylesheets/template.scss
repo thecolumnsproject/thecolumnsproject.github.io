@@ -1,12 +1,20 @@
 @import 'variables';
 @import 'keyframes';
+@import 'z-index';
 @import 'bower_components/bourbon/dist/bourbon';
 
 #layout {
 	height: 100%;
 	@include flex-grow(1);
 	@include display(flex);
-	@include align-items(center);
+	@include flex-direction(column);
+	@include align-items(flex-start);
+	background-image: url("/images/iphone_6.png");
+	background-repeat: no-repeat;
+	background-position: center top, center;
+	position: relative;
+	top: -80px;
+	z-index: $layout-index;
 }
 
 .layout-template {
@@ -14,14 +22,17 @@
 	// height: 100%;
 	@include display(flex);
 	@include justify-content(center);
+	position: relative;
+	top: 167px;
 }
 
 .layout-template-row {
-	width: 50%;
+	width: 375px;
 	min-height: 60px;
-	border: 1px solid $gray-lighter;
+	border: 1px solid $gray-light;
 	background-color: $gray-lightest;
-	padding: 12px;
+	// padding: 12px;
+	box-shadow: 0px 0px 16px 0px $gray-20;
 	@include display(flex);
 	@include justify-content(center);
 }
@@ -29,7 +40,19 @@
 /* Stretch just the first group in the row */
 .layout-template-row > .layout-template-row-group {
 	@include flex-grow(1);
+	padding: 12px;
 	background-color: #fff;
+}
+
+.layout-template-row.empty {
+	> .layout-template-row-group:after {
+		content: 'Drag columns here';
+		font-style: italic;
+		font-size: 20px;
+		color: $gray-40;
+		width: 100%;
+		text-align: center;
+	}
 }
 
 .layout-template-row-group {
@@ -56,27 +79,22 @@
 	@include justify-content(space-between);
 	@include align-items(center);
 
-	&[data-flex-direction='row'],
 	&[layout-flex-direction='row'] {
 		@include flex-direction(row);
 	}
 
-	&[data-flex-direction='column'],
 	&[layout-flex-direction='column'] {
 		@include flex-direction(column);
 	}
 
-	&[data-align-items='flex-start'],
 	&[layout-align-items='flex-start'] {
 		@include align-items(flex-start);
 	}
 
-	&[data-align-items='center'],
 	&[layout-align-items='center'] {
 		@include align-items(center);
 	}
-
-	&[data-align-items='flex-end'],
+	
 	&[layout-align-items='flex-end'] {
 		@include align-items(flex-end);
 	}

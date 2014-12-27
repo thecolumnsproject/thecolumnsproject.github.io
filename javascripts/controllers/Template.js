@@ -11,12 +11,14 @@ Columns.Template = new function() {
 	this.ROW_VALUE_CLASS = 'layout-template-row-value';
 	this.ROW_VALUE_PLACEHOLDER_CLASS = 'placeholder';
 	this.ROW_VALUE_INACTIVE_CLASS = 'inactive';
+	this.ROW_VALUE_INACTIVE_SELECTOR = '.' + this.ROW_VALUE_INACTIVE_CLASS;
 	this.ROW_VALUE_SELECTOR = '.' + this.ROW_VALUE_CLASS;
 	this.ROW_VALUE_PLACEHOLDER_SELECTOR = this.ROW_VALUE_SELECTOR + '.' + this.ROW_VALUE_PLACEHOLDER_CLASS;
 	this.ROW_GROUP_CLASS = 'layout-template-row-group';
 	this.ROW_GROUP_PLACEHOLDER_CLASS = 'placeholder';
 	this.ROW_GROUP_SELECTOR = '.' + this.ROW_GROUP_CLASS;
 	this.ROW_GROUP_PLACEHOLDER_SELECTOR = this.ROW_GROUP_SELECTOR + '.' + this.ROW_GROUP_PLACEHOLDER_CLASS;
+	this.TEMPLATE_EMPTY_CLASS = 'empty';
 
 	this.$template;
 
@@ -42,6 +44,10 @@ Columns.Template = new function() {
 			// Make sure that only this class has the dragover appearance
 			$(_this.ROW_GROUP_SELECTOR).removeClass('dragover');
 			// $(this).addClass('dragover');
+
+			_this.$template.removeClass('empty');
+
+			$('.ui-draggable-dragging').addClass('droppable');
 		});
 
 		$group.on('dropout', function(e) {
@@ -55,6 +61,12 @@ Columns.Template = new function() {
 			if (index > -1) {
 				_this.DROPPABLE_ITEMS.splice(index, 1);
 			}
+
+			if (_this.isEmpty()) {
+				_this.$template.addClass('empty');
+			}
+
+			$('.ui-draggable-dragging').removeClass('droppable');
 		});
 
 		$group.on('drop', function(e) {
@@ -73,7 +85,6 @@ Columns.Template = new function() {
 			// Drop the element
 			_this.positionDropForDragEventInParentWithPlaceholder(e, $(this), false);
 			// $(this).removeClass('dragover');
-
 		});
 	};
 
@@ -142,7 +153,7 @@ Columns.Template = new function() {
 
 	this.createDropWithPlaceholder = function(placeholder) {
 		if (!placeholder) placeholder = false;
-		var data = this.DRAGGING_ITEM.innerHTML.trim();
+		var data = Columns.Items.getItemName(this.DRAGGING_ITEM);
 		var item = Columns.Templates['templates/layout/row-value.hbs'];
 		var style = $(this.DRAGGING_ITEM).data('style');
 		return item({data: data, placeholder: placeholder, style: style});
@@ -161,7 +172,10 @@ Columns.Template = new function() {
 
 		if (!placeholder) {
 			Columns.Layout.update(false);
+			Columns.Styling.updateStyling(Columns.Items.getItemForTemplate($placeholder));
 		}
+
+		// _this.$template.removeClass('empty');
 
 		// Add listeners for styling purposes
 		// SEE layout-style.js
@@ -302,8 +316,12 @@ Columns.Template = new function() {
 		});
 	};
 
+	this.isEmpty = function() {
+		return this.$template.find(this.ROW_VALUE_SELECTOR).not(this.ROW_VALUE_INACTIVE_SELECTOR).length == 0;
+	};
+
 	this.getTemplateForItem = function(item) {
-		var $templateItem = $(this.ROW_VALUE_SELECTOR + ":contains('" + item.innerHTML.trim() + "')");
+		var $templateItem = $(this.ROW_VALUE_SELECTOR + ":contains('" + $(item).text().trim() + "')");
 		if ($templateItem.length > 0) {
 			return $templateItem.get(0);
 		} else {

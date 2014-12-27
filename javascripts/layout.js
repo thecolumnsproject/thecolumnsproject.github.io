@@ -7,12 +7,8 @@ var DATA = [
 	'Unit'
 ];
 
-Columns['styleData'] = {
-	components: {},
-	types: {}
-};
-
 Columns.Template.init();
 Columns.Items.init(DATA);
 Columns.Styling.init();
+Columns.Styling.updateStyling($(Columns.Template.$template).first());
 

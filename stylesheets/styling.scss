@@ -21,7 +21,24 @@ $style-component-section-spacing: 12px;
 	width: $style-component-width;
 	background-color: $gray-lightest;
 	border: 1px solid $gray-lighter;
+	border-bottom: none;
+	border-top-right-radius: 2px;
+	border-top-left-radius: 2px;
 }
+
+.style-component:first-child {
+	.style-component-header {
+		border-top-right-radius: 2px;
+		border-top-left-radius: 2px;
+	}
+}
+
+.style-component:last-child {
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+	border-bottom: 1px solid $gray-lighter;
+}
+
 
 .style-component-header {
 	// height: 24px;
@@ -43,65 +60,132 @@ $style-component-section-spacing: 12px;
 
 .style-component-section {
 	@include display(flex);
+	padding: $style-component-section-spacing;
+	border-bottom: 1px solid $gray-lighter;
+
+	&:last-child {
+		border-bottom: none;
+	}
 }
 
 .style-component-section-title {
 	width: $style-component-section-title-width - $style-component-spacing;
-	padding: $style-component-spacing;
-	padding-top: $style-component-section-spacing + 4px;
+	margin-right: $style-component-spacing;
+	padding-top: 4px;
 	font-size: 14px;
 }
 
 .style-component-section-rows {
-	padding: $style-component-section-spacing;
+	margin-bottom: $style-component-section-spacing;
 	padding-right: 0;
+	@include flex(0 0 $style-component-width - $style-component-section-title-width - $style-component-section-spacing * 2);
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 
 .style-component-section-row {
 	@include display(flex);
 	@include flex-direction(row);
+	@include justify-content(flex-start);
+	margin-bottom: $style-component-section-spacing;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 
 .style-component-section-row-item {
 	@include display(flex);
 	@include flex-direction(column);
-	@include align-items(center);
+	@include align-items(stretch);
+	@include flex(1 1 auto);
+	margin-right: $style-component-section-spacing;
+
+	&:last-child {
+		margin-right: 0;
+	}
 }
+
+// .style-component-section-row-input {
+
+// }
 
 .style-component-section-row-item-label {
 	font-size: 12px;
 	color: $gray-40;
-}
+	text-align: center;
+	margin-top: 4px;
+	font-weight: 500;
+}	
 
 $style-component-row-item-height: 24px;
+$style-component-row-item-width: ($style-component-width - $style-component-section-spacing * 3 - $style-component-section-title-width) / 2;
 $style-component-row-item-input-padding: 6px;
 $style-component-row-item-input-append-width: 16px;
 $style-component-row-item-input-prepend-width: 24px;
 
 .style-component-section-row-input {
+	box-sizing: border-box;
 	height: $style-component-row-item-height;
-	padding: 0 $style-component-row-item-input-padding;
 	background-color: #fff;
 	border: 1px solid $gray-light;
 	border-radius: 2px;
 	box-shadow: inset 0px 0px 3px 0px $gray-20;
 	position: relative;
-
-	&.append {
-		padding-right: $style-component-row-item-input-padding + $style-component-row-item-input-append-width;
-	}
-
-	&.append {
-		padding-left: $style-component-row-item-input-padding + $style-component-row-item-input-prepend-width
-	}
+	width: $style-component-row-item-width;
+	@include display(flex);
 
 	input {
-		padding: 0;
-		height: $style-component-row-item-height;
+		padding: 0 $style-component-row-item-input-padding;
+		height: $style-component-row-item-height - 1px;
 		line-height: $style-component-row-item-height;
+		// border: 1px solid transparent;
 		border: none;
 		background: none;
 		text-align: right;
+		border-radius: 2px;
+		@include flex(1 1 auto);
+
+		&:focus, &:active {
+			outline: none;
+			// border-color: $primary-color;
+			// box-shadow: inset 0px 0px 1px 0px $gray-20;
+			background-color: fade-out($primary-color, .95);
+		}
+
+		&[type='color'] {
+			padding: 0;
+			height: $style-component-row-item-height;
+			border-color: $gray-light;
+			&::-webkit-color-swatch-wrapper {
+		        padding: 0;
+		        border-radius: 2px;
+			}
+		    &::-webkit-color-swatch {
+				border: none;
+				border-radius: 2px;
+			}
+		}
+	}
+
+	&.append {
+		padding-right: $style-component-row-item-input-append-width + 1px;
+
+		input {
+			border-top-right-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+	}
+
+	&.prepend {
+		padding-left: $style-component-row-item-input-prepend-width + 1px;
+
+		input {
+			border-top-left-radius: 0px;
+			border-bottom-left-radius: 0px;
+		}
 	}
 }
 
@@ -111,9 +195,10 @@ $style-component-row-item-input-prepend-width: 24px;
 	top: 0;
 	width: $style-component-row-item-input-append-width;
 	background-color: $gray-lightest;
-	border-left: 1px solid $gray-lighter;
+	border-left: 1px solid $gray-light;
 	border-top-right-radius: 2px;
 	border-bottom-right-radius: 2px;
+	box-shadow: -1px 0px 1px $gray-10;
 	@include display(flex);
 	@include flex-direction(column);
 
@@ -123,12 +208,18 @@ $style-component-row-item-input-prepend-width: 24px;
 		border: none;
 		outline: none;
 		appearance: none;
-		height: $style-component-row-item-height / 2;
+		height: $style-component-row-item-height / 2 - 1;
 		width: $style-component-row-item-input-append-width;
 		padding: 0;
 		@include display(flex);
 		@include align-items(center);
 		@include justify-content(center);
+
+		&:active {
+			i {
+				color: $primary-color;
+			}
+		}
 
 		i {
 			font-size: 24px;
@@ -136,6 +227,7 @@ $style-component-row-item-input-prepend-width: 24px;
 			position: relative;
 			top: -8px;
 			left: -4px;
+			pointer-events: none;
 		}
 	}
 }
@@ -146,29 +238,71 @@ $style-component-row-item-input-prepend-width: 24px;
 	top: 0;
 	width: $style-component-row-item-input-prepend-width;
 	background-color: $gray-lightest;
-	border-right: 1px solid $gray-lighter;
+	border-right: 1px solid $gray-light;
 	border-top-left-radius: 2px;
 	border-bottom-left-radius: 2px;
+	box-shadow: 1px 0px 1px $gray-10;
 	@include display(flex);
 	// @include display(flex);
 	// @include flex-direction(column);
 
 	i {
 		font-size: 17px;
-		height: $style-component-row-item-input-prepend-width;
+		height: $style-component-row-item-input-prepend-width - 2;
 		width: $style-component-row-item-input-prepend-width;
 		text-align: center;
 		color: $gray-30;
 		position: relative;
 		top: 1px;
-		left: -1px;
+		// left: -1px;
+	}
+}
+
+.style-component-section-row-segmentedButton {
+	height: $style-component-row-item-height;
+	background-color: #fff;
+	box-shadow: inset 0px 0px 2px 0px $gray-20;
+	border: 1px solid $gray-light;
+	border-radius: 2px;
+	position: relative;
+	@include display(flex);
+	width: $style-component-row-item-width;
+	// @include flex-grow(1);
+
+	button {
+		background-color: #fff;
+		border: none;
+		outline: none;
+		appearance: none;
+		border-right: 1px solid $gray-lighter;
+		@include flex-grow(1);
+
+		&:last-child {
+			border-right: none;
+		}
+
+		&.active {
+			i {
+				color: $primary-color;
+			}
+			background-color: transparent;
+		}
+
+		&:active {
+			background-color: transparent;
+		}
+
+		i {
+			font-size: 16px;
+			color: $gray-80;
+		}
 	}
 }
 
 [data-property='align-items'] {
 	button i {
 		display: block;
-		@include transition(all 0.2s ease-in-out);
+		@include transition(transform 0.2s ease-in-out);
 		@include transform(rotate(0deg));
 	}
 }

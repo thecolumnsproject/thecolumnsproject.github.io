@@ -295,7 +295,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<span class=\"layout-column active\">\n	"
+  buffer += "<span class=\"layout-column active\">\n	<i class=\"icon-text layout-column-icon\"></i>\n	"
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
     + "\n</span>";
   return buffer;
@@ -490,61 +490,61 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n					";
+  buffer += "\n					<div class=\"style-component-section-row\">\n						";
   options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}
   if (helper = helpers.items) { stack1 = helper.call(depth0, options); }
   else { helper = (depth0 && depth0.items); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
   if (!helpers.items) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}); }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n				";
+  buffer += "\n					</div>\n				";
   return buffer;
   }
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n						";
+  buffer += "\n							<div class=\"style-component-section-row-item\">\n								";
   stack1 = (helper = helpers.ifIsInput || (depth0 && depth0.ifIsInput),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsInput", (depth0 && depth0.kind), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n						";
+  buffer += "\n								";
   stack1 = (helper = helpers.ifIsSingleSegmentedButton || (depth0 && depth0.ifIsSingleSegmentedButton),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsSingleSegmentedButton", (depth0 && depth0.kind), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n						";
+  buffer += "\n								";
   stack1 = (helper = helpers.ifIsMultipleSegmentedButton || (depth0 && depth0.ifIsMultipleSegmentedButton),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsMultipleSegmentedButton", (depth0 && depth0.kind), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n						<label>";
+  buffer += "\n								<label class='style-component-section-row-item-label'>";
   if (helper = helpers.label) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.label); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</label>\n					";
+    + "</label>\n							</div>\n						";
   return buffer;
   }
 function program4(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n							";
+  buffer += "\n									";
   stack1 = self.invokePartial(partials.input, 'input', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n						";
+  buffer += "\n								";
   return buffer;
   }
 
 function program6(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n							";
+  buffer += "\n									";
   stack1 = self.invokePartial(partials['single-segmented-button'], 'single-segmented-button', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n						";
+  buffer += "\n								";
   return buffer;
   }
 
 function program8(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n							";
+  buffer += "\n									";
   stack1 = self.invokePartial(partials['multiple-segmented-button'], 'multiple-segmented-button', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n						";
+  buffer += "\n								";
   return buffer;
   }
 
@@ -556,7 +556,7 @@ function program8(depth0,data) {
   if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\"></i>\n		<span class=\"style-component-title\">";
+    + " style-component-header-icon\"></i>\n		<span class=\"style-component-header-title\">";
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -577,6 +577,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
+  
+  return "prepend";
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "append";
+  }
+
+function program5(depth0,data) {
+  
   var buffer = "", stack1, helper;
   buffer += "\n		<div class=\"style-component-section-row-input-prepend\">\n			<i class=\"icon-";
   if (helper = helpers.prependIcon) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -586,14 +598,20 @@ function program1(depth0,data) {
   return buffer;
   }
 
-function program3(depth0,data) {
+function program7(depth0,data) {
   
   
   return "\n		<div class=\"style-component-section-row-input-append\">\n			<button class='increment'>\n				<i class=\"icon-caret-up\"></i>\n			</button>\n			<button class='decrement'>\n				<i class=\"icon-caret-down\"></i>\n			</button>\n		</div>\n	";
   }
 
-  buffer += "<div class=\"style-component-section-row-input\">\n	";
+  buffer += "<div class=\"style-component-section-row-input ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.prependIcon), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.appendControls), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n	";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.prependIcon), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	<input type=\"";
   if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -604,7 +622,7 @@ function program3(depth0,data) {
     + "' value='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'/>\n	";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.appendControls), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.appendControls), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</div>";
   return buffer;

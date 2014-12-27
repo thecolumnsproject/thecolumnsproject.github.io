@@ -2,127 +2,42 @@
 @import 'keyframes';
 @import 'bower_components/bourbon/dist/bourbon';
 
+$page-width: 1200px;
+
+.columns-header {
+	height: 80px;
+	background-color: $primary-color;
+}
+
+.columns-header-nav {
+	height: 100%;
+	width: $page-width;
+	margin: auto;
+	@include display(flex);
+	@include align-items(center);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 500;
+	text-transform: uppercase;
+	padding: 0 
+}
+
+.columns-header-nav-home {
+	@include display(flex);
+	@include align-items(center);
+}
+
+i.columns-header-nav-icon {
+	font-size: 20px;
+	margin-right: 12px;
+}
+
 #editor {
 	@include display(flex);
 	@include align-items(center);
 	@include justify-content(space-between);
 	height: 100%;
-}
-
-#layout {
-	height: 100%;
-	@include flex-grow(1);
-	@include display(flex);
-	@include align-items(center);
-}
-
-#columns {
-	height: 100%;
-	width: 320px;
-	@include flex-grow(0);
-	@include display(flex);
-	@include align-items(center);
-}
-
-.layout-columns {
-	width: 320px;
-	padding: 0 10px;
-	@include display(flex);
-	@include flex-flow(row wrap);
-	@include align-content(flex-start);
-}
-
-.layout-column {
-	height: 24px;
-	padding: 6px 12px;
-	margin-right: 12px;
-	margin-bottom: 12px;
-	border: 1px solid $gray-lighter;
-	border-radius: 4px;
-	background-color: $gray-lightest;
-	color: $text-color;
-	@include display(flex);
-	@include align-items(center);
-}
-
-.layout-column.inactive {
-	opacity: .3;
-}
-
-.layout-column.placeholder {
-	border-color: $primary-color;
-	background-color: fade-out($primary-color, .9);
-}
-
-.layout-template {
-	width: 100%;
-	// height: 100%;
-	@include display(flex);
-	@include justify-content(center);
-}
-
-.layout-template-row {
-	width: 50%;
-	min-height: 60px;
-	border: 1px solid $gray-lighter;
-	background-color: $gray-lightest;
-	padding: 12px;
-	@include display(flex);
-	@include justify-content(center);
-}
-
-/* Stretch just the first group in the row */
-.layout-template-row > .layout-template-row-group {
-	@include flex-grow(1);
-	background-color: #fff;
-}
-
-.layout-template-row-group {
-	@include box-sizing(border-box);
-	border: 1px solid transparent;
-}
-
-// .layout-template-row-group.dragover,
-.layout-template-row-group.placeholder {
-	border: 1px dashed $primary-color;
-	background-color: fade-out($primary-color, .9);
-}
-
-.layout-template-row-value.placeholder {
-	color: fade-out($primary-color, .5);
-}
-
-.layout-template-row-value.inactive {
-	display:none;
-}
-
-.layout-template-row-group {
-	@include display(flex);
-	@include justify-content(space-between);
-	@include align-items(center);
-
-	&[data-flex-direction='row'],
-	&[layout-flex-direction='row'] {
-		@include flex-direction(row);
-	}
-
-	&[data-flex-direction='column'],
-	&[layout-flex-direction='column'] {
-		@include flex-direction(column);
-	}
-
-	&[data-align-items='flex-start'],
-	&[layout-align-items='flex-start'] {
-		@include align-items(flex-start);
-	}
-
-	&[data-align-items='center'],
-	&[layout-align-items='center'] {
-		@include align-items(center);
-	}
-
-	&[data-align-items='flex-end'],
-	&[layout-align-items='flex-end'] {
-		@include align-items(flex-end);
-	}
+	width: $page-width;
+	margin: auto;
+	padding-top: 40px;
 }

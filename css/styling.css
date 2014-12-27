@@ -2,30 +2,24 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
-
   50% {
     -webkit-transform: scale(1.1); }
-
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
-
   50% {
     -webkit-transform: scale(0.9); }
-
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
-
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
-
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
@@ -43,6 +37,91 @@
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-direction: column;
+  -webkit-box-align: start;
+  -moz-box-align: start;
+  box-align: start;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  -o-align-items: flex-start;
+  align-items: flex-start;
+  -ms-flex-align: start; }
+
+.style-component {
+  width: 278px;
+  background-color: #fafafa;
+  border: 1px solid #ebebeb; }
+
+.style-component-header {
+  padding: 6px;
+  background-color: #fff;
+  border-bottom: 1px solid #ebebeb; }
+
+.style-component-header-icon {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3);
+  margin-right: 6px; }
+
+.style-component-header-title {
+  color: rgba(0, 0, 0, 0.75); }
+
+.style-component-section {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex; }
+
+.style-component-section-title {
+  width: 66px;
+  padding: 6px;
+  padding-top: 16px;
+  font-size: 14px; }
+
+.style-component-section-rows {
+  padding: 12px;
+  padding-right: 0; }
+
+.style-component-section-row {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-direction: row; }
+
+.style-component-section-row-item {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-direction: column;
   -webkit-box-align: center;
   -moz-box-align: center;
   box-align: center;
@@ -52,6 +131,121 @@
   -o-align-items: center;
   align-items: center;
   -ms-flex-align: center; }
+
+.style-component-section-row-item-label {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.4); }
+
+.style-component-section-row-input {
+  height: 24px;
+  padding: 0 6px;
+  background-color: #fff;
+  border: 1px solid #cccccc;
+  border-radius: 2px;
+  box-shadow: inset 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  position: relative; }
+  .style-component-section-row-input.append {
+    padding-right: 22px; }
+  .style-component-section-row-input.append {
+    padding-left: 30px; }
+  .style-component-section-row-input input {
+    padding: 0;
+    height: 24px;
+    line-height: 24px;
+    border: none;
+    background: none;
+    text-align: right; }
+
+.style-component-section-row-input-append {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 16px;
+  background-color: #fafafa;
+  border-left: 1px solid #ebebeb;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-direction: column; }
+  .style-component-section-row-input-append .increment,
+  .style-component-section-row-input-append .decrement {
+    background: none;
+    border: none;
+    outline: none;
+    appearance: none;
+    height: 12px;
+    width: 16px;
+    padding: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -o-align-items: center;
+    align-items: center;
+    -ms-flex-align: center;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    box-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -o-justify-content: center;
+    justify-content: center;
+    -ms-flex-pack: center; }
+    .style-component-section-row-input-append .increment i,
+    .style-component-section-row-input-append .decrement i {
+      font-size: 24px;
+      color: rgba(0, 0, 0, 0.4);
+      position: relative;
+      top: -8px;
+      left: -4px; }
+
+.style-component-section-row-input-prepend {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  background-color: #fafafa;
+  border-right: 1px solid #ebebeb;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex; }
+  .style-component-section-row-input-prepend i {
+    font-size: 17px;
+    height: 24px;
+    width: 24px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.3);
+    position: relative;
+    top: 1px;
+    left: -1px; }
 
 [data-property='align-items'] button i {
   display: block;
@@ -70,3 +264,5 @@
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg); }
+
+/*# sourceMappingURL=styling.css.map */

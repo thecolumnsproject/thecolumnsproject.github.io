@@ -19,7 +19,9 @@ Columns.styleData.components['margins'] = {
 			property: {
 				name:'margin-bottom'
 			}
-		}, {
+		}]
+	}, {
+		items: [{
 			kind: 'input',
 			type: 'tel',
 			prependIcon: 'margin-left',

@@ -15,6 +15,13 @@ body {
 
 	color: $text-color;
 
-	font-family: 'Heiti TC';
+	// font-family: "Avenir", 'Heiti TC'
+	font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;;
+}
+
+h2 {
+	color: $primary-color;
+	font-size: 32px;
+	font-weight: 300;
 }
 

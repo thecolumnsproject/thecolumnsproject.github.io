@@ -7,7 +7,162 @@
 	width: 320px;
 	@include flex-grow(0);
 	@include display(flex);
+	@include flex-direction(column);
+	@include align-items(flex-start);
+}
+
+$style-component-width: 278px;
+$style-component-spacing: 6px;
+$style-component-header-spacing: $style-component-spacing;
+$style-component-section-title-width: 72px;
+$style-component-section-spacing: 12px;
+
+.style-component {
+	width: $style-component-width;
+	background-color: $gray-lightest;
+	border: 1px solid $gray-lighter;
+}
+
+.style-component-header {
+	// height: 24px;
+	padding: $style-component-header-spacing;
+	background-color: #fff;
+	border-bottom: 1px solid $gray-lighter;
+	// overflow: hidden;
+}
+
+.style-component-header-icon {
+	font-size: 20px;
+	color: $gray-30;
+	margin-right: $style-component-header-spacing;
+}
+
+.style-component-header-title {
+	color: $gray-75;
+}
+
+.style-component-section {
+	@include display(flex);
+}
+
+.style-component-section-title {
+	width: $style-component-section-title-width - $style-component-spacing;
+	padding: $style-component-spacing;
+	padding-top: $style-component-section-spacing + 4px;
+	font-size: 14px;
+}
+
+.style-component-section-rows {
+	padding: $style-component-section-spacing;
+	padding-right: 0;
+}
+
+.style-component-section-row {
+	@include display(flex);
+	@include flex-direction(row);
+}
+
+.style-component-section-row-item {
+	@include display(flex);
+	@include flex-direction(column);
 	@include align-items(center);
+}
+
+.style-component-section-row-item-label {
+	font-size: 12px;
+	color: $gray-40;
+}
+
+$style-component-row-item-height: 24px;
+$style-component-row-item-input-padding: 6px;
+$style-component-row-item-input-append-width: 16px;
+$style-component-row-item-input-prepend-width: 24px;
+
+.style-component-section-row-input {
+	height: $style-component-row-item-height;
+	padding: 0 $style-component-row-item-input-padding;
+	background-color: #fff;
+	border: 1px solid $gray-light;
+	border-radius: 2px;
+	box-shadow: inset 0px 0px 3px 0px $gray-20;
+	position: relative;
+
+	&.append {
+		padding-right: $style-component-row-item-input-padding + $style-component-row-item-input-append-width;
+	}
+
+	&.append {
+		padding-left: $style-component-row-item-input-padding + $style-component-row-item-input-prepend-width
+	}
+
+	input {
+		padding: 0;
+		height: $style-component-row-item-height;
+		line-height: $style-component-row-item-height;
+		border: none;
+		background: none;
+		text-align: right;
+	}
+}
+
+.style-component-section-row-input-append {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: $style-component-row-item-input-append-width;
+	background-color: $gray-lightest;
+	border-left: 1px solid $gray-lighter;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+	@include display(flex);
+	@include flex-direction(column);
+
+	.increment,
+	.decrement {
+		background: none;
+		border: none;
+		outline: none;
+		appearance: none;
+		height: $style-component-row-item-height / 2;
+		width: $style-component-row-item-input-append-width;
+		padding: 0;
+		@include display(flex);
+		@include align-items(center);
+		@include justify-content(center);
+
+		i {
+			font-size: 24px;
+			color: $gray-40;
+			position: relative;
+			top: -8px;
+			left: -4px;
+		}
+	}
+}
+
+.style-component-section-row-input-prepend {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: $style-component-row-item-input-prepend-width;
+	background-color: $gray-lightest;
+	border-right: 1px solid $gray-lighter;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	@include display(flex);
+	// @include display(flex);
+	// @include flex-direction(column);
+
+	i {
+		font-size: 17px;
+		height: $style-component-row-item-input-prepend-width;
+		width: $style-component-row-item-input-prepend-width;
+		text-align: center;
+		color: $gray-30;
+		position: relative;
+		top: 1px;
+		left: -1px;
+	}
 }
 
 [data-property='align-items'] {

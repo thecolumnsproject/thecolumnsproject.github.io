@@ -10,4 +10,11 @@ body {
   height: 100%;
   width: 100%;
   color: #3a3a3a;
-  font-family: 'Heiti TC'; }
+  font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif; }
+
+h2 {
+  color: #3E97BD;
+  font-size: 32px;
+  font-weight: 300; }
+
+/*# sourceMappingURL=style.css.map */

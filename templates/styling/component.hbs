@@ -1,7 +1,7 @@
 <div class="style-component" data-component-index='{{index}}'>
 	<div class="style-component-header">
-		<i class="icon-{{type}}"></i>
-		<span class="style-component-title">{{name}}</span>
+		<i class="icon-{{type}} style-component-header-icon"></i>
+		<span class="style-component-header-title">{{name}}</span>
 	</div>
 	<div class="style-component-body">
 		{{#styles}}
@@ -11,18 +11,22 @@
 			</div>
 			<div class="style-component-section-rows">
 				{{#rows}}
-					{{#items}}
-						{{#ifIsInput kind}}
-							{{> input}}
-						{{/ifIsInput}}
-						{{#ifIsSingleSegmentedButton kind}}
-							{{> single-segmented-button}}
-						{{/ifIsSingleSegmentedButton}}
-						{{#ifIsMultipleSegmentedButton kind}}
-							{{> multiple-segmented-button}}
-						{{/ifIsMultipleSegmentedButton}}
-						<label>{{label}}</label>
-					{{/items}}
+					<div class="style-component-section-row">
+						{{#items}}
+							<div class="style-component-section-row-item">
+								{{#ifIsInput kind}}
+									{{> input}}
+								{{/ifIsInput}}
+								{{#ifIsSingleSegmentedButton kind}}
+									{{> single-segmented-button}}
+								{{/ifIsSingleSegmentedButton}}
+								{{#ifIsMultipleSegmentedButton kind}}
+									{{> multiple-segmented-button}}
+								{{/ifIsMultipleSegmentedButton}}
+								<label class='style-component-section-row-item-label'>{{label}}</label>
+							</div>
+						{{/items}}
+					</div>
 				{{/rows}}
 			</div>
 		</div>

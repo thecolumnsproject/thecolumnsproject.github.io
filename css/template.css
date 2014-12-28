@@ -62,7 +62,6 @@
   background-repeat: no-repeat;
   background-position: center top, center;
   position: relative;
-  top: -80px;
   z-index: 1; }
 
 .layout-template {
@@ -167,7 +166,14 @@
   -ms-align-items: center;
   -o-align-items: center;
   align-items: center;
-  -ms-flex-align: center; }
+  -ms-flex-align: center;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-direction: row; }
   .layout-template-row-group[layout-flex-direction='row'] {
     -webkit-box-orient: horizontal;
     -moz-box-orient: horizontal;

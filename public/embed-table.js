@@ -563,7 +563,7 @@ function program10(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div class=\"layout-template-row-group \n			";
+  buffer += "<div class=\"layout-template-row-group\n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"\n			";

@@ -93,7 +93,7 @@ Columns.Styling = new function() {
 			}
 
 			if (i == $parents.length - 1) {
-				_this.renderStyleComponents(items.reverse());
+				_this.renderStyleComponents(items);
 			}
 		});
 	}
@@ -109,7 +109,7 @@ Columns.Styling = new function() {
 			_this.populateCurrentValues(item);
 
 			$('#styling').append(component({
-				index: (items.length - 1) - i,
+				index: i,
 				type: type,
 				name: Columns.Items.getItemName(item),
 				styles: Columns.styleData.types[type]

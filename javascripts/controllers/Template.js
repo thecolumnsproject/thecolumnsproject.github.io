@@ -34,7 +34,9 @@ Columns.Template = new function() {
 
 	this.setupDropListeners = function($group) {
 		var _this = this;
-		$group.droppable();
+		$group.droppable({
+			tolerance: 'pointer'
+		});
 		$group.on('dropover', function(e) {
 
 			if (_this.DROPPABLE_ITEMS.indexOf(this) == -1) {

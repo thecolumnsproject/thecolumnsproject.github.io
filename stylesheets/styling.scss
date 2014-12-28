@@ -4,7 +4,7 @@
 
 #styling {
 	height: 100%;
-	width: 320px;
+	width: 280px;
 	@include flex-grow(0);
 	@include display(flex);
 	@include flex-direction(column);
@@ -147,6 +147,8 @@ $style-component-row-item-input-prepend-width: 24px;
 		text-align: right;
 		border-radius: 2px;
 		@include flex(1 1 auto);
+		font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+		font-weight: 500;
 
 		&:focus, &:active {
 			outline: none;
@@ -293,7 +295,7 @@ $style-component-row-item-input-prepend-width: 24px;
 		}
 
 		i {
-			font-size: 16px;
+			font-size: 14px;
 			color: $gray-80;
 		}
 	}

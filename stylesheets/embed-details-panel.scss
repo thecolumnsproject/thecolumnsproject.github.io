@@ -1,0 +1,192 @@
+@import 'variables';
+@import 'keyframes';
+@import 'z-index';
+@import 'bower_components/bourbon/dist/bourbon';
+
+.columns-panel-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: $panel-index;
+}
+
+.columns-panel-container.active {
+	pointer-events: auto;
+}
+
+.columns-panel-blocker {
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0;
+	@include transition(opacity, 0.2s);
+}
+
+.columns-panel {
+	width: 320px;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	right: -322px;
+	box-shadow: -1px 0px 2px $gray-20;
+	@include display(flex);
+	@include flex-direction(column);
+	@include align-items(stretch);
+	@include transition(transform 0.2s ease-in);
+	@include transform(translateX(0px));
+	@include transform(translate3d(0,0,0));
+}
+
+.columns-panel-container.active .columns-panel {
+	@include transform(translateX(-322px));
+	@include transition(transform 0.2s ease-out);
+}
+
+.columns-panel-container.active .columns-panel-blocker {
+	opacity: .36;
+}
+
+.columns-panel-header {
+	height: 80px;
+	background-color: $primary-color;
+	@include display(flex);
+	@include justify-content(center);
+	@include align-items(center);
+}
+
+.columns-panel-header-title {
+	font-size: 16px;
+	font-weight: 300;
+	color: #fff;
+}
+
+.columns-panel-header-close-button {
+	height: 80px;
+	width: 80px;
+	position: absolute;
+	left: 0;
+	top: 0px;
+	@include display(flex);
+	@include justify-content(center);
+	@include align-items(center);
+	cursor: pointer;
+
+	i {
+		color: rgba(255,255,255,0.75);
+	}
+
+	&:hover {
+		i {
+			color: #fff;
+		}
+	}
+}
+
+.columns-panel-body {
+	background-color: #fff;
+	@include flex-grow(1);
+	@include display(flex);
+	@include flex-direction(column);
+	@include align-items(stretch);
+	@include justify-content(flex-start);
+}
+
+.columns-panel-input-group {
+	.columns-panel-input-area {
+		border-bottom: none;
+
+		.columns-panel-input {
+			border-bottom: 1px solid $gray-lighter;
+		}
+
+		&:last-child {
+			border-bottom: 1px solid $gray-lighter;
+
+			.columns-panel-input {
+				border-bottom: none;
+			}
+		}
+	}
+}
+
+.columns-panel-input-area,
+.columns-panel-textarea-area {
+	border-bottom: 1px solid $gray-lighter;
+	@include display(flex);
+
+	input,
+	textarea {
+		background: none;
+		border: none;
+		font-size: 16px;
+		font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+		font-weight: 400;
+		color: $gray-80;
+		width: 100%;
+
+		&:focus {
+			border: none;
+			outline: none;
+		}
+	}
+
+	textarea {
+		resize: none;
+		padding-top: 16px;
+		@include flex-grow(1);
+		height: 100px;
+	}
+}
+
+.columns-panel-input-area {
+	// height: 79px;
+
+	input {
+		line-height: 39px;
+	}
+}
+
+.columns-panel-input,
+.columns-panel-textarea {
+	padding: 16px 0 12px 0;
+	@include flex-direction(column);
+	@include align-items(stretch);
+	@include justify-content(flex-start);
+}
+
+.columns-panel-input-label,
+.columns-panel-textarea-label {
+	line-height: 18px;
+	font-size: 12px;
+	font-weight: 600;
+	color: $gray-darker;
+	// text-transform: uppercase;
+}
+
+.columns-panel-input-icon,
+.columns-panel-textarea-icon {
+	height: 59px;
+	width: 80px;
+	@include display(flex);
+	@include align-items(center);
+	@include justify-content(center);
+
+	i {
+		color: $gray-75;
+		font-size: 20px;
+		text-align: center;
+	}
+}
+
+#embed-code {
+	@include flex-grow(1);
+	background-color: $gray-lightest;
+
+	button {
+		border-top: 1px solid $gray-lighter;
+		padding-top: 6px;
+	}
+}

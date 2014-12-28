@@ -81,6 +81,23 @@ i.columns-header-nav-icon {
   font-size: 20px;
   margin-right: 12px; }
 
+.columns-header-nav-embed {
+  height: 42px;
+  line-height: 42px;
+  border: 1px solid #fff;
+  border-radius: 22px;
+  padding: 0 40px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #fff;
+  background-color: #3e97bd;
+  margin-left: auto;
+  cursor: pointer; }
+  .columns-header-nav-embed:active {
+    background-color: #fff;
+    color: #3e97bd; }
+
 #editor {
   display: -webkit-box;
   display: -moz-box;

@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "columns-font";
-  src: url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.eot");
-  src: url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.eot?#iefix") format("embedded-opentype"),
-       url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.woff") format("woff"),
-       url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.ttf") format("truetype"),
-       url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.svg#columns-font") format("svg");
+  src: url("../fonts/columns-font_5956b7104dc43df19c6e0a148cc671a8.eot");
+  src: url("../fonts/columns-font_5956b7104dc43df19c6e0a148cc671a8.eot?#iefix") format("embedded-opentype"),
+       url("../fonts/columns-font_5956b7104dc43df19c6e0a148cc671a8.woff") format("woff"),
+       url("../fonts/columns-font_5956b7104dc43df19c6e0a148cc671a8.ttf") format("truetype"),
+       url("../fonts/columns-font_5956b7104dc43df19c6e0a148cc671a8.svg#columns-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "columns-font";
-    src: url("../fonts/columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.svg#columns-font") format("svg");
+    src: url("../fonts/columns-font_5956b7104dc43df19c6e0a148cc671a8.svg#columns-font") format("svg");
   }
 }
 
@@ -32,7 +32,10 @@
 .icon-circle-check-open:before,
 .icon-circle-popout-open:before,
 .icon-circle-x-open:before,
+.icon-close:before,
+.icon-code:before,
 .icon-columns:before,
+.icon-csv:before,
 .icon-equalizer:before,
 .icon-group:before,
 .icon-image:before,
@@ -55,12 +58,14 @@
 .icon-publish:before,
 .icon-publish-table:before,
 .icon-search:before,
+.icon-source:before,
 .icon-tap:before,
 .icon-tap-action:before,
 .icon-text:before,
 .icon-text-align-center:before,
 .icon-text-align-left:before,
 .icon-text-align-right:before,
+.icon-title:before,
 .icon-triangle-right:before,
 .icon-underline:before,
 .icon-upload:before,
@@ -95,7 +100,10 @@
 .icon-circle-check-open:before { content: "\f108"; }
 .icon-circle-popout-open:before { content: "\f109"; }
 .icon-circle-x-open:before { content: "\f10a"; }
+.icon-close:before { content: "\f131"; }
+.icon-code:before { content: "\f132"; }
 .icon-columns:before { content: "\f104"; }
+.icon-csv:before { content: "\f133"; }
 .icon-equalizer:before { content: "\f10e"; }
 .icon-group:before { content: "\f110"; }
 .icon-image:before { content: "\f111"; }
@@ -118,12 +126,14 @@
 .icon-publish:before { content: "\f103"; }
 .icon-publish-table:before { content: "\f118"; }
 .icon-search:before { content: "\f10c"; }
+.icon-source:before { content: "\f134"; }
 .icon-tap:before { content: "\f119"; }
 .icon-tap-action:before { content: "\f11a"; }
 .icon-text:before { content: "\f11b"; }
 .icon-text-align-center:before { content: "\f12e"; }
 .icon-text-align-left:before { content: "\f12f"; }
 .icon-text-align-right:before { content: "\f130"; }
+.icon-title:before { content: "\f135"; }
 .icon-triangle-right:before { content: "\f10d"; }
 .icon-underline:before { content: "\f12d"; }
 .icon-upload:before { content: "\f105"; }

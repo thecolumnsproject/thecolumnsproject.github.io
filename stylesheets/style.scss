@@ -16,12 +16,67 @@ body {
 	color: $text-color;
 
 	// font-family: "Avenir", 'Heiti TC'
-	font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;;
+	font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 h2 {
 	color: $primary-color;
 	font-size: 32px;
 	font-weight: 300;
+}
+
+.columns-button {
+	height: 42px;
+	line-height: 42px;
+	border: 1px solid #fff;
+	border-radius: 22px;
+	padding: 0 40px;
+	font-size: 12px;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: #fff;
+	background-color: $primary-color;
+	margin-left: auto;
+	cursor: pointer;
+
+	&:active {
+		background-color: #fff;
+		color: $primary-color;
+	}
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.button-small {
+	height: 34px;
+	line-height: 34px;
+	border-radius: 17px;
+	padding: 0 20px;
+}
+
+.button-secondary {
+	border-color: $primary-color;
+	background-color: transparent;
+	color: $primary-color;
+
+	&:active {
+		color: #fff;
+		background-color: $primary-color;
+	}
+}
+
+.button-tertiary {
+	border-radius: 0;
+	border-color: transparent;
+	background-color: transparent;
+	color: $primary-color;
+	padding: 0;
+
+	&:active {
+		color: darken($primary-color, 10%);
+		background-color: transparent;
+	}
 }
 

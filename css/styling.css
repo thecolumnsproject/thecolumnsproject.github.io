@@ -31,7 +31,7 @@
     opacity: 0.5; } }
 #styling {
   height: 100%;
-  width: 320px;
+  width: 280px;
   -webkit-flex-grow: 0;
   -moz-flex-grow: 0;
   flex-grow: 0;
@@ -222,7 +222,9 @@
     -webkit-flex: 1 1 auto;
     -moz-flex: 1 1 auto;
     -ms-flex: 1 1 auto;
-    flex: 1 1 auto; }
+    flex: 1 1 auto;
+    font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 500; }
     .style-component-section-row-input input:focus, .style-component-section-row-input input:active {
       outline: none;
       background-color: rgba(62, 151, 189, 0.05); }
@@ -377,7 +379,7 @@
     .style-component-section-row-segmentedButton button:active {
       background-color: transparent; }
     .style-component-section-row-segmentedButton button i {
-      font-size: 16px;
+      font-size: 14px;
       color: rgba(0, 0, 0, 0.8); }
 
 [data-property='align-items'] button i {

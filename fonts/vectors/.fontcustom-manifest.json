@@ -1,13 +1,13 @@
 {
   "checksum": {
-    "previous": "0eb421bafd7b55fde04eeebaccc8eb1c7dc4a42f261aab4d5bf8454c8a678fa8",
-    "current": "0eb421bafd7b55fde04eeebaccc8eb1c7dc4a42f261aab4d5bf8454c8a678fa8"
+    "previous": "5956b7104dc43df19c6e0a148cc671a826f513e898044cb00da0016bf60eb692",
+    "current": "5956b7104dc43df19c6e0a148cc671a826f513e898044cb00da0016bf60eb692"
   },
   "fonts": [
-    "..//columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.ttf",
-    "..//columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.svg",
-    "..//columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.woff",
-    "..//columns-font_0eb421bafd7b55fde04eeebaccc8eb1c.eot"
+    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.ttf",
+    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.svg",
+    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.woff",
+    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.eot"
   ],
   "glyphs": {
     "angle-right": {
@@ -46,9 +46,21 @@
       "codepoint": 61706,
       "source": "./circle-x-open.svg"
     },
+    "close": {
+      "codepoint": 61745,
+      "source": "./close.svg"
+    },
+    "code": {
+      "codepoint": 61746,
+      "source": "./code.svg"
+    },
     "columns": {
       "codepoint": 61700,
       "source": "./columns.svg"
+    },
+    "csv": {
+      "codepoint": 61747,
+      "source": "./csv.svg"
     },
     "equalizer": {
       "codepoint": 61710,
@@ -138,6 +150,10 @@
       "codepoint": 61708,
       "source": "./search.svg"
     },
+    "source": {
+      "codepoint": 61748,
+      "source": "./source.svg"
+    },
     "tap": {
       "codepoint": 61721,
       "source": "./tap.svg"
@@ -161,6 +177,10 @@
     "text-align-right": {
       "codepoint": 61744,
       "source": "./text-align-right.svg"
+    },
+    "title": {
+      "codepoint": 61749,
+      "source": "./title.svg"
     },
     "triangle-right": {
       "codepoint": 61709,

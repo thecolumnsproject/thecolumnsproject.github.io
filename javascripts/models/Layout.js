@@ -27,6 +27,7 @@ Columns.Layout = new function() {
 
 	this.update = function(refresh) {
 		this.layoutObject = this.objectForElement(Columns.Template.$template.children().first(), true);
+		Columns.data.layout = this.layoutObject;
 		if (refresh) {
 			Columns.Template.render();
 		}

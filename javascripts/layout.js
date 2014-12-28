@@ -1,4 +1,12 @@
 // Add dummy columns to the page
+Columns['data'] = {
+	source: null,
+	source_url: null,
+	title: null,
+	layout: null,
+	data: null
+}
+
 var DATA = [
 	'First Name',
 	'Last Name',

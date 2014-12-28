@@ -28,6 +28,12 @@ Columns.EmbedDetailsPanel = new function() {
 		this.$this.find(this.BLOCKER_SELECTOR).click(function() {
 			_this.hide();
 		});
+
+		this.$this.find('input').keyup(function() {
+			var property = $(this).data('property');
+			var value = $(this).val();
+			Columns.data[property] = value;
+		});
 	};
 
 	this.show = function() {

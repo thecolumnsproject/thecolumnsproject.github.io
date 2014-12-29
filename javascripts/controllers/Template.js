@@ -256,12 +256,16 @@ Columns.Template = new function() {
 				bufferY = $child.height() * buffer;
 			}
 
+			// Also account for any scrolling the template has done
+			// in order to stay fixed with the page scroll
+			var scrollOffset = parseInt($.Velocity.hook($("#layout"), "translateY"));
+
 			// If we're intersecting directly with this child,
 			// set it as the new intersect child
 			if (childEdgeLeft + bufferX <= dragOffsetX &&
 				childEdgeRight - bufferX>= dragOffsetX &&
-				childEdgeTop + bufferY <= dragOffsetY &&
-				childEdgeBottom - bufferY >= dragOffsetY) {
+				childEdgeTop - scrollOffset + bufferY <= dragOffsetY &&
+				childEdgeBottom - scrollOffset - bufferY >= dragOffsetY) {
 
 				// Reset the previous child
 				$previousChild = undefined;

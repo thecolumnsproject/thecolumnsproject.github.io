@@ -46,7 +46,7 @@ $layout-column-width: 278px;
 }
 
 .layout-column.styling {
-	border-color: fade-out($primary-color, .6);
+	// border-color: fade-out($primary-color, .6);
 	.layout-column-icon {
 		color: $secondary-color;
 	}
@@ -70,8 +70,12 @@ $layout-column-width: 278px;
 }
 
 .layout-column.inactive {
-	color: $gray-30;
+	color: $gray-20;
 	cursor: pointer;
+
+	.layout-column-icon {
+		color: $gray-10;
+	}
 }
 
 .layout-column.placeholder {

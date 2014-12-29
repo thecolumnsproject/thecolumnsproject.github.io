@@ -29,6 +29,7 @@ $page-width: 1200px;
 .columns-header-nav-home {
 	@include display(flex);
 	@include align-items(center);
+	cursor: pointer;
 }
 
 i.columns-header-nav-icon {

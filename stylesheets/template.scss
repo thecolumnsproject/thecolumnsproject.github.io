@@ -4,7 +4,8 @@
 @import 'bower_components/bourbon/dist/bourbon';
 
 #layout {
-	height: 100%;
+	// height: 100%;
+	@include calc(height, '100% + 80px');
 	@include flex-grow(1);
 	@include display(flex);
 	@include flex-direction(column);
@@ -13,7 +14,7 @@
 	background-repeat: no-repeat;
 	background-position: center top, center;
 	position: relative;
-	top: -80px;
+	top: -40px;
 	z-index: $layout-index;
 }
 

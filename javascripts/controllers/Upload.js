@@ -23,11 +23,13 @@ Columns.Upload = new function() {
 		var _$this = this.$this;
 
 		$(window).resize(function() {
-			_$this.velocity({
-				translateX: -_$this.width()
-			}, {
-				duration: 0
-			});
+			if (!_$this.hasClass('active')) {
+				_$this.velocity({
+					translateX: -_$this.width()
+				}, {
+					duration: 0
+				});
+			}
 		});
 	};
 

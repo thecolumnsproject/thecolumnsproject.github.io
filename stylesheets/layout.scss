@@ -6,7 +6,11 @@ $page-width: 1200px;
 
 .columns-header {
 	height: 80px;
+	width: 100%;
 	background-color: $primary-color;
+	position: fixed;
+	top: 0;
+	left: 0;
 }
 
 .columns-header-nav {
@@ -59,5 +63,5 @@ i.columns-header-nav-icon {
 	@include calc(height, '100% - 120px');
 	width: $page-width;
 	margin: auto;
-	padding-top: 40px;
+	padding-top: 120px;
 }

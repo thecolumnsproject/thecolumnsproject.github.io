@@ -1,0 +1,69 @@
+@import 'variables';
+@import 'keyframes';
+@import 'z-index';
+@import 'bower_components/bourbon/dist/bourbon';
+
+#upload {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: $primary-color;
+	z-index: $upload-index;
+	background-image: url("/images/upload_devices.png");
+	background-repeat: no-repeat;
+	background-position: right bottom;
+}
+
+$upload-copy-spacing: 120px;
+
+.upload-copy {
+	@include display(flex);
+	color: $primary-white;
+	margin-top: $upload-copy-spacing;
+	margin-left: $upload-copy-spacing;
+}
+
+.upload-copy-logo {
+	margin-right: 16px;
+
+	img {
+		display: none;
+		position: relative;
+		top: 4px;
+	}
+
+	i {
+		font-size: 32px;
+		display: inline;
+	}
+}
+
+.loading .upload-copy-logo {
+	i {
+		display: none;
+	}
+
+	img {
+		display: inline;
+	}
+}
+
+.upload-copy-text {
+	h2 {
+		color: $primary-white;
+		margin-top: 0;
+	}
+
+	p {
+		font-weight: 300;
+		margin-bottom: 40px;
+		font-size: 18px;
+	}
+
+	button[disabled] {
+		opacity: 0.3;
+		cursor: default;
+	}
+}

@@ -11,12 +11,17 @@
 	@include display(flex);
 	@include flex-direction(column);
 	@include align-items(flex-start);
+
+	h2 {
+		margin-bottom: 0px;
+	}
 }
 
 $layout-column-spacing: 6px;
 $layout-column-width: 278px;
 
 .layout-columns {
+	padding-top: 63px;
 	@include display(flex);
 	@include flex-flow(column);
 	@include align-content(flex-start);
@@ -24,6 +29,8 @@ $layout-column-width: 278px;
 
 .layout-column {
 	height: 24px;
+	// @include flex-basis(24px);
+	@include flex-shrink(0);
 	width: $layout-column-width;
 	padding: $layout-column-spacing;
 	margin-right: 12px;

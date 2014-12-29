@@ -257,10 +257,6 @@
   .columns-panel-textarea-area textarea {
     resize: none;
     padding-top: 16px;
-    -webkit-flex-grow: 1;
-    -moz-flex-grow: 1;
-    flex-grow: 1;
-    -ms-flex-positive: 1;
     height: 100px; }
 
 .columns-panel-input-area input {
@@ -305,7 +301,7 @@
 .columns-panel-input-icon,
 .columns-panel-textarea-icon {
   height: 59px;
-  width: 80px;
+  min-width: 80px;
   display: -webkit-box;
   display: -moz-box;
   display: box;

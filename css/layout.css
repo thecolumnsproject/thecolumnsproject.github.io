@@ -31,7 +31,11 @@
     opacity: 0.5; } }
 .columns-header {
   height: 80px;
-  background-color: #3e97bd; }
+  width: 100%;
+  background-color: #3e97bd;
+  position: fixed;
+  top: 0;
+  left: 0; }
 
 .columns-header-nav {
   height: 100%;
@@ -128,4 +132,4 @@ i.columns-header-nav-icon {
   height: calc(100% - 120px);
   width: 1200px;
   margin: auto;
-  padding-top: 40px; }
+  padding-top: 120px; }

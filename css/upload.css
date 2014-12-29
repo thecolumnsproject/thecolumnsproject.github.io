@@ -1,0 +1,80 @@
+/* Grays */
+@-webkit-keyframes pop-out {
+  0% {
+    -webkit-transform: scale(1); }
+
+  50% {
+    -webkit-transform: scale(1.1); }
+
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pop-in {
+  0% {
+    -webkit-transform: scale(1); }
+
+  50% {
+    -webkit-transform: scale(0.9); }
+
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; }
+
+  50% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1.0; }
+
+  100% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; } }
+#upload {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #3e97bd;
+  z-index: 3;
+  background-image: url("/images/upload_devices.png");
+  background-repeat: no-repeat;
+  background-position: right bottom; }
+
+.upload-copy {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  color: rgba(255, 255, 255, 0.96);
+  margin-top: 120px;
+  margin-left: 120px; }
+
+.upload-copy-logo {
+  margin-right: 16px; }
+  .upload-copy-logo img {
+    display: none;
+    position: relative;
+    top: 4px; }
+  .upload-copy-logo i {
+    font-size: 32px;
+    display: inline; }
+
+.loading .upload-copy-logo i {
+  display: none; }
+.loading .upload-copy-logo img {
+  display: inline; }
+
+.upload-copy-text h2 {
+  color: rgba(255, 255, 255, 0.96);
+  margin-top: 0; }
+.upload-copy-text p {
+  font-weight: 300;
+  margin-bottom: 40px;
+  font-size: 18px; }
+.upload-copy-text button[disabled] {
+  opacity: 0.3;
+  cursor: default; }

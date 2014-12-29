@@ -32,6 +32,25 @@ Columns.Styling = new function() {
 		this.updateStyling(item);
 	};
 
+	this.setupScrollListeners = function() {
+		// Scroll the style section down as the use scrolls the page
+		$(window).scroll(function() {
+			// console.log("Height " +$(document).height());
+			// console.log("Scroll " +$(window).scrollTop());
+			// console.log("Style " +$.Velocity.hook($("#styling"), "translateY"));
+			var scroll;
+			var maxScroll = $(document).height() - $(window).height();
+			var minScroll = 0;
+			scroll = $(window).scrollTop() < minScroll ? 0 : $(window).scrollTop();
+			scroll = scroll > maxScroll ? parseInt($.Velocity.hook($("#styling"), "translateY")) : scroll; /* Keep current position */
+			$("#styling").velocity({
+				translateY: scroll
+			}, {
+				duration: 0
+			});
+		});
+	};
+
 	// Every time an item is clicked,
 	// either in the list of items or on the canvas,
 	// update the current item and update the styling area.
@@ -309,7 +328,7 @@ Columns.Styling = new function() {
 	};
 
 	this.render = function() {
-
+		this.setupScrollListeners();
 	};
 
 	this.setupHandlebars = function() {

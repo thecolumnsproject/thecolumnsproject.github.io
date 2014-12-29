@@ -32,6 +32,25 @@ Columns.Template = new function() {
 		this.render();
 	};
 
+	this.setupScrollListeners = function() {
+		// Scroll the style section down as the use scrolls the page
+		$(window).scroll(function() {
+			// console.log("Height " +$(document).height());
+			// console.log("Scroll " +$(window).scrollTop());
+			// console.log("Style " +$.Velocity.hook($("#styling"), "translateY"));
+			var scroll;
+			var maxScroll = $(document).height() - $(window).height();
+			var minScroll = 0;
+			scroll = $(window).scrollTop() < minScroll ? 0 : $(window).scrollTop();
+			scroll = scroll > maxScroll ? parseInt($.Velocity.hook($("#layout"), "translateY")) : scroll; /* Keep current position */
+			$("#layout").velocity({
+				translateY: scroll
+			}, {
+				duration: 0
+			});
+		});
+	};
+
 	this.setupDropListeners = function($group) {
 		var _this = this;
 		$group.droppable({
@@ -339,6 +358,7 @@ Columns.Template = new function() {
 		this.$template = $('.layout-template-row.master');
 		this.setupDragListeners($(this.ROW_VALUE_SELECTOR));
 		this.setupDropListeners($(this.ROW_GROUP_SELECTOR));
+		this.setupScrollListeners();
 	};
 
 	this.setupHandlebars = function() {

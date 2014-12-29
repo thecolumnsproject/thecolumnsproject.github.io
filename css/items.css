@@ -59,8 +59,11 @@
   -o-align-items: flex-start;
   align-items: flex-start;
   -ms-flex-align: start; }
+  #columns h2 {
+    margin-bottom: 0px; }
 
 .layout-columns {
+  padding-top: 63px;
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -78,6 +81,10 @@
 
 .layout-column {
   height: 24px;
+  -webkit-flex-shrink: 0;
+  -moz-flex-shrink: 0;
+  flex-shrink: 0;
+  -ms-flex-negative: 0;
   width: 278px;
   padding: 6px;
   margin-right: 12px;

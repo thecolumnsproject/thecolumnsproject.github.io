@@ -4,24 +4,17 @@ Columns['data'] = {
 	source_url: null,
 	title: null,
 	layout: null,
+	columns: null,
 	data: null
 }
 
-var DATA = [
-	'First Name',
-	'Last Name',
-	'Hometown',
-	'Age',
-	'Unit'
-];
-
-Columns.Template.init();
-Columns.Items.init(DATA);
-Columns.Styling.init();
-Columns.EmbedDetailsPanel.init();
-Columns.Styling.updateStyling($(Columns.Template.$template).first());
+Columns.Upload.init();
 
 $(function() {
+	$('.columns-header-nav-home').click(function() {
+		Columns.Upload.show();
+	});
+
 	$('.columns-header-nav-embed').click(function() {
 		Columns.EmbedDetailsPanel.show();
 	});

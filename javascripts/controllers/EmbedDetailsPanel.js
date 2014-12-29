@@ -47,7 +47,7 @@ Columns.EmbedDetailsPanel = new function() {
 	this.render = function() {
 		var panel = Columns.Templates['templates/panels/panel.hbs'];
 		var body = Columns.Templates['templates/embed-details-panel/body.hbs'];
-		$('#styling').append(panel({
+		$('body').append(panel({
 			id: this.ID,
 			header: {
 				title: 'Embed Details'

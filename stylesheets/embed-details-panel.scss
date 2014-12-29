@@ -136,7 +136,7 @@
 	textarea {
 		resize: none;
 		padding-top: 16px;
-		@include flex-grow(1);
+		// @include flex-grow(1);
 		height: 100px;
 	}
 }
@@ -169,7 +169,7 @@
 .columns-panel-input-icon,
 .columns-panel-textarea-icon {
 	height: 59px;
-	width: 80px;
+	min-width: 80px;
 	@include display(flex);
 	@include align-items(center);
 	@include justify-content(center);

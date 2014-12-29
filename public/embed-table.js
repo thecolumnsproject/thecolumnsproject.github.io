@@ -485,9 +485,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<span class=\"layout-column active\">\n	<i class=\"icon-text layout-column-icon\"></i>\n	"
+  buffer += "<div class=\"layout-column active\">\n	<i class=\"icon-text layout-column-icon\"></i>\n	"
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "\n</span>";
+    + "\n</div>";
   return buffer;
   });
 

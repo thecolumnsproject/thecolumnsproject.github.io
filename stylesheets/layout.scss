@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'keyframes';
+@import 'z-index';
 @import 'bower_components/bourbon/dist/bourbon';
 
 $page-width: 1200px;
@@ -11,6 +12,7 @@ $page-width: 1200px;
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: $header-index;
 }
 
 .columns-header-nav {
@@ -59,10 +61,15 @@ i.columns-header-nav-icon {
 
 #editor {
 	@include display(flex);
-	@include align-items(center);
+	@include align-items(flex-start);
 	@include justify-content(space-between);
 	@include calc(height, '100% - 120px');
 	width: $page-width;
 	margin: auto;
-	padding-top: 120px;
+	padding-top: 80px;
+
+	h2 {
+		@include flex-shrink(0);
+		margin: 32px 0;
+	}
 }

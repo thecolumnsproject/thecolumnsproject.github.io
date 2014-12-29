@@ -11,9 +11,15 @@
 	@include display(flex);
 	@include flex-direction(column);
 	@include align-items(flex-start);
+	padding-top: 40px;
+	overflow: scroll;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 
 	h2 {
-		margin-bottom: 0px;
+		// margin-bottom: 0px;
 	}
 }
 
@@ -21,7 +27,7 @@ $layout-column-spacing: 6px;
 $layout-column-width: 278px;
 
 .layout-columns {
-	padding-top: 63px;
+	// padding-top: 63px;
 	@include display(flex);
 	@include flex-flow(column);
 	@include align-content(flex-start);

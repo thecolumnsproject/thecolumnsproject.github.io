@@ -16,7 +16,7 @@ Columns.styleData.components['items'] = {
 			}]
 		}, {
 			kind: 'single-segmented-button',
-			label: 'Position',
+			label: 'Alignment',
 			property: {
 				name:'align-items'
 			},

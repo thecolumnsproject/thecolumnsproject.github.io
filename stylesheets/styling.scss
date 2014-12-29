@@ -9,6 +9,13 @@
 	@include display(flex);
 	@include flex-direction(column);
 	@include align-items(flex-start);
+	@include justify-content(flex-start);
+	padding-top: 40px;
+	overflow: scroll;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 $style-component-width: 278px;
@@ -24,6 +31,11 @@ $style-component-section-spacing: 12px;
 	border-bottom: none;
 	border-top-right-radius: 2px;
 	border-top-left-radius: 2px;
+	@include flex-shrink(0);
+
+	&:last-child {
+		margin-bottom: 12px;
+	}
 }
 
 .style-component:first-child {

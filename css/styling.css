@@ -52,7 +52,20 @@
   -ms-align-items: flex-start;
   -o-align-items: flex-start;
   align-items: flex-start;
-  -ms-flex-align: start; }
+  -ms-flex-align: start;
+  -webkit-box-pack: start;
+  -moz-box-pack: start;
+  box-pack: start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  -o-justify-content: flex-start;
+  justify-content: flex-start;
+  -ms-flex-pack: start;
+  padding-top: 40px;
+  overflow: scroll; }
+  #styling::-webkit-scrollbar {
+    display: none; }
 
 .style-component {
   width: 278px;
@@ -60,7 +73,13 @@
   border: 1px solid #ebebeb;
   border-bottom: none;
   border-top-right-radius: 2px;
-  border-top-left-radius: 2px; }
+  border-top-left-radius: 2px;
+  -webkit-flex-shrink: 0;
+  -moz-flex-shrink: 0;
+  flex-shrink: 0;
+  -ms-flex-negative: 0; }
+  .style-component:last-child {
+    margin-bottom: 12px; }
 
 .style-component:first-child .style-component-header {
   border-top-right-radius: 2px;

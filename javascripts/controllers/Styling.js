@@ -328,7 +328,7 @@ Columns.Styling = new function() {
 	};
 
 	this.render = function() {
-		this.setupScrollListeners();
+		// this.setupScrollListeners();
 	};
 
 	this.setupHandlebars = function() {

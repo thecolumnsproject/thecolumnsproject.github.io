@@ -70,11 +70,11 @@ Columns.Upload = new function() {
 					// renderData(uploadedData);
 				// }
 				_this.setLoading(false);
-				Columns.Template.init();
-				Columns.Items.init(Columns.data.columns);
-				Columns.Styling.init();
-				Columns.EmbedDetailsPanel.init();
-				Columns.Styling.updateStyling($(Columns.Template.$template).first());
+				// Columns.Template.init();
+				// Columns.Items.init(Columns.data.columns);
+				// Columns.Styling.init();
+				// Columns.EmbedDetailsPanel.init();
+				// Columns.Styling.updateStyling($(Columns.Template.$template).first());
 				_this.hide();
 			}
 		});

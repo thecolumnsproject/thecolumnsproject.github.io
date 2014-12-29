@@ -52,12 +52,13 @@
   -ms-align-items: flex-start;
   -o-align-items: flex-start;
   align-items: flex-start;
-  -ms-flex-align: start; }
-  #columns h2 {
-    margin-bottom: 0px; }
+  -ms-flex-align: start;
+  padding-top: 40px;
+  overflow: scroll; }
+  #columns::-webkit-scrollbar {
+    display: none; }
 
 .layout-columns {
-  padding-top: 63px;
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -114,7 +115,7 @@
 .layout-column.ui-draggable-dragging {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
   border-color: #3E97BD;
-  z-index: 2; }
+  z-index: 3; }
   .layout-column.ui-draggable-dragging.droppable {
     opacity: 0.2; }
 

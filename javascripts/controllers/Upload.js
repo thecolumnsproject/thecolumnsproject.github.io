@@ -160,7 +160,7 @@ Columns.Upload = new function() {
 	this.render = function() {
 		this.$this = $(this.SELECTOR);
 		this.setupListeners();
-		this.setupResizeListeners();
+		// this.setupResizeListeners();
 	};
 
 }

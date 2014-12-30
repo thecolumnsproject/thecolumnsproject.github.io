@@ -227,6 +227,7 @@
     padding: 0 6px;
     height: 23px;
     line-height: 24px;
+    width: 73px;
     border: none;
     background: none;
     text-align: right;
@@ -257,12 +258,16 @@
     padding-right: 17px; }
     .style-component-section-row-input.append input {
       border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px; }
+      border-bottom-right-radius: 0px;
+      width: 57px; }
   .style-component-section-row-input.prepend {
     padding-left: 25px; }
     .style-component-section-row-input.prepend input {
       border-top-left-radius: 0px;
-      border-bottom-left-radius: 0px; }
+      border-bottom-left-radius: 0px;
+      width: 49px; }
+  .style-component-section-row-input.prepend.append input {
+    width: 33px; }
 
 .style-component-section-row-input-append {
   position: absolute;
@@ -378,6 +383,8 @@
   .style-component-section-row-segmentedButton button {
     background-color: #fff;
     border: none;
+    padding: 0;
+    /* For Firefox */
     outline: none;
     appearance: none;
     border-right: 1px solid #ebebeb;

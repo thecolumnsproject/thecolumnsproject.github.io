@@ -155,6 +155,7 @@ $style-component-row-item-input-prepend-width: 24px;
 		padding: 0 $style-component-row-item-input-padding;
 		height: $style-component-row-item-height - 1px;
 		line-height: $style-component-row-item-height;
+		width: $style-component-row-item-width - $style-component-row-item-input-padding * 2;
 		// border: 1px solid transparent;
 		border: none;
 		background: none;
@@ -192,6 +193,7 @@ $style-component-row-item-input-prepend-width: 24px;
 		input {
 			border-top-right-radius: 0px;
 			border-bottom-right-radius: 0px;
+			width: $style-component-row-item-width - $style-component-row-item-input-append-width - $style-component-row-item-input-padding * 2;
 		}
 	}
 
@@ -201,6 +203,13 @@ $style-component-row-item-input-prepend-width: 24px;
 		input {
 			border-top-left-radius: 0px;
 			border-bottom-left-radius: 0px;
+			width: $style-component-row-item-width - $style-component-row-item-input-prepend-width - $style-component-row-item-input-padding * 2;
+		}
+	}
+
+	&.prepend.append {
+		input {
+			width: $style-component-row-item-width - $style-component-row-item-input-prepend-width - $style-component-row-item-input-append-width - $style-component-row-item-input-padding * 2;
 		}
 	}
 }
@@ -288,6 +297,7 @@ $style-component-row-item-input-prepend-width: 24px;
 	button {
 		background-color: #fff;
 		border: none;
+		padding: 0; /* For Firefox */
 		outline: none;
 		appearance: none;
 		border-right: 1px solid $gray-lighter;

@@ -57,8 +57,10 @@ Columns.Upload = new function() {
 			];
 			Columns.Items.render(Columns.data.columns);
 			Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
-			Columns.Styling.updateStyling($(Columns.Template.$template).first());
+			// Columns.Styling.updateStyling($(Columns.Template.$template).first());
 			Columns.Items.updateItemStylesFromTemplate(Columns.Template);
+			Columns.Styling.initWithItem($(Columns.Template.$template).first());
+			// Columns.Styling.updateStyling($(Columns.Template.$template).first());
 			_this.hide();
 		});
 

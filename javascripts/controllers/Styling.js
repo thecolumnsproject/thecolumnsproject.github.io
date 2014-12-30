@@ -60,7 +60,7 @@ Columns.Styling = new function() {
 		var _this = this;
 		if ($template.hasClass(Columns.Template.ROW_VALUE_CLASS)) {
 			$template.click(function(e) {
-				var item = Columns.Items.getItemForTemplate($template.get(0));
+				var item = Columns.Items.getItemForTemplate(this);
 				// _this._currentItems = [item];
 				_this.updateStyling(item);
 

@@ -109,9 +109,6 @@
   -moz-transition: opacity 0.2s;
   transition: opacity 0.2s; }
 
-.layout-column.styling .layout-column-icon {
-  color: #89c0d8; }
-
 .layout-column.ui-draggable-dragging {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
   border-color: #3E97BD;
@@ -129,6 +126,9 @@
   cursor: pointer; }
   .layout-column.inactive .layout-column-icon {
     color: rgba(0, 0, 0, 0.1); }
+
+.layout-column.styling .layout-column-icon {
+  color: #89c0d8; }
 
 .layout-column.placeholder {
   border-color: #3E97BD;

@@ -51,13 +51,6 @@ $layout-column-width: 278px;
 	@include transition(opacity 0.2s);
 }
 
-.layout-column.styling {
-	// border-color: fade-out($primary-color, .6);
-	.layout-column-icon {
-		color: $secondary-color;
-	}
-}
-
 .layout-column.ui-draggable-dragging {
 	// opacity: .6;
 	box-shadow: 0px 0px 4px 0px $gray-20;
@@ -81,6 +74,13 @@ $layout-column-width: 278px;
 
 	.layout-column-icon {
 		color: $gray-10;
+	}
+}
+
+.layout-column.styling {
+	// border-color: fade-out($primary-color, .6);
+	.layout-column-icon {
+		color: $secondary-color;
 	}
 }
 

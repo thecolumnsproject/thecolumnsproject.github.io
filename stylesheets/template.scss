@@ -69,13 +69,13 @@
 
 .layout-template-row-value {
 	cursor: move;
-	border-radius: 4px;
+	border-radius: 2px;
 }
 
 .layout-template-row-value:hover {
 	cursor: move;
 	background-color: fade-out($primary-color, .9);
-	box-shadow: 0px 0px 4px 0px $gray-20;
+	box-shadow: 0px 0px 1px 0px $primary-color;
 }
 
 .layout-template-row-value.placeholder {

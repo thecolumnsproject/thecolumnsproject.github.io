@@ -162,6 +162,7 @@ Columns.Items = new function() {
 			var currentStyle = $(item).data('style') || [];
 			$.merge(currentStyle, styleObject);
 			$(item).data('style', currentStyle);
+			$(item).addClass('inactive');
 		});
 	};
 

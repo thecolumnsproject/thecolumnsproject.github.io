@@ -33,7 +33,11 @@
   z-index: 4;
   background-image: url("/images/upload_devices.png");
   background-repeat: no-repeat;
-  background-position: right bottom; }
+  background-position: right bottom;
+  pointer-events: none; }
+
+#upload.active {
+  pointer-events: auto; }
 
 .upload-copy {
   display: -webkit-box;

@@ -37,7 +37,26 @@ Columns.Upload = new function() {
 		var _this = this;
 		var _$this = this.$this;
 		_$this.find(_this.UPLOAD_BUTTON_SELECTOR).click(function() {
-			$(this).siblings('input').trigger('click');
+			// $(this).siblings('input').trigger('click');
+			Columns.Items.render([
+				'First Name',
+				'Last Name',
+				'Hometown',
+				'Age',
+				'Units',
+				'First Name',
+				'Last Name',
+				'Hometown',
+				'Age',
+				'Units',
+				'First Name',
+				'Last Name',
+				'Hometown',
+				'Age',
+				'Units'
+			]);
+			Columns.Styling.updateStyling($(Columns.Template.$template).first());
+			_this.hide();
 		});
 
 		$("input[type='file']").change(function() {
@@ -85,9 +104,10 @@ Columns.Upload = new function() {
 		var _$this = this.$this;
 
 		_$this.velocity({
-			translateX: -_$this.width()
+			// translateX: -_$this.width(),
+			opacity: 0,
 		}, {
-			duration: 400,
+			duration: 200,
 			easing: 'ease-in',
 			begin: function() {
 				_$this.addClass('animating');
@@ -104,9 +124,10 @@ Columns.Upload = new function() {
 		var _$this = this.$this;
 
 		_$this.velocity({
-			translateX: 0
+			// translateX: 0,
+			opacity: 1
 		}, {
-			duration: 400,
+			duration: 200,
 			easing: 'ease-out',
 			begin: function() {
 				_$this.addClass('animating');

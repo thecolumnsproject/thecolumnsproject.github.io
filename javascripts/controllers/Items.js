@@ -152,6 +152,7 @@ Columns.Items = new function() {
 	};
 
 	this.render = function(items) {
+		$('.layout-columns').remove();
 		var columns = Columns.Templates['templates/layout/columns.hbs'];
 		$("#columns").append(columns({columns: items}));
 

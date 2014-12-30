@@ -38,7 +38,7 @@ Columns.Upload = new function() {
 		var _$this = this.$this;
 		_$this.find(_this.UPLOAD_BUTTON_SELECTOR).click(function() {
 			// $(this).siblings('input').trigger('click');
-			Columns.Items.render([
+			Columns.data.columns = [
 				'First Name',
 				'Last Name',
 				'Hometown',
@@ -54,8 +54,11 @@ Columns.Upload = new function() {
 				'Hometown',
 				'Age',
 				'Units'
-			]);
+			];
+			Columns.Items.render(Columns.data.columns);
+			Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
 			Columns.Styling.updateStyling($(Columns.Template.$template).first());
+			Columns.Items.updateItemStylesFromTemplate(Columns.Template);
 			_this.hide();
 		});
 

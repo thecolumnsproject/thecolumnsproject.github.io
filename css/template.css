@@ -131,6 +131,15 @@
   border: 1px dashed #3E97BD;
   background-color: rgba(62, 151, 189, 0.1); }
 
+.layout-template-row-value {
+  cursor: move;
+  border-radius: 4px; }
+
+.layout-template-row-value:hover {
+  cursor: move;
+  background-color: rgba(62, 151, 189, 0.1);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2); }
+
 .layout-template-row-value.placeholder {
   color: rgba(62, 151, 189, 0.5); }
 

@@ -67,6 +67,17 @@
 	background-color: fade-out($primary-color, .9);
 }
 
+.layout-template-row-value {
+	cursor: move;
+	border-radius: 4px;
+}
+
+.layout-template-row-value:hover {
+	cursor: move;
+	background-color: fade-out($primary-color, .9);
+	box-shadow: 0px 0px 4px 0px $gray-20;
+}
+
 .layout-template-row-value.placeholder {
 	color: fade-out($primary-color, .5);
 }

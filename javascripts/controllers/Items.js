@@ -151,6 +151,20 @@ Columns.Items = new function() {
 		}
 	};
 
+	// Refresh the item styles with the template values.
+	// Useful after applying a default template.
+	this.updateItemStylesFromTemplate = function(template) {
+		var _this = this;
+		$(template.ROW_VALUE_SELECTOR).each(function(i, value) {
+			var item = _this.getItemForTemplate(value);
+			var css = $(value).attr('style');
+			var styleObject = Columns.Layout.objectForCSS(css);
+			var currentStyle = $(item).data('style') || [];
+			$.merge(currentStyle, styleObject);
+			$(item).data('style', currentStyle);
+		});
+	};
+
 	this.render = function(items) {
 		$('.layout-columns').remove();
 		var columns = Columns.Templates['templates/layout/columns.hbs'];

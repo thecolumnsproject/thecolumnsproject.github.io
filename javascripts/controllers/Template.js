@@ -29,7 +29,7 @@ Columns.Template = new function() {
 	// Create the model and render it
 	this.init = function() {
 		this.setupHandlebars();
-		this.render();
+		this.render(Columns.Layout.layoutObject);
 	};
 
 	this.setupScrollListeners = function() {
@@ -123,7 +123,8 @@ Columns.Template = new function() {
 
 		$value.on('dragstart', function(e) {
 			// e.originalEvent.dataTransfer.setData('text', e.target.innerHTML);
-			_this.DRAGGING_ITEM = this;
+			// _this.DRAGGING_ITEM = this;
+			_this.DRAGGING_ITEM = Columns.Items.getItemForTemplate(this);
 			$(this).addClass('inactive');
 
 			// If this there's only one item left in the surrouning group, dissolve the group.
@@ -354,10 +355,10 @@ Columns.Template = new function() {
 		}
 	};
 
-	this.render = function() {
+	this.render = function(layout) {
 		$('#layout').empty();
 		var template = Columns.Templates['templates/layout/template.hbs'];
-		$("#layout").append(template(Columns.Layout.layoutObject));
+		$("#layout").append(template(layout));
 
 		this.$template = $('.layout-template-row.master');
 		this.setupDragListeners($(this.ROW_VALUE_SELECTOR));

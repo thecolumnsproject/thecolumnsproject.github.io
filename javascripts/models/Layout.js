@@ -26,12 +26,27 @@ Columns.Layout = new function() {
 	];
 
 	this.update = function(refresh) {
-		this.layoutObject = this.objectForElement(Columns.Template.$template.children().first(), true);
+		// this.layoutObject = this.objectForElement(Columns.Template.$template.children().first(), true);
+		// Columns.data.layout = this.layoutObject;
+		// if (refresh) {
+		// 	Columns.Template.render();
+		// }
+		var layout = this.objectForElement(Columns.Template.$template.children().first(), true);
+		this.updateWithLayout(layout, refresh);
+	};
+
+	this.updateWithDefaultLayout = function(columns, refresh) {
+		var layout = this.defaultLayout(columns);
+		this.updateWithLayout(layout, refresh);
+	};
+
+	this.updateWithLayout = function(layout, refresh) {
+		this.layoutObject = layout;
 		Columns.data.layout = this.layoutObject;
 		if (refresh) {
-			Columns.Template.render();
+			Columns.Template.render(this.layoutObject);
 		}
-	}
+	};
 
 	// Private
 	this.objectForElement = function($element, recursive) {
@@ -89,6 +104,57 @@ Columns.Layout = new function() {
 		});
 		return layoutObj;
 	};
+
+	// Default layouts for various column numbers
+	this.defaultLayout = function(columns) {
+		var layout = this.layoutObject;
+		switch (columns.length) {
+			case 0:
+				break;
+			case 1:
+				layout['values'] = [{
+					type: 'single',
+					style: Columns.Layout.defaults.styles[0],
+					data: Columns.data.columns[0]
+				}];
+				break;
+			case 2:
+				layout['values'] = [{
+					type: 'group',
+					layout: Columns.Layout.defaults.layouts[0],
+					values: [{
+						type: 'single',
+						style: Columns.Layout.defaults.styles[0],
+						data: Columns.data.columns[0]
+					},{
+						type: 'single',
+						data: Columns.data.columns[1],
+						style: Columns.Layout.defaults.style[1]
+					}]
+				}];
+				break;
+			default:
+				layout['values'] = [{
+					type: 'group',
+					layout: Columns.Layout.defaults.layouts[0],
+					values: [{
+						type: 'single',
+						style: Columns.Layout.defaults.styles[0],
+						data: Columns.data.columns[0]
+					},{
+						type: 'single',
+						data: Columns.data.columns[1],
+						style: Columns.Layout.defaults.styles[1]
+					}]
+				}, {
+					type: 'single',
+					data: Columns.data.columns[2],
+					style: Columns.Layout.defaults.styles[2]
+				}];
+				break;
+		}
+		return layout;
+	}
 
 	// this.addEventListener('Style.didChange', this.update, false);
 };

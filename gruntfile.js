@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 					'vendor/prevent-ghost-click.js',
 					'bower_components/velocity/velocity.min.js',
 					// 'bower_components/velocity/velocity.js',
-					// 'bower_components/velocity/velocity.ui.min.js',
+					'bower_components/velocity/velocity.ui.min.js',
 					'bower_components/handlebars/handlebars.min.js',
 					// 'bower_components/handlebars/handlebars.js',
 					'templates/templates.js',

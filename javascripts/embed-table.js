@@ -374,25 +374,6 @@ $(function() {
 		Handlebars.registerPartial('row_layout', row_template);
 	}
 
-	function generateHandlebarsPartials() {
-		Handlebars.registerPartial('row', Columns.Templates['templates/embed-table/row.hbs']);
-		Handlebars.registerPartial('group', Columns.Templates['templates/embed-table/row-group.hbs']);
-		Handlebars.registerPartial('column', Columns.Templates['templates/embed-table/row-value.hbs']);
-		Handlebars.registerPartial('footer', Columns.Templates['templates/embed-table/footer.hbs']);
-		Handlebars.registerPartial('layout', Columns.Templates['templates/embed-table/layout.hbs']);
-		Handlebars.registerPartial('style', Columns.Templates['templates/embed-table/style.hbs']);
-	}
-
-	function generateHandlebarsHelpers() {
-		Handlebars.registerHelper('ifIsGroup', function(type, options) {
-			return type == 'group' ? options.fn(this) : options.inverse(this);
-		});
-
-		Handlebars.registerHelper('ifIsSingle', function(type, options) {
-			return type == 'single' ? options.fn(this) : options.inverse(this);
-		});
-	}
-
 	// Methods to animate table data
 	// into place once it's been downloaded
 	// ------------------------------
@@ -803,9 +784,275 @@ $(function() {
 		return highest;
 	}
 
-	createTable();
-	setTimeout(function() {
-		populateTable(DUMMY_DATA)
-	}, 1000);
+	// createTable();
+	// setTimeout(function() {
+	// 	populateTable(DUMMY_DATA)
+	// }, 1000);
+
+	// Create a class for the table object
+	// that will allow us to easily manange multiple instances
+	// and control their display.
+	// Methods herein should allow the table to:
+	// 1) Render initially
+	// 2) Populate with data
+	// 3) Expand
+	// 4) Contract
+	function Table(script) {
+
+		// The placement of each table is dependent on the script that
+		// was used to create it, so we need this to begin
+		this.script = script;
+
+		// Remember the table instance once it's been inserted into the DOM
+		// as well as its jquery counterpart
+		this.table;
+		this.$table;
+
+		// Save a reference to the layout we create specifically for rows of this table
+		this.row_layout;
+	};
+
+	// Render the initial table to the screen and position it correctly
+	Table.prototype.render = function() {
+
+		// Generate table skeleton
+		// and insert it befor the script
+		var skeleton = Columns.Templates['templates/embed-table/skeleton.hbs'];
+		var tmpDiv = document.createElement('div'); tmpDiv.innerHTML = skeleton();
+		this.table = this.script.parentNode.insertBefore(tmpDiv.firstChild, this.script);
+		this.$table = $(this.table);
+
+		// Position table correctly given the size of the screen
+		// and reposition on resize events
+		$(window).resize(this.position);
+		this.position();
+
+		// Generate table structure
+		// var loading = createLoading();
+		// var body = createBody();
+		var loading = Columns.Templates['templates/embed-table/loading.hbs'];
+		var body = Columns.Templates['templates/embed-table/body.hbs'];
+		this.$table.append(loading({img_path: IMG_PATH}));
+		this.$table.append(body());
+
+		// // Make the table bounce on scroll
+		// // $TABLE.find('.columns-table-container').fancy_scroll({
+		// // 	animation: "bounce"
+		// // });
+
+		// // Prevent ghost clicks while the table is open
+		PreventGhostClick(document, function() {
+			return this.$table.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)
+		});
+	};
+
+	// Ensure that the table is positioned correctly on the screen
+	// Smartphones: it should be the full width of the screen and left-aligned
+	Table.prototype.position = function() {
+		var properties = {
+			'width': $(window).width()
+		}
+
+		// Only move the table if it's not aligned with the left side of the screen
+		var offset = this.$table.offset().left;
+		if (offset != 0) {
+			properties['margin-left'] = -offset 
+		}
+
+		// Make the table the width of the window
+		// and left align it with the window 
+		this.$table.css(properties);
+	};
+
+	// Download the appropriate data from the api
+	Table.prototype.fetchData = function() {
+		// We're faking it right now
+
+		// First turn on loading
+		this.setLoading(true);
+
+		var _this = this;
+		setTimeout(function() {
+			_this.renderData(DUMMY_DATA);
+		}, 100);
+	};
+
+	Table.prototype.renderData = function(data) {
+		var _this = this;
+		var numRows = data.data.length;
+
+		// Set up the row layout as a handlebars partial
+		// dynamically based on the row layout object
+		var row_layout = Columns.Templates['templates/embed-table/row-layout.hbs']({layout: data.layout});
+		var row_template = Handlebars.compile(row_layout);
+		var templateName = 'row_layout_' + scripts.indexOf(this.script);
+		Handlebars.registerPartial(templateName, row_template);
+
+		// Generate table layouts with data
+		var header = Columns.Templates['templates/embed-table/header.hbs'];
+		var rowsTemplate = Columns.Templates['templates/embed-table/rows.hbs'];
+		var footer = Columns.Templates['templates/embed-table/footer.hbs'];
+
+		// Render table components with data
+		var $tableBody = this.$table.find(TABLE_BODY_SELECTOR);
+		this.$table.prepend(header({
+			title: data.title,
+			sort_by_column: data.sort_by_column
+		}));
+		$tableBody.append(rowsTemplate({
+			row_layout: templateName,
+			rows: data.data
+		}));
+		$tableBody.after(footer({
+			source: data.source,
+			item_count: numRows
+		}));
+
+		// Set any dynamic sizing or positioning values
+		// and animate the various components in
+		var introSequence = [];
+		var delay = ANIMATION_DURATION / 3;
+		var $rows = this.$table.find(TABLE_ROW_SELECTOR);
+		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+		var tableHeight = offsetHeight + $rows.height();
+		introSequence.push({elements: $tableBody, properties: {height: tableHeight}, options: {duration: ANIMATION_DURATION}});
+		$.each($rows, function(index, row) {
+
+			// Only animate the two drooping rows
+			if (index > 0 && index <= 2) {
+				var $row = $(row);
+				introSequence.push({
+					elements: $row, properties: {translateY: 5}, options: {duration: ANIMATION_DURATION / 6, delay: delay * index, sequenceQueue: false}
+				});
+				introSequence.push({
+					elements: $row, properties: {translateY: 0}, options: {duration: ANIMATION_DURATION / 6}
+				});
+			}
+
+			// Once we're through the first two rows, run the sequence and exit the loop
+			if (index == 2 || index == $rows.length - 1) {
+				$.Velocity.RunSequence(introSequence);
+				return false;
+			}
+
+		});
+
+		// Set up DOM events on the table
+		this.setupEvents();
+
+		// Remove the loading class after the screen repaints
+		setTimeout(function() {
+			_this.setLoading(false);
+		}, 100);
+	}
+
+	Table.prototype.setupEvents = function() {
+		this.$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+			$table = $(this);
+			if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+				expandTable($table);
+			}
+		});
+
+		// $(".columns-table").click(function(e) {
+		// 	$table = $(this);
+		// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+		// 		expandTable($table);
+		// 	}
+		// });
+
+		this.$table.find(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+			var $parent = $(this).parents('.columns-table-widget');
+			var $table = $parent.find('.columns-table');
+			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+				collapseTable($table);
+
+				// Prevent the dom from doing any other conflicting stuff
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		});
+
+		// $(".columns-table-close-button").click(function(e) {
+		// 	var $parent = $(this).parents('.columns-table-widget');
+		// 	var $table = $parent.find('.columns-table');
+		// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+		// 		collapseTable($table);
+		// 	}
+		// });
+	};
+
+	Table.prototype.setLoading = function(loading) {
+		if (loading) {
+			this.$table.addClass(LOADING_CLASS);
+		} else {
+			this.$table.removeClass(LOADING_CLASS);
+		}
+	};
+
+	// Basic setup operations before we start creating tables
+	// ------------------------------------------------------
+
+	// Do the following tasks only once per page
+	if(!Columns.hasFinishedSetup) { Columns.hasFinishedSetup = false; };
+	if (!Columns.hasFinishedSetup) {
+
+		// 1) Add the table stylsheet to the page
+		var style = document.createElement('link');
+		style.rel = 'stylesheet';
+		style.type = 'text/css';
+		style.href = CSS_PATH;
+		style.media = 'all';
+		document.head.appendChild(style);
+
+		// 2) Setup necessary handlebars templates and helpers
+		// Handlebars.registerPartial('row', Columns.Templates['templates/embed-table/row.hbs']);
+		Handlebars.registerHelper('partial', function(name, ctx, hash) {
+		    var ps = Handlebars.partials;
+		    if(typeof ps[name] !== 'function')
+		        ps[name] = Handlebars.compile(ps[name]);
+		    return ps[name](ctx, hash);
+		});
+		Handlebars.registerPartial('group', Columns.Templates['templates/embed-table/row-group.hbs']);
+		Handlebars.registerPartial('column', Columns.Templates['templates/embed-table/row-value.hbs']);
+		Handlebars.registerPartial('footer', Columns.Templates['templates/embed-table/footer.hbs']);
+		Handlebars.registerPartial('layout', Columns.Templates['templates/embed-table/layout.hbs']);
+		Handlebars.registerPartial('style', Columns.Templates['templates/embed-table/style.hbs']);
+
+		Handlebars.registerHelper('ifIsGroup', function(type, options) {
+			return type == 'group' ? options.fn(this) : options.inverse(this);
+		});
+
+		Handlebars.registerHelper('ifIsSingle', function(type, options) {
+			return type == 'single' ? options.fn(this) : options.inverse(this);
+		});
+
+		// 3) Create global variables to store our tables and manage the load process
+		if(!Columns.scripts) { Columns.scripts = []; };
+		if(!Columns.tables) { Columns.tables = []; };
+
+		// Make sure we don't do this setup again
+		Columns.hasFinishedSetup = true;
+	}
+
+	var scripts = Columns.scripts;
+	var tables = Columns.tables;
+		
+	// 4) Find all the scripts generaged by us
+	//    and create a new table for each one!
+	var scriptTags = document.getElementsByTagName('script');
+	for (var i = 0; i < scriptTags.length ; i++) {
+		var scriptTag = scriptTags[i];
+		if (scriptTag.src.search(ROOT_PATH) > -1 && scripts.indexOf(scriptTag) < 0) {
+			scripts.push(scriptTag);
+
+			// Create a new table
+			var table = new Table(scriptTag);
+			tables.push(table);
+			table.render();
+			table.fetchData();
+		}
+	}
+
 
 });

@@ -65,8 +65,12 @@
   height: 664px;
   position: absolute;
   top: 107px;
-  left: 114px;
-  overflow: scroll; }
+  left: 114px; }
+  .layout-table-preview img {
+    margin: 8px; }
+
+.columns-table-widget {
+  z-index: 1 !important; }
 
 .layout-template {
   width: 100%;
@@ -87,10 +91,11 @@
   justify-content: center;
   -ms-flex-pack: center;
   position: relative;
-  top: 167px; }
+  top: 123px;
+  z-index: 2; }
 
 .layout-template-row {
-  width: 375px;
+  width: 335px;
   min-height: 60px;
   border: 1px solid #cccccc;
   background-color: #fafafa;

@@ -950,50 +950,74 @@ $$(function() {
 
 		// Render table components with data
 		var $$tableBody = this.$$table.find(TABLE_BODY_SELECTOR);
-		this.$$table.find(TABLE_HEADER_SELECTOR).remove();
-		this.$$table.find(TABLE_FOOTER_SELECTOR).remove();
-		$$tableBody.empty();
-		this.$$table.prepend(header({
-			title: data.title,
-			sort_by_column: data.sort_by_column
-		}));
-		$$tableBody.append(rowsTemplate({
+		var $$header = this.$$table.find(TABLE_HEADER_SELECTOR);
+		var $$footer = this.$$table.find(TABLE_FOOTER_SELECTOR);
+		var $$rows = this.$$table.find(TABLE_ROW_SELECTOR);
+
+		if ($$header.length > 0) {
+			this.updateComponent($$header, {
+				title: data.title,
+				sort_by_column: data.sort_by_column
+			}, header);
+		} else {
+			this.$$table.prepend(header({
+				title: data.title,
+				sort_by_column: data.sort_by_column
+			}));
+		}
+
+		if ($$footer.length > 0) {
+			this.updateComponent($$footer, {
+				source: data.source,
+				item_count: numRows
+			}, footer);
+		} else {
+			$$tableBody.after(footer({
+				source: data.source,
+				item_count: numRows
+			}));
+		}
+
+		var shouldRunIntroAnimation = false;
+		if ($$rows.length == 0) {
+			shouldRunIntroAnimation = true;
+		}
+
+		$$rows.remove();
+		$$tableBody.prepend(rowsTemplate({
 			row_layout: this.templateName(),
 			rows: data.data
-		}));
-		$$tableBody.after(footer({
-			source: data.source,
-			item_count: numRows
-		}));
+		}));	
 
-		// Set any dynamic sizing or positioning values
-		// and animate the various components in
-		var introSequence = [];
-		var delay = ANIMATION_DURATION / 3;
-		var $$rows = this.$$table.find(TABLE_ROW_SELECTOR);
-		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
-		var tableHeight = offsetHeight + $$rows.height();
-		introSequence.push({elements: $$tableBody, properties: {height: tableHeight}, options: {duration: ANIMATION_DURATION}});
-		$$.each($$rows, function(index, row) {
+		if (shouldRunIntroAnimation) {
+			// Set any dynamic sizing or positioning values
+			// and animate the various components in
+			var introSequence = [];
+			var delay = ANIMATION_DURATION / 3;
+			var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+			var tableHeight = offsetHeight + $$rows.height();
+			introSequence.push({elements: $$tableBody, properties: {height: tableHeight}, options: {duration: ANIMATION_DURATION}});
+			$$.each($$rows, function(index, row) {
 
-			// Only animate the two drooping rows
-			if (index > 0 && index <= 2) {
-				var $$row = $$(row);
-				introSequence.push({
-					elements: $$row, properties: {translateY: 5}, options: {duration: ANIMATION_DURATION / 6, delay: delay * index, sequenceQueue: false}
-				});
-				introSequence.push({
-					elements: $$row, properties: {translateY: 0}, options: {duration: ANIMATION_DURATION / 6}
-				});
-			}
+				// Only animate the two drooping rows
+				if (index > 0 && index <= 2) {
+					var $$row = $$(row);
+					introSequence.push({
+						elements: $$row, properties: {translateY: 5}, options: {duration: ANIMATION_DURATION / 6, delay: delay * index, sequenceQueue: false}
+					});
+					introSequence.push({
+						elements: $$row, properties: {translateY: 0}, options: {duration: ANIMATION_DURATION / 6}
+					});
+				}
 
-			// Once we're through the first two rows, run the sequence and exit the loop
-			if (index == 2 || index == $$rows.length - 1) {
-				$$.Velocity.RunSequence(introSequence);
-				return false;
-			}
+				// Once we're through the first two rows, run the sequence and exit the loop
+				if (index == 2 || index == $$rows.length - 1) {
+					$$.Velocity.RunSequence(introSequence);
+					return false;
+				}
 
-		});
+			});
+		}	
 
 		// Set up DOM events on the table
 		this.setupEvents();
@@ -1002,7 +1026,15 @@ $$(function() {
 		setTimeout(function() {
 			_this.setLoading(false);
 		}, 100);
-	}
+	};
+
+	Table.prototype.updateComponent = function($$component, data, template) {
+		// If there is alread a component, just update it with the new data
+		var oldStyle = $$component.attr('style');
+		var oldClasses = $$component.attr('class');
+		var $$template = $(template(data)).attr('style', oldStyle).attr('class', oldClasses);
+		$$component.replaceWith($$template);
+	};
 
 	Table.prototype.setupEvents = function() {
 		var _this = this;
@@ -1055,6 +1087,17 @@ $$(function() {
 	// ------------------------------
 
 	Table.prototype.expand = function() {
+		
+		// Tell everyone we're about to expand
+		// var willExpandEvent = new CustomEvent('ColumnsTableWillExpand', {
+		// 	detail: {
+		// 		table: this.$$table
+		// 	}
+		// });
+		if (this.preview) {
+			$(document).trigger('ColumnsTableWillExpand', {table: this.$$table});
+		}
+
 		var $$table = this.$$table;
 		$$bg = $$table.find('.columns-table-container'),
 		$$body = $$table.find(TABLE_BODY_SELECTOR);
@@ -1104,7 +1147,7 @@ $$(function() {
 		}, {
 			duration: ANIMATION_DURATION,
 			complete: function(elements) {
-				$$header.addClass(EXPANDED_CLASS);
+				// $$header.addClass(EXPANDED_CLASS);
 			}
 		});
 	}
@@ -1128,8 +1171,10 @@ $$(function() {
 
 		// The background should be as tall as necessary to fit all the rows
 		// but the screen height at minimum
-		var bgHeight = $$bg.outerHeight() + $$header.outerHeight() + $$footer.outerHeight() + ( $$rows.outerHeight() * ($$rows.length - 1) );
-		var bgHeight = bgHeight < this.$$container.height ? this.$$container.height : bgHeight;
+		// Update: the background should be the height of the container
+		// var bgHeight = $$bg.outerHeight() + $$header.outerHeight() + $$footer.outerHeight() + ( $$rows.outerHeight() * ($$rows.length - 1) );
+		// var bgHeight = bgHeight < this.$$container.height ? this.$$container.height : bgHeight;
+		var bgHeight = this.$$container.height();
 
 		$$bg.velocity({
 			height: bgHeight, 			/* Fill the entire screen */
@@ -1142,7 +1187,7 @@ $$(function() {
 			},
 			complete: function(elements) {
 				$$bg.removeClass(EXPANDING_CLASS);
-				$$bg.addClass(EXPANDED_CLASS);
+				// $$bg.addClass(EXPANDED_CLASS);
 				$$bg.addClass('translateY-reset');
 				// $$TABLE.removeClass(RELOCATED_CLASS);
 			}
@@ -1154,11 +1199,18 @@ $$(function() {
 		var _this = this;
 		// Calculate the new table size and position
 		var tableOffsetTop = 60;
+
+		// Move the table down a few extra pixels to account for the template if we're in preview mode
+		var paddingTop = 0;
+		if (this.preview) {
+			paddingTop = this.$$table.find(TABLE_ROW_SELECTOR).height();
+		}
 		// var tableHeight = rowHeight * $$rows.length - 40;
 
 		$$body.velocity({
 			// height: tableHeight, /* Grow to encompass all of the rows */
-			translateY: tableOffsetTop /* Move down a few pixels to account for the header */
+			translateY: tableOffsetTop, /* Move down a few pixels to account for the header */
+			'padding-top': paddingTop /* Move down a few more pixels to account for the template row in preview mode */
 		}, {
 			duration: ANIMATION_DURATION,
 			begin: function(elements) {
@@ -1169,7 +1221,7 @@ $$(function() {
 				_this.$$table.addClass(EXPANDED_CLASS);
 				_this.$$table.removeClass(EXPANDING_CLASS);
 				$$('html').addClass('table-expanded');
-				$$body.addClass(EXPANDED_CLASS);
+				// $$body.addClass(EXPANDED_CLASS);
 				$$body.addClass('translateY-reset');
 			}
 		});
@@ -1220,7 +1272,7 @@ $$(function() {
 				$$row.removeClass('translateY-reset');
 			},
 			complete: function(elements) {
-				$$row.addClass(EXPANDED_CLASS);
+				// $$row.addClass(EXPANDED_CLASS);
 				$$row.addClass('translateY-reset');
 			}
 		});
@@ -1320,6 +1372,8 @@ $$(function() {
 
 			// Move to top of container
 			translateY: 0,
+			// Remove any padding we added for the template row in preview mode
+			'padding-top': 0
 
 		}, {
 			duration: ANIMATION_DURATION,
@@ -1432,9 +1486,15 @@ $$(function() {
 
 			// Create a new table
 			var table = new Table(scriptTag);
+			table.preview = $$(scriptTag).data('preview');
 			tables.push(table);
 			table.render();
 			table.fetchData();
+
+			// If we're in preview mode, make sure the template is listening to expand and collapse events
+			if (table.preview) {
+				Columns.Template.setupTableEventListeners(table.$$table);
+			}
 		}
 	}
 

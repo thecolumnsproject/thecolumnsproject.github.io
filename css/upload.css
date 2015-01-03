@@ -58,7 +58,7 @@
     position: relative;
     top: 4px; }
   .upload-copy-logo i {
-    font-size: 32px;
+    font-size: 36px;
     display: inline; }
 
 .loading .upload-copy-logo i {
@@ -68,11 +68,12 @@
 
 .upload-copy-text h2 {
   color: rgba(255, 255, 255, 0.96);
-  margin-top: 0; }
+  margin-top: 0;
+  font-size: 36px; }
 .upload-copy-text p {
   font-weight: 300;
   margin-bottom: 40px;
-  font-size: 18px; }
+  font-size: 20px; }
 .upload-copy-text button[disabled] {
   opacity: 0.3;
   cursor: default; }

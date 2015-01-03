@@ -32,6 +32,21 @@ Columns.Template = new function() {
 		this.render(Columns.Layout.layoutObject);
 	};
 
+	// Get notified when the table is doing things
+	this.setupTableEventListeners = function($table) {
+		var _this = this;
+
+		// When the table is about to expand
+		$(document).on('ColumnsTableWillExpand', function (e) {
+			// Move the template down below the header
+			_this.$template.velocity({
+				translateY: 64
+			}, {
+				duration: 400
+			});
+		});
+	};
+
 	this.setupScrollListeners = function() {
 		// Scroll the style section down as the use scrolls the page
 		$(window).scroll(function() {
@@ -368,7 +383,8 @@ Columns.Template = new function() {
 			this.setupDragListeners($(this.ROW_VALUE_SELECTOR));
 		if ($(this.ROW_GROUP_SELECTOR).length > 0)
 			this.setupDropListeners($(this.ROW_GROUP_SELECTOR));
-		this.setupScrollListeners();
+		// this.setupScrollListeners();
+		// this.setupTableEventListeners();
 	};
 
 	this.setupHandlebars = function() {

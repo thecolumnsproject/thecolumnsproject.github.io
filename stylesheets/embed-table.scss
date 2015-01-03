@@ -19,12 +19,14 @@ $columns-table-accent-color: 	#69A368;
 .columns-table-widget {
 	position: relative;
 	box-sizing: content-box;
-	font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+	// font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+	font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
 	max-width: none !important;
 
 	* {
 		box-sizing: content-box;
-		font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+		// font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+		font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
 		line-height: normal;
 		max-width: none !important;
  	}
@@ -154,7 +156,8 @@ $columns-table-accent-color: 	#69A368;
 }
 
 .columns-table-close-button {
-	color: $columns-table-accent-color;
+	// color: $columns-table-accent-color;
+	color: $primary-color;
 	border-left: 1px solid $gray-lighter;
 	padding-right: 0;
 }
@@ -191,7 +194,8 @@ $columns-table-accent-color: 	#69A368;
 }
 
 .columns-table-footer-icon {
-	color: $gray-light;
+	// color: $gray-light;
+	color: $primary-color;
 	font-size: 14px;
 }
 
@@ -272,7 +276,7 @@ html.table-expanded {
 	-webkit-overflow-scrolling: none;
 }
 
-.columns-table-container.expanded {
+.expanded .columns-table-container {
 	// transform: translateY(0px); /* Remove the expansion animation transform */
 	top: 0;
 	// @include calc(height, '100% - #{$table-container-padding} * 2' !important);
@@ -280,11 +284,11 @@ html.table-expanded {
 	overflow: scroll;
 }
 
-.large-form-factor .columns-table-container.expanded {
+.expanded.large-form-factor .columns-table-container {
 	position: absolute;
 }
 
-.small-form-factor .columns-table-container.expanded {
+.expanded.small-form-factor .columns-table-container {
 	position: fixed;
 }
 
@@ -303,11 +307,11 @@ html.table-expanded {
 	display: none;
 }
 
-.columns-table-row.expanded:last-child {
+.expanded .columns-table-row:last-child {
 	border-bottom: none;
 }
 
-.columns-table-row.expanded {
+.expanded .columns-table-row {
 	border: none; /* Remove the table-row-top borders */
 	border-bottom: 1px solid $gray-lighter;
 
@@ -318,7 +322,7 @@ html.table-expanded {
 	position:relative;
 }
 
-.columns-table-header.expanded {
+.expanded .columns-table-header {
 	opacity: 1;
 	pointer-events: auto;
 }

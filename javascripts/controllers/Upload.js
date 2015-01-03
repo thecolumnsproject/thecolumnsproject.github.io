@@ -43,7 +43,7 @@ Columns.Upload = new function() {
 				'Last Name',
 				'Hometown',
 				'Age',
-				'Units'
+				'Unit'
 			];
 			Columns.Items.render(Columns.data.columns);
 			Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
@@ -55,7 +55,7 @@ Columns.Upload = new function() {
 
 			// Expand the preview table as the upload screen fades
 			Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
-			Columns.tables[0].expand();
+			// Columns.tables[0].expand();
 		});
 
 		$("input[type='file']").change(function() {

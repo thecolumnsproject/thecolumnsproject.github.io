@@ -316,6 +316,7 @@ Columns.Styling = new function() {
 		// });
 		// dispatchEvent(event);
 		Columns.Layout.update(false);
+		Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
 	};
 
 	this.getValueSubstrings = function(value) {

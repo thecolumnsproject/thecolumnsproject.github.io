@@ -56,7 +56,7 @@ Columns.Layout = new function() {
 		object['layout'] = this.objectForLayout($element);
 		object['type'] = $element.hasClass(Columns.Template.ROW_VALUE_CLASS) ? 'single' : 'group';
 		if (object.type == 'single') {
-			object['data'] = $element.text().trim();
+			object['data'] = $element.text().trim().toLowerCase().replace(/ /g, '_');
 		} else {
 			if (recursive) {
 				object['values'] = [];
@@ -115,7 +115,7 @@ Columns.Layout = new function() {
 				layout['values'] = [{
 					type: 'single',
 					style: Columns.Layout.defaults.styles[0],
-					data: Columns.data.columns[0]
+					data: Columns.data.columns[0].toLowerCase().replace(/ /g, '_')
 				}];
 				break;
 			case 2:
@@ -125,10 +125,10 @@ Columns.Layout = new function() {
 					values: [{
 						type: 'single',
 						style: Columns.Layout.defaults.styles[0],
-						data: Columns.data.columns[0]
+						data: Columns.data.columns[0].toLowerCase().replace(/ /g, '_')
 					},{
 						type: 'single',
-						data: Columns.data.columns[1],
+						data: Columns.data.columns[1].toLowerCase().replace(/ /g, '_'),
 						style: Columns.Layout.defaults.style[1]
 					}]
 				}];
@@ -140,15 +140,15 @@ Columns.Layout = new function() {
 					values: [{
 						type: 'single',
 						style: Columns.Layout.defaults.styles[0],
-						data: Columns.data.columns[0]
+						data: Columns.data.columns[0].toLowerCase().replace(/ /g, '_')
 					},{
 						type: 'single',
-						data: Columns.data.columns[1],
+						data: Columns.data.columns[1].toLowerCase().replace(/ /g, '_'),
 						style: Columns.Layout.defaults.styles[1]
 					}]
 				}, {
 					type: 'single',
-					data: Columns.data.columns[2],
+					data: Columns.data.columns[2].toLowerCase().replace(/ /g, '_'),
 					style: Columns.Layout.defaults.styles[2]
 				}];
 				break;

@@ -43,16 +43,6 @@ Columns.Upload = new function() {
 				'Last Name',
 				'Hometown',
 				'Age',
-				'Units',
-				'First Name',
-				'Last Name',
-				'Hometown',
-				'Age',
-				'Units',
-				'First Name',
-				'Last Name',
-				'Hometown',
-				'Age',
 				'Units'
 			];
 			Columns.Items.render(Columns.data.columns);
@@ -62,6 +52,10 @@ Columns.Upload = new function() {
 			Columns.Styling.initWithItem($(Columns.Template.$template).first());
 			// Columns.Styling.updateStyling($(Columns.Template.$template).first());
 			_this.hide();
+
+			// Expand the preview table as the upload screen fades
+			Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
+			Columns.tables[0].expand();
 		});
 
 		$("input[type='file']").change(function() {

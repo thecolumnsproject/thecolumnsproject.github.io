@@ -60,6 +60,14 @@
   top: -40px;
   z-index: 2; }
 
+.layout-table-preview {
+  width: 373px;
+  height: 664px;
+  position: absolute;
+  top: 107px;
+  left: 114px;
+  overflow: scroll; }
+
 .layout-template {
   width: 100%;
   display: -webkit-box;

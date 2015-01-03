@@ -157,6 +157,8 @@ Columns.Template = new function() {
 
 		$value.on('dragstop', function(e) {
 			$(this).remove();
+			Columns.Layout.update(false);
+			Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
 		});
 	}
 
@@ -194,6 +196,7 @@ Columns.Template = new function() {
 
 		if (!placeholder) {
 			Columns.Layout.update(false);
+			Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
 			Columns.Styling.updateStyling(Columns.Items.getItemForTemplate($placeholder));
 		}
 
@@ -356,21 +359,23 @@ Columns.Template = new function() {
 	};
 
 	this.render = function(layout) {
-		$('#layout').empty();
+		$('.layout-template').remove();
 		var template = Columns.Templates['templates/layout/template.hbs'];
 		$("#layout").append(template(layout));
 
 		this.$template = $('.layout-template-row.master');
-		this.setupDragListeners($(this.ROW_VALUE_SELECTOR));
-		this.setupDropListeners($(this.ROW_GROUP_SELECTOR));
+		if ($(this.ROW_VALUE_SELECTOR).length > 0)
+			this.setupDragListeners($(this.ROW_VALUE_SELECTOR));
+		if ($(this.ROW_GROUP_SELECTOR).length > 0)
+			this.setupDropListeners($(this.ROW_GROUP_SELECTOR));
 		this.setupScrollListeners();
 	};
 
 	this.setupHandlebars = function() {
 		Handlebars.registerPartial('layout-row-group', Columns.Templates['templates/layout/row-group.hbs']);
 		Handlebars.registerPartial('layout-row-value', Columns.Templates['templates/layout/row-value.hbs']);
-		Handlebars.registerPartial('layout', Columns.Templates['templates/embed-table/layout.hbs']);
-		Handlebars.registerPartial('style', Columns.Templates['templates/embed-table/style.hbs']);
+		Handlebars.registerPartial('layout', Columns.Templates['templates/layout/layout.hbs']);
+		Handlebars.registerPartial('style', Columns.Templates['templates/layout/style.hbs']);
 
 		Handlebars.registerHelper('ifIsGroup', function(type, options) {
 			return type == 'group' ? options.fn(this) : options.inverse(this);
@@ -378,6 +383,10 @@ Columns.Template = new function() {
 
 		Handlebars.registerHelper('ifIsSingle', function(type, options) {
 			return type == 'single' ? options.fn(this) : options.inverse(this);
+		});
+
+		Handlebars.registerHelper('parseData', function(data, options) {
+			return data.replace(/_/g, ' ').replace(/\b./g, function(m){ return m.toUpperCase(); });
 		});
 	};
 };

@@ -171,75 +171,2731 @@ THE SOFTWARE.
 
 @license
 */
-var Handlebars=function(){var a=function(){"use strict";function a(a){this.string=a}var b;return a.prototype.toString=function(){return""+this.string},b=a}(),b=function(a){"use strict";function b(a){return h[a]||"&amp;"}function c(a,b){for(var c in b)Object.prototype.hasOwnProperty.call(b,c)&&(a[c]=b[c])}function d(a){return a instanceof g?a.toString():a||0===a?(a=""+a,j.test(a)?a.replace(i,b):a):""}function e(a){return a||0===a?m(a)&&0===a.length?!0:!1:!0}var f={},g=a,h={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;"},i=/[&<>"'`]/g,j=/[&<>"'`]/;f.extend=c;var k=Object.prototype.toString;f.toString=k;var l=function(a){return"function"==typeof a};l(/x/)&&(l=function(a){return"function"==typeof a&&"[object Function]"===k.call(a)});var l;f.isFunction=l;var m=Array.isArray||function(a){return a&&"object"==typeof a?"[object Array]"===k.call(a):!1};return f.isArray=m,f.escapeExpression=d,f.isEmpty=e,f}(a),c=function(){"use strict";function a(a,b){var d;b&&b.firstLine&&(d=b.firstLine,a+=" - "+d+":"+b.firstColumn);for(var e=Error.prototype.constructor.call(this,a),f=0;f<c.length;f++)this[c[f]]=e[c[f]];d&&(this.lineNumber=d,this.column=b.firstColumn)}var b,c=["description","fileName","lineNumber","message","name","number","stack"];return a.prototype=new Error,b=a}(),d=function(a,b){"use strict";function c(a,b){this.helpers=a||{},this.partials=b||{},d(this)}function d(a){a.registerHelper("helperMissing",function(a){if(2===arguments.length)return void 0;throw new h("Missing helper: '"+a+"'")}),a.registerHelper("blockHelperMissing",function(b,c){var d=c.inverse||function(){},e=c.fn;return m(b)&&(b=b.call(this)),b===!0?e(this):b===!1||null==b?d(this):l(b)?b.length>0?a.helpers.each(b,c):d(this):e(b)}),a.registerHelper("each",function(a,b){var c,d=b.fn,e=b.inverse,f=0,g="";if(m(a)&&(a=a.call(this)),b.data&&(c=q(b.data)),a&&"object"==typeof a)if(l(a))for(var h=a.length;h>f;f++)c&&(c.index=f,c.first=0===f,c.last=f===a.length-1),g+=d(a[f],{data:c});else for(var i in a)a.hasOwnProperty(i)&&(c&&(c.key=i,c.index=f,c.first=0===f),g+=d(a[i],{data:c}),f++);return 0===f&&(g=e(this)),g}),a.registerHelper("if",function(a,b){return m(a)&&(a=a.call(this)),!b.hash.includeZero&&!a||g.isEmpty(a)?b.inverse(this):b.fn(this)}),a.registerHelper("unless",function(b,c){return a.helpers["if"].call(this,b,{fn:c.inverse,inverse:c.fn,hash:c.hash})}),a.registerHelper("with",function(a,b){return m(a)&&(a=a.call(this)),g.isEmpty(a)?void 0:b.fn(a)}),a.registerHelper("log",function(b,c){var d=c.data&&null!=c.data.level?parseInt(c.data.level,10):1;a.log(d,b)})}function e(a,b){p.log(a,b)}var f={},g=a,h=b,i="1.3.0";f.VERSION=i;var j=4;f.COMPILER_REVISION=j;var k={1:"<= 1.0.rc.2",2:"== 1.0.0-rc.3",3:"== 1.0.0-rc.4",4:">= 1.0.0"};f.REVISION_CHANGES=k;var l=g.isArray,m=g.isFunction,n=g.toString,o="[object Object]";f.HandlebarsEnvironment=c,c.prototype={constructor:c,logger:p,log:e,registerHelper:function(a,b,c){if(n.call(a)===o){if(c||b)throw new h("Arg not supported with multiple helpers");g.extend(this.helpers,a)}else c&&(b.not=c),this.helpers[a]=b},registerPartial:function(a,b){n.call(a)===o?g.extend(this.partials,a):this.partials[a]=b}};var p={methodMap:{0:"debug",1:"info",2:"warn",3:"error"},DEBUG:0,INFO:1,WARN:2,ERROR:3,level:3,log:function(a,b){if(p.level<=a){var c=p.methodMap[a];"undefined"!=typeof console&&console[c]&&console[c].call(console,b)}}};f.logger=p,f.log=e;var q=function(a){var b={};return g.extend(b,a),b};return f.createFrame=q,f}(b,c),e=function(a,b,c){"use strict";function d(a){var b=a&&a[0]||1,c=m;if(b!==c){if(c>b){var d=n[c],e=n[b];throw new l("Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version ("+d+") or downgrade your runtime to an older version ("+e+").")}throw new l("Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version ("+a[1]+").")}}function e(a,b){if(!b)throw new l("No environment passed to template");var c=function(a,c,d,e,f,g){var h=b.VM.invokePartial.apply(this,arguments);if(null!=h)return h;if(b.compile){var i={helpers:e,partials:f,data:g};return f[c]=b.compile(a,{data:void 0!==g},b),f[c](d,i)}throw new l("The partial "+c+" could not be compiled when running in runtime-only mode")},d={escapeExpression:k.escapeExpression,invokePartial:c,programs:[],program:function(a,b,c){var d=this.programs[a];return c?d=g(a,b,c):d||(d=this.programs[a]=g(a,b)),d},merge:function(a,b){var c=a||b;return a&&b&&a!==b&&(c={},k.extend(c,b),k.extend(c,a)),c},programWithDepth:b.VM.programWithDepth,noop:b.VM.noop,compilerInfo:null};return function(c,e){e=e||{};var f,g,h=e.partial?e:b;e.partial||(f=e.helpers,g=e.partials);var i=a.call(d,h,c,f,g,e.data);return e.partial||b.VM.checkRevision(d.compilerInfo),i}}function f(a,b,c){var d=Array.prototype.slice.call(arguments,3),e=function(a,e){return e=e||{},b.apply(this,[a,e.data||c].concat(d))};return e.program=a,e.depth=d.length,e}function g(a,b,c){var d=function(a,d){return d=d||{},b(a,d.data||c)};return d.program=a,d.depth=0,d}function h(a,b,c,d,e,f){var g={partial:!0,helpers:d,partials:e,data:f};if(void 0===a)throw new l("The partial "+b+" could not be found");return a instanceof Function?a(c,g):void 0}function i(){return""}var j={},k=a,l=b,m=c.COMPILER_REVISION,n=c.REVISION_CHANGES;return j.checkRevision=d,j.template=e,j.programWithDepth=f,j.program=g,j.invokePartial=h,j.noop=i,j}(b,c,d),f=function(a,b,c,d,e){"use strict";var f,g=a,h=b,i=c,j=d,k=e,l=function(){var a=new g.HandlebarsEnvironment;return j.extend(a,g),a.SafeString=h,a.Exception=i,a.Utils=j,a.VM=k,a.template=function(b){return k.template(b,a)},a},m=l();return m.create=l,f=m}(d,a,c,b,e),g=function(a){"use strict";function b(a){a=a||{},this.firstLine=a.first_line,this.firstColumn=a.first_column,this.lastColumn=a.last_column,this.lastLine=a.last_line}var c,d=a,e={ProgramNode:function(a,c,d,f){var g,h;3===arguments.length?(f=d,d=null):2===arguments.length&&(f=c,c=null),b.call(this,f),this.type="program",this.statements=a,this.strip={},d?(h=d[0],h?(g={first_line:h.firstLine,last_line:h.lastLine,last_column:h.lastColumn,first_column:h.firstColumn},this.inverse=new e.ProgramNode(d,c,g)):this.inverse=new e.ProgramNode(d,c),this.strip.right=c.left):c&&(this.strip.left=c.right)},MustacheNode:function(a,c,d,f,g){if(b.call(this,g),this.type="mustache",this.strip=f,null!=d&&d.charAt){var h=d.charAt(3)||d.charAt(2);this.escaped="{"!==h&&"&"!==h}else this.escaped=!!d;this.sexpr=a instanceof e.SexprNode?a:new e.SexprNode(a,c),this.sexpr.isRoot=!0,this.id=this.sexpr.id,this.params=this.sexpr.params,this.hash=this.sexpr.hash,this.eligibleHelper=this.sexpr.eligibleHelper,this.isHelper=this.sexpr.isHelper},SexprNode:function(a,c,d){b.call(this,d),this.type="sexpr",this.hash=c;var e=this.id=a[0],f=this.params=a.slice(1),g=this.eligibleHelper=e.isSimple;this.isHelper=g&&(f.length||c)},PartialNode:function(a,c,d,e){b.call(this,e),this.type="partial",this.partialName=a,this.context=c,this.strip=d},BlockNode:function(a,c,e,f,g){if(b.call(this,g),a.sexpr.id.original!==f.path.original)throw new d(a.sexpr.id.original+" doesn't match "+f.path.original,this);this.type="block",this.mustache=a,this.program=c,this.inverse=e,this.strip={left:a.strip.left,right:f.strip.right},(c||e).strip.left=a.strip.right,(e||c).strip.right=f.strip.left,e&&!c&&(this.isInverse=!0)},ContentNode:function(a,c){b.call(this,c),this.type="content",this.string=a},HashNode:function(a,c){b.call(this,c),this.type="hash",this.pairs=a},IdNode:function(a,c){b.call(this,c),this.type="ID";for(var e="",f=[],g=0,h=0,i=a.length;i>h;h++){var j=a[h].part;if(e+=(a[h].separator||"")+j,".."===j||"."===j||"this"===j){if(f.length>0)throw new d("Invalid path: "+e,this);".."===j?g++:this.isScoped=!0}else f.push(j)}this.original=e,this.parts=f,this.string=f.join("."),this.depth=g,this.isSimple=1===a.length&&!this.isScoped&&0===g,this.stringModeValue=this.string},PartialNameNode:function(a,c){b.call(this,c),this.type="PARTIAL_NAME",this.name=a.original},DataNode:function(a,c){b.call(this,c),this.type="DATA",this.id=a},StringNode:function(a,c){b.call(this,c),this.type="STRING",this.original=this.string=this.stringModeValue=a},IntegerNode:function(a,c){b.call(this,c),this.type="INTEGER",this.original=this.integer=a,this.stringModeValue=Number(a)},BooleanNode:function(a,c){b.call(this,c),this.type="BOOLEAN",this.bool=a,this.stringModeValue="true"===a},CommentNode:function(a,c){b.call(this,c),this.type="comment",this.comment=a}};return c=e}(c),h=function(){"use strict";var a,b=function(){function a(a,b){return{left:"~"===a.charAt(2),right:"~"===b.charAt(0)||"~"===b.charAt(1)}}function b(){this.yy={}}var c={trace:function(){},yy:{},symbols_:{error:2,root:3,statements:4,EOF:5,program:6,simpleInverse:7,statement:8,openInverse:9,closeBlock:10,openBlock:11,mustache:12,partial:13,CONTENT:14,COMMENT:15,OPEN_BLOCK:16,sexpr:17,CLOSE:18,OPEN_INVERSE:19,OPEN_ENDBLOCK:20,path:21,OPEN:22,OPEN_UNESCAPED:23,CLOSE_UNESCAPED:24,OPEN_PARTIAL:25,partialName:26,partial_option0:27,sexpr_repetition0:28,sexpr_option0:29,dataName:30,param:31,STRING:32,INTEGER:33,BOOLEAN:34,OPEN_SEXPR:35,CLOSE_SEXPR:36,hash:37,hash_repetition_plus0:38,hashSegment:39,ID:40,EQUALS:41,DATA:42,pathSegments:43,SEP:44,$accept:0,$end:1},terminals_:{2:"error",5:"EOF",14:"CONTENT",15:"COMMENT",16:"OPEN_BLOCK",18:"CLOSE",19:"OPEN_INVERSE",20:"OPEN_ENDBLOCK",22:"OPEN",23:"OPEN_UNESCAPED",24:"CLOSE_UNESCAPED",25:"OPEN_PARTIAL",32:"STRING",33:"INTEGER",34:"BOOLEAN",35:"OPEN_SEXPR",36:"CLOSE_SEXPR",40:"ID",41:"EQUALS",42:"DATA",44:"SEP"},productions_:[0,[3,2],[3,1],[6,2],[6,3],[6,2],[6,1],[6,1],[6,0],[4,1],[4,2],[8,3],[8,3],[8,1],[8,1],[8,1],[8,1],[11,3],[9,3],[10,3],[12,3],[12,3],[13,4],[7,2],[17,3],[17,1],[31,1],[31,1],[31,1],[31,1],[31,1],[31,3],[37,1],[39,3],[26,1],[26,1],[26,1],[30,2],[21,1],[43,3],[43,1],[27,0],[27,1],[28,0],[28,2],[29,0],[29,1],[38,1],[38,2]],performAction:function(b,c,d,e,f,g){var h=g.length-1;switch(f){case 1:return new e.ProgramNode(g[h-1],this._$);case 2:return new e.ProgramNode([],this._$);case 3:this.$=new e.ProgramNode([],g[h-1],g[h],this._$);break;case 4:this.$=new e.ProgramNode(g[h-2],g[h-1],g[h],this._$);break;case 5:this.$=new e.ProgramNode(g[h-1],g[h],[],this._$);break;case 6:this.$=new e.ProgramNode(g[h],this._$);break;case 7:this.$=new e.ProgramNode([],this._$);break;case 8:this.$=new e.ProgramNode([],this._$);break;case 9:this.$=[g[h]];break;case 10:g[h-1].push(g[h]),this.$=g[h-1];break;case 11:this.$=new e.BlockNode(g[h-2],g[h-1].inverse,g[h-1],g[h],this._$);break;case 12:this.$=new e.BlockNode(g[h-2],g[h-1],g[h-1].inverse,g[h],this._$);break;case 13:this.$=g[h];break;case 14:this.$=g[h];break;case 15:this.$=new e.ContentNode(g[h],this._$);break;case 16:this.$=new e.CommentNode(g[h],this._$);break;case 17:this.$=new e.MustacheNode(g[h-1],null,g[h-2],a(g[h-2],g[h]),this._$);break;case 18:this.$=new e.MustacheNode(g[h-1],null,g[h-2],a(g[h-2],g[h]),this._$);break;case 19:this.$={path:g[h-1],strip:a(g[h-2],g[h])};break;case 20:this.$=new e.MustacheNode(g[h-1],null,g[h-2],a(g[h-2],g[h]),this._$);break;case 21:this.$=new e.MustacheNode(g[h-1],null,g[h-2],a(g[h-2],g[h]),this._$);break;case 22:this.$=new e.PartialNode(g[h-2],g[h-1],a(g[h-3],g[h]),this._$);break;case 23:this.$=a(g[h-1],g[h]);break;case 24:this.$=new e.SexprNode([g[h-2]].concat(g[h-1]),g[h],this._$);break;case 25:this.$=new e.SexprNode([g[h]],null,this._$);break;case 26:this.$=g[h];break;case 27:this.$=new e.StringNode(g[h],this._$);break;case 28:this.$=new e.IntegerNode(g[h],this._$);break;case 29:this.$=new e.BooleanNode(g[h],this._$);break;case 30:this.$=g[h];break;case 31:g[h-1].isHelper=!0,this.$=g[h-1];break;case 32:this.$=new e.HashNode(g[h],this._$);break;case 33:this.$=[g[h-2],g[h]];break;case 34:this.$=new e.PartialNameNode(g[h],this._$);break;case 35:this.$=new e.PartialNameNode(new e.StringNode(g[h],this._$),this._$);break;case 36:this.$=new e.PartialNameNode(new e.IntegerNode(g[h],this._$));break;case 37:this.$=new e.DataNode(g[h],this._$);break;case 38:this.$=new e.IdNode(g[h],this._$);break;case 39:g[h-2].push({part:g[h],separator:g[h-1]}),this.$=g[h-2];break;case 40:this.$=[{part:g[h]}];break;case 43:this.$=[];break;case 44:g[h-1].push(g[h]);break;case 47:this.$=[g[h]];break;case 48:g[h-1].push(g[h])}},table:[{3:1,4:2,5:[1,3],8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],22:[1,13],23:[1,14],25:[1,15]},{1:[3]},{5:[1,16],8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],22:[1,13],23:[1,14],25:[1,15]},{1:[2,2]},{5:[2,9],14:[2,9],15:[2,9],16:[2,9],19:[2,9],20:[2,9],22:[2,9],23:[2,9],25:[2,9]},{4:20,6:18,7:19,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,21],20:[2,8],22:[1,13],23:[1,14],25:[1,15]},{4:20,6:22,7:19,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,21],20:[2,8],22:[1,13],23:[1,14],25:[1,15]},{5:[2,13],14:[2,13],15:[2,13],16:[2,13],19:[2,13],20:[2,13],22:[2,13],23:[2,13],25:[2,13]},{5:[2,14],14:[2,14],15:[2,14],16:[2,14],19:[2,14],20:[2,14],22:[2,14],23:[2,14],25:[2,14]},{5:[2,15],14:[2,15],15:[2,15],16:[2,15],19:[2,15],20:[2,15],22:[2,15],23:[2,15],25:[2,15]},{5:[2,16],14:[2,16],15:[2,16],16:[2,16],19:[2,16],20:[2,16],22:[2,16],23:[2,16],25:[2,16]},{17:23,21:24,30:25,40:[1,28],42:[1,27],43:26},{17:29,21:24,30:25,40:[1,28],42:[1,27],43:26},{17:30,21:24,30:25,40:[1,28],42:[1,27],43:26},{17:31,21:24,30:25,40:[1,28],42:[1,27],43:26},{21:33,26:32,32:[1,34],33:[1,35],40:[1,28],43:26},{1:[2,1]},{5:[2,10],14:[2,10],15:[2,10],16:[2,10],19:[2,10],20:[2,10],22:[2,10],23:[2,10],25:[2,10]},{10:36,20:[1,37]},{4:38,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,7],22:[1,13],23:[1,14],25:[1,15]},{7:39,8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,21],20:[2,6],22:[1,13],23:[1,14],25:[1,15]},{17:23,18:[1,40],21:24,30:25,40:[1,28],42:[1,27],43:26},{10:41,20:[1,37]},{18:[1,42]},{18:[2,43],24:[2,43],28:43,32:[2,43],33:[2,43],34:[2,43],35:[2,43],36:[2,43],40:[2,43],42:[2,43]},{18:[2,25],24:[2,25],36:[2,25]},{18:[2,38],24:[2,38],32:[2,38],33:[2,38],34:[2,38],35:[2,38],36:[2,38],40:[2,38],42:[2,38],44:[1,44]},{21:45,40:[1,28],43:26},{18:[2,40],24:[2,40],32:[2,40],33:[2,40],34:[2,40],35:[2,40],36:[2,40],40:[2,40],42:[2,40],44:[2,40]},{18:[1,46]},{18:[1,47]},{24:[1,48]},{18:[2,41],21:50,27:49,40:[1,28],43:26},{18:[2,34],40:[2,34]},{18:[2,35],40:[2,35]},{18:[2,36],40:[2,36]},{5:[2,11],14:[2,11],15:[2,11],16:[2,11],19:[2,11],20:[2,11],22:[2,11],23:[2,11],25:[2,11]},{21:51,40:[1,28],43:26},{8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,3],22:[1,13],23:[1,14],25:[1,15]},{4:52,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,5],22:[1,13],23:[1,14],25:[1,15]},{14:[2,23],15:[2,23],16:[2,23],19:[2,23],20:[2,23],22:[2,23],23:[2,23],25:[2,23]},{5:[2,12],14:[2,12],15:[2,12],16:[2,12],19:[2,12],20:[2,12],22:[2,12],23:[2,12],25:[2,12]},{14:[2,18],15:[2,18],16:[2,18],19:[2,18],20:[2,18],22:[2,18],23:[2,18],25:[2,18]},{18:[2,45],21:56,24:[2,45],29:53,30:60,31:54,32:[1,57],33:[1,58],34:[1,59],35:[1,61],36:[2,45],37:55,38:62,39:63,40:[1,64],42:[1,27],43:26},{40:[1,65]},{18:[2,37],24:[2,37],32:[2,37],33:[2,37],34:[2,37],35:[2,37],36:[2,37],40:[2,37],42:[2,37]},{14:[2,17],15:[2,17],16:[2,17],19:[2,17],20:[2,17],22:[2,17],23:[2,17],25:[2,17]},{5:[2,20],14:[2,20],15:[2,20],16:[2,20],19:[2,20],20:[2,20],22:[2,20],23:[2,20],25:[2,20]},{5:[2,21],14:[2,21],15:[2,21],16:[2,21],19:[2,21],20:[2,21],22:[2,21],23:[2,21],25:[2,21]},{18:[1,66]},{18:[2,42]},{18:[1,67]},{8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,4],22:[1,13],23:[1,14],25:[1,15]},{18:[2,24],24:[2,24],36:[2,24]},{18:[2,44],24:[2,44],32:[2,44],33:[2,44],34:[2,44],35:[2,44],36:[2,44],40:[2,44],42:[2,44]},{18:[2,46],24:[2,46],36:[2,46]},{18:[2,26],24:[2,26],32:[2,26],33:[2,26],34:[2,26],35:[2,26],36:[2,26],40:[2,26],42:[2,26]},{18:[2,27],24:[2,27],32:[2,27],33:[2,27],34:[2,27],35:[2,27],36:[2,27],40:[2,27],42:[2,27]},{18:[2,28],24:[2,28],32:[2,28],33:[2,28],34:[2,28],35:[2,28],36:[2,28],40:[2,28],42:[2,28]},{18:[2,29],24:[2,29],32:[2,29],33:[2,29],34:[2,29],35:[2,29],36:[2,29],40:[2,29],42:[2,29]},{18:[2,30],24:[2,30],32:[2,30],33:[2,30],34:[2,30],35:[2,30],36:[2,30],40:[2,30],42:[2,30]},{17:68,21:24,30:25,40:[1,28],42:[1,27],43:26},{18:[2,32],24:[2,32],36:[2,32],39:69,40:[1,70]},{18:[2,47],24:[2,47],36:[2,47],40:[2,47]},{18:[2,40],24:[2,40],32:[2,40],33:[2,40],34:[2,40],35:[2,40],36:[2,40],40:[2,40],41:[1,71],42:[2,40],44:[2,40]},{18:[2,39],24:[2,39],32:[2,39],33:[2,39],34:[2,39],35:[2,39],36:[2,39],40:[2,39],42:[2,39],44:[2,39]},{5:[2,22],14:[2,22],15:[2,22],16:[2,22],19:[2,22],20:[2,22],22:[2,22],23:[2,22],25:[2,22]},{5:[2,19],14:[2,19],15:[2,19],16:[2,19],19:[2,19],20:[2,19],22:[2,19],23:[2,19],25:[2,19]},{36:[1,72]},{18:[2,48],24:[2,48],36:[2,48],40:[2,48]},{41:[1,71]},{21:56,30:60,31:73,32:[1,57],33:[1,58],34:[1,59],35:[1,61],40:[1,28],42:[1,27],43:26},{18:[2,31],24:[2,31],32:[2,31],33:[2,31],34:[2,31],35:[2,31],36:[2,31],40:[2,31],42:[2,31]},{18:[2,33],24:[2,33],36:[2,33],40:[2,33]}],defaultActions:{3:[2,2],16:[2,1],50:[2,42]},parseError:function(a){throw new Error(a)},parse:function(a){function b(){var a;return a=c.lexer.lex()||1,"number"!=typeof a&&(a=c.symbols_[a]||a),a}var c=this,d=[0],e=[null],f=[],g=this.table,h="",i=0,j=0,k=0;this.lexer.setInput(a),this.lexer.yy=this.yy,this.yy.lexer=this.lexer,this.yy.parser=this,"undefined"==typeof this.lexer.yylloc&&(this.lexer.yylloc={});var l=this.lexer.yylloc;f.push(l);var m=this.lexer.options&&this.lexer.options.ranges;"function"==typeof this.yy.parseError&&(this.parseError=this.yy.parseError);for(var n,o,p,q,r,s,t,u,v,w={};;){if(p=d[d.length-1],this.defaultActions[p]?q=this.defaultActions[p]:((null===n||"undefined"==typeof n)&&(n=b()),q=g[p]&&g[p][n]),"undefined"==typeof q||!q.length||!q[0]){var x="";if(!k){v=[];for(s in g[p])this.terminals_[s]&&s>2&&v.push("'"+this.terminals_[s]+"'");x=this.lexer.showPosition?"Parse error on line "+(i+1)+":\n"+this.lexer.showPosition()+"\nExpecting "+v.join(", ")+", got '"+(this.terminals_[n]||n)+"'":"Parse error on line "+(i+1)+": Unexpected "+(1==n?"end of input":"'"+(this.terminals_[n]||n)+"'"),this.parseError(x,{text:this.lexer.match,token:this.terminals_[n]||n,line:this.lexer.yylineno,loc:l,expected:v})}}if(q[0]instanceof Array&&q.length>1)throw new Error("Parse Error: multiple actions possible at state: "+p+", token: "+n);switch(q[0]){case 1:d.push(n),e.push(this.lexer.yytext),f.push(this.lexer.yylloc),d.push(q[1]),n=null,o?(n=o,o=null):(j=this.lexer.yyleng,h=this.lexer.yytext,i=this.lexer.yylineno,l=this.lexer.yylloc,k>0&&k--);break;case 2:if(t=this.productions_[q[1]][1],w.$=e[e.length-t],w._$={first_line:f[f.length-(t||1)].first_line,last_line:f[f.length-1].last_line,first_column:f[f.length-(t||1)].first_column,last_column:f[f.length-1].last_column},m&&(w._$.range=[f[f.length-(t||1)].range[0],f[f.length-1].range[1]]),r=this.performAction.call(w,h,j,i,this.yy,q[1],e,f),"undefined"!=typeof r)return r;t&&(d=d.slice(0,-1*t*2),e=e.slice(0,-1*t),f=f.slice(0,-1*t)),d.push(this.productions_[q[1]][0]),e.push(w.$),f.push(w._$),u=g[d[d.length-2]][d[d.length-1]],d.push(u);break;case 3:return!0}}return!0}},d=function(){var a={EOF:1,parseError:function(a,b){if(!this.yy.parser)throw new Error(a);this.yy.parser.parseError(a,b)},setInput:function(a){return this._input=a,this._more=this._less=this.done=!1,this.yylineno=this.yyleng=0,this.yytext=this.matched=this.match="",this.conditionStack=["INITIAL"],this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0},this.options.ranges&&(this.yylloc.range=[0,0]),this.offset=0,this},input:function(){var a=this._input[0];this.yytext+=a,this.yyleng++,this.offset++,this.match+=a,this.matched+=a;var b=a.match(/(?:\r\n?|\n).*/g);return b?(this.yylineno++,this.yylloc.last_line++):this.yylloc.last_column++,this.options.ranges&&this.yylloc.range[1]++,this._input=this._input.slice(1),a},unput:function(a){var b=a.length,c=a.split(/(?:\r\n?|\n)/g);this._input=a+this._input,this.yytext=this.yytext.substr(0,this.yytext.length-b-1),this.offset-=b;var d=this.match.split(/(?:\r\n?|\n)/g);this.match=this.match.substr(0,this.match.length-1),this.matched=this.matched.substr(0,this.matched.length-1),c.length-1&&(this.yylineno-=c.length-1);var e=this.yylloc.range;return this.yylloc={first_line:this.yylloc.first_line,last_line:this.yylineno+1,first_column:this.yylloc.first_column,last_column:c?(c.length===d.length?this.yylloc.first_column:0)+d[d.length-c.length].length-c[0].length:this.yylloc.first_column-b},this.options.ranges&&(this.yylloc.range=[e[0],e[0]+this.yyleng-b]),this},more:function(){return this._more=!0,this},less:function(a){this.unput(this.match.slice(a))},pastInput:function(){var a=this.matched.substr(0,this.matched.length-this.match.length);return(a.length>20?"...":"")+a.substr(-20).replace(/\n/g,"")},upcomingInput:function(){var a=this.match;return a.length<20&&(a+=this._input.substr(0,20-a.length)),(a.substr(0,20)+(a.length>20?"...":"")).replace(/\n/g,"")},showPosition:function(){var a=this.pastInput(),b=new Array(a.length+1).join("-");return a+this.upcomingInput()+"\n"+b+"^"},next:function(){if(this.done)return this.EOF;this._input||(this.done=!0);var a,b,c,d,e;this._more||(this.yytext="",this.match="");for(var f=this._currentRules(),g=0;g<f.length&&(c=this._input.match(this.rules[f[g]]),!c||b&&!(c[0].length>b[0].length)||(b=c,d=g,this.options.flex));g++);return b?(e=b[0].match(/(?:\r\n?|\n).*/g),e&&(this.yylineno+=e.length),this.yylloc={first_line:this.yylloc.last_line,last_line:this.yylineno+1,first_column:this.yylloc.last_column,last_column:e?e[e.length-1].length-e[e.length-1].match(/\r?\n?/)[0].length:this.yylloc.last_column+b[0].length},this.yytext+=b[0],this.match+=b[0],this.matches=b,this.yyleng=this.yytext.length,this.options.ranges&&(this.yylloc.range=[this.offset,this.offset+=this.yyleng]),this._more=!1,this._input=this._input.slice(b[0].length),this.matched+=b[0],a=this.performAction.call(this,this.yy,this,f[d],this.conditionStack[this.conditionStack.length-1]),this.done&&this._input&&(this.done=!1),a?a:void 0):""===this._input?this.EOF:this.parseError("Lexical error on line "+(this.yylineno+1)+". Unrecognized text.\n"+this.showPosition(),{text:"",token:null,line:this.yylineno})},lex:function(){var a=this.next();return"undefined"!=typeof a?a:this.lex()},begin:function(a){this.conditionStack.push(a)},popState:function(){return this.conditionStack.pop()},_currentRules:function(){return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules},topState:function(){return this.conditionStack[this.conditionStack.length-2]},pushState:function(a){this.begin(a)}};return a.options={},a.performAction=function(a,b,c,d){function e(a,c){return b.yytext=b.yytext.substr(a,b.yyleng-c)}switch(c){case 0:if("\\\\"===b.yytext.slice(-2)?(e(0,1),this.begin("mu")):"\\"===b.yytext.slice(-1)?(e(0,1),this.begin("emu")):this.begin("mu"),b.yytext)return 14;break;case 1:return 14;case 2:return this.popState(),14;case 3:return e(0,4),this.popState(),15;case 4:return 35;case 5:return 36;case 6:return 25;case 7:return 16;case 8:return 20;case 9:return 19;case 10:return 19;case 11:return 23;case 12:return 22;case 13:this.popState(),this.begin("com");break;case 14:return e(3,5),this.popState(),15;case 15:return 22;case 16:return 41;case 17:return 40;case 18:return 40;case 19:return 44;case 20:break;case 21:return this.popState(),24;case 22:return this.popState(),18;case 23:return b.yytext=e(1,2).replace(/\\"/g,'"'),32;case 24:return b.yytext=e(1,2).replace(/\\'/g,"'"),32;case 25:return 42;case 26:return 34;case 27:return 34;case 28:return 33;case 29:return 40;case 30:return b.yytext=e(1,2),40;case 31:return"INVALID";case 32:return 5}},a.rules=[/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/,/^(?:[\s\S]*?--\}\})/,/^(?:\()/,/^(?:\))/,/^(?:\{\{(~)?>)/,/^(?:\{\{(~)?#)/,/^(?:\{\{(~)?\/)/,/^(?:\{\{(~)?\^)/,/^(?:\{\{(~)?\s*else\b)/,/^(?:\{\{(~)?\{)/,/^(?:\{\{(~)?&)/,/^(?:\{\{!--)/,/^(?:\{\{![\s\S]*?\}\})/,/^(?:\{\{(~)?)/,/^(?:=)/,/^(?:\.\.)/,/^(?:\.(?=([=~}\s\/.)])))/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}(~)?\}\})/,/^(?:(~)?\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=([~}\s)])))/,/^(?:false(?=([~}\s)])))/,/^(?:-?[0-9]+(?=([~}\s)])))/,/^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)]))))/,/^(?:\[[^\]]*\])/,/^(?:.)/,/^(?:$)/],a.conditions={mu:{rules:[4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],inclusive:!1},emu:{rules:[2],inclusive:!1},com:{rules:[3],inclusive:!1},INITIAL:{rules:[0,1,32],inclusive:!0}},a}();return c.lexer=d,b.prototype=c,c.Parser=b,new b}();return a=b}(),i=function(a,b){"use strict";function c(a){return a.constructor===f.ProgramNode?a:(e.yy=f,e.parse(a))}var d={},e=a,f=b;return d.parser=e,d.parse=c,d}(h,g),j=function(a){"use strict";function b(){}function c(a,b,c){if(null==a||"string"!=typeof a&&a.constructor!==c.AST.ProgramNode)throw new f("You must pass a string or Handlebars AST to Handlebars.precompile. You passed "+a);b=b||{},"data"in b||(b.data=!0);var d=c.parse(a),e=(new c.Compiler).compile(d,b);return(new c.JavaScriptCompiler).compile(e,b)}function d(a,b,c){function d(){var d=c.parse(a),e=(new c.Compiler).compile(d,b),f=(new c.JavaScriptCompiler).compile(e,b,void 0,!0);return c.template(f)}if(null==a||"string"!=typeof a&&a.constructor!==c.AST.ProgramNode)throw new f("You must pass a string or Handlebars AST to Handlebars.compile. You passed "+a);b=b||{},"data"in b||(b.data=!0);var e;return function(a,b){return e||(e=d()),e.call(this,a,b)}}var e={},f=a;return e.Compiler=b,b.prototype={compiler:b,disassemble:function(){for(var a,b,c,d=this.opcodes,e=[],f=0,g=d.length;g>f;f++)if(a=d[f],"DECLARE"===a.opcode)e.push("DECLARE "+a.name+"="+a.value);else{b=[];for(var h=0;h<a.args.length;h++)c=a.args[h],"string"==typeof c&&(c='"'+c.replace("\n","\\n")+'"'),b.push(c);e.push(a.opcode+" "+b.join(" "))}return e.join("\n")},equals:function(a){var b=this.opcodes.length;if(a.opcodes.length!==b)return!1;for(var c=0;b>c;c++){var d=this.opcodes[c],e=a.opcodes[c];if(d.opcode!==e.opcode||d.args.length!==e.args.length)return!1;for(var f=0;f<d.args.length;f++)if(d.args[f]!==e.args[f])return!1}if(b=this.children.length,a.children.length!==b)return!1;for(c=0;b>c;c++)if(!this.children[c].equals(a.children[c]))return!1;return!0},guid:0,compile:function(a,b){this.opcodes=[],this.children=[],this.depths={list:[]},this.options=b;var c=this.options.knownHelpers;if(this.options.knownHelpers={helperMissing:!0,blockHelperMissing:!0,each:!0,"if":!0,unless:!0,"with":!0,log:!0},c)for(var d in c)this.options.knownHelpers[d]=c[d];return this.accept(a)},accept:function(a){var b,c=a.strip||{};return c.left&&this.opcode("strip"),b=this[a.type](a),c.right&&this.opcode("strip"),b},program:function(a){for(var b=a.statements,c=0,d=b.length;d>c;c++)this.accept(b[c]);return this.isSimple=1===d,this.depths.list=this.depths.list.sort(function(a,b){return a-b}),this},compileProgram:function(a){var b,c=(new this.compiler).compile(a,this.options),d=this.guid++;this.usePartial=this.usePartial||c.usePartial,this.children[d]=c;for(var e=0,f=c.depths.list.length;f>e;e++)b=c.depths.list[e],2>b||this.addDepth(b-1);return d},block:function(a){var b=a.mustache,c=a.program,d=a.inverse;c&&(c=this.compileProgram(c)),d&&(d=this.compileProgram(d));var e=b.sexpr,f=this.classifySexpr(e);"helper"===f?this.helperSexpr(e,c,d):"simple"===f?(this.simpleSexpr(e),this.opcode("pushProgram",c),this.opcode("pushProgram",d),this.opcode("emptyHash"),this.opcode("blockValue")):(this.ambiguousSexpr(e,c,d),this.opcode("pushProgram",c),this.opcode("pushProgram",d),this.opcode("emptyHash"),this.opcode("ambiguousBlockValue")),this.opcode("append")},hash:function(a){var b,c,d=a.pairs;this.opcode("pushHash");for(var e=0,f=d.length;f>e;e++)b=d[e],c=b[1],this.options.stringParams?(c.depth&&this.addDepth(c.depth),this.opcode("getContext",c.depth||0),this.opcode("pushStringParam",c.stringModeValue,c.type),"sexpr"===c.type&&this.sexpr(c)):this.accept(c),this.opcode("assignToHash",b[0]);this.opcode("popHash")},partial:function(a){var b=a.partialName;this.usePartial=!0,a.context?this.ID(a.context):this.opcode("push","depth0"),this.opcode("invokePartial",b.name),this.opcode("append")},content:function(a){this.opcode("appendContent",a.string)},mustache:function(a){this.sexpr(a.sexpr),a.escaped&&!this.options.noEscape?this.opcode("appendEscaped"):this.opcode("append")},ambiguousSexpr:function(a,b,c){var d=a.id,e=d.parts[0],f=null!=b||null!=c;this.opcode("getContext",d.depth),this.opcode("pushProgram",b),this.opcode("pushProgram",c),this.opcode("invokeAmbiguous",e,f)},simpleSexpr:function(a){var b=a.id;"DATA"===b.type?this.DATA(b):b.parts.length?this.ID(b):(this.addDepth(b.depth),this.opcode("getContext",b.depth),this.opcode("pushContext")),this.opcode("resolvePossibleLambda")},helperSexpr:function(a,b,c){var d=this.setupFullMustacheParams(a,b,c),e=a.id.parts[0];if(this.options.knownHelpers[e])this.opcode("invokeKnownHelper",d.length,e);else{if(this.options.knownHelpersOnly)throw new f("You specified knownHelpersOnly, but used the unknown helper "+e,a);this.opcode("invokeHelper",d.length,e,a.isRoot)}},sexpr:function(a){var b=this.classifySexpr(a);"simple"===b?this.simpleSexpr(a):"helper"===b?this.helperSexpr(a):this.ambiguousSexpr(a)},ID:function(a){this.addDepth(a.depth),this.opcode("getContext",a.depth);var b=a.parts[0];b?this.opcode("lookupOnContext",a.parts[0]):this.opcode("pushContext");for(var c=1,d=a.parts.length;d>c;c++)this.opcode("lookup",a.parts[c])},DATA:function(a){if(this.options.data=!0,a.id.isScoped||a.id.depth)throw new f("Scoped data references are not supported: "+a.original,a);this.opcode("lookupData");for(var b=a.id.parts,c=0,d=b.length;d>c;c++)this.opcode("lookup",b[c])},STRING:function(a){this.opcode("pushString",a.string)},INTEGER:function(a){this.opcode("pushLiteral",a.integer)},BOOLEAN:function(a){this.opcode("pushLiteral",a.bool)},comment:function(){},opcode:function(a){this.opcodes.push({opcode:a,args:[].slice.call(arguments,1)})},declare:function(a,b){this.opcodes.push({opcode:"DECLARE",name:a,value:b})},addDepth:function(a){0!==a&&(this.depths[a]||(this.depths[a]=!0,this.depths.list.push(a)))},classifySexpr:function(a){var b=a.isHelper,c=a.eligibleHelper,d=this.options;if(c&&!b){var e=a.id.parts[0];d.knownHelpers[e]?b=!0:d.knownHelpersOnly&&(c=!1)}return b?"helper":c?"ambiguous":"simple"},pushParams:function(a){for(var b,c=a.length;c--;)b=a[c],this.options.stringParams?(b.depth&&this.addDepth(b.depth),this.opcode("getContext",b.depth||0),this.opcode("pushStringParam",b.stringModeValue,b.type),"sexpr"===b.type&&this.sexpr(b)):this[b.type](b)},setupFullMustacheParams:function(a,b,c){var d=a.params;return this.pushParams(d),this.opcode("pushProgram",b),this.opcode("pushProgram",c),a.hash?this.hash(a.hash):this.opcode("emptyHash"),d}},e.precompile=c,e.compile=d,e}(c),k=function(a,b){"use strict";function c(a){this.value=a}function d(){}var e,f=a.COMPILER_REVISION,g=a.REVISION_CHANGES,h=a.log,i=b;d.prototype={nameLookup:function(a,b){var c,e;return 0===a.indexOf("depth")&&(c=!0),e=/^[0-9]+$/.test(b)?a+"["+b+"]":d.isValidJavaScriptVariableName(b)?a+"."+b:a+"['"+b+"']",c?"("+a+" && "+e+")":e},compilerInfo:function(){var a=f,b=g[a];return"this.compilerInfo = ["+a+",'"+b+"'];\n"},appendToBuffer:function(a){return this.environment.isSimple?"return "+a+";":{appendToBuffer:!0,content:a,toString:function(){return"buffer += "+a+";"}}},initializeBuffer:function(){return this.quotedString("")},namespace:"Handlebars",compile:function(a,b,c,d){this.environment=a,this.options=b||{},h("debug",this.environment.disassemble()+"\n\n"),this.name=this.environment.name,this.isChild=!!c,this.context=c||{programs:[],environments:[],aliases:{}},this.preamble(),this.stackSlot=0,this.stackVars=[],this.registers={list:[]},this.hashes=[],this.compileStack=[],this.inlineStack=[],this.compileChildren(a,b);
-var e,f=a.opcodes;this.i=0;for(var g=f.length;this.i<g;this.i++)e=f[this.i],"DECLARE"===e.opcode?this[e.name]=e.value:this[e.opcode].apply(this,e.args),e.opcode!==this.stripNext&&(this.stripNext=!1);if(this.pushSource(""),this.stackSlot||this.inlineStack.length||this.compileStack.length)throw new i("Compile completed with content left on stack");return this.createFunctionContext(d)},preamble:function(){var a=[];if(this.isChild)a.push("");else{var b=this.namespace,c="helpers = this.merge(helpers, "+b+".helpers);";this.environment.usePartial&&(c=c+" partials = this.merge(partials, "+b+".partials);"),this.options.data&&(c+=" data = data || {};"),a.push(c)}this.environment.isSimple?a.push(""):a.push(", buffer = "+this.initializeBuffer()),this.lastContext=0,this.source=a},createFunctionContext:function(a){var b=this.stackVars.concat(this.registers.list);if(b.length>0&&(this.source[1]=this.source[1]+", "+b.join(", ")),!this.isChild)for(var c in this.context.aliases)this.context.aliases.hasOwnProperty(c)&&(this.source[1]=this.source[1]+", "+c+"="+this.context.aliases[c]);this.source[1]&&(this.source[1]="var "+this.source[1].substring(2)+";"),this.isChild||(this.source[1]+="\n"+this.context.programs.join("\n")+"\n"),this.environment.isSimple||this.pushSource("return buffer;");for(var d=this.isChild?["depth0","data"]:["Handlebars","depth0","helpers","partials","data"],e=0,f=this.environment.depths.list.length;f>e;e++)d.push("depth"+this.environment.depths.list[e]);var g=this.mergeSource();if(this.isChild||(g=this.compilerInfo()+g),a)return d.push(g),Function.apply(this,d);var i="function "+(this.name||"")+"("+d.join(",")+") {\n  "+g+"}";return h("debug",i+"\n\n"),i},mergeSource:function(){for(var a,b="",c=0,d=this.source.length;d>c;c++){var e=this.source[c];e.appendToBuffer?a=a?a+"\n    + "+e.content:e.content:(a&&(b+="buffer += "+a+";\n  ",a=void 0),b+=e+"\n  ")}return b},blockValue:function(){this.context.aliases.blockHelperMissing="helpers.blockHelperMissing";var a=["depth0"];this.setupParams(0,a),this.replaceStack(function(b){return a.splice(1,0,b),"blockHelperMissing.call("+a.join(", ")+")"})},ambiguousBlockValue:function(){this.context.aliases.blockHelperMissing="helpers.blockHelperMissing";var a=["depth0"];this.setupParams(0,a);var b=this.topStack();a.splice(1,0,b),this.pushSource("if (!"+this.lastHelper+") { "+b+" = blockHelperMissing.call("+a.join(", ")+"); }")},appendContent:function(a){this.pendingContent&&(a=this.pendingContent+a),this.stripNext&&(a=a.replace(/^\s+/,"")),this.pendingContent=a},strip:function(){this.pendingContent&&(this.pendingContent=this.pendingContent.replace(/\s+$/,"")),this.stripNext="strip"},append:function(){this.flushInline();var a=this.popStack();this.pushSource("if("+a+" || "+a+" === 0) { "+this.appendToBuffer(a)+" }"),this.environment.isSimple&&this.pushSource("else { "+this.appendToBuffer("''")+" }")},appendEscaped:function(){this.context.aliases.escapeExpression="this.escapeExpression",this.pushSource(this.appendToBuffer("escapeExpression("+this.popStack()+")"))},getContext:function(a){this.lastContext!==a&&(this.lastContext=a)},lookupOnContext:function(a){this.push(this.nameLookup("depth"+this.lastContext,a,"context"))},pushContext:function(){this.pushStackLiteral("depth"+this.lastContext)},resolvePossibleLambda:function(){this.context.aliases.functionType='"function"',this.replaceStack(function(a){return"typeof "+a+" === functionType ? "+a+".apply(depth0) : "+a})},lookup:function(a){this.replaceStack(function(b){return b+" == null || "+b+" === false ? "+b+" : "+this.nameLookup(b,a,"context")})},lookupData:function(){this.pushStackLiteral("data")},pushStringParam:function(a,b){this.pushStackLiteral("depth"+this.lastContext),this.pushString(b),"sexpr"!==b&&("string"==typeof a?this.pushString(a):this.pushStackLiteral(a))},emptyHash:function(){this.pushStackLiteral("{}"),this.options.stringParams&&(this.push("{}"),this.push("{}"))},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:[],types:[],contexts:[]}},popHash:function(){var a=this.hash;this.hash=this.hashes.pop(),this.options.stringParams&&(this.push("{"+a.contexts.join(",")+"}"),this.push("{"+a.types.join(",")+"}")),this.push("{\n    "+a.values.join(",\n    ")+"\n  }")},pushString:function(a){this.pushStackLiteral(this.quotedString(a))},push:function(a){return this.inlineStack.push(a),a},pushLiteral:function(a){this.pushStackLiteral(a)},pushProgram:function(a){null!=a?this.pushStackLiteral(this.programExpression(a)):this.pushStackLiteral(null)},invokeHelper:function(a,b,c){this.context.aliases.helperMissing="helpers.helperMissing",this.useRegister("helper");var d=this.lastHelper=this.setupHelper(a,b,!0),e=this.nameLookup("depth"+this.lastContext,b,"context"),f="helper = "+d.name+" || "+e;d.paramsInit&&(f+=","+d.paramsInit),this.push("("+f+",helper ? helper.call("+d.callParams+") : helperMissing.call("+d.helperMissingParams+"))"),c||this.flushInline()},invokeKnownHelper:function(a,b){var c=this.setupHelper(a,b);this.push(c.name+".call("+c.callParams+")")},invokeAmbiguous:function(a,b){this.context.aliases.functionType='"function"',this.useRegister("helper"),this.emptyHash();var c=this.setupHelper(0,a,b),d=this.lastHelper=this.nameLookup("helpers",a,"helper"),e=this.nameLookup("depth"+this.lastContext,a,"context"),f=this.nextStack();c.paramsInit&&this.pushSource(c.paramsInit),this.pushSource("if (helper = "+d+") { "+f+" = helper.call("+c.callParams+"); }"),this.pushSource("else { helper = "+e+"; "+f+" = typeof helper === functionType ? helper.call("+c.callParams+") : helper; }")},invokePartial:function(a){var b=[this.nameLookup("partials",a,"partial"),"'"+a+"'",this.popStack(),"helpers","partials"];this.options.data&&b.push("data"),this.context.aliases.self="this",this.push("self.invokePartial("+b.join(", ")+")")},assignToHash:function(a){var b,c,d=this.popStack();this.options.stringParams&&(c=this.popStack(),b=this.popStack());var e=this.hash;b&&e.contexts.push("'"+a+"': "+b),c&&e.types.push("'"+a+"': "+c),e.values.push("'"+a+"': ("+d+")")},compiler:d,compileChildren:function(a,b){for(var c,d,e=a.children,f=0,g=e.length;g>f;f++){c=e[f],d=new this.compiler;var h=this.matchExistingProgram(c);null==h?(this.context.programs.push(""),h=this.context.programs.length,c.index=h,c.name="program"+h,this.context.programs[h]=d.compile(c,b,this.context),this.context.environments[h]=c):(c.index=h,c.name="program"+h)}},matchExistingProgram:function(a){for(var b=0,c=this.context.environments.length;c>b;b++){var d=this.context.environments[b];if(d&&d.equals(a))return b}},programExpression:function(a){if(this.context.aliases.self="this",null==a)return"self.noop";for(var b,c=this.environment.children[a],d=c.depths.list,e=[c.index,c.name,"data"],f=0,g=d.length;g>f;f++)b=d[f],1===b?e.push("depth0"):e.push("depth"+(b-1));return(0===d.length?"self.program(":"self.programWithDepth(")+e.join(", ")+")"},register:function(a,b){this.useRegister(a),this.pushSource(a+" = "+b+";")},useRegister:function(a){this.registers[a]||(this.registers[a]=!0,this.registers.list.push(a))},pushStackLiteral:function(a){return this.push(new c(a))},pushSource:function(a){this.pendingContent&&(this.source.push(this.appendToBuffer(this.quotedString(this.pendingContent))),this.pendingContent=void 0),a&&this.source.push(a)},pushStack:function(a){this.flushInline();var b=this.incrStack();return a&&this.pushSource(b+" = "+a+";"),this.compileStack.push(b),b},replaceStack:function(a){var b,d,e,f="",g=this.isInline();if(g){var h=this.popStack(!0);if(h instanceof c)b=h.value,e=!0;else{d=!this.stackSlot;var i=d?this.incrStack():this.topStackName();f="("+this.push(i)+" = "+h+"),",b=this.topStack()}}else b=this.topStack();var j=a.call(this,b);return g?(e||this.popStack(),d&&this.stackSlot--,this.push("("+f+j+")")):(/^stack/.test(b)||(b=this.nextStack()),this.pushSource(b+" = ("+f+j+");")),b},nextStack:function(){return this.pushStack()},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var a=this.inlineStack;if(a.length){this.inlineStack=[];for(var b=0,d=a.length;d>b;b++){var e=a[b];e instanceof c?this.compileStack.push(e):this.pushStack(e)}}},isInline:function(){return this.inlineStack.length},popStack:function(a){var b=this.isInline(),d=(b?this.inlineStack:this.compileStack).pop();if(!a&&d instanceof c)return d.value;if(!b){if(!this.stackSlot)throw new i("Invalid stack pop");this.stackSlot--}return d},topStack:function(a){var b=this.isInline()?this.inlineStack:this.compileStack,d=b[b.length-1];return!a&&d instanceof c?d.value:d},quotedString:function(a){return'"'+a.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\u2028/g,"\\u2028").replace(/\u2029/g,"\\u2029")+'"'},setupHelper:function(a,b,c){var d=[],e=this.setupParams(a,d,c),f=this.nameLookup("helpers",b,"helper");return{params:d,paramsInit:e,name:f,callParams:["depth0"].concat(d).join(", "),helperMissingParams:c&&["depth0",this.quotedString(b)].concat(d).join(", ")}},setupOptions:function(a,b){var c,d,e,f=[],g=[],h=[];f.push("hash:"+this.popStack()),this.options.stringParams&&(f.push("hashTypes:"+this.popStack()),f.push("hashContexts:"+this.popStack())),d=this.popStack(),e=this.popStack(),(e||d)&&(e||(this.context.aliases.self="this",e="self.noop"),d||(this.context.aliases.self="this",d="self.noop"),f.push("inverse:"+d),f.push("fn:"+e));for(var i=0;a>i;i++)c=this.popStack(),b.push(c),this.options.stringParams&&(h.push(this.popStack()),g.push(this.popStack()));return this.options.stringParams&&(f.push("contexts:["+g.join(",")+"]"),f.push("types:["+h.join(",")+"]")),this.options.data&&f.push("data:data"),f},setupParams:function(a,b,c){var d="{"+this.setupOptions(a,b).join(",")+"}";return c?(this.useRegister("options"),b.push("options"),"options="+d):(b.push(d),"")}};for(var j="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield".split(" "),k=d.RESERVED_WORDS={},l=0,m=j.length;m>l;l++)k[j[l]]=!0;return d.isValidJavaScriptVariableName=function(a){return!d.RESERVED_WORDS[a]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(a)?!0:!1},e=d}(d,c),l=function(a,b,c,d,e){"use strict";var f,g=a,h=b,i=c.parser,j=c.parse,k=d.Compiler,l=d.compile,m=d.precompile,n=e,o=g.create,p=function(){var a=o();return a.compile=function(b,c){return l(b,c,a)},a.precompile=function(b,c){return m(b,c,a)},a.AST=h,a.Compiler=k,a.JavaScriptCompiler=n,a.Parser=i,a.parse=j,a};return g=p(),g.create=p,f=g}(f,g,i,j,k);return l}();
+/* exported Handlebars */
+var Handlebars = (function() {
+// handlebars/safe-string.js
+var __module4__ = (function() {
+  "use strict";
+  var __exports__;
+  // Build out our basic SafeString type
+  function SafeString(string) {
+    this.string = string;
+  }
+
+  SafeString.prototype.toString = function() {
+    return "" + this.string;
+  };
+
+  __exports__ = SafeString;
+  return __exports__;
+})();
+
+// handlebars/utils.js
+var __module3__ = (function(__dependency1__) {
+  "use strict";
+  var __exports__ = {};
+  /*jshint -W004 */
+  var SafeString = __dependency1__;
+
+  var escape = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#x27;",
+    "`": "&#x60;"
+  };
+
+  var badChars = /[&<>"'`]/g;
+  var possible = /[&<>"'`]/;
+
+  function escapeChar(chr) {
+    return escape[chr] || "&amp;";
+  }
+
+  function extend(obj, value) {
+    for(var key in value) {
+      if(Object.prototype.hasOwnProperty.call(value, key)) {
+        obj[key] = value[key];
+      }
+    }
+  }
+
+  __exports__.extend = extend;var toString = Object.prototype.toString;
+  __exports__.toString = toString;
+  // Sourced from lodash
+  // https://github.com/bestiejs/lodash/blob/master/LICENSE.txt
+  var isFunction = function(value) {
+    return typeof value === 'function';
+  };
+  // fallback for older versions of Chrome and Safari
+  if (isFunction(/x/)) {
+    isFunction = function(value) {
+      return typeof value === 'function' && toString.call(value) === '[object Function]';
+    };
+  }
+  var isFunction;
+  __exports__.isFunction = isFunction;
+  var isArray = Array.isArray || function(value) {
+    return (value && typeof value === 'object') ? toString.call(value) === '[object Array]' : false;
+  };
+  __exports__.isArray = isArray;
+
+  function escapeExpression(string) {
+    // don't escape SafeStrings, since they're already safe
+    if (string instanceof SafeString) {
+      return string.toString();
+    } else if (!string && string !== 0) {
+      return "";
+    }
+
+    // Force a string conversion as this will be done by the append regardless and
+    // the regex test will do this transparently behind the scenes, causing issues if
+    // an object's to string has escaped characters in it.
+    string = "" + string;
+
+    if(!possible.test(string)) { return string; }
+    return string.replace(badChars, escapeChar);
+  }
+
+  __exports__.escapeExpression = escapeExpression;function isEmpty(value) {
+    if (!value && value !== 0) {
+      return true;
+    } else if (isArray(value) && value.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  __exports__.isEmpty = isEmpty;
+  return __exports__;
+})(__module4__);
+
+// handlebars/exception.js
+var __module5__ = (function() {
+  "use strict";
+  var __exports__;
+
+  var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
+
+  function Exception(message, node) {
+    var line;
+    if (node && node.firstLine) {
+      line = node.firstLine;
+
+      message += ' - ' + line + ':' + node.firstColumn;
+    }
+
+    var tmp = Error.prototype.constructor.call(this, message);
+
+    // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
+    for (var idx = 0; idx < errorProps.length; idx++) {
+      this[errorProps[idx]] = tmp[errorProps[idx]];
+    }
+
+    if (line) {
+      this.lineNumber = line;
+      this.column = node.firstColumn;
+    }
+  }
+
+  Exception.prototype = new Error();
+
+  __exports__ = Exception;
+  return __exports__;
+})();
+
+// handlebars/base.js
+var __module2__ = (function(__dependency1__, __dependency2__) {
+  "use strict";
+  var __exports__ = {};
+  var Utils = __dependency1__;
+  var Exception = __dependency2__;
+
+  var VERSION = "1.3.0";
+  __exports__.VERSION = VERSION;var COMPILER_REVISION = 4;
+  __exports__.COMPILER_REVISION = COMPILER_REVISION;
+  var REVISION_CHANGES = {
+    1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
+    2: '== 1.0.0-rc.3',
+    3: '== 1.0.0-rc.4',
+    4: '>= 1.0.0'
+  };
+  __exports__.REVISION_CHANGES = REVISION_CHANGES;
+  var isArray = Utils.isArray,
+      isFunction = Utils.isFunction,
+      toString = Utils.toString,
+      objectType = '[object Object]';
+
+  function HandlebarsEnvironment(helpers, partials) {
+    this.helpers = helpers || {};
+    this.partials = partials || {};
+
+    registerDefaultHelpers(this);
+  }
+
+  __exports__.HandlebarsEnvironment = HandlebarsEnvironment;HandlebarsEnvironment.prototype = {
+    constructor: HandlebarsEnvironment,
+
+    logger: logger,
+    log: log,
+
+    registerHelper: function(name, fn, inverse) {
+      if (toString.call(name) === objectType) {
+        if (inverse || fn) { throw new Exception('Arg not supported with multiple helpers'); }
+        Utils.extend(this.helpers, name);
+      } else {
+        if (inverse) { fn.not = inverse; }
+        this.helpers[name] = fn;
+      }
+    },
+
+    registerPartial: function(name, str) {
+      if (toString.call(name) === objectType) {
+        Utils.extend(this.partials,  name);
+      } else {
+        this.partials[name] = str;
+      }
+    }
+  };
+
+  function registerDefaultHelpers(instance) {
+    instance.registerHelper('helperMissing', function(arg) {
+      if(arguments.length === 2) {
+        return undefined;
+      } else {
+        throw new Exception("Missing helper: '" + arg + "'");
+      }
+    });
+
+    instance.registerHelper('blockHelperMissing', function(context, options) {
+      var inverse = options.inverse || function() {}, fn = options.fn;
+
+      if (isFunction(context)) { context = context.call(this); }
+
+      if(context === true) {
+        return fn(this);
+      } else if(context === false || context == null) {
+        return inverse(this);
+      } else if (isArray(context)) {
+        if(context.length > 0) {
+          return instance.helpers.each(context, options);
+        } else {
+          return inverse(this);
+        }
+      } else {
+        return fn(context);
+      }
+    });
+
+    instance.registerHelper('each', function(context, options) {
+      var fn = options.fn, inverse = options.inverse;
+      var i = 0, ret = "", data;
+
+      if (isFunction(context)) { context = context.call(this); }
+
+      if (options.data) {
+        data = createFrame(options.data);
+      }
+
+      if(context && typeof context === 'object') {
+        if (isArray(context)) {
+          for(var j = context.length; i<j; i++) {
+            if (data) {
+              data.index = i;
+              data.first = (i === 0);
+              data.last  = (i === (context.length-1));
+            }
+            ret = ret + fn(context[i], { data: data });
+          }
+        } else {
+          for(var key in context) {
+            if(context.hasOwnProperty(key)) {
+              if(data) { 
+                data.key = key; 
+                data.index = i;
+                data.first = (i === 0);
+              }
+              ret = ret + fn(context[key], {data: data});
+              i++;
+            }
+          }
+        }
+      }
+
+      if(i === 0){
+        ret = inverse(this);
+      }
+
+      return ret;
+    });
+
+    instance.registerHelper('if', function(conditional, options) {
+      if (isFunction(conditional)) { conditional = conditional.call(this); }
+
+      // Default behavior is to render the positive path if the value is truthy and not empty.
+      // The `includeZero` option may be set to treat the condtional as purely not empty based on the
+      // behavior of isEmpty. Effectively this determines if 0 is handled by the positive path or negative.
+      if ((!options.hash.includeZero && !conditional) || Utils.isEmpty(conditional)) {
+        return options.inverse(this);
+      } else {
+        return options.fn(this);
+      }
+    });
+
+    instance.registerHelper('unless', function(conditional, options) {
+      return instance.helpers['if'].call(this, conditional, {fn: options.inverse, inverse: options.fn, hash: options.hash});
+    });
+
+    instance.registerHelper('with', function(context, options) {
+      if (isFunction(context)) { context = context.call(this); }
+
+      if (!Utils.isEmpty(context)) return options.fn(context);
+    });
+
+    instance.registerHelper('log', function(context, options) {
+      var level = options.data && options.data.level != null ? parseInt(options.data.level, 10) : 1;
+      instance.log(level, context);
+    });
+  }
+
+  var logger = {
+    methodMap: { 0: 'debug', 1: 'info', 2: 'warn', 3: 'error' },
+
+    // State enum
+    DEBUG: 0,
+    INFO: 1,
+    WARN: 2,
+    ERROR: 3,
+    level: 3,
+
+    // can be overridden in the host environment
+    log: function(level, obj) {
+      if (logger.level <= level) {
+        var method = logger.methodMap[level];
+        if (typeof console !== 'undefined' && console[method]) {
+          console[method].call(console, obj);
+        }
+      }
+    }
+  };
+  __exports__.logger = logger;
+  function log(level, obj) { logger.log(level, obj); }
+
+  __exports__.log = log;var createFrame = function(object) {
+    var obj = {};
+    Utils.extend(obj, object);
+    return obj;
+  };
+  __exports__.createFrame = createFrame;
+  return __exports__;
+})(__module3__, __module5__);
+
+// handlebars/runtime.js
+var __module6__ = (function(__dependency1__, __dependency2__, __dependency3__) {
+  "use strict";
+  var __exports__ = {};
+  var Utils = __dependency1__;
+  var Exception = __dependency2__;
+  var COMPILER_REVISION = __dependency3__.COMPILER_REVISION;
+  var REVISION_CHANGES = __dependency3__.REVISION_CHANGES;
+
+  function checkRevision(compilerInfo) {
+    var compilerRevision = compilerInfo && compilerInfo[0] || 1,
+        currentRevision = COMPILER_REVISION;
+
+    if (compilerRevision !== currentRevision) {
+      if (compilerRevision < currentRevision) {
+        var runtimeVersions = REVISION_CHANGES[currentRevision],
+            compilerVersions = REVISION_CHANGES[compilerRevision];
+        throw new Exception("Template was precompiled with an older version of Handlebars than the current runtime. "+
+              "Please update your precompiler to a newer version ("+runtimeVersions+") or downgrade your runtime to an older version ("+compilerVersions+").");
+      } else {
+        // Use the embedded version info since the runtime doesn't know about this revision yet
+        throw new Exception("Template was precompiled with a newer version of Handlebars than the current runtime. "+
+              "Please update your runtime to a newer version ("+compilerInfo[1]+").");
+      }
+    }
+  }
+
+  __exports__.checkRevision = checkRevision;// TODO: Remove this line and break up compilePartial
+
+  function template(templateSpec, env) {
+    if (!env) {
+      throw new Exception("No environment passed to template");
+    }
+
+    // Note: Using env.VM references rather than local var references throughout this section to allow
+    // for external users to override these as psuedo-supported APIs.
+    var invokePartialWrapper = function(partial, name, context, helpers, partials, data) {
+      var result = env.VM.invokePartial.apply(this, arguments);
+      if (result != null) { return result; }
+
+      if (env.compile) {
+        var options = { helpers: helpers, partials: partials, data: data };
+        partials[name] = env.compile(partial, { data: data !== undefined }, env);
+        return partials[name](context, options);
+      } else {
+        throw new Exception("The partial " + name + " could not be compiled when running in runtime-only mode");
+      }
+    };
+
+    // Just add water
+    var container = {
+      escapeExpression: Utils.escapeExpression,
+      invokePartial: invokePartialWrapper,
+      programs: [],
+      program: function(i, fn, data) {
+        var programWrapper = this.programs[i];
+        if(data) {
+          programWrapper = program(i, fn, data);
+        } else if (!programWrapper) {
+          programWrapper = this.programs[i] = program(i, fn);
+        }
+        return programWrapper;
+      },
+      merge: function(param, common) {
+        var ret = param || common;
+
+        if (param && common && (param !== common)) {
+          ret = {};
+          Utils.extend(ret, common);
+          Utils.extend(ret, param);
+        }
+        return ret;
+      },
+      programWithDepth: env.VM.programWithDepth,
+      noop: env.VM.noop,
+      compilerInfo: null
+    };
+
+    return function(context, options) {
+      options = options || {};
+      var namespace = options.partial ? options : env,
+          helpers,
+          partials;
+
+      if (!options.partial) {
+        helpers = options.helpers;
+        partials = options.partials;
+      }
+      var result = templateSpec.call(
+            container,
+            namespace, context,
+            helpers,
+            partials,
+            options.data);
+
+      if (!options.partial) {
+        env.VM.checkRevision(container.compilerInfo);
+      }
+
+      return result;
+    };
+  }
+
+  __exports__.template = template;function programWithDepth(i, fn, data /*, $depth */) {
+    var args = Array.prototype.slice.call(arguments, 3);
+
+    var prog = function(context, options) {
+      options = options || {};
+
+      return fn.apply(this, [context, options.data || data].concat(args));
+    };
+    prog.program = i;
+    prog.depth = args.length;
+    return prog;
+  }
+
+  __exports__.programWithDepth = programWithDepth;function program(i, fn, data) {
+    var prog = function(context, options) {
+      options = options || {};
+
+      return fn(context, options.data || data);
+    };
+    prog.program = i;
+    prog.depth = 0;
+    return prog;
+  }
+
+  __exports__.program = program;function invokePartial(partial, name, context, helpers, partials, data) {
+    var options = { partial: true, helpers: helpers, partials: partials, data: data };
+
+    if(partial === undefined) {
+      throw new Exception("The partial " + name + " could not be found");
+    } else if(partial instanceof Function) {
+      return partial(context, options);
+    }
+  }
+
+  __exports__.invokePartial = invokePartial;function noop() { return ""; }
+
+  __exports__.noop = noop;
+  return __exports__;
+})(__module3__, __module5__, __module2__);
+
+// handlebars.runtime.js
+var __module1__ = (function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__) {
+  "use strict";
+  var __exports__;
+  /*globals Handlebars: true */
+  var base = __dependency1__;
+
+  // Each of these augment the Handlebars object. No need to setup here.
+  // (This is done to easily share code between commonjs and browse envs)
+  var SafeString = __dependency2__;
+  var Exception = __dependency3__;
+  var Utils = __dependency4__;
+  var runtime = __dependency5__;
+
+  // For compatibility and usage outside of module systems, make the Handlebars object a namespace
+  var create = function() {
+    var hb = new base.HandlebarsEnvironment();
+
+    Utils.extend(hb, base);
+    hb.SafeString = SafeString;
+    hb.Exception = Exception;
+    hb.Utils = Utils;
+
+    hb.VM = runtime;
+    hb.template = function(spec) {
+      return runtime.template(spec, hb);
+    };
+
+    return hb;
+  };
+
+  var Handlebars = create();
+  Handlebars.create = create;
+
+  __exports__ = Handlebars;
+  return __exports__;
+})(__module2__, __module4__, __module5__, __module3__, __module6__);
+
+// handlebars/compiler/ast.js
+var __module7__ = (function(__dependency1__) {
+  "use strict";
+  var __exports__;
+  var Exception = __dependency1__;
+
+  function LocationInfo(locInfo){
+    locInfo = locInfo || {};
+    this.firstLine   = locInfo.first_line;
+    this.firstColumn = locInfo.first_column;
+    this.lastColumn  = locInfo.last_column;
+    this.lastLine    = locInfo.last_line;
+  }
+
+  var AST = {
+    ProgramNode: function(statements, inverseStrip, inverse, locInfo) {
+      var inverseLocationInfo, firstInverseNode;
+      if (arguments.length === 3) {
+        locInfo = inverse;
+        inverse = null;
+      } else if (arguments.length === 2) {
+        locInfo = inverseStrip;
+        inverseStrip = null;
+      }
+
+      LocationInfo.call(this, locInfo);
+      this.type = "program";
+      this.statements = statements;
+      this.strip = {};
+
+      if(inverse) {
+        firstInverseNode = inverse[0];
+        if (firstInverseNode) {
+          inverseLocationInfo = {
+            first_line: firstInverseNode.firstLine,
+            last_line: firstInverseNode.lastLine,
+            last_column: firstInverseNode.lastColumn,
+            first_column: firstInverseNode.firstColumn
+          };
+          this.inverse = new AST.ProgramNode(inverse, inverseStrip, inverseLocationInfo);
+        } else {
+          this.inverse = new AST.ProgramNode(inverse, inverseStrip);
+        }
+        this.strip.right = inverseStrip.left;
+      } else if (inverseStrip) {
+        this.strip.left = inverseStrip.right;
+      }
+    },
+
+    MustacheNode: function(rawParams, hash, open, strip, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "mustache";
+      this.strip = strip;
+
+      // Open may be a string parsed from the parser or a passed boolean flag
+      if (open != null && open.charAt) {
+        // Must use charAt to support IE pre-10
+        var escapeFlag = open.charAt(3) || open.charAt(2);
+        this.escaped = escapeFlag !== '{' && escapeFlag !== '&';
+      } else {
+        this.escaped = !!open;
+      }
+
+      if (rawParams instanceof AST.SexprNode) {
+        this.sexpr = rawParams;
+      } else {
+        // Support old AST API
+        this.sexpr = new AST.SexprNode(rawParams, hash);
+      }
+
+      this.sexpr.isRoot = true;
+
+      // Support old AST API that stored this info in MustacheNode
+      this.id = this.sexpr.id;
+      this.params = this.sexpr.params;
+      this.hash = this.sexpr.hash;
+      this.eligibleHelper = this.sexpr.eligibleHelper;
+      this.isHelper = this.sexpr.isHelper;
+    },
+
+    SexprNode: function(rawParams, hash, locInfo) {
+      LocationInfo.call(this, locInfo);
+
+      this.type = "sexpr";
+      this.hash = hash;
+
+      var id = this.id = rawParams[0];
+      var params = this.params = rawParams.slice(1);
+
+      // a mustache is an eligible helper if:
+      // * its id is simple (a single part, not `this` or `..`)
+      var eligibleHelper = this.eligibleHelper = id.isSimple;
+
+      // a mustache is definitely a helper if:
+      // * it is an eligible helper, and
+      // * it has at least one parameter or hash segment
+      this.isHelper = eligibleHelper && (params.length || hash);
+
+      // if a mustache is an eligible helper but not a definite
+      // helper, it is ambiguous, and will be resolved in a later
+      // pass or at runtime.
+    },
+
+    PartialNode: function(partialName, context, strip, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type         = "partial";
+      this.partialName  = partialName;
+      this.context      = context;
+      this.strip = strip;
+    },
+
+    BlockNode: function(mustache, program, inverse, close, locInfo) {
+      LocationInfo.call(this, locInfo);
+
+      if(mustache.sexpr.id.original !== close.path.original) {
+        throw new Exception(mustache.sexpr.id.original + " doesn't match " + close.path.original, this);
+      }
+
+      this.type = 'block';
+      this.mustache = mustache;
+      this.program  = program;
+      this.inverse  = inverse;
+
+      this.strip = {
+        left: mustache.strip.left,
+        right: close.strip.right
+      };
+
+      (program || inverse).strip.left = mustache.strip.right;
+      (inverse || program).strip.right = close.strip.left;
+
+      if (inverse && !program) {
+        this.isInverse = true;
+      }
+    },
+
+    ContentNode: function(string, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "content";
+      this.string = string;
+    },
+
+    HashNode: function(pairs, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "hash";
+      this.pairs = pairs;
+    },
+
+    IdNode: function(parts, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "ID";
+
+      var original = "",
+          dig = [],
+          depth = 0;
+
+      for(var i=0,l=parts.length; i<l; i++) {
+        var part = parts[i].part;
+        original += (parts[i].separator || '') + part;
+
+        if (part === ".." || part === "." || part === "this") {
+          if (dig.length > 0) {
+            throw new Exception("Invalid path: " + original, this);
+          } else if (part === "..") {
+            depth++;
+          } else {
+            this.isScoped = true;
+          }
+        } else {
+          dig.push(part);
+        }
+      }
+
+      this.original = original;
+      this.parts    = dig;
+      this.string   = dig.join('.');
+      this.depth    = depth;
+
+      // an ID is simple if it only has one part, and that part is not
+      // `..` or `this`.
+      this.isSimple = parts.length === 1 && !this.isScoped && depth === 0;
+
+      this.stringModeValue = this.string;
+    },
+
+    PartialNameNode: function(name, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "PARTIAL_NAME";
+      this.name = name.original;
+    },
+
+    DataNode: function(id, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "DATA";
+      this.id = id;
+    },
+
+    StringNode: function(string, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "STRING";
+      this.original =
+        this.string =
+        this.stringModeValue = string;
+    },
+
+    IntegerNode: function(integer, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "INTEGER";
+      this.original =
+        this.integer = integer;
+      this.stringModeValue = Number(integer);
+    },
+
+    BooleanNode: function(bool, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "BOOLEAN";
+      this.bool = bool;
+      this.stringModeValue = bool === "true";
+    },
+
+    CommentNode: function(comment, locInfo) {
+      LocationInfo.call(this, locInfo);
+      this.type = "comment";
+      this.comment = comment;
+    }
+  };
+
+  // Must be exported as an object rather than the root of the module as the jison lexer
+  // most modify the object to operate properly.
+  __exports__ = AST;
+  return __exports__;
+})(__module5__);
+
+// handlebars/compiler/parser.js
+var __module9__ = (function() {
+  "use strict";
+  var __exports__;
+  /* jshint ignore:start */
+  /* Jison generated parser */
+  var handlebars = (function(){
+  var parser = {trace: function trace() { },
+  yy: {},
+  symbols_: {"error":2,"root":3,"statements":4,"EOF":5,"program":6,"simpleInverse":7,"statement":8,"openInverse":9,"closeBlock":10,"openBlock":11,"mustache":12,"partial":13,"CONTENT":14,"COMMENT":15,"OPEN_BLOCK":16,"sexpr":17,"CLOSE":18,"OPEN_INVERSE":19,"OPEN_ENDBLOCK":20,"path":21,"OPEN":22,"OPEN_UNESCAPED":23,"CLOSE_UNESCAPED":24,"OPEN_PARTIAL":25,"partialName":26,"partial_option0":27,"sexpr_repetition0":28,"sexpr_option0":29,"dataName":30,"param":31,"STRING":32,"INTEGER":33,"BOOLEAN":34,"OPEN_SEXPR":35,"CLOSE_SEXPR":36,"hash":37,"hash_repetition_plus0":38,"hashSegment":39,"ID":40,"EQUALS":41,"DATA":42,"pathSegments":43,"SEP":44,"$accept":0,"$end":1},
+  terminals_: {2:"error",5:"EOF",14:"CONTENT",15:"COMMENT",16:"OPEN_BLOCK",18:"CLOSE",19:"OPEN_INVERSE",20:"OPEN_ENDBLOCK",22:"OPEN",23:"OPEN_UNESCAPED",24:"CLOSE_UNESCAPED",25:"OPEN_PARTIAL",32:"STRING",33:"INTEGER",34:"BOOLEAN",35:"OPEN_SEXPR",36:"CLOSE_SEXPR",40:"ID",41:"EQUALS",42:"DATA",44:"SEP"},
+  productions_: [0,[3,2],[3,1],[6,2],[6,3],[6,2],[6,1],[6,1],[6,0],[4,1],[4,2],[8,3],[8,3],[8,1],[8,1],[8,1],[8,1],[11,3],[9,3],[10,3],[12,3],[12,3],[13,4],[7,2],[17,3],[17,1],[31,1],[31,1],[31,1],[31,1],[31,1],[31,3],[37,1],[39,3],[26,1],[26,1],[26,1],[30,2],[21,1],[43,3],[43,1],[27,0],[27,1],[28,0],[28,2],[29,0],[29,1],[38,1],[38,2]],
+  performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
+
+  var $0 = $$.length - 1;
+  switch (yystate) {
+  case 1: return new yy.ProgramNode($$[$0-1], this._$); 
+  break;
+  case 2: return new yy.ProgramNode([], this._$); 
+  break;
+  case 3:this.$ = new yy.ProgramNode([], $$[$0-1], $$[$0], this._$);
+  break;
+  case 4:this.$ = new yy.ProgramNode($$[$0-2], $$[$0-1], $$[$0], this._$);
+  break;
+  case 5:this.$ = new yy.ProgramNode($$[$0-1], $$[$0], [], this._$);
+  break;
+  case 6:this.$ = new yy.ProgramNode($$[$0], this._$);
+  break;
+  case 7:this.$ = new yy.ProgramNode([], this._$);
+  break;
+  case 8:this.$ = new yy.ProgramNode([], this._$);
+  break;
+  case 9:this.$ = [$$[$0]];
+  break;
+  case 10: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+  break;
+  case 11:this.$ = new yy.BlockNode($$[$0-2], $$[$0-1].inverse, $$[$0-1], $$[$0], this._$);
+  break;
+  case 12:this.$ = new yy.BlockNode($$[$0-2], $$[$0-1], $$[$0-1].inverse, $$[$0], this._$);
+  break;
+  case 13:this.$ = $$[$0];
+  break;
+  case 14:this.$ = $$[$0];
+  break;
+  case 15:this.$ = new yy.ContentNode($$[$0], this._$);
+  break;
+  case 16:this.$ = new yy.CommentNode($$[$0], this._$);
+  break;
+  case 17:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+  break;
+  case 18:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+  break;
+  case 19:this.$ = {path: $$[$0-1], strip: stripFlags($$[$0-2], $$[$0])};
+  break;
+  case 20:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+  break;
+  case 21:this.$ = new yy.MustacheNode($$[$0-1], null, $$[$0-2], stripFlags($$[$0-2], $$[$0]), this._$);
+  break;
+  case 22:this.$ = new yy.PartialNode($$[$0-2], $$[$0-1], stripFlags($$[$0-3], $$[$0]), this._$);
+  break;
+  case 23:this.$ = stripFlags($$[$0-1], $$[$0]);
+  break;
+  case 24:this.$ = new yy.SexprNode([$$[$0-2]].concat($$[$0-1]), $$[$0], this._$);
+  break;
+  case 25:this.$ = new yy.SexprNode([$$[$0]], null, this._$);
+  break;
+  case 26:this.$ = $$[$0];
+  break;
+  case 27:this.$ = new yy.StringNode($$[$0], this._$);
+  break;
+  case 28:this.$ = new yy.IntegerNode($$[$0], this._$);
+  break;
+  case 29:this.$ = new yy.BooleanNode($$[$0], this._$);
+  break;
+  case 30:this.$ = $$[$0];
+  break;
+  case 31:$$[$0-1].isHelper = true; this.$ = $$[$0-1];
+  break;
+  case 32:this.$ = new yy.HashNode($$[$0], this._$);
+  break;
+  case 33:this.$ = [$$[$0-2], $$[$0]];
+  break;
+  case 34:this.$ = new yy.PartialNameNode($$[$0], this._$);
+  break;
+  case 35:this.$ = new yy.PartialNameNode(new yy.StringNode($$[$0], this._$), this._$);
+  break;
+  case 36:this.$ = new yy.PartialNameNode(new yy.IntegerNode($$[$0], this._$));
+  break;
+  case 37:this.$ = new yy.DataNode($$[$0], this._$);
+  break;
+  case 38:this.$ = new yy.IdNode($$[$0], this._$);
+  break;
+  case 39: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
+  break;
+  case 40:this.$ = [{part: $$[$0]}];
+  break;
+  case 43:this.$ = [];
+  break;
+  case 44:$$[$0-1].push($$[$0]);
+  break;
+  case 47:this.$ = [$$[$0]];
+  break;
+  case 48:$$[$0-1].push($$[$0]);
+  break;
+  }
+  },
+  table: [{3:1,4:2,5:[1,3],8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],22:[1,13],23:[1,14],25:[1,15]},{1:[3]},{5:[1,16],8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],22:[1,13],23:[1,14],25:[1,15]},{1:[2,2]},{5:[2,9],14:[2,9],15:[2,9],16:[2,9],19:[2,9],20:[2,9],22:[2,9],23:[2,9],25:[2,9]},{4:20,6:18,7:19,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,21],20:[2,8],22:[1,13],23:[1,14],25:[1,15]},{4:20,6:22,7:19,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,21],20:[2,8],22:[1,13],23:[1,14],25:[1,15]},{5:[2,13],14:[2,13],15:[2,13],16:[2,13],19:[2,13],20:[2,13],22:[2,13],23:[2,13],25:[2,13]},{5:[2,14],14:[2,14],15:[2,14],16:[2,14],19:[2,14],20:[2,14],22:[2,14],23:[2,14],25:[2,14]},{5:[2,15],14:[2,15],15:[2,15],16:[2,15],19:[2,15],20:[2,15],22:[2,15],23:[2,15],25:[2,15]},{5:[2,16],14:[2,16],15:[2,16],16:[2,16],19:[2,16],20:[2,16],22:[2,16],23:[2,16],25:[2,16]},{17:23,21:24,30:25,40:[1,28],42:[1,27],43:26},{17:29,21:24,30:25,40:[1,28],42:[1,27],43:26},{17:30,21:24,30:25,40:[1,28],42:[1,27],43:26},{17:31,21:24,30:25,40:[1,28],42:[1,27],43:26},{21:33,26:32,32:[1,34],33:[1,35],40:[1,28],43:26},{1:[2,1]},{5:[2,10],14:[2,10],15:[2,10],16:[2,10],19:[2,10],20:[2,10],22:[2,10],23:[2,10],25:[2,10]},{10:36,20:[1,37]},{4:38,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,7],22:[1,13],23:[1,14],25:[1,15]},{7:39,8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,21],20:[2,6],22:[1,13],23:[1,14],25:[1,15]},{17:23,18:[1,40],21:24,30:25,40:[1,28],42:[1,27],43:26},{10:41,20:[1,37]},{18:[1,42]},{18:[2,43],24:[2,43],28:43,32:[2,43],33:[2,43],34:[2,43],35:[2,43],36:[2,43],40:[2,43],42:[2,43]},{18:[2,25],24:[2,25],36:[2,25]},{18:[2,38],24:[2,38],32:[2,38],33:[2,38],34:[2,38],35:[2,38],36:[2,38],40:[2,38],42:[2,38],44:[1,44]},{21:45,40:[1,28],43:26},{18:[2,40],24:[2,40],32:[2,40],33:[2,40],34:[2,40],35:[2,40],36:[2,40],40:[2,40],42:[2,40],44:[2,40]},{18:[1,46]},{18:[1,47]},{24:[1,48]},{18:[2,41],21:50,27:49,40:[1,28],43:26},{18:[2,34],40:[2,34]},{18:[2,35],40:[2,35]},{18:[2,36],40:[2,36]},{5:[2,11],14:[2,11],15:[2,11],16:[2,11],19:[2,11],20:[2,11],22:[2,11],23:[2,11],25:[2,11]},{21:51,40:[1,28],43:26},{8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,3],22:[1,13],23:[1,14],25:[1,15]},{4:52,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,5],22:[1,13],23:[1,14],25:[1,15]},{14:[2,23],15:[2,23],16:[2,23],19:[2,23],20:[2,23],22:[2,23],23:[2,23],25:[2,23]},{5:[2,12],14:[2,12],15:[2,12],16:[2,12],19:[2,12],20:[2,12],22:[2,12],23:[2,12],25:[2,12]},{14:[2,18],15:[2,18],16:[2,18],19:[2,18],20:[2,18],22:[2,18],23:[2,18],25:[2,18]},{18:[2,45],21:56,24:[2,45],29:53,30:60,31:54,32:[1,57],33:[1,58],34:[1,59],35:[1,61],36:[2,45],37:55,38:62,39:63,40:[1,64],42:[1,27],43:26},{40:[1,65]},{18:[2,37],24:[2,37],32:[2,37],33:[2,37],34:[2,37],35:[2,37],36:[2,37],40:[2,37],42:[2,37]},{14:[2,17],15:[2,17],16:[2,17],19:[2,17],20:[2,17],22:[2,17],23:[2,17],25:[2,17]},{5:[2,20],14:[2,20],15:[2,20],16:[2,20],19:[2,20],20:[2,20],22:[2,20],23:[2,20],25:[2,20]},{5:[2,21],14:[2,21],15:[2,21],16:[2,21],19:[2,21],20:[2,21],22:[2,21],23:[2,21],25:[2,21]},{18:[1,66]},{18:[2,42]},{18:[1,67]},{8:17,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,4],22:[1,13],23:[1,14],25:[1,15]},{18:[2,24],24:[2,24],36:[2,24]},{18:[2,44],24:[2,44],32:[2,44],33:[2,44],34:[2,44],35:[2,44],36:[2,44],40:[2,44],42:[2,44]},{18:[2,46],24:[2,46],36:[2,46]},{18:[2,26],24:[2,26],32:[2,26],33:[2,26],34:[2,26],35:[2,26],36:[2,26],40:[2,26],42:[2,26]},{18:[2,27],24:[2,27],32:[2,27],33:[2,27],34:[2,27],35:[2,27],36:[2,27],40:[2,27],42:[2,27]},{18:[2,28],24:[2,28],32:[2,28],33:[2,28],34:[2,28],35:[2,28],36:[2,28],40:[2,28],42:[2,28]},{18:[2,29],24:[2,29],32:[2,29],33:[2,29],34:[2,29],35:[2,29],36:[2,29],40:[2,29],42:[2,29]},{18:[2,30],24:[2,30],32:[2,30],33:[2,30],34:[2,30],35:[2,30],36:[2,30],40:[2,30],42:[2,30]},{17:68,21:24,30:25,40:[1,28],42:[1,27],43:26},{18:[2,32],24:[2,32],36:[2,32],39:69,40:[1,70]},{18:[2,47],24:[2,47],36:[2,47],40:[2,47]},{18:[2,40],24:[2,40],32:[2,40],33:[2,40],34:[2,40],35:[2,40],36:[2,40],40:[2,40],41:[1,71],42:[2,40],44:[2,40]},{18:[2,39],24:[2,39],32:[2,39],33:[2,39],34:[2,39],35:[2,39],36:[2,39],40:[2,39],42:[2,39],44:[2,39]},{5:[2,22],14:[2,22],15:[2,22],16:[2,22],19:[2,22],20:[2,22],22:[2,22],23:[2,22],25:[2,22]},{5:[2,19],14:[2,19],15:[2,19],16:[2,19],19:[2,19],20:[2,19],22:[2,19],23:[2,19],25:[2,19]},{36:[1,72]},{18:[2,48],24:[2,48],36:[2,48],40:[2,48]},{41:[1,71]},{21:56,30:60,31:73,32:[1,57],33:[1,58],34:[1,59],35:[1,61],40:[1,28],42:[1,27],43:26},{18:[2,31],24:[2,31],32:[2,31],33:[2,31],34:[2,31],35:[2,31],36:[2,31],40:[2,31],42:[2,31]},{18:[2,33],24:[2,33],36:[2,33],40:[2,33]}],
+  defaultActions: {3:[2,2],16:[2,1],50:[2,42]},
+  parseError: function parseError(str, hash) {
+      throw new Error(str);
+  },
+  parse: function parse(input) {
+      var self = this, stack = [0], vstack = [null], lstack = [], table = this.table, yytext = "", yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+      this.lexer.setInput(input);
+      this.lexer.yy = this.yy;
+      this.yy.lexer = this.lexer;
+      this.yy.parser = this;
+      if (typeof this.lexer.yylloc == "undefined")
+          this.lexer.yylloc = {};
+      var yyloc = this.lexer.yylloc;
+      lstack.push(yyloc);
+      var ranges = this.lexer.options && this.lexer.options.ranges;
+      if (typeof this.yy.parseError === "function")
+          this.parseError = this.yy.parseError;
+      function popStack(n) {
+          stack.length = stack.length - 2 * n;
+          vstack.length = vstack.length - n;
+          lstack.length = lstack.length - n;
+      }
+      function lex() {
+          var token;
+          token = self.lexer.lex() || 1;
+          if (typeof token !== "number") {
+              token = self.symbols_[token] || token;
+          }
+          return token;
+      }
+      var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+      while (true) {
+          state = stack[stack.length - 1];
+          if (this.defaultActions[state]) {
+              action = this.defaultActions[state];
+          } else {
+              if (symbol === null || typeof symbol == "undefined") {
+                  symbol = lex();
+              }
+              action = table[state] && table[state][symbol];
+          }
+          if (typeof action === "undefined" || !action.length || !action[0]) {
+              var errStr = "";
+              if (!recovering) {
+                  expected = [];
+                  for (p in table[state])
+                      if (this.terminals_[p] && p > 2) {
+                          expected.push("'" + this.terminals_[p] + "'");
+                      }
+                  if (this.lexer.showPosition) {
+                      errStr = "Parse error on line " + (yylineno + 1) + ":\n" + this.lexer.showPosition() + "\nExpecting " + expected.join(", ") + ", got '" + (this.terminals_[symbol] || symbol) + "'";
+                  } else {
+                      errStr = "Parse error on line " + (yylineno + 1) + ": Unexpected " + (symbol == 1?"end of input":"'" + (this.terminals_[symbol] || symbol) + "'");
+                  }
+                  this.parseError(errStr, {text: this.lexer.match, token: this.terminals_[symbol] || symbol, line: this.lexer.yylineno, loc: yyloc, expected: expected});
+              }
+          }
+          if (action[0] instanceof Array && action.length > 1) {
+              throw new Error("Parse Error: multiple actions possible at state: " + state + ", token: " + symbol);
+          }
+          switch (action[0]) {
+          case 1:
+              stack.push(symbol);
+              vstack.push(this.lexer.yytext);
+              lstack.push(this.lexer.yylloc);
+              stack.push(action[1]);
+              symbol = null;
+              if (!preErrorSymbol) {
+                  yyleng = this.lexer.yyleng;
+                  yytext = this.lexer.yytext;
+                  yylineno = this.lexer.yylineno;
+                  yyloc = this.lexer.yylloc;
+                  if (recovering > 0)
+                      recovering--;
+              } else {
+                  symbol = preErrorSymbol;
+                  preErrorSymbol = null;
+              }
+              break;
+          case 2:
+              len = this.productions_[action[1]][1];
+              yyval.$ = vstack[vstack.length - len];
+              yyval._$ = {first_line: lstack[lstack.length - (len || 1)].first_line, last_line: lstack[lstack.length - 1].last_line, first_column: lstack[lstack.length - (len || 1)].first_column, last_column: lstack[lstack.length - 1].last_column};
+              if (ranges) {
+                  yyval._$.range = [lstack[lstack.length - (len || 1)].range[0], lstack[lstack.length - 1].range[1]];
+              }
+              r = this.performAction.call(yyval, yytext, yyleng, yylineno, this.yy, action[1], vstack, lstack);
+              if (typeof r !== "undefined") {
+                  return r;
+              }
+              if (len) {
+                  stack = stack.slice(0, -1 * len * 2);
+                  vstack = vstack.slice(0, -1 * len);
+                  lstack = lstack.slice(0, -1 * len);
+              }
+              stack.push(this.productions_[action[1]][0]);
+              vstack.push(yyval.$);
+              lstack.push(yyval._$);
+              newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+              stack.push(newState);
+              break;
+          case 3:
+              return true;
+          }
+      }
+      return true;
+  }
+  };
+
+
+  function stripFlags(open, close) {
+    return {
+      left: open.charAt(2) === '~',
+      right: close.charAt(0) === '~' || close.charAt(1) === '~'
+    };
+  }
+
+  /* Jison generated lexer */
+  var lexer = (function(){
+  var lexer = ({EOF:1,
+  parseError:function parseError(str, hash) {
+          if (this.yy.parser) {
+              this.yy.parser.parseError(str, hash);
+          } else {
+              throw new Error(str);
+          }
+      },
+  setInput:function (input) {
+          this._input = input;
+          this._more = this._less = this.done = false;
+          this.yylineno = this.yyleng = 0;
+          this.yytext = this.matched = this.match = '';
+          this.conditionStack = ['INITIAL'];
+          this.yylloc = {first_line:1,first_column:0,last_line:1,last_column:0};
+          if (this.options.ranges) this.yylloc.range = [0,0];
+          this.offset = 0;
+          return this;
+      },
+  input:function () {
+          var ch = this._input[0];
+          this.yytext += ch;
+          this.yyleng++;
+          this.offset++;
+          this.match += ch;
+          this.matched += ch;
+          var lines = ch.match(/(?:\r\n?|\n).*/g);
+          if (lines) {
+              this.yylineno++;
+              this.yylloc.last_line++;
+          } else {
+              this.yylloc.last_column++;
+          }
+          if (this.options.ranges) this.yylloc.range[1]++;
+
+          this._input = this._input.slice(1);
+          return ch;
+      },
+  unput:function (ch) {
+          var len = ch.length;
+          var lines = ch.split(/(?:\r\n?|\n)/g);
+
+          this._input = ch + this._input;
+          this.yytext = this.yytext.substr(0, this.yytext.length-len-1);
+          //this.yyleng -= len;
+          this.offset -= len;
+          var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+          this.match = this.match.substr(0, this.match.length-1);
+          this.matched = this.matched.substr(0, this.matched.length-1);
+
+          if (lines.length-1) this.yylineno -= lines.length-1;
+          var r = this.yylloc.range;
+
+          this.yylloc = {first_line: this.yylloc.first_line,
+            last_line: this.yylineno+1,
+            first_column: this.yylloc.first_column,
+            last_column: lines ?
+                (lines.length === oldLines.length ? this.yylloc.first_column : 0) + oldLines[oldLines.length - lines.length].length - lines[0].length:
+                this.yylloc.first_column - len
+            };
+
+          if (this.options.ranges) {
+              this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+          }
+          return this;
+      },
+  more:function () {
+          this._more = true;
+          return this;
+      },
+  less:function (n) {
+          this.unput(this.match.slice(n));
+      },
+  pastInput:function () {
+          var past = this.matched.substr(0, this.matched.length - this.match.length);
+          return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
+      },
+  upcomingInput:function () {
+          var next = this.match;
+          if (next.length < 20) {
+              next += this._input.substr(0, 20-next.length);
+          }
+          return (next.substr(0,20)+(next.length > 20 ? '...':'')).replace(/\n/g, "");
+      },
+  showPosition:function () {
+          var pre = this.pastInput();
+          var c = new Array(pre.length + 1).join("-");
+          return pre + this.upcomingInput() + "\n" + c+"^";
+      },
+  next:function () {
+          if (this.done) {
+              return this.EOF;
+          }
+          if (!this._input) this.done = true;
+
+          var token,
+              match,
+              tempMatch,
+              index,
+              col,
+              lines;
+          if (!this._more) {
+              this.yytext = '';
+              this.match = '';
+          }
+          var rules = this._currentRules();
+          for (var i=0;i < rules.length; i++) {
+              tempMatch = this._input.match(this.rules[rules[i]]);
+              if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                  match = tempMatch;
+                  index = i;
+                  if (!this.options.flex) break;
+              }
+          }
+          if (match) {
+              lines = match[0].match(/(?:\r\n?|\n).*/g);
+              if (lines) this.yylineno += lines.length;
+              this.yylloc = {first_line: this.yylloc.last_line,
+                             last_line: this.yylineno+1,
+                             first_column: this.yylloc.last_column,
+                             last_column: lines ? lines[lines.length-1].length-lines[lines.length-1].match(/\r?\n?/)[0].length : this.yylloc.last_column + match[0].length};
+              this.yytext += match[0];
+              this.match += match[0];
+              this.matches = match;
+              this.yyleng = this.yytext.length;
+              if (this.options.ranges) {
+                  this.yylloc.range = [this.offset, this.offset += this.yyleng];
+              }
+              this._more = false;
+              this._input = this._input.slice(match[0].length);
+              this.matched += match[0];
+              token = this.performAction.call(this, this.yy, this, rules[index],this.conditionStack[this.conditionStack.length-1]);
+              if (this.done && this._input) this.done = false;
+              if (token) return token;
+              else return;
+          }
+          if (this._input === "") {
+              return this.EOF;
+          } else {
+              return this.parseError('Lexical error on line '+(this.yylineno+1)+'. Unrecognized text.\n'+this.showPosition(),
+                      {text: "", token: null, line: this.yylineno});
+          }
+      },
+  lex:function lex() {
+          var r = this.next();
+          if (typeof r !== 'undefined') {
+              return r;
+          } else {
+              return this.lex();
+          }
+      },
+  begin:function begin(condition) {
+          this.conditionStack.push(condition);
+      },
+  popState:function popState() {
+          return this.conditionStack.pop();
+      },
+  _currentRules:function _currentRules() {
+          return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules;
+      },
+  topState:function () {
+          return this.conditionStack[this.conditionStack.length-2];
+      },
+  pushState:function begin(condition) {
+          this.begin(condition);
+      }});
+  lexer.options = {};
+  lexer.performAction = function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
+
+
+  function strip(start, end) {
+    return yy_.yytext = yy_.yytext.substr(start, yy_.yyleng-end);
+  }
+
+
+  var YYSTATE=YY_START
+  switch($avoiding_name_collisions) {
+  case 0:
+                                     if(yy_.yytext.slice(-2) === "\\\\") {
+                                       strip(0,1);
+                                       this.begin("mu");
+                                     } else if(yy_.yytext.slice(-1) === "\\") {
+                                       strip(0,1);
+                                       this.begin("emu");
+                                     } else {
+                                       this.begin("mu");
+                                     }
+                                     if(yy_.yytext) return 14;
+                                   
+  break;
+  case 1:return 14;
+  break;
+  case 2:
+                                     this.popState();
+                                     return 14;
+                                   
+  break;
+  case 3:strip(0,4); this.popState(); return 15;
+  break;
+  case 4:return 35;
+  break;
+  case 5:return 36;
+  break;
+  case 6:return 25;
+  break;
+  case 7:return 16;
+  break;
+  case 8:return 20;
+  break;
+  case 9:return 19;
+  break;
+  case 10:return 19;
+  break;
+  case 11:return 23;
+  break;
+  case 12:return 22;
+  break;
+  case 13:this.popState(); this.begin('com');
+  break;
+  case 14:strip(3,5); this.popState(); return 15;
+  break;
+  case 15:return 22;
+  break;
+  case 16:return 41;
+  break;
+  case 17:return 40;
+  break;
+  case 18:return 40;
+  break;
+  case 19:return 44;
+  break;
+  case 20:// ignore whitespace
+  break;
+  case 21:this.popState(); return 24;
+  break;
+  case 22:this.popState(); return 18;
+  break;
+  case 23:yy_.yytext = strip(1,2).replace(/\\"/g,'"'); return 32;
+  break;
+  case 24:yy_.yytext = strip(1,2).replace(/\\'/g,"'"); return 32;
+  break;
+  case 25:return 42;
+  break;
+  case 26:return 34;
+  break;
+  case 27:return 34;
+  break;
+  case 28:return 33;
+  break;
+  case 29:return 40;
+  break;
+  case 30:yy_.yytext = strip(1,2); return 40;
+  break;
+  case 31:return 'INVALID';
+  break;
+  case 32:return 5;
+  break;
+  }
+  };
+  lexer.rules = [/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/,/^(?:[\s\S]*?--\}\})/,/^(?:\()/,/^(?:\))/,/^(?:\{\{(~)?>)/,/^(?:\{\{(~)?#)/,/^(?:\{\{(~)?\/)/,/^(?:\{\{(~)?\^)/,/^(?:\{\{(~)?\s*else\b)/,/^(?:\{\{(~)?\{)/,/^(?:\{\{(~)?&)/,/^(?:\{\{!--)/,/^(?:\{\{![\s\S]*?\}\})/,/^(?:\{\{(~)?)/,/^(?:=)/,/^(?:\.\.)/,/^(?:\.(?=([=~}\s\/.)])))/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}(~)?\}\})/,/^(?:(~)?\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=([~}\s)])))/,/^(?:false(?=([~}\s)])))/,/^(?:-?[0-9]+(?=([~}\s)])))/,/^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)]))))/,/^(?:\[[^\]]*\])/,/^(?:.)/,/^(?:$)/];
+  lexer.conditions = {"mu":{"rules":[4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],"inclusive":false},"emu":{"rules":[2],"inclusive":false},"com":{"rules":[3],"inclusive":false},"INITIAL":{"rules":[0,1,32],"inclusive":true}};
+  return lexer;})()
+  parser.lexer = lexer;
+  function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Parser;
+  return new Parser;
+  })();__exports__ = handlebars;
+  /* jshint ignore:end */
+  return __exports__;
+})();
+
+// handlebars/compiler/base.js
+var __module8__ = (function(__dependency1__, __dependency2__) {
+  "use strict";
+  var __exports__ = {};
+  var parser = __dependency1__;
+  var AST = __dependency2__;
+
+  __exports__.parser = parser;
+
+  function parse(input) {
+    // Just return if an already-compile AST was passed in.
+    if(input.constructor === AST.ProgramNode) { return input; }
+
+    parser.yy = AST;
+    return parser.parse(input);
+  }
+
+  __exports__.parse = parse;
+  return __exports__;
+})(__module9__, __module7__);
+
+// handlebars/compiler/compiler.js
+var __module10__ = (function(__dependency1__) {
+  "use strict";
+  var __exports__ = {};
+  var Exception = __dependency1__;
+
+  function Compiler() {}
+
+  __exports__.Compiler = Compiler;// the foundHelper register will disambiguate helper lookup from finding a
+  // function in a context. This is necessary for mustache compatibility, which
+  // requires that context functions in blocks are evaluated by blockHelperMissing,
+  // and then proceed as if the resulting value was provided to blockHelperMissing.
+
+  Compiler.prototype = {
+    compiler: Compiler,
+
+    disassemble: function() {
+      var opcodes = this.opcodes, opcode, out = [], params, param;
+
+      for (var i=0, l=opcodes.length; i<l; i++) {
+        opcode = opcodes[i];
+
+        if (opcode.opcode === 'DECLARE') {
+          out.push("DECLARE " + opcode.name + "=" + opcode.value);
+        } else {
+          params = [];
+          for (var j=0; j<opcode.args.length; j++) {
+            param = opcode.args[j];
+            if (typeof param === "string") {
+              param = "\"" + param.replace("\n", "\\n") + "\"";
+            }
+            params.push(param);
+          }
+          out.push(opcode.opcode + " " + params.join(" "));
+        }
+      }
+
+      return out.join("\n");
+    },
+
+    equals: function(other) {
+      var len = this.opcodes.length;
+      if (other.opcodes.length !== len) {
+        return false;
+      }
+
+      for (var i = 0; i < len; i++) {
+        var opcode = this.opcodes[i],
+            otherOpcode = other.opcodes[i];
+        if (opcode.opcode !== otherOpcode.opcode || opcode.args.length !== otherOpcode.args.length) {
+          return false;
+        }
+        for (var j = 0; j < opcode.args.length; j++) {
+          if (opcode.args[j] !== otherOpcode.args[j]) {
+            return false;
+          }
+        }
+      }
+
+      len = this.children.length;
+      if (other.children.length !== len) {
+        return false;
+      }
+      for (i = 0; i < len; i++) {
+        if (!this.children[i].equals(other.children[i])) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+
+    guid: 0,
+
+    compile: function(program, options) {
+      this.opcodes = [];
+      this.children = [];
+      this.depths = {list: []};
+      this.options = options;
+
+      // These changes will propagate to the other compiler components
+      var knownHelpers = this.options.knownHelpers;
+      this.options.knownHelpers = {
+        'helperMissing': true,
+        'blockHelperMissing': true,
+        'each': true,
+        'if': true,
+        'unless': true,
+        'with': true,
+        'log': true
+      };
+      if (knownHelpers) {
+        for (var name in knownHelpers) {
+          this.options.knownHelpers[name] = knownHelpers[name];
+        }
+      }
+
+      return this.accept(program);
+    },
+
+    accept: function(node) {
+      var strip = node.strip || {},
+          ret;
+      if (strip.left) {
+        this.opcode('strip');
+      }
+
+      ret = this[node.type](node);
+
+      if (strip.right) {
+        this.opcode('strip');
+      }
+
+      return ret;
+    },
+
+    program: function(program) {
+      var statements = program.statements;
+
+      for(var i=0, l=statements.length; i<l; i++) {
+        this.accept(statements[i]);
+      }
+      this.isSimple = l === 1;
+
+      this.depths.list = this.depths.list.sort(function(a, b) {
+        return a - b;
+      });
+
+      return this;
+    },
+
+    compileProgram: function(program) {
+      var result = new this.compiler().compile(program, this.options);
+      var guid = this.guid++, depth;
+
+      this.usePartial = this.usePartial || result.usePartial;
+
+      this.children[guid] = result;
+
+      for(var i=0, l=result.depths.list.length; i<l; i++) {
+        depth = result.depths.list[i];
+
+        if(depth < 2) { continue; }
+        else { this.addDepth(depth - 1); }
+      }
+
+      return guid;
+    },
+
+    block: function(block) {
+      var mustache = block.mustache,
+          program = block.program,
+          inverse = block.inverse;
+
+      if (program) {
+        program = this.compileProgram(program);
+      }
+
+      if (inverse) {
+        inverse = this.compileProgram(inverse);
+      }
+
+      var sexpr = mustache.sexpr;
+      var type = this.classifySexpr(sexpr);
+
+      if (type === "helper") {
+        this.helperSexpr(sexpr, program, inverse);
+      } else if (type === "simple") {
+        this.simpleSexpr(sexpr);
+
+        // now that the simple mustache is resolved, we need to
+        // evaluate it by executing `blockHelperMissing`
+        this.opcode('pushProgram', program);
+        this.opcode('pushProgram', inverse);
+        this.opcode('emptyHash');
+        this.opcode('blockValue');
+      } else {
+        this.ambiguousSexpr(sexpr, program, inverse);
+
+        // now that the simple mustache is resolved, we need to
+        // evaluate it by executing `blockHelperMissing`
+        this.opcode('pushProgram', program);
+        this.opcode('pushProgram', inverse);
+        this.opcode('emptyHash');
+        this.opcode('ambiguousBlockValue');
+      }
+
+      this.opcode('append');
+    },
+
+    hash: function(hash) {
+      var pairs = hash.pairs, pair, val;
+
+      this.opcode('pushHash');
+
+      for(var i=0, l=pairs.length; i<l; i++) {
+        pair = pairs[i];
+        val  = pair[1];
+
+        if (this.options.stringParams) {
+          if(val.depth) {
+            this.addDepth(val.depth);
+          }
+          this.opcode('getContext', val.depth || 0);
+          this.opcode('pushStringParam', val.stringModeValue, val.type);
+
+          if (val.type === 'sexpr') {
+            // Subexpressions get evaluated and passed in
+            // in string params mode.
+            this.sexpr(val);
+          }
+        } else {
+          this.accept(val);
+        }
+
+        this.opcode('assignToHash', pair[0]);
+      }
+      this.opcode('popHash');
+    },
+
+    partial: function(partial) {
+      var partialName = partial.partialName;
+      this.usePartial = true;
+
+      if(partial.context) {
+        this.ID(partial.context);
+      } else {
+        this.opcode('push', 'depth0');
+      }
+
+      this.opcode('invokePartial', partialName.name);
+      this.opcode('append');
+    },
+
+    content: function(content) {
+      this.opcode('appendContent', content.string);
+    },
+
+    mustache: function(mustache) {
+      this.sexpr(mustache.sexpr);
+
+      if(mustache.escaped && !this.options.noEscape) {
+        this.opcode('appendEscaped');
+      } else {
+        this.opcode('append');
+      }
+    },
+
+    ambiguousSexpr: function(sexpr, program, inverse) {
+      var id = sexpr.id,
+          name = id.parts[0],
+          isBlock = program != null || inverse != null;
+
+      this.opcode('getContext', id.depth);
+
+      this.opcode('pushProgram', program);
+      this.opcode('pushProgram', inverse);
+
+      this.opcode('invokeAmbiguous', name, isBlock);
+    },
+
+    simpleSexpr: function(sexpr) {
+      var id = sexpr.id;
+
+      if (id.type === 'DATA') {
+        this.DATA(id);
+      } else if (id.parts.length) {
+        this.ID(id);
+      } else {
+        // Simplified ID for `this`
+        this.addDepth(id.depth);
+        this.opcode('getContext', id.depth);
+        this.opcode('pushContext');
+      }
+
+      this.opcode('resolvePossibleLambda');
+    },
+
+    helperSexpr: function(sexpr, program, inverse) {
+      var params = this.setupFullMustacheParams(sexpr, program, inverse),
+          name = sexpr.id.parts[0];
+
+      if (this.options.knownHelpers[name]) {
+        this.opcode('invokeKnownHelper', params.length, name);
+      } else if (this.options.knownHelpersOnly) {
+        throw new Exception("You specified knownHelpersOnly, but used the unknown helper " + name, sexpr);
+      } else {
+        this.opcode('invokeHelper', params.length, name, sexpr.isRoot);
+      }
+    },
+
+    sexpr: function(sexpr) {
+      var type = this.classifySexpr(sexpr);
+
+      if (type === "simple") {
+        this.simpleSexpr(sexpr);
+      } else if (type === "helper") {
+        this.helperSexpr(sexpr);
+      } else {
+        this.ambiguousSexpr(sexpr);
+      }
+    },
+
+    ID: function(id) {
+      this.addDepth(id.depth);
+      this.opcode('getContext', id.depth);
+
+      var name = id.parts[0];
+      if (!name) {
+        this.opcode('pushContext');
+      } else {
+        this.opcode('lookupOnContext', id.parts[0]);
+      }
+
+      for(var i=1, l=id.parts.length; i<l; i++) {
+        this.opcode('lookup', id.parts[i]);
+      }
+    },
+
+    DATA: function(data) {
+      this.options.data = true;
+      if (data.id.isScoped || data.id.depth) {
+        throw new Exception('Scoped data references are not supported: ' + data.original, data);
+      }
+
+      this.opcode('lookupData');
+      var parts = data.id.parts;
+      for(var i=0, l=parts.length; i<l; i++) {
+        this.opcode('lookup', parts[i]);
+      }
+    },
+
+    STRING: function(string) {
+      this.opcode('pushString', string.string);
+    },
+
+    INTEGER: function(integer) {
+      this.opcode('pushLiteral', integer.integer);
+    },
+
+    BOOLEAN: function(bool) {
+      this.opcode('pushLiteral', bool.bool);
+    },
+
+    comment: function() {},
+
+    // HELPERS
+    opcode: function(name) {
+      this.opcodes.push({ opcode: name, args: [].slice.call(arguments, 1) });
+    },
+
+    declare: function(name, value) {
+      this.opcodes.push({ opcode: 'DECLARE', name: name, value: value });
+    },
+
+    addDepth: function(depth) {
+      if(depth === 0) { return; }
+
+      if(!this.depths[depth]) {
+        this.depths[depth] = true;
+        this.depths.list.push(depth);
+      }
+    },
+
+    classifySexpr: function(sexpr) {
+      var isHelper   = sexpr.isHelper;
+      var isEligible = sexpr.eligibleHelper;
+      var options    = this.options;
+
+      // if ambiguous, we can possibly resolve the ambiguity now
+      if (isEligible && !isHelper) {
+        var name = sexpr.id.parts[0];
+
+        if (options.knownHelpers[name]) {
+          isHelper = true;
+        } else if (options.knownHelpersOnly) {
+          isEligible = false;
+        }
+      }
+
+      if (isHelper) { return "helper"; }
+      else if (isEligible) { return "ambiguous"; }
+      else { return "simple"; }
+    },
+
+    pushParams: function(params) {
+      var i = params.length, param;
+
+      while(i--) {
+        param = params[i];
+
+        if(this.options.stringParams) {
+          if(param.depth) {
+            this.addDepth(param.depth);
+          }
+
+          this.opcode('getContext', param.depth || 0);
+          this.opcode('pushStringParam', param.stringModeValue, param.type);
+
+          if (param.type === 'sexpr') {
+            // Subexpressions get evaluated and passed in
+            // in string params mode.
+            this.sexpr(param);
+          }
+        } else {
+          this[param.type](param);
+        }
+      }
+    },
+
+    setupFullMustacheParams: function(sexpr, program, inverse) {
+      var params = sexpr.params;
+      this.pushParams(params);
+
+      this.opcode('pushProgram', program);
+      this.opcode('pushProgram', inverse);
+
+      if (sexpr.hash) {
+        this.hash(sexpr.hash);
+      } else {
+        this.opcode('emptyHash');
+      }
+
+      return params;
+    }
+  };
+
+  function precompile(input, options, env) {
+    if (input == null || (typeof input !== 'string' && input.constructor !== env.AST.ProgramNode)) {
+      throw new Exception("You must pass a string or Handlebars AST to Handlebars.precompile. You passed " + input);
+    }
+
+    options = options || {};
+    if (!('data' in options)) {
+      options.data = true;
+    }
+
+    var ast = env.parse(input);
+    var environment = new env.Compiler().compile(ast, options);
+    return new env.JavaScriptCompiler().compile(environment, options);
+  }
+
+  __exports__.precompile = precompile;function compile(input, options, env) {
+    if (input == null || (typeof input !== 'string' && input.constructor !== env.AST.ProgramNode)) {
+      throw new Exception("You must pass a string or Handlebars AST to Handlebars.compile. You passed " + input);
+    }
+
+    options = options || {};
+
+    if (!('data' in options)) {
+      options.data = true;
+    }
+
+    var compiled;
+
+    function compileInput() {
+      var ast = env.parse(input);
+      var environment = new env.Compiler().compile(ast, options);
+      var templateSpec = new env.JavaScriptCompiler().compile(environment, options, undefined, true);
+      return env.template(templateSpec);
+    }
+
+    // Template is only compiled on first use and cached after that point.
+    return function(context, options) {
+      if (!compiled) {
+        compiled = compileInput();
+      }
+      return compiled.call(this, context, options);
+    };
+  }
+
+  __exports__.compile = compile;
+  return __exports__;
+})(__module5__);
+
+// handlebars/compiler/javascript-compiler.js
+var __module11__ = (function(__dependency1__, __dependency2__) {
+  "use strict";
+  var __exports__;
+  var COMPILER_REVISION = __dependency1__.COMPILER_REVISION;
+  var REVISION_CHANGES = __dependency1__.REVISION_CHANGES;
+  var log = __dependency1__.log;
+  var Exception = __dependency2__;
+
+  function Literal(value) {
+    this.value = value;
+  }
+
+  function JavaScriptCompiler() {}
+
+  JavaScriptCompiler.prototype = {
+    // PUBLIC API: You can override these methods in a subclass to provide
+    // alternative compiled forms for name lookup and buffering semantics
+    nameLookup: function(parent, name /* , type*/) {
+      var wrap,
+          ret;
+      if (parent.indexOf('depth') === 0) {
+        wrap = true;
+      }
+
+      if (/^[0-9]+$/.test(name)) {
+        ret = parent + "[" + name + "]";
+      } else if (JavaScriptCompiler.isValidJavaScriptVariableName(name)) {
+        ret = parent + "." + name;
+      }
+      else {
+        ret = parent + "['" + name + "']";
+      }
+
+      if (wrap) {
+        return '(' + parent + ' && ' + ret + ')';
+      } else {
+        return ret;
+      }
+    },
+
+    compilerInfo: function() {
+      var revision = COMPILER_REVISION,
+          versions = REVISION_CHANGES[revision];
+      return "this.compilerInfo = ["+revision+",'"+versions+"'];\n";
+    },
+
+    appendToBuffer: function(string) {
+      if (this.environment.isSimple) {
+        return "return " + string + ";";
+      } else {
+        return {
+          appendToBuffer: true,
+          content: string,
+          toString: function() { return "buffer += " + string + ";"; }
+        };
+      }
+    },
+
+    initializeBuffer: function() {
+      return this.quotedString("");
+    },
+
+    namespace: "Handlebars",
+    // END PUBLIC API
+
+    compile: function(environment, options, context, asObject) {
+      this.environment = environment;
+      this.options = options || {};
+
+      log('debug', this.environment.disassemble() + "\n\n");
+
+      this.name = this.environment.name;
+      this.isChild = !!context;
+      this.context = context || {
+        programs: [],
+        environments: [],
+        aliases: { }
+      };
+
+      this.preamble();
+
+      this.stackSlot = 0;
+      this.stackVars = [];
+      this.registers = { list: [] };
+      this.hashes = [];
+      this.compileStack = [];
+      this.inlineStack = [];
+
+      this.compileChildren(environment, options);
+
+      var opcodes = environment.opcodes, opcode;
+
+      this.i = 0;
+
+      for(var l=opcodes.length; this.i<l; this.i++) {
+        opcode = opcodes[this.i];
+
+        if(opcode.opcode === 'DECLARE') {
+          this[opcode.name] = opcode.value;
+        } else {
+          this[opcode.opcode].apply(this, opcode.args);
+        }
+
+        // Reset the stripNext flag if it was not set by this operation.
+        if (opcode.opcode !== this.stripNext) {
+          this.stripNext = false;
+        }
+      }
+
+      // Flush any trailing content that might be pending.
+      this.pushSource('');
+
+      if (this.stackSlot || this.inlineStack.length || this.compileStack.length) {
+        throw new Exception('Compile completed with content left on stack');
+      }
+
+      return this.createFunctionContext(asObject);
+    },
+
+    preamble: function() {
+      var out = [];
+
+      if (!this.isChild) {
+        var namespace = this.namespace;
+
+        var copies = "helpers = this.merge(helpers, " + namespace + ".helpers);";
+        if (this.environment.usePartial) { copies = copies + " partials = this.merge(partials, " + namespace + ".partials);"; }
+        if (this.options.data) { copies = copies + " data = data || {};"; }
+        out.push(copies);
+      } else {
+        out.push('');
+      }
+
+      if (!this.environment.isSimple) {
+        out.push(", buffer = " + this.initializeBuffer());
+      } else {
+        out.push("");
+      }
+
+      // track the last context pushed into place to allow skipping the
+      // getContext opcode when it would be a noop
+      this.lastContext = 0;
+      this.source = out;
+    },
+
+    createFunctionContext: function(asObject) {
+      var locals = this.stackVars.concat(this.registers.list);
+
+      if(locals.length > 0) {
+        this.source[1] = this.source[1] + ", " + locals.join(", ");
+      }
+
+      // Generate minimizer alias mappings
+      if (!this.isChild) {
+        for (var alias in this.context.aliases) {
+          if (this.context.aliases.hasOwnProperty(alias)) {
+            this.source[1] = this.source[1] + ', ' + alias + '=' + this.context.aliases[alias];
+          }
+        }
+      }
+
+      if (this.source[1]) {
+        this.source[1] = "var " + this.source[1].substring(2) + ";";
+      }
+
+      // Merge children
+      if (!this.isChild) {
+        this.source[1] += '\n' + this.context.programs.join('\n') + '\n';
+      }
+
+      if (!this.environment.isSimple) {
+        this.pushSource("return buffer;");
+      }
+
+      var params = this.isChild ? ["depth0", "data"] : ["Handlebars", "depth0", "helpers", "partials", "data"];
+
+      for(var i=0, l=this.environment.depths.list.length; i<l; i++) {
+        params.push("depth" + this.environment.depths.list[i]);
+      }
+
+      // Perform a second pass over the output to merge content when possible
+      var source = this.mergeSource();
+
+      if (!this.isChild) {
+        source = this.compilerInfo()+source;
+      }
+
+      if (asObject) {
+        params.push(source);
+
+        return Function.apply(this, params);
+      } else {
+        var functionSource = 'function ' + (this.name || '') + '(' + params.join(',') + ') {\n  ' + source + '}';
+        log('debug', functionSource + "\n\n");
+        return functionSource;
+      }
+    },
+    mergeSource: function() {
+      // WARN: We are not handling the case where buffer is still populated as the source should
+      // not have buffer append operations as their final action.
+      var source = '',
+          buffer;
+      for (var i = 0, len = this.source.length; i < len; i++) {
+        var line = this.source[i];
+        if (line.appendToBuffer) {
+          if (buffer) {
+            buffer = buffer + '\n    + ' + line.content;
+          } else {
+            buffer = line.content;
+          }
+        } else {
+          if (buffer) {
+            source += 'buffer += ' + buffer + ';\n  ';
+            buffer = undefined;
+          }
+          source += line + '\n  ';
+        }
+      }
+      return source;
+    },
+
+    // [blockValue]
+    //
+    // On stack, before: hash, inverse, program, value
+    // On stack, after: return value of blockHelperMissing
+    //
+    // The purpose of this opcode is to take a block of the form
+    // `{{#foo}}...{{/foo}}`, resolve the value of `foo`, and
+    // replace it on the stack with the result of properly
+    // invoking blockHelperMissing.
+    blockValue: function() {
+      this.context.aliases.blockHelperMissing = 'helpers.blockHelperMissing';
+
+      var params = ["depth0"];
+      this.setupParams(0, params);
+
+      this.replaceStack(function(current) {
+        params.splice(1, 0, current);
+        return "blockHelperMissing.call(" + params.join(", ") + ")";
+      });
+    },
+
+    // [ambiguousBlockValue]
+    //
+    // On stack, before: hash, inverse, program, value
+    // Compiler value, before: lastHelper=value of last found helper, if any
+    // On stack, after, if no lastHelper: same as [blockValue]
+    // On stack, after, if lastHelper: value
+    ambiguousBlockValue: function() {
+      this.context.aliases.blockHelperMissing = 'helpers.blockHelperMissing';
+
+      var params = ["depth0"];
+      this.setupParams(0, params);
+
+      var current = this.topStack();
+      params.splice(1, 0, current);
+
+      this.pushSource("if (!" + this.lastHelper + ") { " + current + " = blockHelperMissing.call(" + params.join(", ") + "); }");
+    },
+
+    // [appendContent]
+    //
+    // On stack, before: ...
+    // On stack, after: ...
+    //
+    // Appends the string value of `content` to the current buffer
+    appendContent: function(content) {
+      if (this.pendingContent) {
+        content = this.pendingContent + content;
+      }
+      if (this.stripNext) {
+        content = content.replace(/^\s+/, '');
+      }
+
+      this.pendingContent = content;
+    },
+
+    // [strip]
+    //
+    // On stack, before: ...
+    // On stack, after: ...
+    //
+    // Removes any trailing whitespace from the prior content node and flags
+    // the next operation for stripping if it is a content node.
+    strip: function() {
+      if (this.pendingContent) {
+        this.pendingContent = this.pendingContent.replace(/\s+$/, '');
+      }
+      this.stripNext = 'strip';
+    },
+
+    // [append]
+    //
+    // On stack, before: value, ...
+    // On stack, after: ...
+    //
+    // Coerces `value` to a String and appends it to the current buffer.
+    //
+    // If `value` is truthy, or 0, it is coerced into a string and appended
+    // Otherwise, the empty string is appended
+    append: function() {
+      // Force anything that is inlined onto the stack so we don't have duplication
+      // when we examine local
+      this.flushInline();
+      var local = this.popStack();
+      this.pushSource("if(" + local + " || " + local + " === 0) { " + this.appendToBuffer(local) + " }");
+      if (this.environment.isSimple) {
+        this.pushSource("else { " + this.appendToBuffer("''") + " }");
+      }
+    },
+
+    // [appendEscaped]
+    //
+    // On stack, before: value, ...
+    // On stack, after: ...
+    //
+    // Escape `value` and append it to the buffer
+    appendEscaped: function() {
+      this.context.aliases.escapeExpression = 'this.escapeExpression';
+
+      this.pushSource(this.appendToBuffer("escapeExpression(" + this.popStack() + ")"));
+    },
+
+    // [getContext]
+    //
+    // On stack, before: ...
+    // On stack, after: ...
+    // Compiler value, after: lastContext=depth
+    //
+    // Set the value of the `lastContext` compiler value to the depth
+    getContext: function(depth) {
+      if(this.lastContext !== depth) {
+        this.lastContext = depth;
+      }
+    },
+
+    // [lookupOnContext]
+    //
+    // On stack, before: ...
+    // On stack, after: currentContext[name], ...
+    //
+    // Looks up the value of `name` on the current context and pushes
+    // it onto the stack.
+    lookupOnContext: function(name) {
+      this.push(this.nameLookup('depth' + this.lastContext, name, 'context'));
+    },
+
+    // [pushContext]
+    //
+    // On stack, before: ...
+    // On stack, after: currentContext, ...
+    //
+    // Pushes the value of the current context onto the stack.
+    pushContext: function() {
+      this.pushStackLiteral('depth' + this.lastContext);
+    },
+
+    // [resolvePossibleLambda]
+    //
+    // On stack, before: value, ...
+    // On stack, after: resolved value, ...
+    //
+    // If the `value` is a lambda, replace it on the stack by
+    // the return value of the lambda
+    resolvePossibleLambda: function() {
+      this.context.aliases.functionType = '"function"';
+
+      this.replaceStack(function(current) {
+        return "typeof " + current + " === functionType ? " + current + ".apply(depth0) : " + current;
+      });
+    },
+
+    // [lookup]
+    //
+    // On stack, before: value, ...
+    // On stack, after: value[name], ...
+    //
+    // Replace the value on the stack with the result of looking
+    // up `name` on `value`
+    lookup: function(name) {
+      this.replaceStack(function(current) {
+        return current + " == null || " + current + " === false ? " + current + " : " + this.nameLookup(current, name, 'context');
+      });
+    },
+
+    // [lookupData]
+    //
+    // On stack, before: ...
+    // On stack, after: data, ...
+    //
+    // Push the data lookup operator
+    lookupData: function() {
+      this.pushStackLiteral('data');
+    },
+
+    // [pushStringParam]
+    //
+    // On stack, before: ...
+    // On stack, after: string, currentContext, ...
+    //
+    // This opcode is designed for use in string mode, which
+    // provides the string value of a parameter along with its
+    // depth rather than resolving it immediately.
+    pushStringParam: function(string, type) {
+      this.pushStackLiteral('depth' + this.lastContext);
+
+      this.pushString(type);
+
+      // If it's a subexpression, the string result
+      // will be pushed after this opcode.
+      if (type !== 'sexpr') {
+        if (typeof string === 'string') {
+          this.pushString(string);
+        } else {
+          this.pushStackLiteral(string);
+        }
+      }
+    },
+
+    emptyHash: function() {
+      this.pushStackLiteral('{}');
+
+      if (this.options.stringParams) {
+        this.push('{}'); // hashContexts
+        this.push('{}'); // hashTypes
+      }
+    },
+    pushHash: function() {
+      if (this.hash) {
+        this.hashes.push(this.hash);
+      }
+      this.hash = {values: [], types: [], contexts: []};
+    },
+    popHash: function() {
+      var hash = this.hash;
+      this.hash = this.hashes.pop();
+
+      if (this.options.stringParams) {
+        this.push('{' + hash.contexts.join(',') + '}');
+        this.push('{' + hash.types.join(',') + '}');
+      }
+
+      this.push('{\n    ' + hash.values.join(',\n    ') + '\n  }');
+    },
+
+    // [pushString]
+    //
+    // On stack, before: ...
+    // On stack, after: quotedString(string), ...
+    //
+    // Push a quoted version of `string` onto the stack
+    pushString: function(string) {
+      this.pushStackLiteral(this.quotedString(string));
+    },
+
+    // [push]
+    //
+    // On stack, before: ...
+    // On stack, after: expr, ...
+    //
+    // Push an expression onto the stack
+    push: function(expr) {
+      this.inlineStack.push(expr);
+      return expr;
+    },
+
+    // [pushLiteral]
+    //
+    // On stack, before: ...
+    // On stack, after: value, ...
+    //
+    // Pushes a value onto the stack. This operation prevents
+    // the compiler from creating a temporary variable to hold
+    // it.
+    pushLiteral: function(value) {
+      this.pushStackLiteral(value);
+    },
+
+    // [pushProgram]
+    //
+    // On stack, before: ...
+    // On stack, after: program(guid), ...
+    //
+    // Push a program expression onto the stack. This takes
+    // a compile-time guid and converts it into a runtime-accessible
+    // expression.
+    pushProgram: function(guid) {
+      if (guid != null) {
+        this.pushStackLiteral(this.programExpression(guid));
+      } else {
+        this.pushStackLiteral(null);
+      }
+    },
+
+    // [invokeHelper]
+    //
+    // On stack, before: hash, inverse, program, params..., ...
+    // On stack, after: result of helper invocation
+    //
+    // Pops off the helper's parameters, invokes the helper,
+    // and pushes the helper's return value onto the stack.
+    //
+    // If the helper is not found, `helperMissing` is called.
+    invokeHelper: function(paramSize, name, isRoot) {
+      this.context.aliases.helperMissing = 'helpers.helperMissing';
+      this.useRegister('helper');
+
+      var helper = this.lastHelper = this.setupHelper(paramSize, name, true);
+      var nonHelper = this.nameLookup('depth' + this.lastContext, name, 'context');
+
+      var lookup = 'helper = ' + helper.name + ' || ' + nonHelper;
+      if (helper.paramsInit) {
+        lookup += ',' + helper.paramsInit;
+      }
+
+      this.push(
+        '('
+          + lookup
+          + ',helper '
+            + '? helper.call(' + helper.callParams + ') '
+            + ': helperMissing.call(' + helper.helperMissingParams + '))');
+
+      // Always flush subexpressions. This is both to prevent the compounding size issue that
+      // occurs when the code has to be duplicated for inlining and also to prevent errors
+      // due to the incorrect options object being passed due to the shared register.
+      if (!isRoot) {
+        this.flushInline();
+      }
+    },
+
+    // [invokeKnownHelper]
+    //
+    // On stack, before: hash, inverse, program, params..., ...
+    // On stack, after: result of helper invocation
+    //
+    // This operation is used when the helper is known to exist,
+    // so a `helperMissing` fallback is not required.
+    invokeKnownHelper: function(paramSize, name) {
+      var helper = this.setupHelper(paramSize, name);
+      this.push(helper.name + ".call(" + helper.callParams + ")");
+    },
+
+    // [invokeAmbiguous]
+    //
+    // On stack, before: hash, inverse, program, params..., ...
+    // On stack, after: result of disambiguation
+    //
+    // This operation is used when an expression like `{{foo}}`
+    // is provided, but we don't know at compile-time whether it
+    // is a helper or a path.
+    //
+    // This operation emits more code than the other options,
+    // and can be avoided by passing the `knownHelpers` and
+    // `knownHelpersOnly` flags at compile-time.
+    invokeAmbiguous: function(name, helperCall) {
+      this.context.aliases.functionType = '"function"';
+      this.useRegister('helper');
+
+      this.emptyHash();
+      var helper = this.setupHelper(0, name, helperCall);
+
+      var helperName = this.lastHelper = this.nameLookup('helpers', name, 'helper');
+
+      var nonHelper = this.nameLookup('depth' + this.lastContext, name, 'context');
+      var nextStack = this.nextStack();
+
+      if (helper.paramsInit) {
+        this.pushSource(helper.paramsInit);
+      }
+      this.pushSource('if (helper = ' + helperName + ') { ' + nextStack + ' = helper.call(' + helper.callParams + '); }');
+      this.pushSource('else { helper = ' + nonHelper + '; ' + nextStack + ' = typeof helper === functionType ? helper.call(' + helper.callParams + ') : helper; }');
+    },
+
+    // [invokePartial]
+    //
+    // On stack, before: context, ...
+    // On stack after: result of partial invocation
+    //
+    // This operation pops off a context, invokes a partial with that context,
+    // and pushes the result of the invocation back.
+    invokePartial: function(name) {
+      var params = [this.nameLookup('partials', name, 'partial'), "'" + name + "'", this.popStack(), "helpers", "partials"];
+
+      if (this.options.data) {
+        params.push("data");
+      }
+
+      this.context.aliases.self = "this";
+      this.push("self.invokePartial(" + params.join(", ") + ")");
+    },
+
+    // [assignToHash]
+    //
+    // On stack, before: value, hash, ...
+    // On stack, after: hash, ...
+    //
+    // Pops a value and hash off the stack, assigns `hash[key] = value`
+    // and pushes the hash back onto the stack.
+    assignToHash: function(key) {
+      var value = this.popStack(),
+          context,
+          type;
+
+      if (this.options.stringParams) {
+        type = this.popStack();
+        context = this.popStack();
+      }
+
+      var hash = this.hash;
+      if (context) {
+        hash.contexts.push("'" + key + "': " + context);
+      }
+      if (type) {
+        hash.types.push("'" + key + "': " + type);
+      }
+      hash.values.push("'" + key + "': (" + value + ")");
+    },
+
+    // HELPERS
+
+    compiler: JavaScriptCompiler,
+
+    compileChildren: function(environment, options) {
+      var children = environment.children, child, compiler;
+
+      for(var i=0, l=children.length; i<l; i++) {
+        child = children[i];
+        compiler = new this.compiler();
+
+        var index = this.matchExistingProgram(child);
+
+        if (index == null) {
+          this.context.programs.push('');     // Placeholder to prevent name conflicts for nested children
+          index = this.context.programs.length;
+          child.index = index;
+          child.name = 'program' + index;
+          this.context.programs[index] = compiler.compile(child, options, this.context);
+          this.context.environments[index] = child;
+        } else {
+          child.index = index;
+          child.name = 'program' + index;
+        }
+      }
+    },
+    matchExistingProgram: function(child) {
+      for (var i = 0, len = this.context.environments.length; i < len; i++) {
+        var environment = this.context.environments[i];
+        if (environment && environment.equals(child)) {
+          return i;
+        }
+      }
+    },
+
+    programExpression: function(guid) {
+      this.context.aliases.self = "this";
+
+      if(guid == null) {
+        return "self.noop";
+      }
+
+      var child = this.environment.children[guid],
+          depths = child.depths.list, depth;
+
+      var programParams = [child.index, child.name, "data"];
+
+      for(var i=0, l = depths.length; i<l; i++) {
+        depth = depths[i];
+
+        if(depth === 1) { programParams.push("depth0"); }
+        else { programParams.push("depth" + (depth - 1)); }
+      }
+
+      return (depths.length === 0 ? "self.program(" : "self.programWithDepth(") + programParams.join(", ") + ")";
+    },
+
+    register: function(name, val) {
+      this.useRegister(name);
+      this.pushSource(name + " = " + val + ";");
+    },
+
+    useRegister: function(name) {
+      if(!this.registers[name]) {
+        this.registers[name] = true;
+        this.registers.list.push(name);
+      }
+    },
+
+    pushStackLiteral: function(item) {
+      return this.push(new Literal(item));
+    },
+
+    pushSource: function(source) {
+      if (this.pendingContent) {
+        this.source.push(this.appendToBuffer(this.quotedString(this.pendingContent)));
+        this.pendingContent = undefined;
+      }
+
+      if (source) {
+        this.source.push(source);
+      }
+    },
+
+    pushStack: function(item) {
+      this.flushInline();
+
+      var stack = this.incrStack();
+      if (item) {
+        this.pushSource(stack + " = " + item + ";");
+      }
+      this.compileStack.push(stack);
+      return stack;
+    },
+
+    replaceStack: function(callback) {
+      var prefix = '',
+          inline = this.isInline(),
+          stack,
+          createdStack,
+          usedLiteral;
+
+      // If we are currently inline then we want to merge the inline statement into the
+      // replacement statement via ','
+      if (inline) {
+        var top = this.popStack(true);
+
+        if (top instanceof Literal) {
+          // Literals do not need to be inlined
+          stack = top.value;
+          usedLiteral = true;
+        } else {
+          // Get or create the current stack name for use by the inline
+          createdStack = !this.stackSlot;
+          var name = !createdStack ? this.topStackName() : this.incrStack();
+
+          prefix = '(' + this.push(name) + ' = ' + top + '),';
+          stack = this.topStack();
+        }
+      } else {
+        stack = this.topStack();
+      }
+
+      var item = callback.call(this, stack);
+
+      if (inline) {
+        if (!usedLiteral) {
+          this.popStack();
+        }
+        if (createdStack) {
+          this.stackSlot--;
+        }
+        this.push('(' + prefix + item + ')');
+      } else {
+        // Prevent modification of the context depth variable. Through replaceStack
+        if (!/^stack/.test(stack)) {
+          stack = this.nextStack();
+        }
+
+        this.pushSource(stack + " = (" + prefix + item + ");");
+      }
+      return stack;
+    },
+
+    nextStack: function() {
+      return this.pushStack();
+    },
+
+    incrStack: function() {
+      this.stackSlot++;
+      if(this.stackSlot > this.stackVars.length) { this.stackVars.push("stack" + this.stackSlot); }
+      return this.topStackName();
+    },
+    topStackName: function() {
+      return "stack" + this.stackSlot;
+    },
+    flushInline: function() {
+      var inlineStack = this.inlineStack;
+      if (inlineStack.length) {
+        this.inlineStack = [];
+        for (var i = 0, len = inlineStack.length; i < len; i++) {
+          var entry = inlineStack[i];
+          if (entry instanceof Literal) {
+            this.compileStack.push(entry);
+          } else {
+            this.pushStack(entry);
+          }
+        }
+      }
+    },
+    isInline: function() {
+      return this.inlineStack.length;
+    },
+
+    popStack: function(wrapped) {
+      var inline = this.isInline(),
+          item = (inline ? this.inlineStack : this.compileStack).pop();
+
+      if (!wrapped && (item instanceof Literal)) {
+        return item.value;
+      } else {
+        if (!inline) {
+          if (!this.stackSlot) {
+            throw new Exception('Invalid stack pop');
+          }
+          this.stackSlot--;
+        }
+        return item;
+      }
+    },
+
+    topStack: function(wrapped) {
+      var stack = (this.isInline() ? this.inlineStack : this.compileStack),
+          item = stack[stack.length - 1];
+
+      if (!wrapped && (item instanceof Literal)) {
+        return item.value;
+      } else {
+        return item;
+      }
+    },
+
+    quotedString: function(str) {
+      return '"' + str
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/\u2028/g, '\\u2028')   // Per Ecma-262 7.3 + 7.8.4
+        .replace(/\u2029/g, '\\u2029') + '"';
+    },
+
+    setupHelper: function(paramSize, name, missingParams) {
+      var params = [],
+          paramsInit = this.setupParams(paramSize, params, missingParams);
+      var foundHelper = this.nameLookup('helpers', name, 'helper');
+
+      return {
+        params: params,
+        paramsInit: paramsInit,
+        name: foundHelper,
+        callParams: ["depth0"].concat(params).join(", "),
+        helperMissingParams: missingParams && ["depth0", this.quotedString(name)].concat(params).join(", ")
+      };
+    },
+
+    setupOptions: function(paramSize, params) {
+      var options = [], contexts = [], types = [], param, inverse, program;
+
+      options.push("hash:" + this.popStack());
+
+      if (this.options.stringParams) {
+        options.push("hashTypes:" + this.popStack());
+        options.push("hashContexts:" + this.popStack());
+      }
+
+      inverse = this.popStack();
+      program = this.popStack();
+
+      // Avoid setting fn and inverse if neither are set. This allows
+      // helpers to do a check for `if (options.fn)`
+      if (program || inverse) {
+        if (!program) {
+          this.context.aliases.self = "this";
+          program = "self.noop";
+        }
+
+        if (!inverse) {
+          this.context.aliases.self = "this";
+          inverse = "self.noop";
+        }
+
+        options.push("inverse:" + inverse);
+        options.push("fn:" + program);
+      }
+
+      for(var i=0; i<paramSize; i++) {
+        param = this.popStack();
+        params.push(param);
+
+        if(this.options.stringParams) {
+          types.push(this.popStack());
+          contexts.push(this.popStack());
+        }
+      }
+
+      if (this.options.stringParams) {
+        options.push("contexts:[" + contexts.join(",") + "]");
+        options.push("types:[" + types.join(",") + "]");
+      }
+
+      if(this.options.data) {
+        options.push("data:data");
+      }
+
+      return options;
+    },
+
+    // the params and contexts arguments are passed in arrays
+    // to fill in
+    setupParams: function(paramSize, params, useRegister) {
+      var options = '{' + this.setupOptions(paramSize, params).join(',') + '}';
+
+      if (useRegister) {
+        this.useRegister('options');
+        params.push('options');
+        return 'options=' + options;
+      } else {
+        params.push(options);
+        return '';
+      }
+    }
+  };
+
+  var reservedWords = (
+    "break else new var" +
+    " case finally return void" +
+    " catch for switch while" +
+    " continue function this with" +
+    " default if throw" +
+    " delete in try" +
+    " do instanceof typeof" +
+    " abstract enum int short" +
+    " boolean export interface static" +
+    " byte extends long super" +
+    " char final native synchronized" +
+    " class float package throws" +
+    " const goto private transient" +
+    " debugger implements protected volatile" +
+    " double import public let yield"
+  ).split(" ");
+
+  var compilerWords = JavaScriptCompiler.RESERVED_WORDS = {};
+
+  for(var i=0, l=reservedWords.length; i<l; i++) {
+    compilerWords[reservedWords[i]] = true;
+  }
+
+  JavaScriptCompiler.isValidJavaScriptVariableName = function(name) {
+    if(!JavaScriptCompiler.RESERVED_WORDS[name] && /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(name)) {
+      return true;
+    }
+    return false;
+  };
+
+  __exports__ = JavaScriptCompiler;
+  return __exports__;
+})(__module2__, __module5__);
+
+// handlebars.js
+var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__) {
+  "use strict";
+  var __exports__;
+  /*globals Handlebars: true */
+  var Handlebars = __dependency1__;
+
+  // Compiler imports
+  var AST = __dependency2__;
+  var Parser = __dependency3__.parser;
+  var parse = __dependency3__.parse;
+  var Compiler = __dependency4__.Compiler;
+  var compile = __dependency4__.compile;
+  var precompile = __dependency4__.precompile;
+  var JavaScriptCompiler = __dependency5__;
+
+  var _create = Handlebars.create;
+  var create = function() {
+    var hb = _create();
+
+    hb.compile = function(input, options) {
+      return compile(input, options, hb);
+    };
+    hb.precompile = function (input, options) {
+      return precompile(input, options, hb);
+    };
+
+    hb.AST = AST;
+    hb.Compiler = Compiler;
+    hb.JavaScriptCompiler = JavaScriptCompiler;
+    hb.Parser = Parser;
+    hb.parse = parse;
+
+    return hb;
+  };
+
+  Handlebars = create();
+  Handlebars.create = create;
+
+  __exports__ = Handlebars;
+  return __exports__;
+})(__module1__, __module7__, __module8__, __module10__, __module11__);
+
+  return __module0__;
+})();
+
 this["Columns"] = this["Columns"] || {};
-this["Columns"]["Templates"] = this["Columns"]["Templates"] || {};
+this["Columns"]["EmbeddableTemplates"] = this["Columns"]["EmbeddableTemplates"] || {};
 
-this["Columns"]["Templates"]["templates/cell.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<td data-value='";
-  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-original-column='";
-  if (helper = helpers.original_column) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.original_column); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>";
-  if (helper = helpers.formatted_value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.formatted_value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</td>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/column-editable.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<th class='editable' data-original-column='";
-  if (helper = helpers.original_column) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.original_column); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n	<input type='text' value='";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'><br />\n	<i class=\"icon-x delete-column\"></i>\n	<input type='checkbox' name='entity-type' class='entity-type'><label for='entity-type'>This is the entity type</label><br />\n	<input type='checkbox' name='date' class='date'><label for='date'>This is the date</label><br />\n	<input type='checkbox' name='filter' class='filter'><label for='date'>This is a filter column</label>\n</th>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/column.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<th>";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</th>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/embed-details-panel/body.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"columns-panel-input-area\">\n	<div class=\"columns-panel-input-icon\">\n		<i class=\"icon-title\"></i>\n	</div>\n	<div class=\"columns-panel-input\">\n		<label class=\"columns-panel-input-label\">Table Title</label>\n		<input type=\"text\" placeholder=\"My Table\" data-property=\"title\">\n	</div>\n</div>\n<div class=\"columns-panel-input-group\">\n	<div class=\"columns-panel-input-area\">\n		<div class=\"columns-panel-input-icon\">\n			<i class=\"icon-source\"></i>\n		</div>\n		<div class=\"columns-panel-input\">\n			<label class=\"columns-panel-input-label\">Data Source</label>\n			<input type=\"text\" placeholder=\"The Data Authority\" data-property=\"source\">\n		</div>\n	</div>\n	<div class=\"columns-panel-input-area\">\n		<div class=\"columns-panel-input-icon\">\n			<i class=\"icon-link\"></i>\n		</div>\n		<div class=\"columns-panel-input\">\n			<label class=\"columns-panel-input-label\">Source URL</label>\n			<input type=\"url\" placeholder=\"http://thedataauthority.com\" data-property=\"source_url\">\n		</div>\n	</div>\n</div>\n<div class=\"columns-panel-textarea-area\" id=\"embed-code\">\n	<div class=\"columns-panel-textarea-icon\">\n		<i class=\"icon-code\"></i>\n	</div>\n	<div class=\"columns-panel-input\">\n		<label class=\"columns-panel-textarea-label\">Embed Code</label>\n		<textarea readonly ><script type=\"text/javascript\" src=\"https://colum.nz/embed-table.js\" id=\"12345678910\" async></script></textarea>\n		<button class=\"columns-button button-small button-tertiary\">\n			Copy Embed Code\n		</button>\n	</div>\n</div>";
-  });
-
-this["Columns"]["Templates"]["templates/embed-table/body.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/body.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "";
@@ -249,7 +2905,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/embed-table/footer.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/footer.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -267,7 +2923,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/embed-table/header.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/header.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -285,7 +2941,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/embed-table/layout.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/layout.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -318,7 +2974,7 @@ function program1(depth0,data) {
   else { return ''; }
   });
 
-this["Columns"]["Templates"]["templates/embed-table/loading.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/loading.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -332,7 +2988,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/embed-table/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
   var buffer = "", stack1, self=this, helperMissing=helpers.helperMissing;
@@ -382,7 +3038,7 @@ function program4(depth0,data) {
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/embed-table/row-layout.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row-layout.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
   var buffer = "", stack1, self=this;
@@ -395,7 +3051,7 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/embed-table/row-value.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row-value.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
   var buffer = "", stack1, helper, self=this, functionType="function", escapeExpression=this.escapeExpression;
@@ -404,15 +3060,15 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
   buffer += "<span class=\"row-value\" ";
   stack1 = self.invokePartial(partials.style, 'style', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">";
+  buffer += ">\n{{ this.";
   if (helper = helpers.data) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.data); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>";
+    + " }}\n</span>";
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/embed-table/row.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
   var stack1, self=this;
@@ -423,7 +3079,7 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
   else { return ''; }
   });
 
-this["Columns"]["Templates"]["templates/embed-table/rows.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/rows.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var stack1, helperMissing=helpers.helperMissing, self=this;
@@ -443,7 +3099,7 @@ function program1(depth0,data,depth1) {
   else { return ''; }
   });
 
-this["Columns"]["Templates"]["templates/embed-table/skeleton.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/skeleton.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
@@ -452,7 +3108,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"columns-table-widget cleanslate\"></div>";
   });
 
-this["Columns"]["Templates"]["templates/embed-table/style.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/style.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -477,549 +3133,9 @@ function program1(depth0,data) {
   buffer += "'";
   return buffer;
   });
-
-this["Columns"]["Templates"]["templates/layout/column.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div class=\"layout-column active\">\n	<i class=\"icon-text layout-column-icon\"></i>\n	"
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/layout/columns.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n		";
-  stack1 = self.invokePartial(partials['layout-column'], 'layout-column', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	";
-  return buffer;
-  }
-
-  buffer += "<div class=\"layout-columns\">\n	";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.columns), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/layout/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, helper, options, self=this, helperMissing=helpers.helperMissing, functionType="function", blockHelperMissing=helpers.blockHelperMissing;
-
-function program1(depth0,data) {
-  
-  
-  return "placeholder";
-  }
-
-function program3(depth0,data) {
-  
-  var stack1;
-  stack1 = self.invokePartial(partials.layout, 'layout', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { return stack1; }
-  else { return ''; }
-  }
-
-function program5(depth0,data) {
-  
-  var stack1;
-  stack1 = self.invokePartial(partials.style, 'style', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { return stack1; }
-  else { return ''; }
-  }
-
-function program7(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n				";
-  stack1 = (helper = helpers.ifIsGroup || (depth0 && depth0.ifIsGroup),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifIsGroup", (depth0 && depth0.type), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n				";
-  stack1 = (helper = helpers.ifIsSingle || (depth0 && depth0.ifIsSingle),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifIsSingle", (depth0 && depth0.type), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			";
-  return buffer;
-  }
-function program8(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n					";
-  stack1 = self.invokePartial(partials['layout-row-group'], 'layout-row-group', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n				";
-  return buffer;
-  }
-
-function program10(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n					";
-  stack1 = self.invokePartial(partials['layout-row-value'], 'layout-row-value', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n				";
-  return buffer;
-  }
-
-  buffer += "<div class=\"layout-template-row-group\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.layout), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.style), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n			";
-  options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}
-  if (helper = helpers.values) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.values); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.values) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>	";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/layout/row-value.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, helper, self=this, functionType="function", escapeExpression=this.escapeExpression;
-
-function program1(depth0,data) {
-  
-  
-  return "placeholder";
-  }
-
-  buffer += "<span class=\"layout-template-row-value \n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"\n			";
-  stack1 = self.invokePartial(partials.style, 'style', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n			";
-  if (helper = helpers.data) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.data); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\n</span>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/layout/template.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, self=this;
-
-
-  buffer += "<div class=\"layout-template\">\n	<div class=\"layout-template-row master\">\n		";
-  stack1 = self.invokePartial(partials['layout-row-group'], 'layout-row-group', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "	\n	</div>\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/panels/panel.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div class=\"columns-panel-container\" id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">\n	<div class=\"columns-panel-blocker\"></div>\n	<div class=\"columns-panel\">\n		<div class=\"columns-panel-header\">\n			<div class=\"columns-panel-header-close-button\">\n				<i class=\"icon-close\"></i> \n	 	 	</div>\n	 	 	<span class=\"columns-panel-header-title\">\n	 	 		"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.header)),stack1 == null || stack1 === false ? stack1 : stack1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n	 	 	</span>\n	 	</div>\n		<div class=\"columns-panel-body\">\n			";
-  if (helper = helpers.body) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.body); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		</div>\n		<div class=\"columns-panel-footer\">\n			";
-  if (helper = helpers.footer) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.footer); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		</div>\n	</div>\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/row.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n	<td class='"
-    + escapeExpression(((stack1 = (depth0 && depth0.type)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "' data-value='"
-    + escapeExpression(((stack1 = (depth0 && depth0.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "' data-original-column='"
-    + escapeExpression(((stack1 = (depth0 && depth0.original_column)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'>"
-    + escapeExpression(((stack1 = (depth0 && depth0.formatted_value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</td>\n	";
-  return buffer;
-  }
-
-  buffer += "<tr>\n	";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.values), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += " \n</tr>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/styling/component.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, helper, options, self=this, helperMissing=helpers.helperMissing, functionType="function", escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n		<div class=\"style-component-section\">\n			<div class=\"style-component-section-title\">\n				";
-  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\n			</div>\n			<div class=\"style-component-section-rows\">\n				";
-  options={hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}
-  if (helper = helpers.rows) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.rows); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.rows) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			</div>\n		</div>\n		";
-  return buffer;
-  }
-function program2(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n					<div class=\"style-component-section-row\">\n						";
-  options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}
-  if (helper = helpers.items) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.items); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.items) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					</div>\n				";
-  return buffer;
-  }
-function program3(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n							<div class=\"style-component-section-row-item\">\n								";
-  stack1 = (helper = helpers.ifIsInput || (depth0 && depth0.ifIsInput),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsInput", (depth0 && depth0.kind), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  stack1 = (helper = helpers.ifIsSingleSegmentedButton || (depth0 && depth0.ifIsSingleSegmentedButton),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsSingleSegmentedButton", (depth0 && depth0.kind), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  stack1 = (helper = helpers.ifIsMultipleSegmentedButton || (depth0 && depth0.ifIsMultipleSegmentedButton),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsMultipleSegmentedButton", (depth0 && depth0.kind), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								<label class='style-component-section-row-item-label'>";
-  if (helper = helpers.label) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.label); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</label>\n							</div>\n						";
-  return buffer;
-  }
-function program4(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n									";
-  stack1 = self.invokePartial(partials.input, 'input', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  return buffer;
-  }
-
-function program6(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n									";
-  stack1 = self.invokePartial(partials['single-segmented-button'], 'single-segmented-button', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  return buffer;
-  }
-
-function program8(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n									";
-  stack1 = self.invokePartial(partials['multiple-segmented-button'], 'multiple-segmented-button', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  return buffer;
-  }
-
-  buffer += "<div class=\"style-component\" data-component-index='";
-  if (helper = helpers.index) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.index); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n	<div class=\"style-component-header\">\n		<i class=\"icon-";
-  if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " style-component-header-icon\"></i>\n		<span class=\"style-component-header-title\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</span>\n	</div>\n	<div class=\"style-component-body\">\n		";
-  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
-  if (helper = helpers.styles) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.styles); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.styles) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		\n	</div>\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/styling/components/input.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  
-  return "prepend";
-  }
-
-function program3(depth0,data) {
-  
-  
-  return "append";
-  }
-
-function program5(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\n		<div class=\"style-component-section-row-input-prepend\">\n			<i class=\"icon-";
-  if (helper = helpers.prependIcon) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.prependIcon); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\"></i>\n		</div>\n	";
-  return buffer;
-  }
-
-function program7(depth0,data) {
-  
-  
-  return "\n		<div class=\"style-component-section-row-input-append\">\n			<button class='increment'>\n				<i class=\"icon-caret-up\"></i>\n			</button>\n			<button class='decrement'>\n				<i class=\"icon-caret-down\"></i>\n			</button>\n		</div>\n	";
-  }
-
-  buffer += "<div class=\"style-component-section-row-input ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.prependIcon), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += " ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.appendControls), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">\n	";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.prependIcon), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	<input type=\"";
-  if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" data-property='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "' value='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "' data-negative='";
-  if (helper = helpers.canBeNegative) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.canBeNegative); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'/>\n	";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.appendControls), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/styling/components/multiple-segmented-button.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "data-property='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'";
-  return buffer;
-  }
-
-function program3(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n		<button data-property='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'\n				data-active-value='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.active)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'\n				data-inactive-value='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.inactive)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'\n				class=\"";
-  stack1 = (helper = helpers.ifIsCurrentValue || (depth0 && depth0.ifIsCurrentValue),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.active), ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options) : helperMissing.call(depth0, "ifIsCurrentValue", ((stack1 = (depth0 && depth0.values)),stack1 == null || stack1 === false ? stack1 : stack1.active), ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.icon), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.text), {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		</button>\n	";
-  return buffer;
-  }
-function program4(depth0,data) {
-  
-  
-  return "active";
-  }
-
-function program6(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "<i class=\"icon-";
-  if (helper = helpers.icon) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.icon); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\"></i>";
-  return buffer;
-  }
-
-function program8(depth0,data) {
-  
-  
-  return "<span></span>";
-  }
-
-  buffer += "<div class=\"style-component-section-row-segmentedButton ";
-  if (helper = helpers.kind) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.kind); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.property), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n	";
-  options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}
-  if (helper = helpers.buttons) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.buttons); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.buttons) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/styling/components/single-segmented-button.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "data-property='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.property)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'";
-  return buffer;
-  }
-
-function program3(depth0,data,depth1) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n		<button data-value='";
-  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' class=\"";
-  stack1 = (helper = helpers.ifIsCurrentValue || (depth0 && depth0.ifIsCurrentValue),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.value), ((stack1 = (depth1 && depth1.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options) : helperMissing.call(depth0, "ifIsCurrentValue", (depth0 && depth0.value), ((stack1 = (depth1 && depth1.property)),stack1 == null || stack1 === false ? stack1 : stack1.current_value), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.icon), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.text), {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		</button>\n	";
-  return buffer;
-  }
-function program4(depth0,data) {
-  
-  
-  return "active";
-  }
-
-function program6(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "<i class=\"icon-";
-  if (helper = helpers.icon) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.icon); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\"></i>";
-  return buffer;
-  }
-
-function program8(depth0,data) {
-  
-  
-  return "<span></span>";
-  }
-
-  buffer += "<div class=\"style-component-section-row-segmentedButton ";
-  if (helper = helpers.kind) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.kind); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.property), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n	";
-  options={hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data}
-  if (helper = helpers.buttons) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.buttons); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.buttons) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
-  return buffer;
-  });
-
-this["Columns"]["Templates"]["templates/styling/types/text.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"style-component-section\">\n	\n</div>";
-  });
-
-this["Columns"]["Templates"]["templates/table.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, self=this;
-
-function program1(depth0,data) {
-  
-  
-  return "editable";
-  }
-
-  buffer += "<table id='results-table' class='";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.editable), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "'>\n	<thead>\n		<tr></tr>\n	</thead>\n	<tbody></tbody>\n</table>";
-  return buffer;
-  });
-$(function() {
+// Make sure our version of jquery isn't polluting the namespace
+$$ = window.jQuery.noConflict(true);
+$$(function() {
 
 	var DUMMY_DATA = {
 		source: 'Lubin Truth Institute',
@@ -1045,10 +3161,10 @@ $(function() {
 						property: 'color',
 						value: '#3a3a3a'
 					}],
-					data: '{{this.first_name}} {{this.last_name}}'
+					data: 'first_name'
 				},{
 					type: 'single',
-					data: '{{this.hometown}}',
+					data: 'hometown',
 					style: [{
 						property: 'color',
 						value: '#888'
@@ -1062,34 +3178,14 @@ $(function() {
 				}]
 			},
 			{
-				type: 'group',
-				layout: [{
-					property: 'flex-direction',
-					value: 'column'
-				}, {
-					property: 'align-items',
-					value: 'flex-end'
-				}],
-				values: [{
-					type: 'single',
-					data: '{{this.age}}',
-					style: [{
-						property: 'color',
-						value: '#3a3a3a'
-					},{
-						property: 'font-size',
-						value: '24px'
-					}]
-				}, {
-					type: 'single',
-					data: '{{this.unit}}',
-					style: [{
-						property: 'color',
-						value: '#ababab'
-					},{
-						property: 'font-size',
-						value: '10px'
-					}]
+				type: 'single',
+				data: 'age',
+				style: [{
+					property: 'color',
+					value: '#3a3a3a'
+				},{
+					property: 'font-size',
+					value: '24px'
 				}]
 			}]
 		},
@@ -1172,11 +3268,6 @@ $(function() {
 	// and progressively open as it is pulled away
 	// from its original location on the page
 
-	// Storage variables for resetting positions
-	var originalBackground = {},
-		originalRows = [],
-		$originalSibling;
-
 	// Animation Constants
 	var ANIMATION_DURATION = 350;
 
@@ -1188,13 +3279,18 @@ $(function() {
 	var TABLE_SELECTOR = '.columns-table-widget',
 		TABLE_BODY_SELECTOR = '.columns-table',
 		TABLE_ROW_SELECTOR = '.columns-table-row',
+		TABLE_HEADER_SELECTOR = '.columns-table-header',
+		TABLE_FOOTER_SELECTOR = '.columns-table-footer',
 		PLACEHOLDER_CLASS = 'columns-table-placeholder',
 		EXPANDED_CLASS = 'expanded',
 		EXPANDING_CLASS = 'expanding',
 		RELOCATED_CLASS = 'relocated',
 		LOADING_CLASS = 'loading',
 		ANIMATING_CLASS = 'velocity-animating',
-		$TABLE;
+		$TABLE,
+		$$CONTAINER = $$(window);
+
+	var MAX_SMARTPHONE_SCREEN_WIDTH = 568;
 
 	// File System Constants
 	var ROOT_PATH = 'http://127.0.0.1/';
@@ -1221,255 +3317,255 @@ $(function() {
 	// Create a row for each value
 	// Create a footer based on the source and item count
 
-	function createTable() {
+	// function createTable() {
 
-		// Set up Handlebars partials, helpers and templates
-		generateHandlebarsHelpers();
-		generateHandlebarsPartials();
+	// 	// Set up Handlebars partials, helpers and templates
+	// 	generateHandlebarsHelpers();
+	// 	generateHandlebarsPartials();
 
-		// Get the CSS and add it to the DOM
-		// getTableStyle(function(data) {
-		// 	$TABLE.after($('<style>', {html: data}));
-		// });
-		getTableStyle();
+	// 	// Get the CSS and add it to the DOM
+	// 	// getTableStyle(function(data) {
+	// 	// 	$TABLE.after($('<style>', {html: data}));
+	// 	// });
+	// 	getTableStyle();
 
-		// Generate table skeleton
-		var skeleton = createSkeleton();
-		var script = getScript();
+	// 	// Generate table skeleton
+	// 	var skeleton = createSkeleton();
+	// 	var script = getScript();
 
-		var tmpDiv = document.createElement('div');
-		tmpDiv.innerHTML = skeleton;
+	// 	var tmpDiv = document.createElement('div');
+	// 	tmpDiv.innerHTML = skeleton;
 
-		script.parentNode.insertBefore(tmpDiv.firstChild, script);
-		$TABLE = $(TABLE_SELECTOR);
+	// 	script.parentNode.insertBefore(tmpDiv.firstChild, script);
+	// 	$TABLE = $(TABLE_SELECTOR);
 
-		// Position table correctly given the size of the screen
-		// and reposition on resize events
-		positionTable();
-		$(window).resize(positionTable);
+	// 	// Position table correctly given the size of the screen
+	// 	// and reposition on resize events
+	// 	positionTable();
+	// 	$(window).resize(positionTable);
 
-		// Generate table structure
-		var loading = createLoading();
-		var body = createBody();
+	// 	// Generate table structure
+	// 	var loading = createLoading();
+	// 	var body = createBody();
 
-		// Render table components
-		$TABLE.append(loading).addClass(LOADING_CLASS);
-		$TABLE.append(body);
+	// 	// Render table components
+	// 	$TABLE.append(loading).addClass(LOADING_CLASS);
+	// 	$TABLE.append(body);
 
-		// Make the table bounce on scroll
-		// $TABLE.find('.columns-table-container').fancy_scroll({
-		// 	animation: "bounce"
-		// });
+	// 	// Make the table bounce on scroll
+	// 	// $TABLE.find('.columns-table-container').fancy_scroll({
+	// 	// 	animation: "bounce"
+	// 	// });
 
-		// Prevent ghost clicks while the table is open
-		PreventGhostClick(document, function() {
-			return $TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)
-		});
-	}
+	// 	// Prevent ghost clicks while the table is open
+	// 	PreventGhostClick(document, function() {
+	// 		return $TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)
+	// 	});
+	// }
 
-	function getTableStyle(callback) {
-		// $.get(CSS_PATH, function(data) {
-		// 	console.log(data);
-		// 	callback(data);
-		// });
-		var style = document.createElement('link');
-		style.rel = 'stylesheet';
-		style.type = 'text/css';
-		style.href = CSS_PATH;
-		style.media = 'all';
-		document.head.appendChild(style);
-	}
+	// function getTableStyle(callback) {
+	// 	// $.get(CSS_PATH, function(data) {
+	// 	// 	console.log(data);
+	// 	// 	callback(data);
+	// 	// });
+	// 	var style = document.createElement('link');
+	// 	style.rel = 'stylesheet';
+	// 	style.type = 'text/css';
+	// 	style.href = CSS_PATH;
+	// 	style.media = 'all';
+	// 	document.head.appendChild(style);
+	// }
 
-	function populateTable(data) {
+	// function populateTable(data) {
 		
-		var numRows = data.data.length;
+	// 	var numRows = data.data.length;
 
-		// Set up Handlebars partials, helpers and templates
-		generateRowLayout(data.layout);
+	// 	// Set up Handlebars partials, helpers and templates
+	// 	generateRowLayout(data.layout);
 
-		// Generate table layouts with data
-		var header = createHeader(data.title, data.sort_by_column);
-		var rows = createRows(data.data);
-		var footer = createFooter(data.source, numRows);
+	// 	// Generate table layouts with data
+	// 	var header = createHeader(data.title, data.sort_by_column);
+	// 	var rows = createRows(data.data);
+	// 	var footer = createFooter(data.source, numRows);
 
-		// Render table components with data
-		$TABLE.prepend(header);
-		var $tableBody = $(TABLE_BODY_SELECTOR);
-		$tableBody.append(rows);
-		$tableBody.after(footer);
+	// 	// Render table components with data
+	// 	$TABLE.prepend(header);
+	// 	var $tableBody = $(TABLE_BODY_SELECTOR);
+	// 	$tableBody.append(rows);
+	// 	$tableBody.after(footer);
 
-		// Set any dynamic sizing or positioning values
-		// and animate the various components in
-		introduceTable(numRows);
-		introduceRows();
+	// 	// Set any dynamic sizing or positioning values
+	// 	// and animate the various components in
+	// 	introduceTable(numRows);
+	// 	introduceRows();
 
-		// Set up DOM events on the table
-		setupTableEvents();
+	// 	// Set up DOM events on the table
+	// 	setupTableEvents();
 
-		// Remove the loading class after the screen repaints
-		setTimeout(function() {
-			$TABLE.removeClass(LOADING_CLASS);
-		}, 100);
-	}
+	// 	// Remove the loading class after the screen repaints
+	// 	setTimeout(function() {
+	// 		$TABLE.removeClass(LOADING_CLASS);
+	// 	}, 100);
+	// }
 
-	function getTableHeight(numRows, rowHeight) {
+	// function getTableHeight(numRows, rowHeight) {
 
-		// Calculate the table height
-		// for the number of rows it contains
-		// in contacted mode
-		var offsetAmount = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
-		return rowHeight + offsetAmount;
-	}
+	// 	// Calculate the table height
+	// 	// for the number of rows it contains
+	// 	// in contacted mode
+	// 	var offsetAmount = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+	// 	return rowHeight + offsetAmount;
+	// }
 
-	function positionTable() {
+	// function positionTable() {
 
-		// Don't do anything else if the table is in expand mode
-		// if ($TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)) {
-		// 	return;
-		// }
+	// 	// Don't do anything else if the table is in expand mode
+	// 	// if ($TABLE.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)) {
+	// 	// 	return;
+	// 	// }
 
-		// Set up the new css properties for the table
-		properties = {
-			'width': $(window).width()
-		}
+	// 	// Set up the new css properties for the table
+	// 	properties = {
+	// 		'width': $(window).width()
+	// 	}
 
-		// Only move the table if it's not aligned with the left side of the screen
-		var offset = $TABLE.offset().left;
-		if (offset != 0) {
-			properties['margin-left'] = -offset 
-		}
+	// 	// Only move the table if it's not aligned with the left side of the screen
+	// 	var offset = $TABLE.offset().left;
+	// 	if (offset != 0) {
+	// 		properties['margin-left'] = -offset 
+	// 	}
 
-		// Make the table the width of the window
-		// and left align it with the window 
-		$TABLE.css(properties);
-	}
+	// 	// Make the table the width of the window
+	// 	// and left align it with the window 
+	// 	$TABLE.css(properties);
+	// }
 
-	function createSkeleton() {
-		var skeleton = Columns.Templates['templates/embed-table/skeleton.hbs'];
-		return skeleton();
-	}
+	// function createSkeleton() {
+	// 	var skeleton = Columns.EmbeddableTemplates['templates/embed-table/skeleton.hbs'];
+	// 	return skeleton();
+	// }
 
-	function createLoading() {
-		var loading = Columns.Templates['templates/embed-table/loading.hbs'];
-		return loading({img_path: IMG_PATH});
-	}
+	// function createLoading() {
+	// 	var loading = Columns.EmbeddableTemplates['templates/embed-table/loading.hbs'];
+	// 	return loading({img_path: IMG_PATH});
+	// }
 
-	function createHeader(title, sort_by_column) {
-		var header = Columns.Templates['templates/embed-table/header.hbs'];
-		return header({title: title, sort_by_column: sort_by_column});
-	}
+	// function createHeader(title, sort_by_column) {
+	// 	var header = Columns.EmbeddableTemplates['templates/embed-table/header.hbs'];
+	// 	return header({title: title, sort_by_column: sort_by_column});
+	// }
 
-	function createBody() {
-		var body = Columns.Templates['templates/embed-table/body.hbs'];
-		return body();
-	}
+	// function createBody() {
+	// 	var body = Columns.EmbeddableTemplates['templates/embed-table/body.hbs'];
+	// 	return body();
+	// }
 
-	function createRows(rows) {
-		var rowsTemplate = Columns.Templates['templates/embed-table/rows.hbs'];
-		return rowsTemplate({rows: rows});
-	}
+	// function createRows(rows) {
+	// 	var rowsTemplate = Columns.EmbeddableTemplates['templates/embed-table/rows.hbs'];
+	// 	return rowsTemplate({rows: rows});
+	// }
 
-	function createFooter(source, item_count) {
-		var footer = Columns.Templates['templates/embed-table/footer.hbs'];
-		return footer({
-			source: source,
-			item_count: item_count
-		});
-	}
+	// function createFooter(source, item_count) {
+	// 	var footer = Columns.EmbeddableTemplates['templates/embed-table/footer.hbs'];
+	// 	return footer({
+	// 		source: source,
+	// 		item_count: item_count
+	// 	});
+	// }
 
-	function getScript() {
+	// function getScript() {
 		
-		// Find all the scripts generaged by us
-		var scripts = document.getElementsByTagName('script');
-		for (var i = 0; i < scripts.length ; i++) {
-			var script = scripts[i];
-			if (script.src.search(ROOT_PATH) > -1) {
-				return script;
-			}
-		}
-	}
+	// 	// Find all the scripts generaged by us
+	// 	var scripts = document.getElementsByTagName('script');
+	// 	for (var i = 0; i < scripts.length ; i++) {
+	// 		var script = scripts[i];
+	// 		if (script.src.search(ROOT_PATH) > -1) {
+	// 			return script;
+	// 		}
+	// 	}
+	// }
 
-	function generateRowLayout(layout) {
-		var row_layout = Columns.Templates['templates/embed-table/row-layout.hbs']({layout: layout});
-		var row_template = Handlebars.compile(row_layout);
-		Handlebars.registerPartial('row_layout', row_template);
-	}
+	// function generateRowLayout(layout) {
+	// 	var row_layout = Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']({layout: layout});
+	// 	var row_template = Handlebars.compile(row_layout);
+	// 	Handlebars.registerPartial('row_layout', row_template);
+	// }
 
-	// Methods to animate table data
-	// into place once it's been downloaded
-	// ------------------------------
+	// // Methods to animate table data
+	// // into place once it's been downloaded
+	// // ------------------------------
 
-	function introduceTable(numRows) {
-		var $table = $(TABLE_BODY_SELECTOR);
+	// function introduceTable(numRows) {
+	// 	var $table = $(TABLE_BODY_SELECTOR);
 
-		$table.velocity({
-			height: getTableHeight(numRows, $(TABLE_ROW_SELECTOR).height())
-		}, {
-			duration: ANIMATION_DURATION,
-		});
-	}
+	// 	$table.velocity({
+	// 		height: getTableHeight(numRows, $(TABLE_ROW_SELECTOR).height())
+	// 	}, {
+	// 		duration: ANIMATION_DURATION,
+	// 	});
+	// }
 
-	function introduceRows() {
-		var $rows = $(TABLE_ROW_SELECTOR);
-		var delay = ANIMATION_DURATION / 3;
-		$.each($rows, function(index, row) {
+	// function introduceRows() {
+	// 	var $rows = $(TABLE_ROW_SELECTOR);
+	// 	var delay = ANIMATION_DURATION / 3;
+	// 	$.each($rows, function(index, row) {
 
-			// Only animate the two drooping rows
-			if (index > 0 && index <= 2) {
-				var $row = $(row);
-				$row.velocity({
-					translateY: 5
-				}, {
-					duration: ANIMATION_DURATION / 6,
-					delay: delay * index
-				}).velocity({
-					translateY: 0
-				}, {
-					duration: ANIMATION_DURATION / 6
-				});
-			}
-		})
-	}
+	// 		// Only animate the two drooping rows
+	// 		if (index > 0 && index <= 2) {
+	// 			var $row = $(row);
+	// 			$row.velocity({
+	// 				translateY: 5
+	// 			}, {
+	// 				duration: ANIMATION_DURATION / 6,
+	// 				delay: delay * index
+	// 			}).velocity({
+	// 				translateY: 0
+	// 			}, {
+	// 				duration: ANIMATION_DURATION / 6
+	// 			});
+	// 		}
+	// 	})
+	// }
 
-	// Bind the table and its components
-	// to various tap handling events
-	// ---------------------------------
+	// // Bind the table and its components
+	// // to various tap handling events
+	// // ---------------------------------
 
-	function setupTableEvents() {
-		$(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-			$table = $(this);
-			if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-				expandTable($table);
-			}
-		});
+	// function setupTableEvents() {
+	// 	$(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+	// 		$table = $(this);
+	// 		if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+	// 			expandTable($table);
+	// 		}
+	// 	});
 
-		// $(".columns-table").click(function(e) {
-		// 	$table = $(this);
-		// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-		// 		expandTable($table);
-		// 	}
-		// });
+	// 	// $(".columns-table").click(function(e) {
+	// 	// 	$table = $(this);
+	// 	// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+	// 	// 		expandTable($table);
+	// 	// 	}
+	// 	// });
 
-		$(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-			var $parent = $(this).parents('.columns-table-widget');
-			var $table = $parent.find('.columns-table');
-			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-				collapseTable($table);
+	// 	$(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+	// 		var $parent = $(this).parents('.columns-table-widget');
+	// 		var $table = $parent.find('.columns-table');
+	// 		if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+	// 			collapseTable($table);
 
-				// Prevent the dom from doing any other conflicting stuff
-				e.stopPropagation();
-				e.preventDefault();
-			}
-		});
+	// 			// Prevent the dom from doing any other conflicting stuff
+	// 			e.stopPropagation();
+	// 			e.preventDefault();
+	// 		}
+	// 	});
 
-		// $(".columns-table-close-button").click(function(e) {
-		// 	var $parent = $(this).parents('.columns-table-widget');
-		// 	var $table = $parent.find('.columns-table');
-		// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-		// 		collapseTable($table);
-		// 	}
-		// });
-	}
+	// 	// $(".columns-table-close-button").click(function(e) {
+	// 	// 	var $parent = $(this).parents('.columns-table-widget');
+	// 	// 	var $table = $parent.find('.columns-table');
+	// 	// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+	// 	// 		collapseTable($table);
+	// 	// 	}
+	// 	// });
+	// }
 
 	// $(".columns-table").hammer({domEvents: true}).bind('pan', function(e) {
 	// 	e.stopPropagation();
@@ -1480,167 +3576,167 @@ $(function() {
 	// to full-screen
 	// ------------------------------
 
-	function expandTable($table) {
-		var $parent = $table.parents('.columns-table-widget');
-		$bg = $parent.find('.columns-table-container'),
-		$rows = $parent.find('.columns-table-row'),
-		$header = $parent.find('.columns-table-header');
-		$footer = $parent.find('.columns-table-footer');
+	// function expandTable($table) {
+	// 	var $parent = $table.parents('.columns-table-widget');
+	// 	$bg = $parent.find('.columns-table-container'),
+	// 	$rows = $parent.find('.columns-table-row'),
+	// 	$header = $parent.find('.columns-table-header');
+	// 	$footer = $parent.find('.columns-table-footer');
 
-		// First move the table to the outermost part of the DOM
-		// while maintaining its visual position
-		// add a placeholder
-		// and make sure we're the highest z-index in the land
+	// 	// First move the table to the outermost part of the DOM
+	// 	// while maintaining its visual position
+	// 	// add a placeholder
+	// 	// and make sure we're the highest z-index in the land
 
-		console.log(highestZIndex('*'));
+	// 	console.log(highestZIndex('*'));
 
-		var offsets = {
-			top: $parent.offset().top,
-			'margin-left': 0,
-			position: 'absolute',
-			'z-index': (highestZIndex('*') + 1)
-		};
+	// 	var offsets = {
+	// 		top: $parent.offset().top,
+	// 		'margin-left': 0,
+	// 		position: 'absolute',
+	// 		'z-index': (highestZIndex('*') + 1)
+	// 	};
 
-		console.log($parent.offset().top);
+	// 	console.log($parent.offset().top);
 		
-		// Replace the table with a same-height placeholder
-		var placeholder = document.createElement('div');
-		placeholder.className = PLACEHOLDER_CLASS;
-		placeholder.style.height = $parent.height();
-		placeholder.style.width = $parent.width();
-		$originalSibling = $parent.siblings('script').first();
-		$parent.appendTo('body');
-		$parent.addClass(RELOCATED_CLASS);
-		$parent.css(offsets);
-		$originalSibling.before(placeholder);
+	// 	// Replace the table with a same-height placeholder
+	// 	var placeholder = document.createElement('div');
+	// 	placeholder.className = PLACEHOLDER_CLASS;
+	// 	placeholder.style.height = $parent.height();
+	// 	placeholder.style.width = $parent.width();
+	// 	$originalSibling = $parent.siblings('script').first();
+	// 	$parent.appendTo('body');
+	// 	$parent.addClass(RELOCATED_CLASS);
+	// 	$parent.css(offsets);
+	// 	$originalSibling.before(placeholder);
 
-		expandTableBackground($table, $bg, $rows, $header, $footer);
-		expandTableRows($table, $rows);
-		expandTableBody($table);
-		expandTableHeader($table, $header);
+	// 	expandTableBackground($table, $bg, $rows, $header, $footer);
+	// 	expandTableRows($table, $rows);
+	// 	expandTableBody($table);
+	// 	expandTableHeader($table, $header);
 
-		positionTable();
-	}
+	// 	positionTable();
+	// }
 
-	function expandTableHeader($table, $header) {
+	// function expandTableHeader($table, $header) {
 
-		// Bring the header into view
-		$header.velocity({
-			opacity: 1 /* Fade the header into view */
-		}, {
-			duration: ANIMATION_DURATION,
-			complete: function(elements) {
-				$header.addClass(EXPANDED_CLASS);
-			}
-		});
-	}
+	// 	// Bring the header into view
+	// 	$header.velocity({
+	// 		opacity: 1 /* Fade the header into view */
+	// 	}, {
+	// 		duration: ANIMATION_DURATION,
+	// 		complete: function(elements) {
+	// 			$header.addClass(EXPANDED_CLASS);
+	// 		}
+	// 	});
+	// }
 
-	function expandTableBackground($table, $bg, $rows, $header, $footer) {
+	// function expandTableBackground($table, $bg, $rows, $header, $footer) {
 
-		// Save values to be used upon reset
-		originalBackground['height'] = $bg.height();
-		originalBackground['positionY'] = $bg.offset().top;
+	// 	// Save values to be used upon reset
+	// 	originalBackground['height'] = $bg.height();
+	// 	originalBackground['positionY'] = $bg.offset().top;
 
-		// Calculate new background position
-		var bgOffsetTop = -$bg.offset().top + $(window).scrollTop();
-		var bgWidth = $(window).width();
+	// 	// Calculate new background position
+	// 	var bgOffsetTop = -$bg.offset().top + $(window).scrollTop();
+	// 	var bgWidth = $(window).width();
 
-		// The background should be as tall as necessary to fit all the rows
-		// but the screen height at minimum
-		var bgHeight = $bg.height() + $header.height() + $footer.height() + ( $rows.height() * ($rows.length - 1) );
-		var bgHeight = bgHeight < $(window).height ?  $(window).height : bgHeight;
+	// 	// The background should be as tall as necessary to fit all the rows
+	// 	// but the screen height at minimum
+	// 	var bgHeight = $bg.height() + $header.height() + $footer.height() + ( $rows.height() * ($rows.length - 1) );
+	// 	var bgHeight = bgHeight < $(window).height ?  $(window).height : bgHeight;
 
-		$bg.velocity({
-			height: bgHeight, 			/* Fill the entire screen */
-			translateY: bgOffsetTop 	/* Move to the top of the screen */
-		},{
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$bg.addClass(EXPANDING_CLASS);
-				$TABLE.addClass(EXPANDING_CLASS);
-				$bg.removeClass('translateY-reset');
-			},
-			complete: function(elements) {
-				$bg.removeClass(EXPANDING_CLASS);
-				$bg.addClass(EXPANDED_CLASS);
-				$TABLE.removeClass(EXPANDING_CLASS);
-				$TABLE.addClass(EXPANDED_CLASS);
-				$bg.addClass('translateY-reset');
-				$('html').addClass('table-expanded');
-				// $TABLE.removeClass(RELOCATED_CLASS);
-			}
-		});
-	}
+	// 	$bg.velocity({
+	// 		height: bgHeight, 			 Fill the entire screen 
+	// 		translateY: bgOffsetTop 	/* Move to the top of the screen */
+	// 	},{
+	// 		duration: ANIMATION_DURATION,
+	// 		begin: function(elements) {
+	// 			$bg.addClass(EXPANDING_CLASS);
+	// 			$TABLE.addClass(EXPANDING_CLASS);
+	// 			$bg.removeClass('translateY-reset');
+	// 		},
+	// 		complete: function(elements) {
+	// 			$bg.removeClass(EXPANDING_CLASS);
+	// 			$bg.addClass(EXPANDED_CLASS);
+	// 			$TABLE.removeClass(EXPANDING_CLASS);
+	// 			$TABLE.addClass(EXPANDED_CLASS);
+	// 			$bg.addClass('translateY-reset');
+	// 			$('html').addClass('table-expanded');
+	// 			// $TABLE.removeClass(RELOCATED_CLASS);
+	// 		}
+	// 	});
+	// }
 
-	function expandTableBody($table, $tableBody) {
+	// function expandTableBody($table, $tableBody) {
 
-		// Calculate the new table size and position
-		var tableOffsetTop = 60;
-		// var tableHeight = rowHeight * $rows.length - 40;
+	// 	// Calculate the new table size and position
+	// 	var tableOffsetTop = 60;
+	// 	// var tableHeight = rowHeight * $rows.length - 40;
 
-		$table.velocity({
-			// height: tableHeight, /* Grow to encompass all of the rows */
-			translateY: tableOffsetTop /* Move down a few pixels to account for the header */
-		}, {
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$table.removeClass('translateY-reset');
-			},
-			complete: function(elements) {
-				$table.addClass(EXPANDED_CLASS);
-				$table.addClass('translateY-reset');
-			}
-		});
-	}
+	// 	$table.velocity({
+	// 		// height: tableHeight, /* Grow to encompass all of the rows */
+	// 		translateY: tableOffsetTop /* Move down a few pixels to account for the header */
+	// 	}, {
+	// 		duration: ANIMATION_DURATION,
+	// 		begin: function(elements) {
+	// 			$table.removeClass('translateY-reset');
+	// 		},
+	// 		complete: function(elements) {
+	// 			$table.addClass(EXPANDED_CLASS);
+	// 			$table.addClass('translateY-reset');
+	// 		}
+	// 	});
+	// }
 
-	function expandTableRows($table, $rows) {
+	// function expandTableRows($table, $rows) {
 
-		// Calculate the new position for each row
-		var duration = ANIMATION_DURATION - ( ($rows.length - 1) * ROW_DELAY );
-		$rows.each(function(index, row) {
-			var $row = $(row);
+	// 	// Calculate the new position for each row
+	// 	var duration = ANIMATION_DURATION - ( ($rows.length - 1) * ROW_DELAY );
+	// 	$rows.each(function(index, row) {
+	// 		var $row = $(row);
 
-			// Save original row data
-			originalRows[index] = {
-				positionY: $row.offset().top
-			}
+	// 		// Save original row data
+	// 		originalRows[index] = {
+	// 			positionY: $row.offset().top
+	// 		}
 
-			// Animate the rows
-			expandTableRowAtIndex($table, $row, index, duration);
-		});
-	}
+	// 		// Animate the rows
+	// 		expandTableRowAtIndex($table, $row, index, duration);
+	// 	});
+	// }
 
-	function expandTableRowAtIndex($table, $row, index, duration) {
+	// function expandTableRowAtIndex($table, $row, index, duration) {
 
-		var rowHeight = $row.outerHeight();
-		var offsetY = (index * rowHeight);
-		switch (index) {
-			case 0:
-			break;
-			case 1:
-			offsetY -= ROW_OFFSET;
-			break;
-			case 2:
-			offsetY -= ROW_OFFSET * 2;
-			break;
-			default:
-			offsetY -= ROW_OFFSET * 2;
-		}
+	// 	var rowHeight = $row.outerHeight();
+	// 	var offsetY = (index * rowHeight);
+	// 	switch (index) {
+	// 		case 0:
+	// 		break;
+	// 		case 1:
+	// 		offsetY -= ROW_OFFSET;
+	// 		break;
+	// 		case 2:
+	// 		offsetY -= ROW_OFFSET * 2;
+	// 		break;
+	// 		default:
+	// 		offsetY -= ROW_OFFSET * 2;
+	// 	}
 
-		$row.velocity({
-			translateY: offsetY /* Move each row down into its natural position */
-		}, {
-			duration: duration,
-			delay: ROW_DELAY,
-			begin: function(elements) {
-				$row.removeClass('translateY-reset');
-			},
-			complete: function(elements) {
-				$row.addClass(EXPANDED_CLASS);
-				$row.addClass('translateY-reset');
-			}
-		});
-	}
+	// 	$row.velocity({
+	// 		translateY: offsetY /* Move each row down into its natural position */
+	// 	}, {
+	// 		duration: duration,
+	// 		delay: ROW_DELAY,
+	// 		begin: function(elements) {
+	// 			$row.removeClass('translateY-reset');
+	// 		},
+	// 		complete: function(elements) {
+	// 			$row.addClass(EXPANDED_CLASS);
+	// 			$row.addClass('translateY-reset');
+	// 		}
+	// 	});
+	// }
 
 	// Define table animation sequences
 	// var expandTableSequence = [
@@ -1655,136 +3751,136 @@ $(function() {
 	// ]
 
 
-	// Methods to collapse a table
-	// back to its original position
-	// ------------------------------
+	// // Methods to collapse a table
+	// // back to its original position
+	// // ------------------------------
 
-	function collapseTable($table) {
-		var $parent = $table.parents('.columns-table-widget');
-		$bg = $parent.find('.columns-table-container'),
-		$rows = $parent.find('.columns-table-row'),
-		$header = $parent.find('.columns-table-header');
+	// function collapseTable($table) {
+	// 	var $parent = $table.parents('.columns-table-widget');
+	// 	$bg = $parent.find('.columns-table-container'),
+	// 	$rows = $parent.find('.columns-table-row'),
+	// 	$header = $parent.find('.columns-table-header');
 
-		// First move the table back to its original DOM position
-		// while maintaining its visual position
-		// and remove the placeholder
-		var offsets = {
-			top: 0,
-			position: 'relative',
-			'z-index': 0
-		};
-		// $parent.addClass(RELOCATED_CLASS);
-		$parent.insertBefore($originalSibling);
+	// 	// First move the table back to its original DOM position
+	// 	// while maintaining its visual position
+	// 	// and remove the placeholder
+	// 	var offsets = {
+	// 		top: 0,
+	// 		position: 'relative',
+	// 		'z-index': 0
+	// 	};
+	// 	// $parent.addClass(RELOCATED_CLASS);
+	// 	$parent.insertBefore($originalSibling);
 
-		// setTimeout(function() {
-			collapseTableHeader($table, $header);
-			collapseTableBackground($table, $bg);
-			collapseTableBody($table);
-			collapseTableRows($table, $rows);
-		// }, 0);
+	// 	// setTimeout(function() {
+	// 		collapseTableHeader($table, $header);
+	// 		collapseTableBackground($table, $bg);
+	// 		collapseTableBody($table);
+	// 		collapseTableRows($table, $rows);
+	// 	// }, 0);
 
-		positionTable();
-	}
+	// 	positionTable();
+	// }
 
-	function collapseTableHeader($table, $header) {
+	// function collapseTableHeader($table, $header) {
 
-		// Remove header from view
-		$header.velocity({
-			opacity: 0 /* Fade the header out of view */
-		}, {
-			duration: ANIMATION_DURATION,
-			complete: function(elements) {
-				$header.removeClass(EXPANDED_CLASS);
-			}
-		});
-	}
+	// 	// Remove header from view
+	// 	$header.velocity({
+	// 		opacity: 0 /* Fade the header out of view */
+	// 	}, {
+	// 		duration: ANIMATION_DURATION,
+	// 		complete: function(elements) {
+	// 			$header.removeClass(EXPANDED_CLASS);
+	// 		}
+	// 	});
+	// }
 
-	function collapseTableBackground($table, $bg) {
+	// function collapseTableBackground($table, $bg) {
 
-		// Calculate new background position
-		$bg.velocity({
+	// 	// Calculate new background position
+	// 	$bg.velocity({
 
-			// Return to small state
-			height: originalBackground.height,
+	// 		// Return to small state
+	// 		height: originalBackground.height,
 
-			// Move back to original position
-			translateY: 0
+	// 		// Move back to original position
+	// 		translateY: 0
 
-		},{
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$bg.addClass(EXPANDING_CLASS);
-				$bg.removeClass('translateY-reset');
-				$bg.removeClass(EXPANDED_CLASS);
-				$TABLE.removeClass(EXPANDED_CLASS);
-				$TABLE.addClass(EXPANDING_CLASS);
-			},
-			complete: function(elements) {
-				$bg.removeClass(EXPANDING_CLASS);
-				$bg.addClass('translateY-reset');
-				$('html').removeClass('table-expanded');
-				$TABLE.css({
-					top: 0,
-					position: 'relative',
-					'z-index': 0
-				});
-				$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
-				$TABLE.removeClass(RELOCATED_CLASS);
-				$TABLE.removeClass(EXPANDING_CLASS);
-			}
-		});
-	}
+	// 	},{
+	// 		duration: ANIMATION_DURATION,
+	// 		begin: function(elements) {
+	// 			$bg.addClass(EXPANDING_CLASS);
+	// 			$bg.removeClass('translateY-reset');
+	// 			$bg.removeClass(EXPANDED_CLASS);
+	// 			$TABLE.removeClass(EXPANDED_CLASS);
+	// 			$TABLE.addClass(EXPANDING_CLASS);
+	// 		},
+	// 		complete: function(elements) {
+	// 			$bg.removeClass(EXPANDING_CLASS);
+	// 			$bg.addClass('translateY-reset');
+	// 			$('html').removeClass('table-expanded');
+	// 			$TABLE.css({
+	// 				top: 0,
+	// 				position: 'relative',
+	// 				'z-index': 0
+	// 			});
+	// 			$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
+	// 			$TABLE.removeClass(RELOCATED_CLASS);
+	// 			$TABLE.removeClass(EXPANDING_CLASS);
+	// 		}
+	// 	});
+	// }
 
-	function collapseTableBody($table) {
+	// function collapseTableBody($table) {
 
-		// Calculate the old table size and position
-		$table.velocity({
+	// 	// Calculate the old table size and position
+	// 	$table.velocity({
 
-			// Move to top of container
-			translateY: 0,
+	// 		// Move to top of container
+	// 		translateY: 0,
 
-		}, {
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$table.removeClass('translateY-reset');
-				$table.removeClass(EXPANDED_CLASS);
-			},
-			complete: function(elements) {
-				// $table.removeClass(EXPANDED_CLASS);
-				$table.addClass('translateY-reset');
-			}
-		});
-	}
+	// 	}, {
+	// 		duration: ANIMATION_DURATION,
+	// 		begin: function(elements) {
+	// 			$table.removeClass('translateY-reset');
+	// 			$table.removeClass(EXPANDED_CLASS);
+	// 		},
+	// 		complete: function(elements) {
+	// 			// $table.removeClass(EXPANDED_CLASS);
+	// 			$table.addClass('translateY-reset');
+	// 		}
+	// 	});
+	// }
 
-	function collapseTableRows($table, $rows) {
+	// function collapseTableRows($table, $rows) {
 
-		var duration = ANIMATION_DURATION - ( ($rows.length - 1) * ROW_DELAY );
-		$rows.each(function(index, row) {
-			collapseTableRowAtIndex($table, $(row), index, duration);
-		});
-	}
+	// 	var duration = ANIMATION_DURATION - ( ($rows.length - 1) * ROW_DELAY );
+	// 	$rows.each(function(index, row) {
+	// 		collapseTableRowAtIndex($table, $(row), index, duration);
+	// 	});
+	// }
 
-	function collapseTableRowAtIndex($table, $row, index, duration) {
+	// function collapseTableRowAtIndex($table, $row, index, duration) {
 
-		// Calculate the old position for each row
-		var newPosition = originalRows[index].positionY - $row.offset().top;
-		$row.velocity({
+	// 	// Calculate the old position for each row
+	// 	var newPosition = originalRows[index].positionY - $row.offset().top;
+	// 	$row.velocity({
 
-			// Move each row to its collapsed position
-			translateY: 0
+	// 		// Move each row to its collapsed position
+	// 		translateY: 0
 
-		}, {
-			duration: duration,
-			delay: ROW_DELAY,
-			begin: function(elements) {
-				$row.removeClass('translateY-reset');
-				$row.removeClass(EXPANDED_CLASS);
-			},
-			complete: function(elements) {
-				$row.addClass('translateY-reset');
-			}
-		});
-	}
+	// 	}, {
+	// 		duration: duration,
+	// 		delay: ROW_DELAY,
+	// 		begin: function(elements) {
+	// 			$row.removeClass('translateY-reset');
+	// 			$row.removeClass(EXPANDED_CLASS);
+	// 		},
+	// 		complete: function(elements) {
+	// 			$row.addClass('translateY-reset');
+	// 		}
+	// 	});
+	// }
 
 	// Utility methods
 	// ------------------------------
@@ -1827,62 +3923,111 @@ $(function() {
 		// Remember the table instance once it's been inserted into the DOM
 		// as well as its jquery counterpart
 		this.table;
-		this.$table;
+		this.$$table;
+
+		// Get a reference to the table's container.
+		// On a smartphone, we'll use the window.
+		// On larger form factors, we'll use the table's container.
+		this.$$container = $$(window);
 
 		// Save a reference to the layout we create specifically for rows of this table
 		this.row_layout;
+
+		// Storage variables for resetting positions
+		this.originalBackground = {};
+		this.originalRows = [];
+		this.$$originalSibling;
+
+		// Save a copy of the data so we can re-render the layout without going back to the server
+		this.data;
+		this.layout;
 	};
 
 	// Render the initial table to the screen and position it correctly
 	Table.prototype.render = function() {
 
+		var _this = this;
+
 		// Generate table skeleton
 		// and insert it befor the script
-		var skeleton = Columns.Templates['templates/embed-table/skeleton.hbs'];
+		var skeleton = Columns.EmbeddableTemplates['templates/embed-table/skeleton.hbs'];
 		var tmpDiv = document.createElement('div'); tmpDiv.innerHTML = skeleton();
 		this.table = this.script.parentNode.insertBefore(tmpDiv.firstChild, this.script);
-		this.$table = $(this.table);
-
-		// Position table correctly given the size of the screen
-		// and reposition on resize events
-		$(window).resize(this.position);
-		this.position();
+		this.$$table = $$(this.table);
 
 		// Generate table structure
 		// var loading = createLoading();
 		// var body = createBody();
-		var loading = Columns.Templates['templates/embed-table/loading.hbs'];
-		var body = Columns.Templates['templates/embed-table/body.hbs'];
-		this.$table.append(loading({img_path: IMG_PATH}));
-		this.$table.append(body());
+		var loading = Columns.EmbeddableTemplates['templates/embed-table/loading.hbs'];
+		var body = Columns.EmbeddableTemplates['templates/embed-table/body.hbs'];
+		this.$$table.append(loading({img_path: IMG_PATH}));
+		this.$$table.append(body());
 
 		// // Make the table bounce on scroll
 		// // $TABLE.find('.columns-table-container').fancy_scroll({
 		// // 	animation: "bounce"
 		// // });
 
+		// Determine whether we're on a small or large form factor
+		// and use this to determine how to expand and contract
+		// as well as initially place the table
+		if (this.isLargeFormFactor()) {
+			this.$$container = this.$$table.parent();
+			this.$$table.addClass('large-form-factor');
+		} else {
+			this.$$container = $$(window);
+			this.$$table.addClass('small-form-factor');
+		}
+
+		// Position table correctly given the size of the screen
+		// and reposition on resize events
+		$$(window).resize(function() {
+			_this.position();
+		});
+		this.position();
+
 		// // Prevent ghost clicks while the table is open
 		PreventGhostClick(document, function() {
-			return this.$table.hasClass(EXPANDING_CLASS) || $TABLE.hasClass(EXPANDED_CLASS)
+			return _this.$$table.hasClass(EXPANDING_CLASS) || _this.$$table.hasClass(EXPANDED_CLASS)
 		});
+	};
+
+	Table.prototype.isLargeFormFactor = function() {
+		return $$(window).width() > MAX_SMARTPHONE_SCREEN_WIDTH;
+	};
+
+	Table.prototype.getOffsetTop = function() {
+		if (this.isLargeFormFactor()) {
+			return this.$$table.position().top; 
+		} else {
+			return this.$$table.offset().top;
+		}
+	};
+
+	Table.prototype.getOffsetLeft = function() {
+		if (this.isLargeFormFactor()) {
+			return this.$$table.position().left; 
+		} else {
+			return this.$$table.offset().left;
+		}
 	};
 
 	// Ensure that the table is positioned correctly on the screen
 	// Smartphones: it should be the full width of the screen and left-aligned
 	Table.prototype.position = function() {
 		var properties = {
-			'width': $(window).width()
+			'width': this.$$container.innerWidth()
 		}
 
 		// Only move the table if it's not aligned with the left side of the screen
-		var offset = this.$table.offset().left;
+		var offset = this.getOffsetLeft();
 		if (offset != 0) {
 			properties['margin-left'] = -offset 
 		}
 
 		// Make the table the width of the window
 		// and left align it with the window 
-		this.$table.css(properties);
+		this.$$table.css(properties);
 	};
 
 	// Download the appropriate data from the api
@@ -1894,37 +4039,64 @@ $(function() {
 
 		var _this = this;
 		setTimeout(function() {
+			_this.generateLayout(DUMMY_DATA.layout);
 			_this.renderData(DUMMY_DATA);
 		}, 100);
 	};
 
-	Table.prototype.renderData = function(data) {
-		var _this = this;
-		var numRows = data.data.length;
+	Table.prototype.templateName = function() {
+		return 'row_layout_' + scripts.indexOf(this.script);
+	};
 
+	Table.prototype.generateLayout = function(layout, reload) {
 		// Set up the row layout as a handlebars partial
 		// dynamically based on the row layout object
-		var row_layout = Columns.Templates['templates/embed-table/row-layout.hbs']({layout: data.layout});
+		this.layout = layout;
+		var row_layout = Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']({layout: layout});
 		var row_template = Handlebars.compile(row_layout);
-		var templateName = 'row_layout_' + scripts.indexOf(this.script);
+		var templateName = this.templateName();
 		Handlebars.registerPartial(templateName, row_template);
 
+		if (reload) {
+			this.renderData();
+		}
+	};
+
+	Table.prototype.renderData = function(data) {
+		var _this = this;
+
+		// If no data was passed in, re-render with the old data
+		if (!data) {
+			if (!this.data) {
+				return;
+			} else {
+				data = this.data;
+			}
+		} else {
+			this.data = data;
+		}
+
+		var numRows = data.data.length;
+
 		// Generate table layouts with data
-		var header = Columns.Templates['templates/embed-table/header.hbs'];
-		var rowsTemplate = Columns.Templates['templates/embed-table/rows.hbs'];
-		var footer = Columns.Templates['templates/embed-table/footer.hbs'];
+		var header = Columns.EmbeddableTemplates['templates/embed-table/header.hbs'];
+		var rowsTemplate = Columns.EmbeddableTemplates['templates/embed-table/rows.hbs'];
+		var footer = Columns.EmbeddableTemplates['templates/embed-table/footer.hbs'];
 
 		// Render table components with data
-		var $tableBody = this.$table.find(TABLE_BODY_SELECTOR);
-		this.$table.prepend(header({
+		var $$tableBody = this.$$table.find(TABLE_BODY_SELECTOR);
+		this.$$table.find(TABLE_HEADER_SELECTOR).remove();
+		this.$$table.find(TABLE_FOOTER_SELECTOR).remove();
+		$$tableBody.empty();
+		this.$$table.prepend(header({
 			title: data.title,
 			sort_by_column: data.sort_by_column
 		}));
-		$tableBody.append(rowsTemplate({
-			row_layout: templateName,
+		$$tableBody.append(rowsTemplate({
+			row_layout: this.templateName(),
 			rows: data.data
 		}));
-		$tableBody.after(footer({
+		$$tableBody.after(footer({
 			source: data.source,
 			item_count: numRows
 		}));
@@ -1933,26 +4105,26 @@ $(function() {
 		// and animate the various components in
 		var introSequence = [];
 		var delay = ANIMATION_DURATION / 3;
-		var $rows = this.$table.find(TABLE_ROW_SELECTOR);
+		var $$rows = this.$$table.find(TABLE_ROW_SELECTOR);
 		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
-		var tableHeight = offsetHeight + $rows.height();
-		introSequence.push({elements: $tableBody, properties: {height: tableHeight}, options: {duration: ANIMATION_DURATION}});
-		$.each($rows, function(index, row) {
+		var tableHeight = offsetHeight + $$rows.height();
+		introSequence.push({elements: $$tableBody, properties: {height: tableHeight}, options: {duration: ANIMATION_DURATION}});
+		$$.each($$rows, function(index, row) {
 
 			// Only animate the two drooping rows
 			if (index > 0 && index <= 2) {
-				var $row = $(row);
+				var $$row = $$(row);
 				introSequence.push({
-					elements: $row, properties: {translateY: 5}, options: {duration: ANIMATION_DURATION / 6, delay: delay * index, sequenceQueue: false}
+					elements: $$row, properties: {translateY: 5}, options: {duration: ANIMATION_DURATION / 6, delay: delay * index, sequenceQueue: false}
 				});
 				introSequence.push({
-					elements: $row, properties: {translateY: 0}, options: {duration: ANIMATION_DURATION / 6}
+					elements: $$row, properties: {translateY: 0}, options: {duration: ANIMATION_DURATION / 6}
 				});
 			}
 
 			// Once we're through the first two rows, run the sequence and exit the loop
-			if (index == 2 || index == $rows.length - 1) {
-				$.Velocity.RunSequence(introSequence);
+			if (index == 2 || index == $$rows.length - 1) {
+				$$.Velocity.RunSequence(introSequence);
 				return false;
 			}
 
@@ -1968,10 +4140,11 @@ $(function() {
 	}
 
 	Table.prototype.setupEvents = function() {
-		this.$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-			$table = $(this);
-			if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-				expandTable($table);
+		var _this = this;
+		this.$$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+			$$table = $$(this);
+			if (!$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+				_this.expand();
 			}
 		});
 
@@ -1982,11 +4155,11 @@ $(function() {
 		// 	}
 		// });
 
-		this.$table.find(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-			var $parent = $(this).parents('.columns-table-widget');
-			var $table = $parent.find('.columns-table');
-			if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-				collapseTable($table);
+		this.$$table.find(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+			var $$parent = $$(this).parents('.columns-table-widget');
+			var $$table = $$parent.find('.columns-table');
+			if ($$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+				_this.collapse();
 
 				// Prevent the dom from doing any other conflicting stuff
 				e.stopPropagation();
@@ -2005,11 +4178,336 @@ $(function() {
 
 	Table.prototype.setLoading = function(loading) {
 		if (loading) {
-			this.$table.addClass(LOADING_CLASS);
+			this.$$table.addClass(LOADING_CLASS);
 		} else {
-			this.$table.removeClass(LOADING_CLASS);
+			this.$$table.removeClass(LOADING_CLASS);
 		}
 	};
+
+	// Methods to expand a table
+	// from to its original position
+	// to full-screen
+	// ------------------------------
+
+	Table.prototype.expand = function() {
+		var $$table = this.$$table;
+		$$bg = $$table.find('.columns-table-container'),
+		$$body = $$table.find(TABLE_BODY_SELECTOR);
+		$$rows = $$table.find('.columns-table-row'),
+		$$header = $$table.find('.columns-table-header');
+		$$footer = $$table.find('.columns-table-footer');
+
+		// First move the table to the outermost part of the DOM
+		// while maintaining its visual position
+		// add a placeholder
+		// and make sure we're the highest z-index in the land
+		var offsets = {
+			top: this.getOffsetTop(),
+			'margin-left': 0,
+			position: 'absolute',
+			'z-index': (highestZIndex('*') + 1)
+		};
+		
+		// Replace the table with a same-height placeholder
+		var placeholder = document.createElement('div');
+		placeholder.className = PLACEHOLDER_CLASS;
+		placeholder.style.height = $$table.height();
+		placeholder.style.width = $$table.width();
+		this.$$originalSibling = $$table.siblings('script').first();
+		if (this.isLargeFormFactor()) {
+			$$table.appendTo(this.$$container);	
+		} else {
+			$$table.appendTo('body');
+		}
+		$$table.addClass(RELOCATED_CLASS);
+		$$table.css(offsets);
+		this.$$originalSibling.before(placeholder);
+
+		this.expandBackground($$bg, $$rows, $$header, $$footer);
+		this.expandRows($$rows);
+		this.expandBody($$body);
+		this.expandHeader($$header);
+
+		this.position();
+	}
+
+	Table.prototype.expandHeader = function($$header) {
+
+		// Bring the header into view
+		$$header.velocity({
+			opacity: 1 /* Fade the header into view */
+		}, {
+			duration: ANIMATION_DURATION,
+			complete: function(elements) {
+				$$header.addClass(EXPANDED_CLASS);
+			}
+		});
+	}
+
+	Table.prototype.expandBackground = function($$bg, $$rows, $$header, $$footer) {
+
+		// Save values to be used upon reset
+		this.originalBackground['height'] = $$bg.height();
+		var bgOffsetTop;
+		if (this.isLargeFormFactor()) {
+			this.originalBackground['positionY'] = $$bg.position().top;
+			bgOffsetTop = -$$bg.position().top;
+		} else {
+			this.originalBackground['positionY'] = $$bg.offset().top;
+			bgOffsetTop = -$$bg.offset().top;
+		}
+
+		// Calculate new background position
+		bgOffsetTop += this.$$container.scrollTop();
+		var bgWidth = this.$$container.width();
+
+		// The background should be as tall as necessary to fit all the rows
+		// but the screen height at minimum
+		var bgHeight = $$bg.outerHeight() + $$header.outerHeight() + $$footer.outerHeight() + ( $$rows.outerHeight() * ($$rows.length - 1) );
+		var bgHeight = bgHeight < this.$$container.height ? this.$$container.height : bgHeight;
+
+		$$bg.velocity({
+			height: bgHeight, 			/* Fill the entire screen */
+			translateY: bgOffsetTop 	/* Move to the top of the screen */
+		},{
+			duration: ANIMATION_DURATION,
+			begin: function(elements) {
+				$$bg.addClass(EXPANDING_CLASS);
+				$$bg.removeClass('translateY-reset');
+			},
+			complete: function(elements) {
+				$$bg.removeClass(EXPANDING_CLASS);
+				$$bg.addClass(EXPANDED_CLASS);
+				$$bg.addClass('translateY-reset');
+				// $$TABLE.removeClass(RELOCATED_CLASS);
+			}
+		});
+	}
+
+	Table.prototype.expandBody = function($$body) {
+
+		var _this = this;
+		// Calculate the new table size and position
+		var tableOffsetTop = 60;
+		// var tableHeight = rowHeight * $$rows.length - 40;
+
+		$$body.velocity({
+			// height: tableHeight, /* Grow to encompass all of the rows */
+			translateY: tableOffsetTop /* Move down a few pixels to account for the header */
+		}, {
+			duration: ANIMATION_DURATION,
+			begin: function(elements) {
+				_this.$$table.addClass(EXPANDING_CLASS);
+				$$body.removeClass('translateY-reset');
+			},
+			complete: function(elements) {
+				_this.$$table.addClass(EXPANDED_CLASS);
+				_this.$$table.removeClass(EXPANDING_CLASS);
+				$$('html').addClass('table-expanded');
+				$$body.addClass(EXPANDED_CLASS);
+				$$body.addClass('translateY-reset');
+			}
+		});
+	}
+
+	Table.prototype.expandRows = function($$rows) {
+
+		var _this = this;
+
+		// Calculate the new position for each row
+		var duration = ANIMATION_DURATION - ( ($$rows.length - 1) * ROW_DELAY );
+		$$rows.each(function(index, row) {
+			var $$row = $$(row);
+
+			// Save original row data
+			_this.originalRows[index] = {
+				positionY: $$row.offset().top
+			}
+
+			// Animate the rows
+			_this.expandRowAtIndex($$row, index, duration);
+		});
+	}
+
+	Table.prototype.expandRowAtIndex = function($$row, index, duration) {
+
+		var rowHeight = $$row.outerHeight();
+		var offsetY = (index * rowHeight);
+		switch (index) {
+			case 0:
+			break;
+			case 1:
+			offsetY -= ROW_OFFSET;
+			break;
+			case 2:
+			offsetY -= ROW_OFFSET * 2;
+			break;
+			default:
+			offsetY -= ROW_OFFSET * 2;
+		}
+
+		$$row.velocity({
+			translateY: offsetY /* Move each row down into its natural position */
+		}, {
+			duration: duration,
+			delay: ROW_DELAY,
+			begin: function(elements) {
+				$$row.removeClass('translateY-reset');
+			},
+			complete: function(elements) {
+				$$row.addClass(EXPANDED_CLASS);
+				$$row.addClass('translateY-reset');
+			}
+		});
+	}
+
+	// Define table animation sequences
+	// var expandTableSequence = [
+	// 	{
+	// 		// Background
+	// 		elements: $$parent.find('.columns-table-container'),
+	// 		properties: {
+	// 			height: bgHeight, 			/* Fill the entire screen */
+	// 			translateY: bgOffsetTop 	/* Move to the top of the screen */
+	// 		}
+	// 	}
+	// ]
+
+	// Methods to collapse a table
+	// back to its original position
+	// ------------------------------
+
+	Table.prototype.collapse = function() {
+		var $$table = this.$$table;
+		$$body = $$table.find(TABLE_BODY_SELECTOR);
+		$$bg = $$table.find('.columns-table-container'),
+		$$rows = $$table.find('.columns-table-row'),
+		$$header = $$table.find('.columns-table-header');
+
+		// First move the table back to its original DOM position
+		// while maintaining its visual position
+		// and remove the placeholder
+		var offsets = {
+			top: 0,
+			position: 'relative',
+			'z-index': 0
+		};
+		// $$parent.addClass(RELOCATED_CLASS);
+		$$table.insertBefore(this.$$originalSibling);
+
+		// setTimeout(function() {
+			this.collapseHeader($$header);
+			this.collapseBackground($$bg);
+			this.collapseBody($$body);
+			this.collapseRows($$rows);
+		// }, 0);
+
+		this.position();
+	}
+
+	Table.prototype.collapseHeader = function($$header) {
+
+		// Remove header from view
+		$$header.velocity({
+			opacity: 0 /* Fade the header out of view */
+		}, {
+			duration: ANIMATION_DURATION,
+			complete: function(elements) {
+				$$header.removeClass(EXPANDED_CLASS);
+			}
+		});
+	}
+
+	Table.prototype.collapseBackground = function($$bg) {
+
+		var _this = this;
+
+		// Calculate new background position
+		$$bg.velocity({
+
+			// Return to small state
+			height: _this.originalBackground.height,
+
+			// Move back to original position
+			translateY: 0
+
+		},{
+			duration: ANIMATION_DURATION,
+			begin: function(elements) {
+				$$bg.addClass(EXPANDING_CLASS);
+				$$bg.removeClass('translateY-reset');
+				$$bg.removeClass(EXPANDED_CLASS);
+			},
+			complete: function(elements) {
+				$$bg.removeClass(EXPANDING_CLASS);
+				$$bg.addClass('translateY-reset');
+				$$('html').removeClass('table-expanded');
+				_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
+			}
+		});
+	}
+
+	Table.prototype.collapseBody = function($$body) {
+
+		var _this = this;
+		// Calculate the old table size and position
+		$$body.velocity({
+
+			// Move to top of container
+			translateY: 0,
+
+		}, {
+			duration: ANIMATION_DURATION,
+			begin: function(elements) {
+				$$body.removeClass('translateY-reset');
+				$$body.removeClass(EXPANDED_CLASS);
+				_this.$$table.removeClass(EXPANDED_CLASS);
+				_this.$$table.addClass(EXPANDING_CLASS);
+			},
+			complete: function(elements) {
+				// $$table.removeClass(EXPANDED_CLASS);
+				$$body.addClass('translateY-reset');
+				_this.$$table.removeClass(RELOCATED_CLASS);
+				_this.$$table.removeClass(EXPANDING_CLASS);
+				_this.$$table.css({
+					top: 0,
+					position: 'relative',
+					'z-index': 0
+				});
+			}
+		});
+	}
+
+	Table.prototype.collapseRows = function($$rows) {
+
+		var _this = this;
+		var duration = ANIMATION_DURATION - ( ($$rows.length - 1) * ROW_DELAY );
+		$$rows.each(function(index, row) {
+			_this.collapseRowAtIndex($$(row), index, duration);
+		});
+	}
+
+	Table.prototype.collapseRowAtIndex = function($$row, index, duration) {
+
+		// Calculate the old position for each row
+		var newPosition = this.originalRows[index].positionY - $$row.offset().top;
+		$$row.velocity({
+
+			// Move each row to its collapsed position
+			translateY: 0
+
+		}, {
+			duration: duration,
+			delay: ROW_DELAY,
+			begin: function(elements) {
+				$$row.removeClass('translateY-reset');
+				$$row.removeClass(EXPANDED_CLASS);
+			},
+			complete: function(elements) {
+				$$row.addClass('translateY-reset');
+			}
+		});
+	}
 
 	// Basic setup operations before we start creating tables
 	// ------------------------------------------------------
@@ -2018,7 +4516,7 @@ $(function() {
 	if(!Columns.hasFinishedSetup) { Columns.hasFinishedSetup = false; };
 	if (!Columns.hasFinishedSetup) {
 
-		// 1) Add the table stylsheet to the page
+		// Add the table stylsheet to the page
 		var style = document.createElement('link');
 		style.rel = 'stylesheet';
 		style.type = 'text/css';
@@ -2026,19 +4524,19 @@ $(function() {
 		style.media = 'all';
 		document.head.appendChild(style);
 
-		// 2) Setup necessary handlebars templates and helpers
-		// Handlebars.registerPartial('row', Columns.Templates['templates/embed-table/row.hbs']);
+		// Setup necessary handlebars templates and helpers
+		// Handlebars.registerPartial('row', Columns.EmbeddableTemplates['templates/embed-table/row.hbs']);
 		Handlebars.registerHelper('partial', function(name, ctx, hash) {
 		    var ps = Handlebars.partials;
 		    if(typeof ps[name] !== 'function')
 		        ps[name] = Handlebars.compile(ps[name]);
 		    return ps[name](ctx, hash);
 		});
-		Handlebars.registerPartial('group', Columns.Templates['templates/embed-table/row-group.hbs']);
-		Handlebars.registerPartial('column', Columns.Templates['templates/embed-table/row-value.hbs']);
-		Handlebars.registerPartial('footer', Columns.Templates['templates/embed-table/footer.hbs']);
-		Handlebars.registerPartial('layout', Columns.Templates['templates/embed-table/layout.hbs']);
-		Handlebars.registerPartial('style', Columns.Templates['templates/embed-table/style.hbs']);
+		Handlebars.registerPartial('group', Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']);
+		Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
+		Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
+		Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
+		Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
 
 		Handlebars.registerHelper('ifIsGroup', function(type, options) {
 			return type == 'group' ? options.fn(this) : options.inverse(this);
@@ -2048,7 +4546,7 @@ $(function() {
 			return type == 'single' ? options.fn(this) : options.inverse(this);
 		});
 
-		// 3) Create global variables to store our tables and manage the load process
+		// Create global variables to store our tables and manage the load process
 		if(!Columns.scripts) { Columns.scripts = []; };
 		if(!Columns.tables) { Columns.tables = []; };
 
@@ -2059,8 +4557,8 @@ $(function() {
 	var scripts = Columns.scripts;
 	var tables = Columns.tables;
 		
-	// 4) Find all the scripts generaged by us
-	//    and create a new table for each one!
+	// Find all the scripts generaged by us
+	// and create a new table for each one!
 	var scriptTags = document.getElementsByTagName('script');
 	for (var i = 0; i < scriptTags.length ; i++) {
 		var scriptTag = scriptTags[i];

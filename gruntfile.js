@@ -13,12 +13,20 @@ module.exports = function(grunt) {
 			}
 		},
 		handlebars: {
-			compile: {
+			embed: {
+				options: {
+					namespace: "Columns.EmbeddableTemplates"
+				},
+				files: {
+					"templates/embeddable-templates.js": "templates/embed-table/*.hbs"
+				}
+			},
+			layout: {
 				options: {
 					namespace: "Columns.Templates"
 				},
 				files: {
-					"templates/templates.js": "templates/**/*.hbs"
+					"templates/templates.js": ["templates/**/*.hbs", "!templates/embed-table/*.hbs"]
 				}
 			}
 		},
@@ -34,9 +42,9 @@ module.exports = function(grunt) {
 					'bower_components/velocity/velocity.min.js',
 					// 'bower_components/velocity/velocity.js',
 					'bower_components/velocity/velocity.ui.min.js',
-					'bower_components/handlebars/handlebars.min.js',
-					// 'bower_components/handlebars/handlebars.js',
-					'templates/templates.js',
+					// 'bower_components/handlebars/handlebars.min.js',
+					'bower_components/handlebars/handlebars.js',
+					'templates/embeddable-templates.js',
 					'javascripts/embed-table.js',
 					'javascripts/embed-table-outro.js'
 				],

@@ -22,12 +22,6 @@ $columns-table-accent-color: 	#69A368;
 	font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
 	max-width: none !important;
 
-		.columns-table-container {
-		width: 100%;
-		background: $gray-lightest;
-		border: 1px solid $gray-lighter;
-	}
-
 	* {
 		box-sizing: content-box;
 		font-family: 'Heiti TC', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
@@ -45,6 +39,13 @@ $columns-table-accent-color: 	#69A368;
 	@include justify-content(flex-start);
 	position: relative;
 	padding: $table-container-padding;
+}
+
+.columns-table-container {
+	width: 100%;
+	background: $gray-lightest;
+	border-top: 1px solid $gray-lighter;
+	border-bottom: 1px solid $gray-lighter;
 }
 
 .columns-table {
@@ -95,7 +96,6 @@ $columns-table-accent-color: 	#69A368;
 	@include display(flex);
 	@include justify-content(space-between);
 	@include align-items(center);
-	position: fixed;
 	top: 0; left: 0;
 	height: $table-header-height;
 	@include calc(width, '100% - #{$table-container-padding} * 2');
@@ -106,6 +106,14 @@ $columns-table-accent-color: 	#69A368;
 
 	opacity: 0;
 	pointer-events: none;
+}
+
+.large-form-factor .columns-table-header {
+	position: absolute;
+}
+
+.small-form-factor .columns-table-header {
+	position: fixed;
 }
 
 .columns-table-header-name {
@@ -266,11 +274,18 @@ html.table-expanded {
 
 .columns-table-container.expanded {
 	// transform: translateY(0px); /* Remove the expansion animation transform */
-	position: fixed;
 	top: 0;
 	// @include calc(height, '100% - #{$table-container-padding} * 2' !important);
-	height: 100% !important; /* Override the height set via animation */
+	// height: 100% !important; /* Override the height set via animation */
 	overflow: scroll;
+}
+
+.large-form-factor .columns-table-container.expanded {
+	position: absolute;
+}
+
+.small-form-factor .columns-table-container.expanded {
+	position: fixed;
 }
 
 .expanded .columns-table-wrapper {
@@ -282,6 +297,10 @@ html.table-expanded {
 	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
 	height: auto !important; /* Override the custom height given on load */
 	border: 1px solid $gray-lighter;
+}
+
+.expanded .columns-table-loading {
+	display: none;
 }
 
 .columns-table-row.expanded:last-child {

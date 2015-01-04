@@ -37,25 +37,26 @@ Columns.Upload = new function() {
 		var _this = this;
 		var _$this = this.$this;
 		_$this.find(_this.UPLOAD_BUTTON_SELECTOR).click(function() {
-			// $(this).siblings('input').trigger('click');
-			Columns.data.columns = [
-				'First Name',
-				'Last Name',
-				'Hometown',
-				'Age',
-				'Unit'
-			];
-			Columns.Items.render(Columns.data.columns);
-			Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
-			// Columns.Styling.updateStyling($(Columns.Template.$template).first());
-			Columns.Items.updateItemStylesFromTemplate(Columns.Template);
-			Columns.Styling.initWithItem($(Columns.Template.$template).first());
-			// Columns.Styling.updateStyling($(Columns.Template.$template).first());
-			_this.hide();
+			$(this).siblings('input').trigger('click');
+			// Columns.data.columns = [
+			// 	'First Name',
+			// 	'Last Name',
+			// 	'Hometown',
+			// 	'Age',
+			// 	'Unit'
+			// ];
+			// Columns.Items.render(Columns.data.columns);
+			// Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
+			// // Columns.Styling.updateStyling($(Columns.Template.$template).first());
+			// Columns.Items.updateItemStylesFromTemplate(Columns.Template);
+			// Columns.Styling.initWithItem($(Columns.Template.$template).first());
+			// // Columns.Styling.updateStyling($(Columns.Template.$template).first());
+			// _this.hide();
 
-			// Expand the preview table as the upload screen fades
-			Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
-			// Columns.tables[0].expand();
+			// // Expand the preview table as the upload screen fades
+			// Columns.tables[0].generateLayout(Columns.Layout.layoutObject, false);
+			// Columns.tables[0].renderData(Columns.data.data);
+			// // Columns.tables[0].expand();
 		});
 
 		$("input[type='file']").change(function() {
@@ -74,6 +75,13 @@ Columns.Upload = new function() {
 				rowsParsed++;
 				if (rowsParsed == 1) {
 					Columns.data.columns = row.data[0];
+				} else {
+					var obj = {};
+					row.data[0].forEach(function(value, index) {
+						obj[Columns.data.columns[index].toLowerCase().replace(/ /g, '_')] = value;
+					});
+					Columns.data.data.push(obj);
+
 				}
 				// uploadedData.push(row.data[0]);
 				// updateProgress(row.meta.lines);
@@ -87,12 +95,24 @@ Columns.Upload = new function() {
 				// } else {
 					// renderData(uploadedData);
 				// }
-				_this.setLoading(false);
+				Columns.Items.render(Columns.data.columns);
+				Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
+				// Columns.Styling.updateStyling($(Columns.Template.$template).first());
+				Columns.Items.updateItemStylesFromTemplate(Columns.Template);
+				Columns.Styling.initWithItem($(Columns.Template.$template).first());
+				// Columns.Styling.updateStyling($(Columns.Template.$template).first());
+				// _this.hide();
+
+				// Expand the preview table as the upload screen fades
+				Columns.tables[0].generateLayout(Columns.Layout.layoutObject, false);
+				Columns.tables[0].renderData(Columns.data);
+				// Columns.tables[0].expand();
 				// Columns.Template.init();
 				// Columns.Items.init(Columns.data.columns);
 				// Columns.Styling.init();
 				// Columns.EmbedDetailsPanel.init();
 				// Columns.Styling.updateStyling($(Columns.Template.$template).first());
+				_this.setLoading(false);
 				_this.hide();
 			}
 		});

@@ -1,7 +1,7 @@
 <div class="columns-table-header">
 	<div class="columns-table-header-name">
-		<span class="columns-table-title">{{title}}</span>
-		<span class="columns-table-subtitle">by {{sort_by_column}}</span>
+		<span class="columns-table-title">{{#if title}}{{title}}{{else}}Untitled{{/if}}</span>
+		{{#if sort_by_column}}<span class="columns-table-subtitle">by {{sort_by_column}}</span>{{/if}}
 	</div>
 	<div class="columns-table-header-controls">
 		<button class="columns-table-header-button columns-table-filters-button">

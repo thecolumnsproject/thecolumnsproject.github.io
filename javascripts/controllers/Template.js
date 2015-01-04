@@ -61,7 +61,7 @@ Columns.Template = new function() {
 
 		// When the table is scrolled
 		$(document).on('ColumnsTableDidScroll', function(e, data) {
-			var $table = data.table;
+			var $table = data.table.$$table;
 
 			// Move the template up until it hits the header
 			var minScroll = -24;
@@ -76,6 +76,12 @@ Columns.Template = new function() {
 			// 	delay: 0
 			// });
 			$.Velocity.hook(_this.$template.parents('.layout-template'), "translateY", scroll + "px");
+		});
+
+		$(document).on('ColumnsTableDidRenderData', function(e, data) {
+			_this.$template.css({
+				height: data.table.tallestRowHeight()
+			});
 		});
 	};
 

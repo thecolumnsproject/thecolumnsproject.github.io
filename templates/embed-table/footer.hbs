@@ -1,7 +1,9 @@
 <div class="columns-table-footer">
 	<span class="columns-table-source">
-		<i class="columns-table-footer-icon columns-verified-source-icon icon-circle-check-open"></i>
-		{{source}}
+		{{#if source}}
+			<i class="columns-table-footer-icon columns-verified-source-icon icon-circle-check-open"></i>
+			{{source}}
+		{{/if}}
 	</span>
 	<span class="columns-table-items-count">{{item_count}} Items</span>
 	<i class="columns-table-footer-icon columns-logo icon-columns"></i>

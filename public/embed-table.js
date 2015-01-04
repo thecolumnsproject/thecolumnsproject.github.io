@@ -2908,14 +2908,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/footer.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
-
-  buffer += "<div class=\"columns-table-footer\">\n	<span class=\"columns-table-source\">\n		<i class=\"columns-table-footer-icon columns-verified-source-icon icon-circle-check-open\"></i>\n		";
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n			<i class=\"columns-table-footer-icon columns-verified-source-icon icon-circle-check-open\"></i>\n			";
   if (helper = helpers.source) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.source); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\n	</span>\n	<span class=\"columns-table-items-count\">";
+    + "\n		";
+  return buffer;
+  }
+
+  buffer += "<div class=\"columns-table-footer\">\n	<span class=\"columns-table-source\">\n		";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.source), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	</span>\n	<span class=\"columns-table-items-count\">";
   if (helper = helpers.item_count) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.item_count); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -2926,18 +2935,40 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/header.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
-
-  buffer += "<div class=\"columns-table-header\">\n	<div class=\"columns-table-header-name\">\n		<span class=\"columns-table-title\">";
+function program1(depth0,data) {
+  
+  var stack1, helper;
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</span>\n		<span class=\"columns-table-subtitle\">by ";
+  return escapeExpression(stack1);
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "Untitled";
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "<span class=\"columns-table-subtitle\">by ";
   if (helper = helpers.sort_by_column) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.sort_by_column); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\n	</div>\n	<div class=\"columns-table-header-controls\">\n		<button class=\"columns-table-header-button columns-table-filters-button\">\n			<i class=\"columns-table-header-icon icon-equalizer\"></i>\n		</button>\n		<button class=\"columns-table-header-button columns-table-close-button\">Close</button>\n	</div>\n</div>";
+    + "</span>";
+  return buffer;
+  }
+
+  buffer += "<div class=\"columns-table-header\">\n	<div class=\"columns-table-header-name\">\n		<span class=\"columns-table-title\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</span>\n		";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.sort_by_column), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	</div>\n	<div class=\"columns-table-header-controls\">\n		<button class=\"columns-table-header-button columns-table-filters-button\">\n			<i class=\"columns-table-header-icon icon-equalizer\"></i>\n		</button>\n		<button class=\"columns-table-header-button columns-table-close-button\">Close</button>\n	</div>\n</div>";
   return buffer;
   });
 
@@ -4118,20 +4149,30 @@ $$(function() {
 			shouldRunRowIntroAnimation = true;
 		}
 
+		// For now, only render the first 20 rows
 		$$rows.remove();
 		$$tableBody.prepend(rowsTemplate({
 			row_layout: this.templateName(),
-			rows: data.data
+			rows: data.data.slice(0, 20)
 		}));	
+
+		// If we're in preview and the table is expanded,
+		// refresh the amount of padding we add to the top
+		// to account for the template
+		if (this.preview && this.$$table.hasClass(EXPANDED_CLASS)) {
+			$$tableBody.css({
+				paddingTop: this.tallestRowHeight()
+			});
+		}
 
 		// Reset rows to equal the new rows we just added
 		$$rows = this.$$table.find(TABLE_ROW_SELECTOR);
+		$$rows.css({height: this.tallestRowHeight()});
 
 		// Set any dynamic sizing or positioning values
 		// and animate the various components in
 		var introSequence = [];
-		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
-		var tableHeight = offsetHeight + $$rows.height();
+		var tableHeight = this.backgroundHeight();
 		var duration = 0;
 		if (shouldRunRowIntroAnimation) {
 			duration = ANIMATION_DURATION;
@@ -4165,10 +4206,27 @@ $$(function() {
 		// Set up DOM events on the table
 		this.setupEvents();
 
+		// Announce that the table has rendered data
+		if (this.preview) {
+			$(document).trigger('ColumnsTableDidRenderData', {table: this});
+		}
+
 		// Remove the loading class after the screen repaints
 		setTimeout(function() {
 			_this.setLoading(false);
 		}, 100);
+	};
+
+	Table.prototype.tallestRowHeight = function() {
+		return Math.max.apply(null, this.$$table.find(TABLE_ROW_SELECTOR).map(function () {
+			return $$(this).height();
+		}).get());
+	};
+
+	Table.prototype.backgroundHeight = function() {
+		var numRows = this.$$table.find(TABLE_ROW_SELECTOR).length;
+		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+		return offsetHeight + this.tallestRowHeight();
 	};
 
 	Table.prototype.updateComponent = function($$component, data, template) {
@@ -4224,7 +4282,7 @@ $$(function() {
 		// Notify the preview template when the table scrolls
 		if (this.preview) {
 			this.$$table.find('.columns-table-container').on('scroll', function(e) {
-				$(document).trigger('ColumnsTableDidScroll', {table: _this.$$table, originalEvent: e});
+				$(document).trigger('ColumnsTableDidScroll', {table: _this, originalEvent: e});
 			})
 		}
 	};
@@ -4253,7 +4311,7 @@ $$(function() {
 		// 	}
 		// });
 		if (this.preview) {
-			$(document).trigger('ColumnsTableWillExpand', {table: this.$$table});
+			$(document).trigger('ColumnsTableWillExpand', {table: this});
 		}
 
 		var $$table = this.$$table;
@@ -4322,7 +4380,7 @@ $$(function() {
 				$$('html').addClass('table-expanded');
 
 				if (_this.preview) {
-					$(document).trigger('ColumnsTableDidExpand', {table: _this.$$table});
+					$(document).trigger('ColumnsTableDidExpand', {table: _this});
 				}
 			}
 		});
@@ -4395,7 +4453,7 @@ $$(function() {
 		// Move the table down a few extra pixels to account for the template if we're in preview mode
 		var paddingTop = 0;
 		if (this.preview) {
-			paddingTop = this.$$table.find(TABLE_ROW_SELECTOR).height();
+			paddingTop = this.tallestRowHeight();
 		}
 		// var tableHeight = rowHeight * $$rows.length - 40;
 
@@ -4536,7 +4594,7 @@ $$(function() {
 				$$('html').removeClass('table-expanded');
 
 				if (_this.preview) {
-					$(document).trigger('ColumnsTableDidCollapse', {table: _this.$$table});
+					$(document).trigger('ColumnsTableDidCollapse', {table: _this});
 				}
 			}
 		});
@@ -4550,7 +4608,7 @@ $$(function() {
 		$$header.velocity({
 			opacity: 0 /* Fade the header out of view */
 		}, {
-			duration: ANIMATION_DURATION,
+			duration: ANIMATION_DURATION * 0.2,
 			complete: function(elements) {
 				$$header.removeClass(EXPANDED_CLASS);
 			}
@@ -4565,7 +4623,9 @@ $$(function() {
 		$$bg.velocity({
 
 			// Return to small state
-			height: _this.originalBackground.height,
+			// height: _this.originalBackground.height,
+			height: _this.backgroundHeight() + 69,
+			// height: 'auto',
 
 			// Move back to original position
 			translateY: 0
@@ -4593,7 +4653,9 @@ $$(function() {
 			// Move to top of container
 			translateY: 0,
 			// Remove any padding we added for the template row in preview mode
-			'padding-top': 0
+			'padding-top': 0,
+			// Adjust height in case any rows have changed
+			height: _this.backgroundHeight()
 
 		}, {
 			duration: ANIMATION_DURATION,
@@ -4709,11 +4771,12 @@ $$(function() {
 			table.preview = $$(scriptTag).data('preview');
 			tables.push(table);
 			table.render();
-			table.fetchData();
 
 			// If we're in preview mode, make sure the template is listening to expand and collapse events
 			if (table.preview) {
 				Columns.Template.setupTableEventListeners(table.$$table);
+			} else {
+				table.fetchData();
 			}
 		}
 	}

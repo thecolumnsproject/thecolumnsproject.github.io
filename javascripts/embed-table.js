@@ -983,20 +983,30 @@ $$(function() {
 			shouldRunRowIntroAnimation = true;
 		}
 
+		// For now, only render the first 20 rows
 		$$rows.remove();
 		$$tableBody.prepend(rowsTemplate({
 			row_layout: this.templateName(),
-			rows: data.data
+			rows: data.data.slice(0, 20)
 		}));	
+
+		// If we're in preview and the table is expanded,
+		// refresh the amount of padding we add to the top
+		// to account for the template
+		if (this.preview && this.$$table.hasClass(EXPANDED_CLASS)) {
+			$$tableBody.css({
+				paddingTop: this.tallestRowHeight()
+			});
+		}
 
 		// Reset rows to equal the new rows we just added
 		$$rows = this.$$table.find(TABLE_ROW_SELECTOR);
+		$$rows.css({height: this.tallestRowHeight()});
 
 		// Set any dynamic sizing or positioning values
 		// and animate the various components in
 		var introSequence = [];
-		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
-		var tableHeight = offsetHeight + $$rows.height();
+		var tableHeight = this.backgroundHeight();
 		var duration = 0;
 		if (shouldRunRowIntroAnimation) {
 			duration = ANIMATION_DURATION;
@@ -1030,10 +1040,27 @@ $$(function() {
 		// Set up DOM events on the table
 		this.setupEvents();
 
+		// Announce that the table has rendered data
+		if (this.preview) {
+			$(document).trigger('ColumnsTableDidRenderData', {table: this});
+		}
+
 		// Remove the loading class after the screen repaints
 		setTimeout(function() {
 			_this.setLoading(false);
 		}, 100);
+	};
+
+	Table.prototype.tallestRowHeight = function() {
+		return Math.max.apply(null, this.$$table.find(TABLE_ROW_SELECTOR).map(function () {
+			return $$(this).height();
+		}).get());
+	};
+
+	Table.prototype.backgroundHeight = function() {
+		var numRows = this.$$table.find(TABLE_ROW_SELECTOR).length;
+		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+		return offsetHeight + this.tallestRowHeight();
 	};
 
 	Table.prototype.updateComponent = function($$component, data, template) {
@@ -1089,7 +1116,7 @@ $$(function() {
 		// Notify the preview template when the table scrolls
 		if (this.preview) {
 			this.$$table.find('.columns-table-container').on('scroll', function(e) {
-				$(document).trigger('ColumnsTableDidScroll', {table: _this.$$table, originalEvent: e});
+				$(document).trigger('ColumnsTableDidScroll', {table: _this, originalEvent: e});
 			})
 		}
 	};
@@ -1118,7 +1145,7 @@ $$(function() {
 		// 	}
 		// });
 		if (this.preview) {
-			$(document).trigger('ColumnsTableWillExpand', {table: this.$$table});
+			$(document).trigger('ColumnsTableWillExpand', {table: this});
 		}
 
 		var $$table = this.$$table;
@@ -1187,7 +1214,7 @@ $$(function() {
 				$$('html').addClass('table-expanded');
 
 				if (_this.preview) {
-					$(document).trigger('ColumnsTableDidExpand', {table: _this.$$table});
+					$(document).trigger('ColumnsTableDidExpand', {table: _this});
 				}
 			}
 		});
@@ -1260,7 +1287,7 @@ $$(function() {
 		// Move the table down a few extra pixels to account for the template if we're in preview mode
 		var paddingTop = 0;
 		if (this.preview) {
-			paddingTop = this.$$table.find(TABLE_ROW_SELECTOR).height();
+			paddingTop = this.tallestRowHeight();
 		}
 		// var tableHeight = rowHeight * $$rows.length - 40;
 
@@ -1401,7 +1428,7 @@ $$(function() {
 				$$('html').removeClass('table-expanded');
 
 				if (_this.preview) {
-					$(document).trigger('ColumnsTableDidCollapse', {table: _this.$$table});
+					$(document).trigger('ColumnsTableDidCollapse', {table: _this});
 				}
 			}
 		});
@@ -1415,7 +1442,7 @@ $$(function() {
 		$$header.velocity({
 			opacity: 0 /* Fade the header out of view */
 		}, {
-			duration: ANIMATION_DURATION,
+			duration: ANIMATION_DURATION * 0.2,
 			complete: function(elements) {
 				$$header.removeClass(EXPANDED_CLASS);
 			}
@@ -1430,7 +1457,9 @@ $$(function() {
 		$$bg.velocity({
 
 			// Return to small state
-			height: _this.originalBackground.height,
+			// height: _this.originalBackground.height,
+			height: _this.backgroundHeight() + 69,
+			// height: 'auto',
 
 			// Move back to original position
 			translateY: 0
@@ -1458,7 +1487,9 @@ $$(function() {
 			// Move to top of container
 			translateY: 0,
 			// Remove any padding we added for the template row in preview mode
-			'padding-top': 0
+			'padding-top': 0,
+			// Adjust height in case any rows have changed
+			height: _this.backgroundHeight()
 
 		}, {
 			duration: ANIMATION_DURATION,
@@ -1574,11 +1605,12 @@ $$(function() {
 			table.preview = $$(scriptTag).data('preview');
 			tables.push(table);
 			table.render();
-			table.fetchData();
 
 			// If we're in preview mode, make sure the template is listening to expand and collapse events
 			if (table.preview) {
 				Columns.Template.setupTableEventListeners(table.$$table);
+			} else {
+				table.fetchData();
 			}
 		}
 	}

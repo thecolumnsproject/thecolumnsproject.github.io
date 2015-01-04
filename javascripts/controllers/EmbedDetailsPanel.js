@@ -33,6 +33,7 @@ Columns.EmbedDetailsPanel = new function() {
 			var property = $(this).data('property');
 			var value = $(this).val();
 			Columns.data[property] = value;
+			Columns.tables[0].renderData(Columns.data);
 		});
 	};
 
@@ -52,8 +53,12 @@ Columns.EmbedDetailsPanel = new function() {
 			header: {
 				title: 'Embed Details'
 			},
-			body: body(),
-			footer: null
+			body: body({
+				title: Columns.data.title,
+				source: Columns.data.source,
+				source_url: Columns.data.source_url
+			}),
+			footer: null,
 		}));
 		this.$this = $(this.SELECTOR);
 		this.setupListeners();

@@ -1,12 +1,82 @@
 // Add dummy columns to the page
 Columns['data'] = {
-	source: null,
+	source: 'Lubin Truth Institute',
+	title: 'Friends of Mine',
+	sort_by_column: 'age',
 	source_url: null,
-	title: null,
 	layout: null,
 	columns: null,
-	data: null
-}
+	data: [{
+		first_name: 'Jeremy',
+		last_name: 'Lubin',
+		hometown: 'Princeton',
+		age: 27,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Jess',
+		last_name: 'Schwartz',
+		hometown: 'Mechanicsburg',
+		age: 28,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Amir',
+		last_name: 'Kanpurwala',
+		hometown: 'Princeton',
+		age: 27,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Jeff',
+		last_name: 'LaFlam',
+		hometown: 'Raliegh',
+		age: 28,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Phil',
+		last_name: 'Chacko',
+		hometown: 'Princeton',
+		age: 28,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Albert',
+		last_name: 'Choi',
+		hometown: 'Raliegh',
+		age: 13,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Kelly',
+		last_name: 'Fee',
+		hometown: 'Chicago',
+		age: 27,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Elaine',
+		last_name: 'Zelby',
+		hometown: 'Chicago',
+		age: 27,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Kousha',
+		last_name: 'Navidar',
+		hometown: 'Albany',
+		age: 26,
+		unit: 'Years'
+	},
+	{
+		first_name: 'Craig',
+		last_name: 'Hosang',
+		hometown: 'Alameda',
+		age: 28,
+		unit: 'Years'
+	}]
+};
 
 Columns.Upload.init();
 Columns.Template.init();

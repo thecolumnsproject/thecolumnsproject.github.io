@@ -4,7 +4,7 @@
 	</div>
 	<div class="columns-panel-input">
 		<label class="columns-panel-input-label">Table Title</label>
-		<input type="text" placeholder="My Table" data-property="title">
+		<input type="text" placeholder="My Table" data-property="title" {{#if title}}value="{{title}}"{{/if}}>
 	</div>
 </div>
 <div class="columns-panel-input-group">
@@ -14,7 +14,7 @@
 		</div>
 		<div class="columns-panel-input">
 			<label class="columns-panel-input-label">Data Source</label>
-			<input type="text" placeholder="The Data Authority" data-property="source">
+			<input type="text" placeholder="The Data Authority" data-property="source" {{#if source}}value="{{source}}"{{/if}}>
 		</div>
 	</div>
 	<div class="columns-panel-input-area">
@@ -23,7 +23,7 @@
 		</div>
 		<div class="columns-panel-input">
 			<label class="columns-panel-input-label">Source URL</label>
-			<input type="url" placeholder="http://thedataauthority.com" data-property="source_url">
+			<input type="url" placeholder="http://thedataauthority.com" data-property="source_url" {{#if source_url}}value="{{source_url}}"{{/if}}>
 		</div>
 	</div>
 </div>

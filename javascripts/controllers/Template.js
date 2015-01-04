@@ -8,6 +8,7 @@
 Columns.Template = new function() {
 
 	// UI Constants
+	this.TEMPLATE_PREVIEW_SELECTOR = '.layout-table-preview';
 	this.ROW_VALUE_CLASS = 'layout-template-row-value';
 	this.ROW_VALUE_PLACEHOLDER_CLASS = 'placeholder';
 	this.ROW_VALUE_INACTIVE_CLASS = 'inactive';
@@ -37,13 +38,44 @@ Columns.Template = new function() {
 		var _this = this;
 
 		// When the table is about to expand
-		$(document).on('ColumnsTableWillExpand', function (e) {
+		$(document).on('ColumnsTableWillExpand', function(e) {
 			// Move the template down below the header
-			_this.$template.velocity({
-				translateY: 64
+			_this.$template.parents('.layout-template').velocity({
+				translateY: 0
 			}, {
 				duration: 400
 			});
+		});
+
+		// When the table is done expanding
+		$(document).on('ColumnsTableDidExpand', function(e) {
+			// Add the expanded class to the template
+			$('.layout-table-preview').addClass('expanded');
+		});
+
+		// When the table is done collapsing
+		$(document).on('ColumnsTableDidCollapse', function(e) {
+			// Add the expanded class to the template
+			$('.layout-table-preview').removeClass('expanded');
+		});
+
+		// When the table is scrolled
+		$(document).on('ColumnsTableDidScroll', function(e, data) {
+			var $table = data.table;
+
+			// Move the template up until it hits the header
+			var minScroll = -24;
+			// var maxScroll = 64;
+			var scroll = 0 - $table.find('.columns-table-container').scrollTop();
+			scroll = scroll < minScroll ? minScroll : scroll;
+			// console.log(scroll);
+			// _this.$template.velocity({
+			// 	translateY: scroll
+			// }, {
+			// 	duration: 0,
+			// 	delay: 0
+			// });
+			$.Velocity.hook(_this.$template.parents('.layout-template'), "translateY", scroll + "px");
 		});
 	};
 
@@ -64,6 +96,8 @@ Columns.Template = new function() {
 				duration: 0
 			});
 		});
+
+
 	};
 
 	this.setupDropListeners = function($group) {
@@ -376,7 +410,7 @@ Columns.Template = new function() {
 	this.render = function(layout) {
 		$('.layout-template').remove();
 		var template = Columns.Templates['templates/layout/template.hbs'];
-		$("#layout").append(template(layout));
+		$(this.TEMPLATE_PREVIEW_SELECTOR).append(template(layout));
 
 		this.$template = $('.layout-template-row.master');
 		if ($(this.ROW_VALUE_SELECTOR).length > 0)

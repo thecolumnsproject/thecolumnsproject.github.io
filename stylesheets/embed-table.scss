@@ -188,9 +188,10 @@ $columns-table-accent-color: 	#69A368;
 	text-transform: uppercase;
 }
 
-.columns-table-expand {
-	color: $columns-table-accent-color;
-	// margin-left: 12px;
+.columns-table-expand-button {
+	color: $primary-color;
+	text-transform: uppercase;
+	margin-left: 12px;
 }
 
 .columns-table-footer-icon {
@@ -205,6 +206,7 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table-footer-icon.columns-verified-source-icon {
 	margin-right: 6px;
+	color: $gray-light;
 }
 
 /* Placeholder styling

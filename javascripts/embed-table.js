@@ -978,9 +978,9 @@ $$(function() {
 			}));
 		}
 
-		var shouldRunIntroAnimation = false;
+		var shouldRunRowIntroAnimation = false;
 		if ($$rows.length == 0) {
-			shouldRunIntroAnimation = true;
+			shouldRunRowIntroAnimation = true;
 		}
 
 		$$rows.remove();
@@ -989,14 +989,19 @@ $$(function() {
 			rows: data.data
 		}));	
 
-		if (shouldRunIntroAnimation) {
-			// Set any dynamic sizing or positioning values
-			// and animate the various components in
-			var introSequence = [];
+		// Reset rows to equal the new rows we just added
+		$$rows = this.$$table.find(TABLE_ROW_SELECTOR);
+
+		// Set any dynamic sizing or positioning values
+		// and animate the various components in
+		var introSequence = [];
+		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+		var tableHeight = offsetHeight + $$rows.height();
+		var duration = 0;
+		if (shouldRunRowIntroAnimation) {
+			duration = ANIMATION_DURATION;
 			var delay = ANIMATION_DURATION / 3;
-			var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
-			var tableHeight = offsetHeight + $$rows.height();
-			introSequence.push({elements: $$tableBody, properties: {height: tableHeight}, options: {duration: ANIMATION_DURATION}});
+			introSequence.push({elements: $$tableBody, properties: {height: tableHeight}, options: {duration: duration}});
 			$$.each($$rows, function(index, row) {
 
 				// Only animate the two drooping rows
@@ -1017,7 +1022,10 @@ $$(function() {
 				}
 
 			});
-		}	
+		} else {
+			introSequence.push({elements: $$tableBody, properties: {height: tableHeight}, options: {duration: duration}});
+			$$.Velocity.RunSequence(introSequence);
+		}
 
 		// Set up DOM events on the table
 		this.setupEvents();
@@ -1039,8 +1047,15 @@ $$(function() {
 	Table.prototype.setupEvents = function() {
 		var _this = this;
 		this.$$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-			$$table = $$(this);
-			if (!$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+			var $$table = $$(this);
+			if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+				_this.expand();
+			}
+		});
+
+		this.$$table.find(".columns-table-expand-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+			var $$table = $$(this);
+			if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
 				_this.expand();
 			}
 		});
@@ -1053,9 +1068,8 @@ $$(function() {
 		// });
 
 		this.$$table.find(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-			var $$parent = $$(this).parents('.columns-table-widget');
-			var $$table = $$parent.find('.columns-table');
-			if ($$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+			var $$table = _this.$$table.find('.columns-table');
+			if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
 				_this.collapse();
 
 				// Prevent the dom from doing any other conflicting stuff
@@ -1071,6 +1085,13 @@ $$(function() {
 		// 		collapseTable($table);
 		// 	}
 		// });
+
+		// Notify the preview template when the table scrolls
+		if (this.preview) {
+			this.$$table.find('.columns-table-container').on('scroll', function(e) {
+				$(document).trigger('ColumnsTableDidScroll', {table: _this.$$table, originalEvent: e});
+			})
+		}
 	};
 
 	Table.prototype.setLoading = function(loading) {
@@ -1088,6 +1109,8 @@ $$(function() {
 
 	Table.prototype.expand = function() {
 		
+		var _this = this;
+
 		// Tell everyone we're about to expand
 		// var willExpandEvent = new CustomEvent('ColumnsTableWillExpand', {
 		// 	detail: {
@@ -1109,6 +1132,12 @@ $$(function() {
 		// while maintaining its visual position
 		// add a placeholder
 		// and make sure we're the highest z-index in the land
+		var offsetTop;
+		if (this.preview) {
+			offsetTop = this.getOffsetTop();
+		} else {
+			offsetTop = parseInt($$.Velocity.hook($$table, "translateY"));
+		}
 		var offsets = {
 			top: this.getOffsetTop(),
 			'margin-left': 0,
@@ -1136,8 +1165,35 @@ $$(function() {
 		this.expandBody($$body);
 		this.expandHeader($$header);
 
+		var props;
+		if (this.preview) {
+			props = {
+				translateY: -this.getOffsetTop()
+			}
+		} else {
+			props = {
+				opacity: 1
+			}
+		}
+
+		$$table.velocity(props, {
+			duration: ANIMATION_DURATION,
+			begin: function(elements) {
+				$$table.addClass(EXPANDING_CLASS);
+			},
+			complete: function(elements) {
+				$$table.addClass(EXPANDED_CLASS);
+				$$table.removeClass(EXPANDING_CLASS);
+				$$('html').addClass('table-expanded');
+
+				if (_this.preview) {
+					$(document).trigger('ColumnsTableDidExpand', {table: _this.$$table});
+				}
+			}
+		});
+
 		this.position();
-	}
+	};
 
 	Table.prototype.expandHeader = function($$header) {
 
@@ -1146,11 +1202,12 @@ $$(function() {
 			opacity: 1 /* Fade the header into view */
 		}, {
 			duration: ANIMATION_DURATION,
+			delay: ANIMATION_DURATION,
 			complete: function(elements) {
 				// $$header.addClass(EXPANDED_CLASS);
 			}
 		});
-	}
+	};
 
 	Table.prototype.expandBackground = function($$bg, $$rows, $$header, $$footer) {
 
@@ -1192,7 +1249,7 @@ $$(function() {
 				// $$TABLE.removeClass(RELOCATED_CLASS);
 			}
 		});
-	}
+	};
 
 	Table.prototype.expandBody = function($$body) {
 
@@ -1209,18 +1266,18 @@ $$(function() {
 
 		$$body.velocity({
 			// height: tableHeight, /* Grow to encompass all of the rows */
-			translateY: tableOffsetTop, /* Move down a few pixels to account for the header */
+			translateY: tableOffsetTop + paddingTop, /* Move down a few pixels to account for the header */
 			'padding-top': paddingTop /* Move down a few more pixels to account for the template row in preview mode */
 		}, {
 			duration: ANIMATION_DURATION,
 			begin: function(elements) {
-				_this.$$table.addClass(EXPANDING_CLASS);
+				// _this.$$table.addClass(EXPANDING_CLASS);
 				$$body.removeClass('translateY-reset');
 			},
 			complete: function(elements) {
-				_this.$$table.addClass(EXPANDED_CLASS);
-				_this.$$table.removeClass(EXPANDING_CLASS);
-				$$('html').addClass('table-expanded');
+				// _this.$$table.addClass(EXPANDED_CLASS);
+				// _this.$$table.removeClass(EXPANDING_CLASS);
+				// $$('html').addClass('table-expanded');
 				// $$body.addClass(EXPANDED_CLASS);
 				$$body.addClass('translateY-reset');
 			}
@@ -1295,20 +1352,15 @@ $$(function() {
 	// ------------------------------
 
 	Table.prototype.collapse = function() {
+		var _this = this;
 		var $$table = this.$$table;
 		$$body = $$table.find(TABLE_BODY_SELECTOR);
 		$$bg = $$table.find('.columns-table-container'),
 		$$rows = $$table.find('.columns-table-row'),
 		$$header = $$table.find('.columns-table-header');
 
-		// First move the table back to its original DOM position
-		// while maintaining its visual position
 		// and remove the placeholder
-		var offsets = {
-			top: 0,
-			position: 'relative',
-			'z-index': 0
-		};
+
 		// $$parent.addClass(RELOCATED_CLASS);
 		$$table.insertBefore(this.$$originalSibling);
 
@@ -1318,6 +1370,41 @@ $$(function() {
 			this.collapseBody($$body);
 			this.collapseRows($$rows);
 		// }, 0);
+
+		var props;
+		if (this.preview) {
+			props = {
+				translateY: 0
+			}
+		} else {
+			props = {
+				opacity: 1
+			}
+		}
+
+		$$table.velocity(props, {
+			duration: ANIMATION_DURATION,
+			begin: function(elements) {
+				$$table.addClass(EXPANDING_CLASS);
+				$$table.removeClass(EXPANDED_CLASS);
+			},
+			complete: function(elements) {
+				$$table.removeClass(RELOCATED_CLASS);
+				$$table.removeClass(EXPANDING_CLASS);
+				// Move the table back to its original DOM position
+				$$table.css({
+					top: 0,
+					position: 'relative',
+					'z-index': 0
+				});
+				_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
+				$$('html').removeClass('table-expanded');
+
+				if (_this.preview) {
+					$(document).trigger('ColumnsTableDidCollapse', {table: _this.$$table});
+				}
+			}
+		});
 
 		this.position();
 	}
@@ -1358,8 +1445,6 @@ $$(function() {
 			complete: function(elements) {
 				$$bg.removeClass(EXPANDING_CLASS);
 				$$bg.addClass('translateY-reset');
-				$$('html').removeClass('table-expanded');
-				_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
 			}
 		});
 	}
@@ -1380,19 +1465,19 @@ $$(function() {
 			begin: function(elements) {
 				$$body.removeClass('translateY-reset');
 				$$body.removeClass(EXPANDED_CLASS);
-				_this.$$table.removeClass(EXPANDED_CLASS);
-				_this.$$table.addClass(EXPANDING_CLASS);
+				// _this.$$table.removeClass(EXPANDED_CLASS);
+				// _this.$$table.addClass(EXPANDING_CLASS);
 			},
 			complete: function(elements) {
 				// $$table.removeClass(EXPANDED_CLASS);
 				$$body.addClass('translateY-reset');
-				_this.$$table.removeClass(RELOCATED_CLASS);
-				_this.$$table.removeClass(EXPANDING_CLASS);
-				_this.$$table.css({
-					top: 0,
-					position: 'relative',
-					'z-index': 0
-				});
+				// _this.$$table.removeClass(RELOCATED_CLASS);
+				// _this.$$table.removeClass(EXPANDING_CLASS);
+				// _this.$$table.css({
+				// 	top: 0,
+				// 	position: 'relative',
+				// 	'z-index': 0
+				// });
 			}
 		});
 	}

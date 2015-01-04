@@ -25,7 +25,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.item_count) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.item_count); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + " Items</span>\n	<i class=\"columns-table-footer-icon columns-logo icon-columns\"></i>\n</div>";
+    + " Items</span>\n	<i class=\"columns-table-footer-icon columns-logo icon-columns\"></i>\n	<span class=\"columns-table-expand-button\">Expand</span>\n</div>";
   return buffer;
   });
 

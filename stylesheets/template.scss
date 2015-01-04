@@ -24,11 +24,20 @@
 	position: absolute;
 	top: 107px;
 	left: 114px;
-	// overflow: scroll;
+	overflow: scroll;
 
 	img {
 		margin: 8px;
+		margin-bottom: 0;
 	}
+}
+
+.layout-table-preview.expanded {
+	overflow: hidden;
+}
+
+.layout-table-preview.expanded .layout-template {
+
 }
 
 .columns-table-widget {
@@ -40,15 +49,15 @@
 	// height: 100%;
 	@include display(flex);
 	@include justify-content(center);
-	position: relative;
-	top: 123px;
+	position: absolute;
+	top: 78px;
 	z-index: $layout-index;
 }
 
 .layout-template-row {
 	width: 335px;
 	min-height: 60px;
-	border: 1px solid $gray-light;
+	border: 1px solid $primary-color;
 	background-color: $gray-lightest;
 	// padding: 12px;
 	box-shadow: 0px 0px 16px 0px $gray-20;

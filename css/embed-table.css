@@ -313,8 +313,10 @@
 .columns-table-items-count {
   text-transform: uppercase; }
 
-.columns-table-expand {
-  color: #69A368; }
+.columns-table-expand-button {
+  color: #3E97BD;
+  text-transform: uppercase;
+  margin-left: 12px; }
 
 .columns-table-footer-icon {
   color: #3E97BD;
@@ -324,7 +326,8 @@
   margin-left: 12px; }
 
 .columns-table-footer-icon.columns-verified-source-icon {
-  margin-right: 6px; }
+  margin-right: 6px;
+  color: #cccccc; }
 
 /* Placeholder styling
  * ------------------

@@ -62,7 +62,9 @@ Columns.Upload = new function() {
 		$("input[type='file']").change(function() {
 			var file = this.files[0];
 			_this.parseFile(file);
-			_this.setLoading(true, file.name);
+			_this.setLoading(true, {
+				name: file.name
+			});
 		});
 	};
 
@@ -83,6 +85,11 @@ Columns.Upload = new function() {
 					Columns.data.data.push(obj);
 
 				}
+				_this.setLoading(true, {
+					name: file.name,
+					row: rowsParsed,
+					// total_rows: row.meta.lines
+				});
 				// uploadedData.push(row.data[0]);
 				// updateProgress(row.meta.lines);
 			},
@@ -158,11 +165,25 @@ Columns.Upload = new function() {
 		});
 	};
 
-	this.setLoading = function(loading, name) {
+	this.setLoading = function(loading, upload) {
 		var $button = this.$this.find(this.UPLOAD_BUTTON_SELECTOR);
 		if (loading) {
 			this.$this.addClass('loading');
-			$button.text('Uploading ' + name + '...');
+			var text = "Uploading";
+			if (upload.row) {
+				text += " row " + upload.row;
+				if (upload.total_rows) {
+					text += " of " + upload.total_rows
+				}
+				if (upload.name) {
+					text += " from " + upload.name;
+				}
+			}
+			else if (upload.name) {
+				text += " " + upload.name;
+			}
+			text+= "...";
+			$button.text(text);
 			$button.prop('disabled', true);
 		} else {
 			this.$this.removeClass('loading');

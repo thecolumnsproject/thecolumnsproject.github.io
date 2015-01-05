@@ -13,6 +13,7 @@ Columns.Upload = new function() {
 	this.ID = 'upload';
 	this.SELECTOR = '#' + this.ID;
 	this.UPLOAD_BUTTON_SELECTOR = '.' + 'columns-upload-button';
+	this.MAX_ROWS = 20;
 
 	this.init = function() {
 		this.render();
@@ -72,8 +73,8 @@ Columns.Upload = new function() {
 		var _this = this;
 		var rowsParsed = 0;
 		Papa.parse(file, {
-			worker: true,
-			step: function(row) {
+			// worker: true,
+			step: function(row, handle) {
 				rowsParsed++;
 				if (rowsParsed == 1) {
 					Columns.data.columns = row.data[0];
@@ -85,15 +86,22 @@ Columns.Upload = new function() {
 					Columns.data.data.push(obj);
 
 				}
+
 				_this.setLoading(true, {
 					name: file.name,
 					row: rowsParsed,
 					// total_rows: row.meta.lines
 				});
+
+				if (rowsParsed >= _this.MAX_ROWS) {
+					handle.abort();
+				}
 				// uploadedData.push(row.data[0]);
 				// updateProgress(row.meta.lines);
 			},
 			complete: function(results) {
+				Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
+				_this.uploadFile(file, Columns.data);
 				// if (uploadedData.length > MAX_ROWS) {
 				// 	$(".welcome").addClass('active');
 				// 	$(".uploading-data").removeClass('active');
@@ -102,27 +110,73 @@ Columns.Upload = new function() {
 				// } else {
 					// renderData(uploadedData);
 				// }
-				Columns.Items.render(Columns.data.columns);
-				Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
-				// Columns.Styling.updateStyling($(Columns.Template.$template).first());
-				Columns.Items.updateItemStylesFromTemplate(Columns.Template);
-				Columns.Styling.initWithItem($(Columns.Template.$template).first());
-				// Columns.Styling.updateStyling($(Columns.Template.$template).first());
-				// _this.hide();
+				// Columns.Items.render(Columns.data.columns);
+				// Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
+				// // Columns.Styling.updateStyling($(Columns.Template.$template).first());
+				// Columns.Items.updateItemStylesFromTemplate(Columns.Template);
+				// Columns.Styling.initWithItem($(Columns.Template.$template).first());
+				// // Columns.Styling.updateStyling($(Columns.Template.$template).first());
+				// // _this.hide();
 
-				// Expand the preview table as the upload screen fades
-				Columns.tables[0].generateLayout(Columns.Layout.layoutObject, false);
-				Columns.tables[0].renderData(Columns.data);
-				// Columns.tables[0].expand();
-				// Columns.Template.init();
-				// Columns.Items.init(Columns.data.columns);
-				// Columns.Styling.init();
-				// Columns.EmbedDetailsPanel.init();
-				// Columns.Styling.updateStyling($(Columns.Template.$template).first());
-				_this.setLoading(false);
-				_this.hide();
+				// // Expand the preview table as the upload screen fades
+				// Columns.tables[0].generateLayout(Columns.Layout.layoutObject, false);
+				// Columns.tables[0].renderData(Columns.data);
+				// // Columns.tables[0].expand();
+				// // Columns.Template.init();
+				// // Columns.Items.init(Columns.data.columns);
+				// // Columns.Styling.init();
+				// // Columns.EmbedDetailsPanel.init();
+				// // Columns.Styling.updateStyling($(Columns.Template.$template).first());
+				// _this.setLoading(false);
+				// _this.hide();
 			}
 		});
+	};
+
+	this.uploadFile = function(file, data) {
+		var _this = this;
+		var formData = new FormData();
+		formData.append("data", file);
+		formData.append("title", data.title);
+		formData.append("source", data.source);
+		formData.append("source_url", data.source_url);
+		formData.append("columns", data.columns);
+		formData.append("layout", JSON.stringify(data.layout));
+
+		$.ajax({
+	        url: config.api.host + '/columns/table',  //Server script to process data
+	        type: 'POST',
+	        // xhr: function() {  // Custom XMLHttpRequest
+	        //     var myXhr = $.ajaxSettings.xhr();
+	        //     if(myXhr.upload){ // Check if upload property exists
+	        //         myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+	        //     }
+	        //     return myXhr;
+	        // },
+	        //Ajax events
+	        // beforeSend: beforeSendHandler,
+	        success: function(data) {
+	        	if (data.status == 'success') {
+	        		Columns.Items.render(Columns.data.columns);
+					Columns.Items.updateItemStylesFromTemplate(Columns.Template);
+					Columns.Styling.initWithItem($(Columns.Template.$template).first());
+					Columns.EmbedDetailsPanel.init(data.data.table_id);
+
+					// Expand the preview table as the upload screen fades
+					Columns.tables[0].generateLayout(Columns.Layout.layoutObject, false);
+					Columns.tables[0].renderData(Columns.data);
+					_this.setLoading(false);
+					_this.hide();
+	        	}
+	        },
+	        // error: errorHandler,
+	        // Form data
+	        data: formData,
+	        //Options to tell jQuery not to process data or worry about content-type.
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    });
 	};
 
 	this.hide = function() {

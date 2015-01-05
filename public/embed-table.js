@@ -2905,6 +2905,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/error.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"columns-table-error\">\n	<i class=\"icon-columns columns-table-error-icon\"></i>\n	<span class=\"columns-table-error-text\">\n		<span class=\"columns-table-error-text-header\">Shoot, we can't load the table right now.<br />\n		<span class=\"columns-table-error-text-body\">Tap to try again.</span>\n	</span>\n</div>";
+  });
+
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/footer.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -3317,6 +3326,7 @@ $$(function() {
 		EXPANDING_CLASS = 'expanding',
 		RELOCATED_CLASS = 'relocated',
 		LOADING_CLASS = 'loading',
+		ERROR_CLASS = 'error',
 		ANIMATING_CLASS = 'velocity-animating',
 		$TABLE,
 		$$CONTAINER = $$(window);
@@ -3990,8 +4000,10 @@ $$(function() {
 		// var loading = createLoading();
 		// var body = createBody();
 		var loading = Columns.EmbeddableTemplates['templates/embed-table/loading.hbs'];
+		var error = Columns.EmbeddableTemplates['templates/embed-table/error.hbs'];
 		var body = Columns.EmbeddableTemplates['templates/embed-table/body.hbs'];
 		this.$$table.append(loading({img_path: IMG_PATH}));
+		this.$$table.append(error());
 		this.$$table.append(body());
 
 		// // Make the table bounce on scroll
@@ -4063,16 +4075,28 @@ $$(function() {
 
 	// Download the appropriate data from the api
 	Table.prototype.fetchData = function() {
-		// We're faking it right now
+		var _this = this;
 
 		// First turn on loading
 		this.setLoading(true);
 
-		var _this = this;
-		setTimeout(function() {
-			_this.generateLayout(DUMMY_DATA.layout);
-			_this.renderData(DUMMY_DATA);
-		}, 100);
+		var id = $$(this.script).data('table-id');
+		$$.get('http://127.0.0.1:8080/api/columns/table?id=' + id, function(data) {
+			if (data.status == 'success') {
+				_this.generateLayout(data.data.layout);
+				_this.renderData(data.data);
+				_this.setError(false);
+			} else {
+				_this.setLoading(false);
+				_this.setError(true);
+			}
+		});
+
+		// var _this = this;
+		// setTimeout(function() {
+		// 	_this.generateLayout(DUMMY_DATA.layout);
+		// 	_this.renderData(DUMMY_DATA);
+		// }, 100);
 	};
 
 	Table.prototype.templateName = function() {
@@ -4253,6 +4277,13 @@ $$(function() {
 			}
 		});
 
+		this.$$table.find(".columns-table-error").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+			var $$table = $$(this);
+			if (_this.$$table.hasClass(ERROR_CLASS)) {
+				_this.fetchData();
+			}
+		});
+
 		// $(".columns-table").click(function(e) {
 		// 	$table = $(this);
 		// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
@@ -4294,6 +4325,14 @@ $$(function() {
 			this.$$table.removeClass(LOADING_CLASS);
 		}
 	};
+
+	Table.prototype.setError = function(error) {
+		if (error) {
+			this.$$table.addClass(ERROR_CLASS);
+		} else {
+			this.$$table.removeClass(ERROR_CLASS);
+		}
+	}
 
 	// Methods to expand a table
 	// from to its original position

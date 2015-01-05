@@ -86,7 +86,6 @@ Columns.Upload.init();
 Columns.Template.init();
 Columns.Items.init();
 // Columns.Styling.init();
-Columns.EmbedDetailsPanel.init();
 // Columns.Styling.updateStyling($(Columns.Template.$template).first());
 
 $(function() {

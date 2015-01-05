@@ -11,6 +11,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/error.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"columns-table-error\">\n	<i class=\"icon-columns columns-table-error-icon\"></i>\n	<span class=\"columns-table-error-text\">\n		<span class=\"columns-table-error-text-header\">Shoot, we can't load the table right now.<br />\n		<span class=\"columns-table-error-text-body\">Tap to try again.</span>\n	</span>\n</div>";
+  });
+
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/footer.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};

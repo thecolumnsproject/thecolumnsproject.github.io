@@ -6,24 +6,30 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(1.1); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(0.9); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
+
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
+
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
@@ -249,7 +255,7 @@
   background: none; }
 
 .columns-table-close-button {
-  color: #3E97BD;
+  color: #3e97bd;
   border-left: 1px solid #ebebeb;
   padding-right: 0; }
 
@@ -314,12 +320,12 @@
   text-transform: uppercase; }
 
 .columns-table-expand-button {
-  color: #3E97BD;
+  color: #3e97bd;
   text-transform: uppercase;
   margin-left: 12px; }
 
 .columns-table-footer-icon {
-  color: #3E97BD;
+  color: #3e97bd;
   font-size: 14px; }
 
 .columns-table-footer-icon.columns-logo {
@@ -334,7 +340,8 @@
  * These styles specify the position and look
  * of loading and error indicators in the table
  */
-.columns-table-loading {
+.columns-table-loading,
+.columns-table-error {
   position: absolute;
   top: 0;
   height: 100%;
@@ -364,20 +371,49 @@
   -ms-align-items: center;
   -o-align-items: center;
   align-items: center;
-  -ms-flex-align: center; }
+  -ms-flex-align: center;
+  visibility: hidden;
+  pointer-events: none; }
+
+.columns-table-error {
+  text-align: left; }
+
+.loading .columns-table-loading {
+  visibility: visible;
+  pointer-events: auto; }
+
+.error .columns-table {
+  pointer-events: none; }
+
+.error .columns-table-error {
+  visibility: visible; }
 
 .columns-table-loading-img {
   height: 20px;
   margin-right: 12px; }
 
-.columns-table-loading-text {
+.columns-table-error-icon {
+  color: red;
+  font-size: 20px;
+  margin-right: 12px; }
+
+.columns-table-loading-text,
+.columns-table-error-text {
   color: #ababab;
   font-size: 14px; }
 
-.loading .columns-table-row {
+.columns-table-error-text-header {
+  color: #888888; }
+
+.columns-table-error-text-body {
+  color: #ababab; }
+
+.loading .columns-table-row,
+.error .columns-table-row {
   opacity: 0; }
 
-.loading .columns-table-footer {
+.loading .columns-table-footer
+.error .columns-table-footer {
   opacity: 0; }
 
 /* Relocated styling
@@ -519,5 +555,3 @@ html.table-expanded {
     -o-align-items: flex-end;
     align-items: flex-end;
     -ms-flex-align: end; }
-
-/*# sourceMappingURL=embed-table.css.map */

@@ -2,7 +2,7 @@ var env = 'local';
 var config = {
 	local: {
 		api: {
-			host: 'http://localhost:8080/api'
+			host: 'http://127.0.0.1:8080/api'
 		}
 	}, 
 	development: {

@@ -215,7 +215,8 @@ $columns-table-accent-color: 	#69A368;
  * of loading and error indicators in the table
  */
 
-.columns-table-loading {
+.columns-table-loading,
+.columns-table-error {
 	position: absolute;
 	top: 0;
 	height: 100%;
@@ -224,6 +225,25 @@ $columns-table-accent-color: 	#69A368;
 	@include display(flex);
 	@include justify-content(center);
 	@include align-items(center);
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.columns-table-error {
+	text-align: left;
+}
+
+.loading .columns-table-loading {
+	visibility: visible;
+	pointer-events: auto;
+}
+
+.error .columns-table {
+	pointer-events: none;
+}
+
+.error .columns-table-error {
+	visibility: visible;
 }
 
 .columns-table-loading-img {
@@ -231,16 +251,33 @@ $columns-table-accent-color: 	#69A368;
 	margin-right: 12px;
 }
 
-.columns-table-loading-text {
+.columns-table-error-icon {
+	color: red;
+	font-size: 20px;
+	margin-right: 12px;
+}
+
+.columns-table-loading-text,
+.columns-table-error-text {
 	color: $gray;
 	font-size: 14px;
 }
 
-.loading .columns-table-row {
+.columns-table-error-text-header {
+	color: $gray-dark;
+}
+
+.columns-table-error-text-body {
+	color: $gray;
+}
+
+.loading .columns-table-row,
+.error .columns-table-row {
 	opacity: 0;
 }	
 
-.loading .columns-table-footer {
+.loading .columns-table-footer
+.error .columns-table-footer {
 	opacity: 0;
 }
 

@@ -58,7 +58,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["Columns"]["Templates"]["templates/embed-details-panel/body.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -102,7 +102,11 @@ function program5(depth0,data) {
   buffer += ">\n		</div>\n	</div>\n	<div class=\"columns-panel-input-area\">\n		<div class=\"columns-panel-input-icon\">\n			<i class=\"icon-link\"></i>\n		</div>\n		<div class=\"columns-panel-input\">\n			<label class=\"columns-panel-input-label\">Source URL</label>\n			<input type=\"url\" placeholder=\"http://thedataauthority.com\" data-property=\"source_url\" ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.source_url), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n		</div>\n	</div>\n</div>\n<div class=\"columns-panel-textarea-area\" id=\"embed-code\">\n	<div class=\"columns-panel-textarea-icon\">\n		<i class=\"icon-code\"></i>\n	</div>\n	<div class=\"columns-panel-input\">\n		<label class=\"columns-panel-textarea-label\">Embed Code</label>\n		<textarea readonly ><script type=\"text/javascript\" src=\"https://colum.nz/embed-table.js\" id=\"12345678910\" async></script></textarea>\n		<button class=\"columns-button button-small button-tertiary\">\n			Copy Embed Code\n		</button>\n	</div>\n</div>";
+  buffer += ">\n		</div>\n	</div>\n</div>\n<div class=\"columns-panel-textarea-area\" id=\"embed-code\">\n	<div class=\"columns-panel-textarea-icon\">\n		<i class=\"icon-code\"></i>\n	</div>\n	<div class=\"columns-panel-input\">\n		<label class=\"columns-panel-textarea-label\">Embed Code</label>\n		<textarea readonly ><script type=\"text/javascript\" src=\"https://colum.nz/embed-table.js\" data-table-id=\"";
+  if (helper = helpers.table_id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.table_id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" async></script></textarea>\n		<button class=\"columns-button button-small button-tertiary\">\n			Copy Embed Code\n		</button>\n	</div>\n</div>";
   return buffer;
   });
 

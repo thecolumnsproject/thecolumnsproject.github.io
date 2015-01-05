@@ -4081,9 +4081,9 @@ $$(function() {
 		this.setLoading(true);
 
 		var id = $$(this.script).data('table-id');
-		$$.get('http://127.0.0.1:8080/api/columns/table?id=' + id, function(data) {
+		$$.get('http://127.0.0.1:8080/api/columns/table/' + id, function(data) {
 			if (data.status == 'success') {
-				_this.generateLayout(data.data.layout);
+				_this.generateLayout($$.parseJSON(data.data.layout));
 				_this.renderData(data.data);
 				_this.setError(false);
 			} else {

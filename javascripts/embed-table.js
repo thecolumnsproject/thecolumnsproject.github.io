@@ -203,7 +203,7 @@ $$(function() {
 		this.setLoading(true);
 
 		var id = $$(this.script).data('table-id');
-		$$.get(API_HOST + '/columns/table/' + id + '?page=1', function(data) {
+		$$.get(API_HOST + '/columns/table/' + id + '?page=0', function(data) {
 			if (data.status == 'success') {
 				_this.generateLayout($$.parseJSON(data.data.layout));
 				_this.renderData(data.data);

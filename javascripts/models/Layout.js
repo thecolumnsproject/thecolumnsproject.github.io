@@ -46,6 +46,7 @@ Columns.Layout = new function() {
 		if (refresh) {
 			Columns.Template.render(this.layoutObject);
 		}
+		Columns.Upload.updateTableData();
 	};
 
 	// Private

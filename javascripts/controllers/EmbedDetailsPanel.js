@@ -40,7 +40,7 @@ Columns.EmbedDetailsPanel = new function() {
 
 		// Update the data on the server after the user tabs
 		this.$this.find('input').blur(function() {
-			_this.updateTableData();
+			Columns.Upload.updateTableData();
 		});
 	};
 
@@ -82,7 +82,8 @@ Columns.EmbedDetailsPanel = new function() {
 				title: Columns.data.title,
 				source: Columns.data.source,
 				source_url: Columns.data.source_url,
-				table_id: table_id
+				table_id: table_id,
+				host: config.web.host
 			}),
 			footer: null,
 		}));

@@ -14,6 +14,7 @@ Columns.Upload = new function() {
 	this.SELECTOR = '#' + this.ID;
 	this.UPLOAD_BUTTON_SELECTOR = '.' + 'columns-upload-button';
 	this.MAX_ROWS = 20;
+	this.table_id;
 
 	this.init = function() {
 		this.render();
@@ -157,6 +158,7 @@ Columns.Upload = new function() {
 	        // beforeSend: beforeSendHandler,
 	        success: function(data) {
 	        	if (data.status == 'success') {
+	        		_this.table_id = data.data.table_id;
 	        		Columns.Items.render(Columns.data.columns);
 					Columns.Items.updateItemStylesFromTemplate(Columns.Template);
 					Columns.Styling.initWithItem($(Columns.Template.$template).first());
@@ -177,6 +179,24 @@ Columns.Upload = new function() {
 	        contentType: false,
 	        processData: false
 	    });
+	};
+
+	this.updateTableData = function() {
+		var data = {
+			title: Columns.data.title,
+			source: Columns.data.source,
+			source_url: Columns.data.source_url,
+			layout: JSON.stringify(Columns.data.layout),
+			columns: Columns.data.columns.join(",")
+		};
+		$.post(config.api.host + '/columns/table/' + this.table_id, data, function(response) {
+			if (response.status == 'success') {
+				console.log('Data updated!');
+			} else {
+				console.log('Problem updating!');
+				console.log(response.message);
+			}
+		});
 	};
 
 	this.hide = function() {

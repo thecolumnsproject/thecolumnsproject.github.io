@@ -472,6 +472,9 @@ html.table-expanded {
   opacity: 1;
   pointer-events: auto; }
 
+.expanded .columns-table-expand-button {
+  display: none; }
+
 /* In-cell styling
  * ------------------
  * These styles correspond to properties

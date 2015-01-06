@@ -143,7 +143,9 @@ Columns.Items = new function() {
 	};
 
 	this.getItemForTemplate = function(template) {
-		var $item = $(this.ITEM_SELECTOR + ":contains('" + $(template).text().trim() + "')");
+		var $item = $(this.ITEM_SELECTOR).filter(function() {
+    		return $(this).text().trim() === $(template).text().trim();
+		});
 		if ($item.length > 0) {
 			return $item.get(0);
 		} else {

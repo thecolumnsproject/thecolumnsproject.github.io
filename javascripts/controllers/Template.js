@@ -405,7 +405,9 @@ Columns.Template = new function() {
 	};
 
 	this.getTemplateForItem = function(item) {
-		var $templateItem = $(this.ROW_VALUE_SELECTOR + ":contains('" + $(item).text().trim() + "')");
+		var $templateItem = $(this.ROW_VALUE_SELECTOR).filter(function() {
+    		return $(this).text().trim() === $(item).text().trim();
+		});
 		if ($templateItem.length > 0) {
 			return $templateItem.get(0);
 		} else {

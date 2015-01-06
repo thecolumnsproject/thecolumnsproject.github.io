@@ -282,12 +282,12 @@ $$(function() {
 		if ($$footer.length > 0) {
 			this.updateComponent($$footer, {
 				source: data.source,
-				item_count: data.num_rows
+				item_count: data.num_rows || data.data.length
 			}, footer);
 		} else {
 			$$tableBody.after(footer({
 				source: data.source,
-				item_count: data.num_rows
+				item_count: data.num_rows || data.data.length
 			}));
 		}
 

@@ -11,19 +11,13 @@
 	<!-- Application Stylesheets -->
 	<link href="css/fonts.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
-	<link href="css/upload.css" rel="stylesheet">
-	<link href="css/layout.css" rel="stylesheet">
-	<link href="css/styling.css" rel="stylesheet">
-	<link href="css/items.css" rel="stylesheet">
-	<link href="css/template.css" rel="stylesheet">	
-	<link href="css/embed-details-panel.css" rel="stylesheet">	
-	<!-- <link href="css/results.css" rel="stylesheet">	 -->
+	<link href="css/header.css" rel="stylesheet">
+	<link href="css/query.css" rel="stylesheet">	
+	<link href="css/results.css" rel="stylesheet">	
 
 	<!-- Vendor Javascript -->
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="vendor/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="bower_components/Papa-Parse/papaparse.min.js"></script>
-	<script type="text/javascript" src="bower_components/velocity/velocity.min.js"></script>
 
 	<!-- Handlebars Templates -->
 	<script type="text/javascript" src="bower_components/handlebars/handlebars.runtime.min.js"></script>
@@ -31,72 +25,84 @@
 
 	<!-- Application Javascript -->
 	<script type="text/javascript" src="javascripts/config.js"></script>
-	<!-- <script type="text/javascript" src="javascripts/query.js"></script> -->
-	<!-- <script type="text/javascript" src="javascripts/upload.js"></script> -->
-	
+	<script type="text/javascript" src="javascripts/query.js"></script>
+	<script type="text/javascript" src="javascripts/upload.js"></script>
 
 
 
 </head>
 <body>
+	<header>
+		<div id="query-box">
+				<form id='query-form'>
+					<input type="text" id="query" placeholder="Hi, what would you like to know about?" autofocus="autofocus" autocomplete="off">
+				</form>
+		</div>
 
-	<header class='columns-header'>
-		<nav class='columns-header-nav'>
-			<div class="columns-header-nav-home">
-				<i class="icon-columns columns-header-nav-icon"></i>
-				The Columns Project
-			</div>
-			<div class="columns-header-nav-embed">
-				Embed Table
-			</div>
+		<nav>
+			<ul>
+				<!-- <li><i class="icon-plus"></i></li> -->
+				<!-- <li><i class="icon-user"></i></li> -->
+				<li class="upload-data">
+					<input type="file" accept='text/csv' id='upload-data' value='Upload Data'>
+					<i class="icon-upload"></i> Upload
+				</li>
+			</ul>
 		</nav>
 	</header>
 
-	<div id="upload" class='active'>
-		<div class="upload-copy">
-			<div class="upload-copy-logo">
-				<i class="icon-columns"></i>
-				<img src="/images/loading-white.gif" alt="" width='32'>
+	<section id="results">
+		<div class="table-container">
+			
+		</div>
+		<div class="welcome active">
+			<i class="icon-columns"></i>
+			<span>Well, hello there.</span>
+		</div>
+		<div class="searching-data">
+			<i class="loading">
+				
+			</i>
+			<span>Searching...</span>
+		</div>
+		<!-- <div class="uploading-data active">
+			<div>
+				<i class="icon-columns full"></i>
+				<i class="icon-columns progress"></i>
+				<span>Uploading Data...</span>
 			</div>
-			<div class="upload-copy-text">
-				<h2>The Columns Project</h2>
-				<p>
-				Beautiful, embeddable tables.<br />
-				For a more knowledgeable web.
-				</p>
-				<button class="columns-button button-large columns-upload-button">Upload a .csv</button>
-				<input type="file" accept='text/csv' style="display:none;"/>
+		</div> -->
+		<div class="uploading-data">
+			<i class="loading">
+				
+			</i>
+			<span>Uploading data...</span>
+		</div>
+		<div class="no-data">
+			<i class="icon-columns"></i>
+			<span>No Results</span>
+		</div>
+		<div class="error-data">
+			<i class="icon-columns"></i>
+			<span>Whoops, something went wrong.<br />Mind trying again?</span>
+		</div>
+	</section>
+
+	<footer>
+		<div id="publish" class='publish'>
+			<div class="publish">
+				<i class="icon-publish"></i>
+				<span>Publish Table</span>
+			</div>
+			<div class="publishing">
+				<i class="loading"></i>
+				<span>Publishing... This may take a minute or two.</span>
+			</div>
+			<div class="published">
+				<i class="icon-check"></i>
+				<span>Published! Start searching your data right away.</span>
 			</div>
 		</div>
-	</div>
-	
-	<div id="editor">
-		<section id="columns">
-			<h2>Columns</h2>
-			
-		</section>
-		<section id="layout">
-			<div class="layout-table-preview">
-				<img src="/images/paragraph_1.png">
-				<script type="text/javascript" src="http://127.0.0.1/public/embed-table.js" data-preview="true" async></script>
-				<img src="/images/paragraph.png">
-				<img src="/images/paragraph_1.png">
-				<!-- <img src="/images/paragraph.png"> -->
-			</div>
-		</section>
-		<section id="styling">
-			<h2>Styling</h2>
-			
-		</section>
-	</div>
+	</footer>
 
-	<script type="text/javascript" src="javascripts/models/Layout.js"></script>
-	<script type="text/javascript" src="javascripts/controllers/Upload.js"></script>
-	<script type="text/javascript" src="javascripts/controllers/Items.js"></script>
-	<script type="text/javascript" src="javascripts/controllers/Template.js"></script>
-	<script type="text/javascript" src="javascripts/controllers/Styling.js"></script>
-	<script type="text/javascript" src="javascripts/controllers/EmbedDetailsPanel.js"></script>
-	<script type="text/javascript" src="compiled-javascripts/styling/compiled-data.js"></script>
-	<script type="text/javascript" src="javascripts/styling/layouts.js"></script>
-	<script type="text/javascript" src="javascripts/layout.js"></script>
 </body>

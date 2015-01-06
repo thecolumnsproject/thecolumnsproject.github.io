@@ -35,10 +35,10 @@ $$(function() {
 	var MAX_SMARTPHONE_SCREEN_WIDTH = 568;
 
 	// File System Constants
-	var API_HOST = 'http://127.0.0.1:8080/api';
-	// var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
-	var ROOT_PATH = 'http://127.0.0.1/';
-	// var ROOT_PATH = 'https://thecolumnsproject.github.io/';
+	// var API_HOST = 'http://127.0.0.1:8080/api';
+	var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
+	// var ROOT_PATH = 'http://127.0.0.1/';
+	var ROOT_PATH = 'https://thecolumnsproject.github.io/';
 	// if (env) {
 	// 	switch (env) {
 	// 		case 'local':

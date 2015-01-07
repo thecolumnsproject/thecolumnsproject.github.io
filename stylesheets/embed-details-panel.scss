@@ -151,7 +151,7 @@
 
 .columns-panel-input,
 .columns-panel-textarea {
-	padding: 16px 0 12px 0;
+	padding: 16px 12px 12px 0;
 	@include flex-direction(column);
 	@include align-items(stretch);
 	@include justify-content(flex-start);

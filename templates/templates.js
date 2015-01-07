@@ -270,7 +270,7 @@ function program1(depth0,data) {
   return "placeholder";
   }
 
-  buffer += "<span class=\"layout-template-row-value \n			";
+  buffer += " <span class=\"layout-template-row-value \n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.placeholder), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"\n			";

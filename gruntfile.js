@@ -30,6 +30,12 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		browserify: {
+			embed: {
+				src: 'javascripts/embed-table.js',
+				dest: 'compiled-javascripts/embed-table.js'
+			}
+		},
 		concat: {
 			embed: {
 				src: [
@@ -41,11 +47,11 @@ module.exports = function(grunt) {
 					'vendor/prevent-ghost-click.js',
 					'bower_components/velocity/velocity.min.js',
 					// 'bower_components/velocity/velocity.js',
-					'bower_components/velocity/velocity.ui.min.js',
+					// 'bower_components/velocity/velocity.ui.min.js',
 					'bower_components/handlebars/handlebars.min.js',
 					// 'bower_components/handlebars/handlebars.js',
 					'templates/embeddable-templates.js',
-					'javascripts/embed-table.js',
+					'compiled-javascripts/embed-table.js',
 					'javascripts/embed-table-outro.js'
 				],
 				dest: 'public/embed-table.js'
@@ -75,7 +81,7 @@ module.exports = function(grunt) {
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',
-				tasks: ['concat']
+				tasks: ['browserify', 'concat']
 			}
 		}
 	});
@@ -84,6 +90,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-handlebars');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-browserify');
 
-	grunt.registerTask('default', ['sass', 'handlebars', 'concat', 'watch']);
+	grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'concat', 'watch']);
 }

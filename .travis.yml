@@ -1,11 +1,20 @@
 language: node_js
 node_js:
-  - "0.11"
-  - "0.10"
-  - "0.8"
-  - "0.6"
+- '0.11'
+- '0.10'
+- '0.8'
+- '0.6'
 before_install:
-  - npm install -g grunt-cli
-  - npm install -g bower
+- npm install -g grunt-cli
+- npm install -g bower
 before script:
-  - grunt build
+- grunt build
+deploy:
+  provider: s3
+  access_key_id: AKIAJ7BART2KY7QI45GA
+  secret_access_key:
+    secure: AarATxkp5lXPeVtZTbsihCyxtWcbmGs4U5aMqKNZpq1nQCKrCj6bJm/iOe+2kzhrAcI0TdUqc58m1mv3+H/Mw2yVfXgmEF+dfZwvvCerDKIincq1QAb/rb7k36Y+OQVDYKz+oyW90PNoUQ+4X7OROLAlSC1IbDVzMmhmu2niIww=
+  bucket: thecolumnsproject.com
+  acl: public_read
+  on:
+    repo: thecolumnsproject/thecolumnsproject.github.io

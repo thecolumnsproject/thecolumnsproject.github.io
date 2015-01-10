@@ -9386,7 +9386,7 @@ $$(function() {
 
 	// File System Constants
 	var API_HOST = 'http://127.0.0.1:8080/api';
-	var ROOT_PATH = 'http://127.0.0.1/';
+	var ROOT_PATH = 'http://127.0.0.1';
 	// var API_HOST = 'http://127.0.0.1:8080/api';
 	// var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
 	// var ROOT_PATH = 'http://127.0.0.1/';
@@ -9400,8 +9400,8 @@ $$(function() {
 	// 			ROOT_PATH = 'https://thecolumnsproject.github.io/';
 	// 	}
 	// }
-	CSS_PATH = ROOT_PATH + 'css/embed-table.css',
-	IMG_PATH = ROOT_PATH + 'images/';
+	CSS_PATH = ROOT_PATH + '/css/embed-table.css',
+	IMG_PATH = ROOT_PATH + '/images/';
 
 	// Utility methods
 	// ------------------------------

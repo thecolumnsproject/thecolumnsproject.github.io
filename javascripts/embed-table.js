@@ -67,8 +67,8 @@ $$(function() {
 	// 			ROOT_PATH = 'https://thecolumnsproject.github.io/';
 	// 	}
 	// }
-	CSS_PATH = ROOT_PATH + 'css/embed-table.css',
-	IMG_PATH = ROOT_PATH + 'images/';
+	CSS_PATH = ROOT_PATH + '/css/embed-table.css',
+	IMG_PATH = ROOT_PATH + '/images/';
 
 	// Utility methods
 	// ------------------------------

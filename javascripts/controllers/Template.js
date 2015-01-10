@@ -419,7 +419,7 @@ Columns.Template = new function() {
 	this.renderTemplate = function() {
 		var template = Columns.Templates['templates/layout/preview.hbs'];
 		$('#layout').append(template({
-			source: config.web.host + '/public/embed-table.js'
+			source: config.embed.host + config.embed.path
 		}));
 	};
 

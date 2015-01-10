@@ -2,10 +2,7 @@ language: node_js
 node_js:
   - '0.11'
   - '0.10'
-  - '0.8'
-  - '0.6'
 install:
-  - npm clean cache
   - npm install -g grunt-cli
   - npm install -g bower
   - bundle install
@@ -20,5 +17,6 @@ deploy:
     secure: AarATxkp5lXPeVtZTbsihCyxtWcbmGs4U5aMqKNZpq1nQCKrCj6bJm/iOe+2kzhrAcI0TdUqc58m1mv3+H/Mw2yVfXgmEF+dfZwvvCerDKIincq1QAb/rb7k36Y+OQVDYKz+oyW90PNoUQ+4X7OROLAlSC1IbDVzMmhmu2niIww=
   bucket: thecolumnsproject.com
   acl: public_read
+  skip_cleanup: true
   on:
     repo: thecolumnsproject/thecolumnsproject.github.io

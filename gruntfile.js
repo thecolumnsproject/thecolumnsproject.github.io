@@ -93,4 +93,5 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-browserify');
 
 	grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'concat', 'watch']);
+	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'concat']);
 }

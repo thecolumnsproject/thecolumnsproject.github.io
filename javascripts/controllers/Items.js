@@ -37,7 +37,10 @@ Columns.Items = new function() {
 
 		$columns.on('dragstop', function(e) {
 			
-			var $matches = $(Columns.Template.ROW_VALUE_SELECTOR + ":contains('" + $(this).text().trim() + "')");
+			var dragText = $(this).text().trim();
+			var $matches = $(Columns.Template.ROW_VALUE_SELECTOR).filter(function() {
+	    		return $(this).text().trim() === dragText;
+			});
 			if ($matches.length == 0) {
 				$(this).removeClass('inactive');
 			}
@@ -86,13 +89,17 @@ Columns.Items = new function() {
 			}
 
 			// Also don't do anything if we just dropped into a template
-			var $dropped = $(Columns.Template.ROW_VALUE_SELECTOR + ":contains('" + _this.getItemName(Columns.Template.DRAGGING_ITEM) + "')").not('.' + Columns.Template.ROW_VALUE_INACTIVE_CLASS);
+			var $dropped = $(Columns.Template.ROW_VALUE_SELECTOR).filter(function() {
+	    		return $(this).text().trim() === _this.getItemName(Columns.Template.DRAGGING_ITEM);
+			}).not('.' + Columns.Template.ROW_VALUE_INACTIVE_CLASS);
 			if ($dropped.length > 0) {
 				return;
 			}
 
 			// Find the original token
-			var $match = $(_this.LAYOUT_COLUMN_SELECTOR + ":contains('" + _this.getItemName(Columns.Template.DRAGGING_ITEM) + "')").first();
+			var $match = $(_this.LAYOUT_COLUMN_SELECTOR).filter(function() {
+				return $(this).text().trim() === _this.getItemName(Columns.Template.DRAGGING_ITEM);
+			}).first();
 
 			// Find the position of the original token
 			var originalPosition = {

@@ -2,7 +2,7 @@ var env = '{{environment}}';
 var config = {
 	development: {
 		api: {
-			host: 'http://127.0.0.1:8080/api'
+			host: 'http://127.0.0.1:8080'
 		},
 		web: {
 			host: 'http://127.0.0.1'
@@ -14,10 +14,10 @@ var config = {
 	}, 
 	production: {
 		api: {
-			host: 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api'
+			host: 'http://api.thecolumnsproject.com'
 		},
 		web: {
-			host: 'https://thecolumnsproject.github.io'
+			host: 'http://thecolumnsproject.com.s3-website-us-west-2.amazonaws.com'
 		},
 		embed: {
 			host: 'http://thecolumnsproject.com.s3-website-us-west-2.amazonaws.com',

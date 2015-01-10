@@ -6350,7 +6350,7 @@ $$(function() {
 	var MAX_SMARTPHONE_SCREEN_WIDTH = 568;
 
 	// File System Constants
-	var API_HOST = 'http://127.0.0.1:8080/api';
+	var API_HOST = 'http://127.0.0.1:8080';
 	var ROOT_PATH = 'http://127.0.0.1';
 	// var API_HOST = 'http://127.0.0.1:8080/api';
 	// var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';

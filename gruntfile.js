@@ -38,9 +38,9 @@ module.exports = function(grunt) {
 					from: '{{api_host}}',
 					to: function(matchedWord) {
 						if (process.env.NODE_ENV == 'production') {
-							return 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
+							return 'http://api.thecolumnsproject.com';
 						} else {
-							return 'http://127.0.0.1:8080/api'
+							return 'http://127.0.0.1:8080'
 						}
 					}
 				}, {

@@ -12,6 +12,8 @@ install:
   - bower install
 script:
   - grunt build
+after_script:
+  - rm -R node_modules
 deploy:
   provider: s3
   access_key_id: AKIAJ7BART2KY7QI45GA

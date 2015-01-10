@@ -30,9 +30,34 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		replace: {
+			embed: {
+				src: ['javascripts/embed-table.js'],
+				dest: 'compiled-javascripts/embed-table.js',
+				replacements: [{
+					from: '{{api_host}}',
+					to: function(matchedWord) {
+						if (process.env.NODE_ENV == 'production') {
+							return 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
+						} else {
+							return 'http://127.0.0.1:8080/api'
+						}
+					}
+				}, {
+					from: '{{root_path}}',
+					to: function(matchedWord) {
+						if (process.env.NODE_ENV == 'production') {
+							return 'https://thecolumnsproject.github.io/';
+						} else {
+							return 'http://127.0.0.1/'
+						}
+					}
+				}]
+			}
+		},
 		browserify: {
 			embed: {
-				src: 'javascripts/embed-table.js',
+				src: 'compiled-javascripts/embed-table.js',
 				dest: 'compiled-javascripts/embed-table.js'
 			}
 		},
@@ -81,7 +106,7 @@ module.exports = function(grunt) {
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',
-				tasks: ['browserify', 'concat']
+				tasks: ['replace', 'browserify', 'concat']
 			}
 		}
 	});
@@ -91,7 +116,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-browserify');
+	grunt.loadNpmTasks('grunt-text-replace');
 
-	grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'concat']);
+	grunt.registerTask('default', ['sass', 'handlebars', 'replace', 'browserify', 'concat', 'watch']);
+	grunt.registerTask('build', ['sass', 'handlebars', 'replace', 'browserify', 'concat']);
 }

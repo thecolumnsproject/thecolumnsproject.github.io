@@ -12,7 +12,7 @@ install:
   - bower install
 script:
   - grunt build
-after_script:
+before_deploy:
   - rm -R node_modules
 deploy:
   provider: s3

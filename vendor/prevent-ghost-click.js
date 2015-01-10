@@ -23,7 +23,8 @@
  
     // no touch support
     if(!("ontouchstart" in window)) {
-        window[exportName] = function(){};
+        // window[exportName] = function(){};
+        module.exports = function(){};
         return;
     }
  
@@ -80,7 +81,8 @@
      * prevent click events for the given element
      * @param {EventTarget} el
      */
-    window[exportName] = function(el, condition) {
+    module.exports = function(el, condition) {
+    // window[exportName] = function(el, condition) {
         el.addEventListener("touchstart", resetCoordinates, true);
         el.addEventListener("touchend", registerCoordinates, true);
         document.addEventListener("click", function(ev) {

@@ -20,5 +20,6 @@ deploy:
   bucket: thecolumnsproject.com
   acl: public_read
   skip_cleanup: true
+  region: us-west-2
   on:
     repo: thecolumnsproject/thecolumnsproject.github.io

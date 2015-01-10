@@ -1,8 +1,5 @@
 /* Grays */
 @import url(../css/columns-font.css);
-@font-face {
-  font-family: Heiti TC;
-  src: url(../fonts/STHeitiTC-Light.ttf); }
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }

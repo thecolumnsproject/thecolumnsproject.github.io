@@ -83,7 +83,7 @@ Columns.EmbedDetailsPanel = new function() {
 				source: Columns.data.source,
 				source_url: Columns.data.source_url,
 				table_id: table_id,
-				host: config.web.host
+				url: config.embed.host + config.embed.path
 			}),
 			footer: null,
 		}));

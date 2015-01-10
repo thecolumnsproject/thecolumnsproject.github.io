@@ -16,6 +16,7 @@ script:
   - grunt build
 before_deploy:
   - rm -R node_modules
+  - rm -R fonts/vectors
 deploy:
   provider: s3
   access_key_id: AKIAJ7BART2KY7QI45GA

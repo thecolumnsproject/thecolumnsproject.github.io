@@ -103,10 +103,10 @@ function program5(depth0,data) {
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.source_url), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += ">\n		</div>\n	</div>\n</div>\n<div class=\"columns-panel-textarea-area\" id=\"embed-code\">\n	<div class=\"columns-panel-textarea-icon\">\n		<i class=\"icon-code\"></i>\n	</div>\n	<div class=\"columns-panel-input\">\n		<label class=\"columns-panel-textarea-label\">Embed Code</label>\n		<textarea readonly ><script type=\"text/javascript\" src=\"";
-  if (helper = helpers.host) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.host); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if (helper = helpers.url) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.url); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "/public/embed-table.js\" data-table-id=\"";
+    + "\" data-table-id=\"";
   if (helper = helpers.table_id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.table_id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

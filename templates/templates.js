@@ -181,6 +181,20 @@ function program1(depth0,data) {
   else { return ''; }
   });
 
+this["Columns"]["Templates"]["templates/layout/preview.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"layout-table-preview\">\n	<img src=\"/images/paragraph_1.png\">\n	<!-- // <script type=\"text/javascript\" src=\"https://thecolumnsproject.github.io/public/embed-table.js\" data-preview=\"true\" async></script> -->\n	<script type=\"text/javascript\" src=\"";
+  if (helper = helpers.source) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.source); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-preview=\"true\" async></script>\n	<img src=\"/images/paragraph.png\">\n	<img src=\"/images/paragraph_1.png\">\n	<!-- <img src=\"/images/paragraph.png\"> -->\n</div>";
+  return buffer;
+  });
+
 this["Columns"]["Templates"]["templates/layout/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};

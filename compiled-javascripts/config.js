@@ -1,4 +1,4 @@
-var env = '{{environment}}';
+var env = 'development';
 var config = {
 	development: {
 		api: {

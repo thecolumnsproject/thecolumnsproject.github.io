@@ -30,6 +30,7 @@ Columns.Template = new function() {
 	// Create the model and render it
 	this.init = function() {
 		this.setupHandlebars();
+		this.renderTemplate();
 		this.render(Columns.Layout.layoutObject);
 	};
 
@@ -413,6 +414,13 @@ Columns.Template = new function() {
 		} else {
 			return null;
 		}
+	};
+
+	this.renderTemplate = function() {
+		var template = Columns.Templates['templates/layout/preview.hbs'];
+		$('#layout').append(template({
+			source: config.web.host + '/public/embed-table.js'
+		}));
 	};
 
 	this.render = function(layout) {

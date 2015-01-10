@@ -53,6 +53,16 @@ module.exports = function(grunt) {
 						}
 					}
 				}]
+			},
+			app: {
+				src: ['javascripts/config.js'],
+				dest: 'compiled-javascripts/config.js',
+				replacements: [{
+					from: '{{environment}}',
+					to: function(matchedWord) {
+							return process.env.NODE_ENV || 'development';
+					}
+				}]
 			}
 		},
 		browserify: {

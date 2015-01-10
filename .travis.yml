@@ -5,6 +5,7 @@ node_js:
   - '0.8'
   - '0.6'
 install:
+  - npm clean cache
   - npm install -g grunt-cli
   - npm install -g bower
   - bundle install

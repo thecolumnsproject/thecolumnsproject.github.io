@@ -1,14 +1,17 @@
 language: node_js
 node_js:
-- '0.11'
-- '0.10'
-- '0.8'
-- '0.6'
-before_install:
-- npm install -g grunt-cli
-# - npm install -g bower
-before script:
-- grunt build
+  - '0.11'
+  - '0.10'
+  - '0.8'
+  - '0.6'
+install:
+  - npm install -g grunt-cli
+  - npm install -g bower
+  - bundle install
+  - npm install
+  - bower install
+script:
+  - grunt build
 deploy:
   provider: s3
   access_key_id: AKIAJ7BART2KY7QI45GA

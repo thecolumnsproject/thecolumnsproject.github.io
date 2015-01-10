@@ -6365,8 +6365,9 @@ $$(function() {
 	// 			ROOT_PATH = 'https://thecolumnsproject.github.io/';
 	// 	}
 	// }
-	CSS_PATH = ROOT_PATH + '/css/embed-table.css',
-	IMG_PATH = ROOT_PATH + '/images/';
+	var EMBED_PATH = ROOT_PATH + '/public/embed-table.js';
+	var CSS_PATH = ROOT_PATH + '/css/embed-table.css';
+	var IMG_PATH = ROOT_PATH + '/images/';
 
 	// Utility methods
 	// ------------------------------
@@ -7305,7 +7306,7 @@ $$(function() {
 	var scriptTags = document.getElementsByTagName('script');
 	for (var i = 0; i < scriptTags.length ; i++) {
 		var scriptTag = scriptTags[i];
-		if (scriptTag.src.search(ROOT_PATH) > -1 && scripts.indexOf(scriptTag) < 0) {
+		if (scriptTag.src.search(EMBED_PATH) > -1 && scripts.indexOf(scriptTag) < 0) {
 			scripts.push(scriptTag);
 
 			// Create a new table

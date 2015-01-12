@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 		},
 		replace: {
 			embed: {
-				src: ['javascripts/embed-table.js'],
+				src: ['compiled-javascripts/embed-table.js'],
 				dest: 'compiled-javascripts/embed-table.js',
 				replacements: [{
 					from: '{{api_host}}',
@@ -63,11 +63,23 @@ module.exports = function(grunt) {
 							return process.env.NODE_ENV || 'development';
 					}
 				}]
+			},
+			require: {
+				src: 'compiled-javascripts/embed-table.js',
+				dest: 'compiled-javascripts/embed-table.js',
+				replacements: [{
+					from: /[^a-zA-Z](require)[^a-zA-Z]/g,
+					to: function(matchedWord) {
+						return matchedWord.substring(0,1) + 
+							   'columns_require' + 
+							   matchedWord.substring(matchedWord.length - 1,matchedWord.length);
+					}
+				}]
 			}
 		},
 		browserify: {
 			embed: {
-				src: 'compiled-javascripts/embed-table.js',
+				src: 'javascripts/embed-table.js',
 				dest: 'compiled-javascripts/embed-table.js'
 			}
 		},
@@ -128,6 +140,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-text-replace');
 
-	grunt.registerTask('default', ['sass', 'handlebars', 'replace', 'browserify', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'replace', 'browserify', 'concat']);
+	grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
+	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'replace', 'concat']);
 }

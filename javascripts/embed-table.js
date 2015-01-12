@@ -4,9 +4,8 @@
 // require('../bower_components/velocity/velocity.js');
 
 var Velocity = require('../bower_components/velocity/velocity.js');
-var Hammer = require('../bower_components/hammerjs/hammer.js');
+var Hammer = require('../vendor/hammer.js');
 var PreventGhostClick = require('../vendor/prevent-ghost-click.js');
-
 // Require Handlebars and our handlebars templates
 // var Handlebars = require('../bower_components/handlebars/handlebars.js');
 // require('../templates/embeddable-templates.js');

@@ -17,10 +17,10 @@ var config = {
 			host: 'http://api.thecolumnsproject.com'
 		},
 		web: {
-			host: 'http://thecolumnsproject.com.s3-website-us-west-2.amazonaws.com'
+			host: 'http://app.thecolumnsproject.com.s3-website-us-west-2.amazonaws.com'
 		},
 		embed: {
-			host: 'http://thecolumnsproject.com.s3-website-us-west-2.amazonaws.com',
+			host: 'http://app.thecolumnsproject.com.s3-website-us-west-2.amazonaws.com',
 			path: '/public/embed-table.js'
 		}
 	}

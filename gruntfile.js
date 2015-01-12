@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 					from: '{{root_path}}',
 					to: function(matchedWord) {
 						if (process.env.NODE_ENV == 'production') {
-							return 'http://thecolumnsproject.com.s3-website-us-west-2.amazonaws.com';
+							return 'http://app.thecolumnsproject.com.s3-website-us-west-2.amazonaws.com';
 						} else {
 							return 'http://127.0.0.1'
 						}

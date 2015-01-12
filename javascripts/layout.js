@@ -6,6 +6,7 @@ Columns['data'] = {
 	source_url: null,
 	layout: null,
 	columns: null,
+	file_name: null,
 	data: []
 	// source: 'Lubin Truth Institute',
 	// title: 'Friends of Mine',

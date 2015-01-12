@@ -102,6 +102,7 @@ Columns.Upload = new function() {
 			},
 			complete: function(results) {
 				Columns.Layout.updateWithDefaultLayout(Columns.data.columns, true);
+				Columns.data.file_name = file.name;
 				_this.uploadFile(file, Columns.data);
 				// if (uploadedData.length > MAX_ROWS) {
 				// 	$(".welcome").addClass('active');

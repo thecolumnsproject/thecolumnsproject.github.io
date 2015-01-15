@@ -20,7 +20,7 @@ var config = {
 			host: 'http://app.thecolumnsproject.com'
 		},
 		embed: {
-			host: 'http://column.nz',
+			host: 'http://colum.nz',
 			path: '/public/embed-table.js'
 		}
 	}

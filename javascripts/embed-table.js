@@ -102,6 +102,7 @@ $$(function() {
 		// The placement of each table is dependent on the script that
 		// was used to create it, so we need this to begin
 		this.script = script;
+		this.id = $$(script).data('table-id');
 
 		// Remember the table instance once it's been inserted into the DOM
 		// as well as its jquery counterpart
@@ -222,8 +223,7 @@ $$(function() {
 		// First turn on loading
 		this.setLoading(true);
 
-		var id = $$(this.script).data('table-id');
-		$$.get(API_HOST + '/columns/table/' + id + '?page=0', function(data) {
+		$$.get(API_HOST + '/columns/table/' + this.id + '?page=0', function(data) {
 			if (data.status == 'success') {
 				_this.generateLayout($$.parseJSON(data.data.layout));
 				_this.renderData(data.data);
@@ -419,6 +419,13 @@ $$(function() {
 			var $$table = $$(this);
 			if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
 				_this.expand();
+
+				// Track this tap
+				if ( _this.preview ) {
+					ga('send', 'event', 'table', 'expand', 'body');
+				} else {
+					gaColumnz('send', 'event', 'table', 'expand', 'body', +_this.id);
+				}
 			}
 		});
 		// this.$$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
@@ -433,6 +440,13 @@ $$(function() {
 			var $$table = $$(this);
 			if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
 				_this.expand();
+
+				// Track this tap
+				if ( _this.preview ) {
+					ga('send', 'event', 'table', 'expand', 'expand button');
+				} else {
+					gaColumnz('send', 'event', 'table', 'expand', 'expand button', +_this.id);
+				}
 			}
 		});
 		// this.$$table.find(".columns-table-expand-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
@@ -447,6 +461,13 @@ $$(function() {
 			var $$table = $$(this);
 			if (_this.$$table.hasClass(ERROR_CLASS)) {
 				_this.fetchData();
+
+				// Track this tap
+				if ( _this.preview ) {
+					ga('send', 'event', 'table', 'retry', 'error message');
+				} else {
+					gaColumnz('send', 'event', 'table', 'retry', 'error message', +_this.id);
+				}
 			}
 		});
 		// this.$$table.find(".columns-table-error").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
@@ -468,6 +489,13 @@ $$(function() {
 			var $$table = _this.$$table.find('.columns-table');
 			if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
 				_this.collapse();
+
+				// Track this tap
+				if ( _this.preview ) {
+					ga('send', 'event', 'table', 'collapse', 'close button');
+				} else {
+					gaColumnz('send', 'event', 'table', 'collapse', 'close button', +_this.id);
+				}
 
 				// Prevent the dom from doing any other conflicting stuff
 				// e.stopPropagation();
@@ -501,7 +529,7 @@ $$(function() {
 		}
 
 		// Listen to scroll events on the table
-		this.$$table.find('.columns-table-container').on('scroll', function(e) {
+		// this.$$table.find('.columns-table-container').on('scroll', function(e) {
 
 			// Have we scrolled to the bottom and met all other conditions for rendering more rows?
 
@@ -509,7 +537,7 @@ $$(function() {
 
 			// If not, download more rows first
 			
-		});
+		// });
 	};
 
 	Table.prototype.setLoading = function(loading) {
@@ -994,6 +1022,14 @@ $$(function() {
 		// Create global variables to store our tables and manage the load process
 		if(!Columns.scripts) { Columns.scripts = []; };
 		if(!Columns.tables) { Columns.tables = []; };
+
+		// Add Google Analytics to the site if we're not in preview mode
+		var scripts = $$('script').filter(function(i, script) {
+			return $$(script).data('preview') === true;
+		});
+		if ( !scripts.length ) {
+			$$('head').append(Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']());
+		}
 
 		// Make sure we don't do this setup again
 		Columns.hasFinishedSetup = true;

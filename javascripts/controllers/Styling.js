@@ -317,6 +317,9 @@ Columns.Styling = new function() {
 		// dispatchEvent(event);
 		Columns.Layout.update(false);
 		Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
+
+		// Track styling event
+		ga('send', 'event', 'template', 'style', Object.keys(properties)[0]);
 	};
 
 	this.getValueSubstrings = function(value) {

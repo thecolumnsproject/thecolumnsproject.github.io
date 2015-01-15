@@ -92,10 +92,16 @@ Columns.Items.init();
 $(function() {
 	$('.columns-header-nav-home').click(function() {
 		Columns.Upload.show();
+
+		// Track this click
+		ga('send', 'event', 'button', 'click', 'home');
 	});
 
 	$('.columns-header-nav-embed').click(function() {
 		Columns.EmbedDetailsPanel.show();
+
+		// Track this click
+		ga('send', 'event', 'button', 'click', 'embed');
 	});
 });
 

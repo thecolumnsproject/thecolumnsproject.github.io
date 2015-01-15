@@ -124,7 +124,7 @@ module.exports = function(grunt) {
 			},
 			handlebars: {
 				files: '**/*.hbs',
-				tasks: ['handlebars']
+				tasks: ['handlebars', 'concat']
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',

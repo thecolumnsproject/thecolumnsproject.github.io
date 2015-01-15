@@ -40,6 +40,10 @@ Columns.Upload = new function() {
 		var _$this = this.$this;
 		_$this.find(_this.UPLOAD_BUTTON_SELECTOR).click(function() {
 			$(this).siblings('input').trigger('click');
+
+			// Track this click
+			ga('send', 'event', 'button', 'click', 'upload');
+			
 			// Columns.data.columns = [
 			// 	'First Name',
 			// 	'Last Name',

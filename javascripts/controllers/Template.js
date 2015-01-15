@@ -254,6 +254,9 @@ Columns.Template = new function() {
 			Columns.Layout.update(false);
 			Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
 			Columns.Styling.updateStyling(Columns.Items.getItemForTemplate($placeholder));
+
+			// Track template add event
+			ga('send', 'event', 'template', 'add');
 		}
 
 		// _this.$template.removeClass('empty');

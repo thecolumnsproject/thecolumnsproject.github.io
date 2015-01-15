@@ -110,7 +110,7 @@ function program5(depth0,data) {
   if (helper = helpers.table_id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.table_id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" async></script></textarea>\n		<button class=\"columns-button button-small button-tertiary\">\n			Copy Embed Code\n		</button>\n	</div>\n</div>";
+    + "\" async></script></textarea>\n		<button class=\"columns-button button-small button-tertiary columns-copy-embed-url\">\n			Copy Embed Code\n		</button>\n	</div>\n</div>";
   return buffer;
   });
 

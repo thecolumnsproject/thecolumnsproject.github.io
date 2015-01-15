@@ -126,6 +126,9 @@ Columns.Items = new function() {
 					$helper.remove();
 				}
 			});
+
+			// Track template remove event
+			ga('send', 'event', 'template', 'remove');	
 		});
 	};
 

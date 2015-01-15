@@ -64,23 +64,25 @@ Columns.Upload = new function() {
 		$("input[type='file']").change(function() {
 			var file = this.files[0];
 			_this.parseFile(file);
-			_this.setLoading(true, {
-				name: file.name
-			});
+			_this.setLoading(true, "Uploading " + file.name + "...");
 		});
 	};
 
 	this.parseFile = function(file) {
 		var _this = this;
 		var rowsParsed = 0;
+		Columns.data.data = [];
 		Papa.parse(file, {
 			// worker: true,
 			step: function(row, handle) {
+				var obj = {};
+
 				rowsParsed++;
 				if (rowsParsed == 1) {
-					Columns.data.columns = row.data[0];
+					Columns.data.columns = row.data[0].map(function( column ) {
+						return column ? column : '_';
+					});
 				} else {
-					var obj = {};
 					row.data[0].forEach(function(value, index) {
 						obj[Columns.data.columns[index].toLowerCase().replace(/ /g, '_')] = value;
 					});
@@ -88,11 +90,11 @@ Columns.Upload = new function() {
 
 				}
 
-				_this.setLoading(true, {
-					name: file.name,
-					row: rowsParsed,
+				// _this.setLoading(true, {
+					// name: file.name,
+					// row: rowsParsed,
 					// total_rows: row.meta.lines
-				});
+				// });
 
 				if (rowsParsed >= _this.MAX_ROWS) {
 					handle.abort();
@@ -170,6 +172,9 @@ Columns.Upload = new function() {
 					Columns.tables[0].renderData(Columns.data);
 					_this.setLoading(false);
 					_this.hide();
+	        	} else {
+	        		console.log(data.message);
+	        		_this.setLoading(false, "Shoot, something went wrong. Mind trying a different .csv?");
 	        	}
 	        },
 	        // error: errorHandler,
@@ -240,31 +245,35 @@ Columns.Upload = new function() {
 		});
 	};
 
-	this.setLoading = function(loading, upload) {
+	this.setLoading = function(loading, message) {
 		var $button = this.$this.find(this.UPLOAD_BUTTON_SELECTOR);
-		if (loading) {
+		if ( !message ) {
+			message = "Upload a .csv";
+		}
+		if ( loading ) {
 			this.$this.addClass('loading');
-			var text = "Uploading";
-			if (upload.row) {
-				text += " row " + upload.row;
-				if (upload.total_rows) {
-					text += " of " + upload.total_rows
-				}
-				if (upload.name) {
-					text += " from " + upload.name;
-				}
-			}
-			else if (upload.name) {
-				text += " " + upload.name;
-			}
-			text+= "...";
-			$button.text(text);
+			// var text = "Uploading";
+			// if (upload.row) {
+			// 	text += " row " + upload.row;
+			// 	if (upload.total_rows) {
+			// 		text += " of " + upload.total_rows
+			// 	}
+			// 	if (upload.name) {
+			// 		text += " from " + upload.name;
+			// 	}
+			// }
+			// else if (upload.name) {
+			// 	text += " " + upload.name;
+			// }
+			// text+= "...";
 			$button.prop('disabled', true);
 		} else {
 			this.$this.removeClass('loading');
-			$button.text('Upload a .csv');
 			$button.prop('disabled', false);
 		}
+
+		$button.text(message);
+
 	}
 
 	this.render = function() {

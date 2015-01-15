@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 					from: '{{root_path}}',
 					to: function(matchedWord) {
 						if (process.env.NODE_ENV == 'production') {
-							return 'http://app.thecolumnsproject.com.s3-website-us-west-2.amazonaws.com';
+							return 'http://colum.nz';
 						} else {
 							return 'http://127.0.0.1'
 						}
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
 				}]
 			},
 			require: {
-				src: 'compiled-javascripts/embed-table.js',
+				src: ['compiled-javascripts/embed-table.js'],
 				dest: 'compiled-javascripts/embed-table.js',
 				replacements: [{
 					from: /[^a-zA-Z](require)[^a-zA-Z]/g,
@@ -79,7 +79,7 @@ module.exports = function(grunt) {
 		},
 		browserify: {
 			embed: {
-				src: 'javascripts/embed-table.js',
+				src: ['javascripts/embed-table.js'],
 				dest: 'compiled-javascripts/embed-table.js'
 			}
 		},
@@ -128,7 +128,7 @@ module.exports = function(grunt) {
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',
-				tasks: ['replace', 'browserify', 'concat']
+				tasks: ['replace', 'browserify', 'replace', 'concat']
 			}
 		}
 	});

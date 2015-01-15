@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof columns_require=="function"&&columns_require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof columns_require=="function"&&columns_require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(columns_require,module,exports){
 /*! VelocityJS.org (1.0.0). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
 
 /*************************
@@ -558,7 +558,7 @@ return function (global, window, document, undefined) {
     }
 
     if (IE <= 8 && !isJQuery) {
-        throw new Error("Velocity: IE8 and below require jQuery to be loaded before Velocity.");
+        throw new Error("Velocity: IE8 and below columns_require jQuery to be loaded before Velocity.");
     } else if (IE <= 7) {
         /* Revert to jQuery's $.animate(), and lose Velocity's extra features. */
         jQuery.fn.velocity = jQuery.fn.animate;
@@ -1482,7 +1482,7 @@ return function (global, window, document, undefined) {
             SVGAttribute: function (property) {
                 var SVGAttributes = "width|height|x|y|cx|cy|r|rx|ry|x1|x2|y1|y2";
 
-                /* Certain browsers require an SVG transform to be applied as an attribute. (Otherwise, application via CSS is preferable due to 3D support.) */
+                /* Certain browsers columns_require an SVG transform to be applied as an attribute. (Otherwise, application via CSS is preferable due to 3D support.) */
                 if (IE || (Velocity.State.isAndroid && !Velocity.State.isChrome)) {
                     SVGAttributes += "|transform";
                 }
@@ -1742,7 +1742,7 @@ return function (global, window, document, undefined) {
             /* If this is a normalized property (e.g. "opacity" becomes "filter" in <=IE8) or "translateX" becomes "transform"),
                normalize the property's name and value, and handle the special case of transforms. */
             /* Note: Normalizing a property is mutually exclusive from hooking a property since hook-extracted values are strictly
-               numerical and therefore do not require normalization extraction. */
+               numerical and therefore do not columns_require normalization extraction. */
             } else if (CSS.Normalizations.registered[property]) {
                 var normalizedPropertyName,
                     normalizedPropertyValue;
@@ -1872,7 +1872,7 @@ return function (global, window, document, undefined) {
         flushTransformCache: function(element) {
             var transformString = "";
 
-            /* Certain browsers require that SVG transforms be applied as an attribute. However, the SVG transform attribute takes a modified version of CSS's transform string
+            /* Certain browsers columns_require that SVG transforms be applied as an attribute. However, the SVG transform attribute takes a modified version of CSS's transform string
                (units are dropped and, except for skewX/Y, subproperties are merged into their master property -- e.g. scaleX and scaleY are merged into scale(X Y). */
             if ((IE || (Velocity.State.isAndroid && !Velocity.State.isChrome)) && Data(element).isSVG) {
                 /* Since transform values are stored in their parentheses-wrapped form, we use a helper function to strip out their numeric values.
@@ -3830,18 +3830,18 @@ return function (global, window, document, undefined) {
 /* The CSS spec mandates that the translateX/Y/Z transforms are %-relative to the element itself -- not its parent.
 Velocity, however, doesn't make this distinction. Thus, converting to or from the % unit with these subproperties
 will produce an inaccurate conversion value. The same issue exists with the cx/cy attributes of SVG circles and ellipses. */
-},{}],2:[function(require,module,exports){
-// require('../bower_components/jquery/dist/jquery.js');
+},{}],2:[function(columns_require,module,exports){
+// columns_require('../bower_components/jquery/dist/jquery.js');
 
 // Load Velocity, where it will attach to jquery
-// require('../bower_components/velocity/velocity.js');
+// columns_require('../bower_components/velocity/velocity.js');
 
-var Velocity = require('../bower_components/velocity/velocity.js');
-var Hammer = require('../vendor/hammer.js');
-var PreventGhostClick = require('../vendor/prevent-ghost-click.js');
+var Velocity = columns_require('../bower_components/velocity/velocity.js');
+var Hammer = columns_require('../vendor/hammer.js');
+var PreventGhostClick = columns_require('../vendor/prevent-ghost-click.js');
 // Require Handlebars and our handlebars templates
-// var Handlebars = require('../bower_components/handlebars/handlebars.js');
-// require('../templates/embeddable-templates.js');
+// var Handlebars = columns_require('../bower_components/handlebars/handlebars.js');
+// columns_require('../templates/embeddable-templates.js');
 
 // Make sure our version of jquery isn't polluting the namespace
 $$ = window.jQuery.noConflict(true);
@@ -3884,8 +3884,8 @@ $$(function() {
 	var MAX_SMARTPHONE_SCREEN_WIDTH = 568;
 
 	// File System Constants
-	var API_HOST = '{{api_host}}';
-	var ROOT_PATH = '{{root_path}}';
+	var API_HOST = 'http://127.0.0.1:8080';
+	var ROOT_PATH = 'http://127.0.0.1';
 	// var API_HOST = 'http://127.0.0.1:8080/api';
 	// var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
 	// var ROOT_PATH = 'http://127.0.0.1/';
@@ -4075,7 +4075,7 @@ $$(function() {
 	};
 
 	Table.prototype.templateName = function() {
-		return 'row_layout_' + scripts.indexOf(this.script);
+		return 'row_layout_' + scripts.indexOf(this.script); 
 	};
 
 	Table.prototype.generateLayout = function(layout, reload) {
@@ -4860,7 +4860,7 @@ $$(function() {
 
 
 });
-},{"../bower_components/velocity/velocity.js":1,"../vendor/hammer.js":3,"../vendor/prevent-ghost-click.js":4}],3:[function(require,module,exports){
+},{"../bower_components/velocity/velocity.js":1,"../vendor/hammer.js":3,"../vendor/prevent-ghost-click.js":4}],3:[function(columns_require,module,exports){
 /*! Hammer.JS - v2.0.4 - 2014-09-28
  * http://hammerjs.github.io/
  *
@@ -6225,7 +6225,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * has require failures boolean
+     * has columns_require failures boolean
      * @returns {boolean}
      */
     hasRequireFailures: function() {
@@ -6268,7 +6268,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * Check that all the require failure recognizers has failed,
+     * Check that all the columns_require failure recognizers has failed,
      * if true, it emits a gesture event,
      * otherwise, setup the state to FAILED.
      * @param {Object} input
@@ -7326,7 +7326,7 @@ if (typeof module != 'undefined' && module.exports) {
 
 })(window, document, 'Hammer');
 
-},{}],4:[function(require,module,exports){
+},{}],4:[function(columns_require,module,exports){
 /**
  * Prevent click events after a touchend.
  * 

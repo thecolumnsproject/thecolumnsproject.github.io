@@ -452,7 +452,7 @@ Columns.Template = new function() {
 		});
 
 		Handlebars.registerHelper('parseData', function(data, options) {
-			return data.toLowerCase().replace(/_/g, ' ').replace(/\b./g, function(m){ return m.toUpperCase(); });
+			return data === "_" ? data : data.toLowerCase().replace(/_/g, ' ').replace(/\b./g, function(m){ return m.toUpperCase(); });
 		});
 	};
 };

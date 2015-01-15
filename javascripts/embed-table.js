@@ -242,7 +242,7 @@ $$(function() {
 	};
 
 	Table.prototype.templateName = function() {
-		return 'row_layout_' + scripts.indexOf(this.script);
+		return 'row_layout_' + scripts.indexOf(this.script); 
 	};
 
 	Table.prototype.generateLayout = function(layout, reload) {

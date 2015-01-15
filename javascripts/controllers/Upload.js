@@ -43,7 +43,7 @@ Columns.Upload = new function() {
 
 			// Track this click
 			ga('send', 'event', 'button', 'click', 'upload');
-			
+
 			// Columns.data.columns = [
 			// 	'First Name',
 			// 	'Last Name',
@@ -69,6 +69,9 @@ Columns.Upload = new function() {
 			var file = this.files[0];
 			_this.parseFile(file);
 			_this.setLoading(true, "Uploading " + file.name + "...");
+
+			// Track this click
+			ga('send', 'event', 'file', 'chosen');
 		});
 	};
 
@@ -176,6 +179,9 @@ Columns.Upload = new function() {
 					Columns.tables[0].renderData(Columns.data);
 					_this.setLoading(false);
 					_this.hide();
+
+					// Track this upload
+					ga('send', 'event', 'file', 'uploaded', '', Columns.EmbedDetailsPanel.table_id);
 	        	} else {
 	        		console.log(data.message);
 	        		_this.setLoading(false, "Shoot, something went wrong. Mind trying a different .csv?");

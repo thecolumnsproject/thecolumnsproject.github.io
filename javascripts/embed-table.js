@@ -176,6 +176,11 @@ $$(function() {
 		PreventGhostClick(document, function() {
 			return _this.$$table.hasClass(EXPANDING_CLASS) || _this.$$table.hasClass(EXPANDED_CLASS)
 		});
+
+		// Track the table render
+		if ( !_this.preview ) {
+			gaColumnz('send', 'event', 'table', 'render', '', +_this.id);
+		}
 	};
 
 	Table.prototype.isLargeFormFactor = function() {
@@ -228,6 +233,11 @@ $$(function() {
 				_this.generateLayout($$.parseJSON(data.data.layout));
 				_this.renderData(data.data);
 				_this.setError(false);
+
+				// Track the table population
+				if ( !_this.preview ) {
+					gaColumnz('send', 'event', 'table', 'populate', '', +_this.id);
+				}
 			} else {
 				_this.setLoading(false);
 				_this.setError(true);

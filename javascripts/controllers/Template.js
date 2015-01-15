@@ -256,7 +256,7 @@ Columns.Template = new function() {
 			Columns.Styling.updateStyling(Columns.Items.getItemForTemplate($placeholder));
 
 			// Track template add event
-			ga('send', 'event', 'template', 'add');
+			ga('send', 'event', 'template', 'add', Columns.EmbedDetailsPanel.table_id);
 		}
 
 		// _this.$template.removeClass('empty');

@@ -319,7 +319,7 @@ Columns.Styling = new function() {
 		Columns.tables[0].generateLayout(Columns.Layout.layoutObject, true);
 
 		// Track styling event
-		ga('send', 'event', 'template', 'style', Object.keys(properties)[0]);
+		ga('send', 'event', 'template', 'style', Object.keys(properties)[0], Columns.EmbedDetailsPanel.table_id);
 	};
 
 	this.getValueSubstrings = function(value) {

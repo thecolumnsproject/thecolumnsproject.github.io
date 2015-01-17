@@ -43,12 +43,12 @@ Columns.EmbedDetailsPanel = new function() {
 			Columns.Upload.updateTableData();
 
 			// Track this update event click
-			ga('send', 'event', 'field', 'edit', $(this).data('property'));
+			ga('send', 'event', 'field', 'edit', $(this).data('property'), _this.table_id);
 		});
 
 		this.$this.find('.columns-copy-embed-url').click(function() {
 			// Track attempts to copy the embed code
-			ga('send', 'event', 'button', 'click', 'copy embed code');
+			ga('send', 'event', 'button', 'click', 'copy embed code', _this.table_id);
 		});
 	};
 

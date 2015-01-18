@@ -7,6 +7,7 @@
 // 2) Update its fields
 // 3) Update the data model when fields are altered
 
+if (!window.Columns) window.Columns = {};
 Columns.EmbedDetailsPanel = new function() {
 
 	this.$this;

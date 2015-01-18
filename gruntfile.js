@@ -111,6 +111,20 @@ module.exports = function(grunt) {
 				dest: 'compiled-javascripts/styling/compiled-data.js'
 			}
 		},
+		jasmine: {
+			app: {
+				src: ['javascripts/models/*.js', 'javascripts/controllers/*.js'],
+				options: {
+					specs: 'specs/**/*.js',
+					vendor: [
+						'bower_components/jquery/dist/jquery.js',
+						'bower_components/handlebars/handlebars.js',
+						'bower_components/velocity/velocity.js'
+					],
+					helpers: ['templates/embeddable-templates.js', 'templates/templates.js']
+				}
+			}
+		},
 		watch: {
 			options: {
 				livereload: true,
@@ -139,6 +153,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-text-replace');
+	grunt.loadNpmTasks('grunt-contrib-jasmine');
 
 	grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
 	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'replace', 'concat']);

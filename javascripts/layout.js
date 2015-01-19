@@ -93,6 +93,9 @@ $(function() {
 	
 	if ( ENV === 'production' ) {
 		$('head').append( Columns.Templates['templates/analytics.hbs']() );
+		mixpanel.track(
+			"Arrived at the app"
+		);
 	}
 
 	$('.columns-header-nav-home').click(function() {

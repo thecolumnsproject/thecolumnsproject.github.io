@@ -119,7 +119,8 @@ module.exports = function(grunt) {
 					vendor: [
 						'bower_components/jquery/dist/jquery.js',
 						'bower_components/handlebars/handlebars.js',
-						'bower_components/velocity/velocity.js'
+						'bower_components/velocity/velocity.js',
+						'vendor/jquery-ui.min.js'
 					],
 					helpers: ['templates/embeddable-templates.js', 'templates/templates.js']
 				}

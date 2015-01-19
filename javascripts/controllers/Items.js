@@ -14,10 +14,11 @@ Columns.Items = new function() {
 	this.ITEM_SELECTOR = '.' + this.ITEM_CLASS;
 	this.LAYOUT_COLUMN_SELECTOR = this.ITEM_SELECTOR; /* alias */
 
-	this.init = function(data) {
+	this.init = function(items) {
 		// Render the columns based on passed in data
+		this.items = items;
 		this.setupHandlebars();
-		this.render(data);
+		this.render(items);
 	};
 
 	this.setupDragListeners = function($columns) {
@@ -181,7 +182,10 @@ Columns.Items = new function() {
 	this.render = function(items) {
 		$('.layout-columns').remove();
 		var columns = Columns.Templates['templates/layout/columns.hbs'];
-		$("#columns").append(columns({columns: items}));
+		var titles = this.items ? this.items.map(function(item, i) {
+			return item.formattedTitle();
+		}) : [] ;
+		$("#columns").append(columns({columns: titles}));
 
 		this.setupDragListeners($(this.LAYOUT_COLUMN_SELECTOR));
 		this.setupDropListeners();

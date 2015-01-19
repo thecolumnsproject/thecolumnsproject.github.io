@@ -1,56 +1,169 @@
-/*
-Error: File to import not found or unreadable: bower_components/bourbon/dist/bourbon.
-       Load path: /Users/jeremy/Documents/columns/front-end
-        on line 3 of stylesheets/header.scss
+/* Grays */
+@-webkit-keyframes pop-out {
+  0% {
+    -webkit-transform: scale(1); }
+  50% {
+    -webkit-transform: scale(1.1); }
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pop-in {
+  0% {
+    -webkit-transform: scale(1); }
+  50% {
+    -webkit-transform: scale(0.9); }
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; }
+  50% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1.0; }
+  100% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; } }
+header {
+  height: 60px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -moz-box-pack: start;
+  box-pack: start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  -o-justify-content: flex-start;
+  justify-content: flex-start;
+  -ms-flex-pack: start;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  box-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -o-align-items: center;
+  align-items: center;
+  -ms-flex-align: center;
+  position: fixed;
+  width: 100%;
+  border-bottom: 1px solid #ebebeb;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 999; }
+  header nav {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -o-align-items: center;
+    align-items: center;
+    -ms-flex-align: center;
+    margin-left: auto;
+    margin-right: 16px; }
+    header nav ul {
+      list-style-type: none;
+      display: -webkit-box;
+      display: -moz-box;
+      display: box;
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -moz-box-pack: center;
+      box-pack: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -o-justify-content: center;
+      justify-content: center;
+      -ms-flex-pack: center;
+      padding: 0;
+      margin: 0; }
+      header nav ul li {
+        height: 22px;
+        width: 22px;
+        border: 1px solid #89c0d8;
+        border-radius: 50%;
+        margin: 0 4px;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer; }
+        header nav ul li:hover {
+          background-color: #3E97BD; }
+          header nav ul li:hover i {
+            color: #fff; }
+        header nav ul li i {
+          text-align: center;
+          display: inline-block;
+          line-height: 22px;
+          width: 22px;
+          font-size: 10px;
+          color: #3E97BD;
+          -webkit-transition: all 0.2s ease-in-out;
+          -moz-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out; }
+        header nav ul li.upload-data {
+          color: #3E97BD;
+          font-weight: 400;
+          position: relative;
+          border: none;
+          margin-right: 64px;
+          display: -webkit-box;
+          display: -moz-box;
+          display: box;
+          display: -webkit-flex;
+          display: -moz-flex;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: center;
+          -moz-box-align: center;
+          box-align: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center;
+          -o-align-items: center;
+          align-items: center;
+          -ms-flex-align: center; }
+          header nav ul li.upload-data:hover {
+            border: none;
+            background-color: #fff; }
+            header nav ul li.upload-data:hover i {
+              color: #3E97BD; }
+          header nav ul li.upload-data i {
+            border: 1px solid #89c0d8;
+            border-radius: 50%;
+            display: block;
+            min-width: 22px;
+            margin-right: 8px; }
+            header nav ul li.upload-data i:hover {
+              background-color: #3E97BD;
+              color: #fff; }
+          header nav ul li.upload-data input {
+            cursor: pointer;
+            position: absolute;
+            top: 0px;
+            left: 0;
+            opacity: 0; }
+          header nav ul li.upload-data input:hover + i {
+            background-color: #3E97BD;
+            color: #fff;
+            cursor: pointer; }
 
-1: @import 'variables';
-2: @import 'keyframes';
-3: @import 'bower_components/bourbon/dist/bourbon';
-4: 
-5: header {
-6: 	height: 60px;
-7: 	@include display(flex);
-8: 	@include justify-content(flex-start);
-
-Backtrace:
-stylesheets/header.scss:3
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/import_node.rb:66:in `rescue in import'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/import_node.rb:45:in `import'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/import_node.rb:28:in `imported_file'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/import_node.rb:37:in `css_import?'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:301:in `visit_import'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/stack.rb:79:in `block in with_base'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/stack.rb:115:in `with_frame'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/stack.rb:79:in `with_base'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/base.rb:52:in `map'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/base.rb:52:in `visit_children'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/base.rb:36:in `block in visit'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:157:in `visit'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/visitors/perform.rb:8:in `visit'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/root_node.rb:36:in `css_tree'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/engine.rb:368:in `_render_with_sourcemap'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/engine.rb:285:in `render_with_sourcemap'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/exec/sass_scss.rb:396:in `run'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/exec/sass_scss.rb:62:in `process_result'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/exec/base.rb:52:in `parse'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/lib/sass/exec/base.rb:19:in `parse!'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/gems/sass-3.4.7/bin/sass:13:in `<top (required)>'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/bin/sass:23:in `load'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/bin/sass:23:in `<main>'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/bin/ruby_executable_hooks:15:in `eval'
-/Users/jeremy/.rvm/gems/ruby-2.0.0-p353/bin/ruby_executable_hooks:15:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: File to import not found or unreadable: bower_components/bourbon/dist/bourbon.\A        Load path: /Users/jeremy/Documents/columns/front-end\A         on line 3 of stylesheets/header.scss\A \A 1: @import 'variables';\A 2: @import 'keyframes';\A 3: @import 'bower_components/bourbon/dist/bourbon';\A 4: \A 5: header {\A 6: 	height: 60px;\A 7: 	@include display(flex);\A 8: 	@include justify-content(flex-start);"; }
+/*# sourceMappingURL=header.css.map */

@@ -23,7 +23,7 @@ describe('Item View', function() {
 
 		beforeEach(function() {
 			var item = new Item({
-				title: 'My Item',
+				title: 'my_item',
 				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
 			});
 			this.itemView = new ItemView(item);
@@ -48,6 +48,33 @@ describe('Item View', function() {
 				property: 'margin-left',
 				value: '12px'
 			}]);
+		});
+	});
+
+	xdescribe('Dragging', function() {
+
+		beforeEach(function() {
+			var item = new Item({
+				title: 'My Item',
+				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
+			});
+			this.$item = new ItemView( item ).render();
+		});
+
+		it('should be draggable', function() {
+			expect( this.$item.draggable('instance') ).toBeDefined();
+		});
+
+		it('should emit an event on drag start', function() {
+			
+		});
+
+		it('should emit an event on drag stop', function() {
+			
+		});
+
+		it('should emit an event on drag', function() {
+			
 		});
 	});
 });

@@ -6,7 +6,7 @@ Columns.Layout['defaults'] = {
 		}],
 		[{
 			property: 'color',
-			value: '#888'
+			value: '#888888'
 		},{
 			property: 'font-size',
 			value: '14px'

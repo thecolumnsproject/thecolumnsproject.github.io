@@ -140,13 +140,13 @@ Columns.Styling = new function() {
 		});
 	};
 
-	this.populateCurrentValues = function(item) {
+	this.populateCurrentValues = function(template) {
 
 		function traverseData(data) {
 			Object.keys(data).forEach(function(key, i) {
 				if (key == 'property') {
 					var value;
-					var existingStyles = $(item).data('style');
+					var existingStyles = $(Columns.Items.getItemForTemplate(template)).data('style');
 					if (existingStyles) {
 						existingStyles.every(function(style, i) {
 							if (style.property == data[key]['name']) {
@@ -155,7 +155,7 @@ Columns.Styling = new function() {
 							}
 						});
 					}
-					data[key]['current_value'] = value || $(item).css(data[key]['name']);
+					data[key]['current_value'] = value || $(template).css(data[key]['name']);
 				} else {
 					if (typeof data[key] == 'object') {
 						traverseData(data[key]);
@@ -164,7 +164,7 @@ Columns.Styling = new function() {
 			});
 		}
 
-		var type = Columns.Items.getItemType(item);
+		var type = Columns.Items.getItemType(template);
 		var data = Columns.styleData.types[type];
 		traverseData(data);
 
@@ -287,14 +287,14 @@ Columns.Styling = new function() {
 
 	this.updateCurrentItemWithProperties = function(component, properties) {
 		var index = $(component).parents(this.STYLE_COMPONENT_SELECTOR).data('component-index');
-		var item = this._currentItems[index];
-		var template = Columns.Template.getTemplateForItem(item);
+		var template = this._currentItems[index];
+		var item = Columns.Items.getItemForTemplate(template);
 
 		// If any of the properties are layout-related,
 		// apply them differently to account for browser-prefixes
 		Object.keys(properties).forEach(function(property) {
 			if (Columns.Layout.LAYOUT_PROPERTIES.indexOf(property) > -1) {
-				$(item).attr('layout-' + property, properties[property]);
+				$(template).attr('layout-' + property, properties[property]);
 			}
 		});
 

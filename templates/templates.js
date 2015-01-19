@@ -117,11 +117,13 @@ function program5(depth0,data) {
 this["Columns"]["Templates"]["templates/layout/column.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"layout-column active\">\n	<i class=\"icon-text layout-column-icon\"></i>\n	"
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+  buffer += "<div class=\"layout-column active\">\n	<i class=\"icon-text layout-column-icon\"></i>\n	";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\n</div>";
   return buffer;
   });

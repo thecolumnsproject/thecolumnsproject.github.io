@@ -257,6 +257,10 @@ Columns.Template = new function() {
 
 			// Track template add event
 			ga('send', 'event', 'template', 'add', Columns.EmbedDetailsPanel.table_id);
+			mixpanel.track(
+				"Add item to template",
+				{ "Table ID": Columns.EmbedDetailsPanel.table_id }
+			);
 		}
 
 		// _this.$template.removeClass('empty');

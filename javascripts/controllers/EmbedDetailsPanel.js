@@ -44,11 +44,19 @@ Columns.EmbedDetailsPanel = new function() {
 
 			// Track this update event click
 			ga('send', 'event', 'field', 'edit', $(this).data('property'), _this.table_id);
+			mixpanel.track(
+				"Edit field " + $(this).data('property'),
+				{ "Table ID":  _this.table_id }
+			);
 		});
 
 		this.$this.find('.columns-copy-embed-url').click(function() {
 			// Track attempts to copy the embed code
 			ga('send', 'event', 'button', 'click', 'copy embed code', _this.table_id);
+			mixpanel.track(
+				"Copy embed code",
+				{ "Table ID":  _this.table_id }
+			);
 		});
 	};
 

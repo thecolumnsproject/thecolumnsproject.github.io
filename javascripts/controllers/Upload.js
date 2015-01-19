@@ -43,6 +43,9 @@ Columns.Upload = new function() {
 
 			// Track this click
 			ga('send', 'event', 'button', 'click', 'upload');
+			mixpanel.track(
+				"Clicked Upload button"
+			);
 
 			// Columns.data.columns = [
 			// 	'First Name',
@@ -72,6 +75,9 @@ Columns.Upload = new function() {
 
 			// Track this click
 			ga('send', 'event', 'file', 'chosen');
+			mixpanel.track(
+				"Chose file"
+			);
 		});
 	};
 
@@ -182,6 +188,9 @@ Columns.Upload = new function() {
 
 					// Track this upload
 					ga('send', 'event', 'file', 'uploaded', '', Columns.EmbedDetailsPanel.table_id);
+					mixpanel.track(
+						"File uploaded successfully"
+					);
 	        	} else {
 	        		console.log(data.message);
 	        		_this.setLoading(false, "Shoot, something went wrong. Mind trying a different .csv?");

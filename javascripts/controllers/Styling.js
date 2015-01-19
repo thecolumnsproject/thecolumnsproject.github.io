@@ -320,6 +320,13 @@ Columns.Styling = new function() {
 
 		// Track styling event
 		ga('send', 'event', 'template', 'style', Object.keys(properties)[0], Columns.EmbedDetailsPanel.table_id);
+		mixpanel.track(
+			"Styled template item",
+			{
+				"Table ID": Columns.EmbedDetailsPanel.table_id,
+				"Property": Object.keys(properties)[0]
+			}
+		);
 	};
 
 	this.getValueSubstrings = function(value) {

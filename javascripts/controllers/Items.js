@@ -129,6 +129,10 @@ Columns.Items = new function() {
 
 			// Track template remove event
 			ga('send', 'event', 'template', 'remove', Columns.EmbedDetailsPanel.table_id);	
+			mixpanel.track(
+				"Removed item from template",
+				{ "Table ID":  Columns.EmbedDetailsPanel.table_id }
+			);
 		});
 	};
 

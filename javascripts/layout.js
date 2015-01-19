@@ -90,11 +90,19 @@ Columns.Items.init();
 // Columns.Styling.updateStyling($(Columns.Template.$template).first());
 
 $(function() {
+	
+	if ( ENV === 'production' ) {
+		$('head').append( Columns.Templates['templates/analytics.hbs']() );
+	}
+
 	$('.columns-header-nav-home').click(function() {
 		Columns.Upload.show();
 
 		// Track this click
 		ga('send', 'event', 'button', 'click', 'home');
+		mixpanel.track(
+			"Clicked Home logo"
+		);
 	});
 
 	$('.columns-header-nav-embed').click(function() {
@@ -102,6 +110,9 @@ $(function() {
 
 		// Track this click
 		ga('send', 'event', 'button', 'click', 'embed');
+		mixpanel.track(
+			"Clicked Embed button"
+		);
 	});
 });
 

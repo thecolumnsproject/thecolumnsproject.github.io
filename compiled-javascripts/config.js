@@ -1,4 +1,4 @@
-var env = 'development';
+var ENV = 'development';
 var config = {
 	development: {
 		api: {
@@ -24,4 +24,4 @@ var config = {
 			path: '/public/embed-table.js'
 		}
 	}
-}[env];
+}[ENV];

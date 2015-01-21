@@ -12,7 +12,7 @@ ItemView.prototype.render = function() {
 	$item.data('style', this.item.style.styles);
 	this.$item = $item;
 
-	// this.setupEvents();
+	this.setupEvents();
 
 	return this.$item;
 };
@@ -27,4 +27,58 @@ ItemView.prototype.setupEvents = function() {
 		// opacity: .2,
 		cancel: '.inactive'
 	});
+
+	this.$item.on( 'dragstart', $.proxy(function( event, ui ) {
+
+		// Alert any listeners that the item has started drag
+		// var event = new CustomEvent( 'Columns.ItemView.ItemDidBeginDrag', {
+		// 	item: 	this,
+		// 	event: 	event,
+		// 	ui: 	ui
+		// });
+		var event = document.createEvent('CustomEvent');
+		event.initCustomEvent('Columns.ItemView.ItemDidBeginDrag', false, false, {
+			item: 	this,
+			event: 	event,
+			ui: 	ui
+		});
+		document.dispatchEvent(event);
+
+	}, this) );
+
+	this.$item.on( 'dragstop', $.proxy(function( event, ui ) {
+
+		// Alert any listeners that the item has started drag
+		// var event = new CustomEvent( 'Columns.ItemView.ItemDidBEndDrag', {
+		// 	item: 	this,
+		// 	event: 	event,
+		// 	ui: 	ui
+		// });
+		var event = document.createEvent('CustomEvent');
+		event.initCustomEvent('Columns.ItemView.ItemDidEndDrag', false, false, {
+			item: 	this,
+			event: 	event,
+			ui: 	ui
+		});
+		document.dispatchEvent(event);
+
+	}, this) );
+
+	this.$item.on( 'drag', $.proxy(function( event, ui ) {
+
+		// Alert any listeners that the item has started drag
+		// var event = new CustomEvent( 'Columns.ItemView.ItemDidDrag', {
+		// 	item: 	this,
+		// 	event: 	event,
+		// 	ui: 	ui
+		// });
+		var event = document.createEvent('CustomEvent');
+		event.initCustomEvent('Columns.ItemView.ItemDidDrag', false, false, {
+			item: 	this,
+			event: 	event,
+			ui: 	ui
+		});
+		document.dispatchEvent(event);
+
+	}, this) );
 };

@@ -51,14 +51,20 @@ describe('Item View', function() {
 		});
 	});
 
-	xdescribe('Dragging', function() {
+	describe('Dragging', function() {
 
 		beforeEach(function() {
 			var item = new Item({
 				title: 'My Item',
 				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
 			});
-			this.$item = new ItemView( item ).render();
+
+			this.fakeUI		= {};
+			this.item 		= new ItemView( item );
+			this.$item		= this.item.render();
+
+			spyOn(document, 'dispatchEvent');
+
 		});
 
 		it('should be draggable', function() {
@@ -66,15 +72,24 @@ describe('Item View', function() {
 		});
 
 		it('should emit an event on drag start', function() {
-			
+			this.$item.trigger('dragstart', this.fakeUI);
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.ItemView.ItemDidBeginDrag');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.item );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
 		});
 
 		it('should emit an event on drag stop', function() {
-			
+			this.$item.trigger('dragstop', this.fakeUI);
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.ItemView.ItemDidEndDrag');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.item );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
 		});
 
 		it('should emit an event on drag', function() {
-			
+			this.$item.trigger('drag', this.fakeUI);
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.ItemView.ItemDidDrag');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.item );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
 		});
 	});
 });

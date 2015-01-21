@@ -1,36 +1,44 @@
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
-describe('Items Contoller', function() {
+describe('Items View', function() {
 
 	describe('Initialization', function() {
 
-		beforeEach(function() {
-			var items = [new Item({title: 'First Name'}), new Item({title: 'Last Name'}), new Item({title: 'Hometown'}), new Item({title: 'Age'})];
-			Columns.Items.init(items);
-		});
-
 		it('should accept an array of items', function() {
-			var items = [new Item({title: 'First Name'}), new Item({title: 'Last Name'}), new Item({title: 'Hometown'}), new Item({title: 'Age'})];
-			Columns.Items.init(items);
-			expect(Columns.Items.items).toEqual(items);
+			var items = [ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' }) ];
+			var itemsView = new ItemsView( items );
+			expect( itemsView.items ).toEqual( items );
 		});
 
 		it ('shoud accept no items', function() {
-			Columns.Items.init();
-			expect(Columns.Items.items).toBeUndefined();
+			var itemsView = new ItemsView();
+			expect(itemsView.items).toBeUndefined();
+		});
+
+		it('should initiatize with the correct template', function() {
+			var itemsView = new ItemsView();
+			expect(itemsView.template).toEqual(Columns.Templates['templates/layout/columns.hbs']);
 		});
 	});
 
 	describe('Rendering', function() {
 
 		beforeEach(function() {
-			this.items = [new Item({title: 'First Name'}), new Item({title: 'Last Name'}), new Item({title: 'Hometown'}), new Item({title: 'Age'})];
+			this.items = [ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' }) ];
 		});
 
 		it('should contain a column for each item', function() {
 			loadFixtures('columns.html');
-			var $items = Columns.Items.render( this.items ).find('.layout-column');
-			expect( $items.length ).toBe(4);
+			var itemsView = new ItemsView( this.items ).render();
+			expect( $('.layout-column').length ).toBe(4);
+		});
+
+		it('should remove any old items', function() {
+			var newItems = [ new Item({ title: 'Batting Average' }), new Item({ title: 'Baseball Player' }), new Item({ title: 'Season' }), new Item({ title: 'Team' }, new Item({ title: 'Coach' }) ];
+			var $columns = $('.layout-column');
+			expect( $columns.length ).toBe(5);
+			expect( $columns.first() ).toContainText('Batting Avarege');
+			expect( $columns ).not.toContainText('First Name');
 		});
 	});
 });

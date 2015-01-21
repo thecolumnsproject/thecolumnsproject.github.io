@@ -5,7 +5,7 @@ ItemsView = function( items ) {
 	this.template 	= Columns.Templates['templates/layout/columns.hbs'];
 	this.$items;
 
-	this.render(items);
+	this.render( items );
 };
 
 ItemsView.prototype.render = function( items ) {
@@ -21,7 +21,7 @@ ItemsView.prototype.render = function( items ) {
 			var itemView = new ItemView( item );
 			$columns.append( itemView.render() );
 
-		}.bind( this ));
+		});
 	}
 
 	$("#columns").append( $columns );

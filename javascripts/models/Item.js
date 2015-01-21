@@ -5,6 +5,7 @@
 
 Item = function( params ) {
 
+	this.id;
 	this.title;
 	this.style;
 

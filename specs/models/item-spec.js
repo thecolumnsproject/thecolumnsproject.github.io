@@ -22,6 +22,11 @@ describe('Item Model', function() {
 				value: '#3a3a3a'
 			}]);
 		});
+
+		xit('should assign itself an id based on the unformatted item name', function() {
+			var item = new Item({ title: "My Item" });
+			expect( item.id ).toBe('my_item');
+		});
 	});
 
 	describe('Title Formatting', function() {

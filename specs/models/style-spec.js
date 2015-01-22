@@ -67,6 +67,26 @@ describe('Style Model', function() {
 		});
 	});
 
+	describe('Converting to CSS', function() {
+
+		it('should convert styles to css', function() {
+			var style = new Style([{
+				property: 'font-size',
+				value: '12px'
+			}, {
+				property: 'color',
+				value: '#888'
+			}, {
+				property: 'font-weight',
+				value: '300'
+			}, {
+				property: 'margin-right',
+				value: '10px'
+			}]);
+			expect( style.css() ).toBe('font-size:12px;color:#888;font-weight:300;margin-right:10px;')
+		});
+	});
+
 	describe('Merging', function() {
 
 		beforeEach(function() {

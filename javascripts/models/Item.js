@@ -10,8 +10,9 @@ Item = function( params ) {
 	this.style;
 
 	if ( params ) {
-		this.title = params.title || '';
-		this.style = new Style( params.style );
+		// this.id 	= 
+		this.title 	= params.title || '';
+		this.style 	= new Style( params.style );
 	}
 }
 
@@ -34,5 +35,13 @@ Item.prototype.unformattedTitle = function() {
 		return '_';
 	} else {
 		return this.title.toLowerCase().replace(/ /g, '_');
+	}
+}
+
+Item.prototype.is = function( item ) {
+	if ( item instanceof Item ) {
+		return this.title === item.title;
+	} else {
+		throw "exception: Comparison must be with another Item";
 	}
 }

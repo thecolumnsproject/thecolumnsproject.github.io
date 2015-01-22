@@ -36,6 +36,14 @@ Style.prototype.update = function( styles ) {
 	this._mergeCSS( newStyles );
 };
 
+Style.prototype.css = function() {
+	var css = '';
+	this.styles.forEach(function( style, i ) {
+		css += style.property + ':' + style.value + ';';
+	});
+	return css;
+};
+
 Style.prototype._parseCSS = function( css ) {
 
 	// Accept a CSS string

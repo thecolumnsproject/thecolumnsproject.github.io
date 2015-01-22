@@ -59,4 +59,29 @@ describe('Item Model', function() {
 			expect(item.unformattedTitle()).toBe('_');
 		});
 	});
+
+	describe('Comparing Items', function() {
+
+		beforeEach(function() {
+			this.item = new Item({ title: 'My Item' });
+		});
+
+		it('should return true if the passed in item is equal to this one', function() {
+			var otherItem = new Item({ title: 'My Item' });
+			expect( this.item.is( otherItem ) ).toBe(true);
+		});
+
+		it('should return false if the passed in Item is not equal to this one', function() {
+			var otherItem = new Item({ title: 'Other Item' });
+			expect( this.item.is( otherItem ) ).toBe(false);
+		});
+
+		it('should throw an error if the passed in object is not an Item', function() {
+			var otherItem = {};
+			expect(function() {
+				this.item.is( otherItem );
+			}.bind( this ))
+			.toThrow("exception: Comparison must be with another Item");
+		});
+	})
 });

@@ -41,6 +41,17 @@ TemplateValueView.prototype.update = function() {
 	// Update the value's style
 	this.$value.attr( 'style', this.item.style.css() );
 	// Update the value's placeholder status
+
+	// Alert any listeners that the value has changed
+	// var event = new CustomEvent( 'Columns.ValueView.DidChange', {
+	// 	valueView: 	this
+	// });
+	var event = document.createEvent('CustomEvent');
+	event.initCustomEvent('Columns.TemplateValueView.DidChange', false, false, {
+		valueView: 	this
+	});
+	document.dispatchEvent(event);
+
 	return this.$value;
 };
 

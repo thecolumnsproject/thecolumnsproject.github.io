@@ -7,7 +7,7 @@ xdescribe('Group Model', function() {
 				property:'flex-direction',
 					value: 'row'
 				}, {
-					property: 'justify-content':
+					property: 'justify-content',
 					value: 'flex-start'
 				}, {
 					property: 'align-items',
@@ -22,7 +22,7 @@ xdescribe('Group Model', function() {
 		});
 
 		it('should iniialize with a layout', function() {
-			var layout = 
+			// var layout = 
 			var group = new TemplateGroup({ layout: this.layout });
 			expect( group.layout ).toEqual( this.layout );
 			expect( group.placeholder ).toBe( false );

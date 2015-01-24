@@ -105,6 +105,18 @@ describe('Template Value View', function() {
 			var $value = this.valueView.update();
 			expect( this.valueView.$value ).toEqual( $value );
 		});
+
+		it('should emit an event once the update has finished', function() {
+			spyOn(document, 'dispatchEvent');
+			this.valueView.item = new Item({
+				title: 'My Item',
+				style: 'font-size:16px;color:#888888;margin-left:14px;'
+			});
+			var $value = this.valueView.update();
+			expect( document.dispatchEvent ).toHaveBeenCalled();
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateValueView.DidChange');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
+		});
 	});
 
 	describe('Responding to Events', function() {

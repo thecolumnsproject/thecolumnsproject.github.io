@@ -7,7 +7,7 @@ describe('Template Group View', function() {
 				property:'flex-direction',
 				value: 'row'
 			}, {
-				property: 'justify-content':
+				property: 'justify-content',
 				value: 'flex-start'
 			}, {
 				property: 'align-items',
@@ -17,7 +17,7 @@ describe('Template Group View', function() {
 
 		it('should initialize without any properties', function() {
 			var group = new TemplateGroupView();
-			expect( group.layout ).toBeUndefined();
+			expect( group.layout ).toEqual( [] );
 			expect( group.placeholder ).toBe( false );
 		});
 
@@ -31,7 +31,11 @@ describe('Template Group View', function() {
 			var group = new TemplateGroupView( this.layout, true );
 			expect( group.layout ).toEqual( this.layout );
 			expect( group.placeholder ).toBe( true );
+		});
 
+		it('should initialize with the correct template', function()  {
+			var group = new TemplateGroupView( this.layout );
+			expect( group.template ).toEqual( Columns.Templates['templates/layout/row-group.hbs'] );
 		});
 	});
 
@@ -42,7 +46,7 @@ describe('Template Group View', function() {
 				property:'flex-direction',
 				value: 'row'
 			}, {
-				property: 'justify-content':
+				property: 'justify-content',
 				value: 'flex-start'
 			}, {
 				property: 'align-items',
@@ -65,7 +69,7 @@ describe('Template Group View', function() {
 		});
 
 		it('should not render as a placeholder when normal', function() {
-			var groupView = new TemplateGroupView( this.item, true );
+			var groupView = new TemplateGroupView( this.item, false );
 			var $group = groupView.render();
 			expect( $group ).not.toHaveClass('placeholder');
 		});
@@ -83,7 +87,7 @@ describe('Template Group View', function() {
 				property:'flex-direction',
 				value: 'row'
 			}, {
-				property: 'justify-content':
+				property: 'justify-content',
 				value: 'flex-start'
 			}, {
 				property: 'align-items',
@@ -97,7 +101,7 @@ describe('Template Group View', function() {
 				property:'flex-direction',
 				value: 'column'
 			}, {
-				property: 'justify-content':
+				property: 'justify-content',
 				value: 'flex-start'
 			}, {
 				property: 'align-items',
@@ -118,7 +122,7 @@ describe('Template Group View', function() {
 				property:'flex-direction',
 				value: 'column'
 			}, {
-				property: 'justify-content':
+				property: 'justify-content',
 				value: 'flex-start'
 			}, {
 				property: 'align-items',
@@ -130,51 +134,121 @@ describe('Template Group View', function() {
 			var $group = this.groupView.update();
 			expect( this.groupView.$group ).toEqual( $group );
 		});
-	});
+
+		it('should emit an event once the update has finished', function() {
+			spyOn(document, 'dispatchEvent');
+			this.groupView.layout = [{
+				property:'flex-direction',
+				value: 'column'
+			}, {
+				property: 'justify-content',
+				value: 'flex-start'
+			}, {
+				property: 'align-items',
+				value: 'flex-end'
+			}, {
+				property: 'align-content',
+				value: 'stretch'
+			}];
+			this.groupView.update();
+			expect( document.dispatchEvent ).toHaveBeenCalled();
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.DidChange');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
+		});
+	});	
 
 	describe('Responding to Events', function() {
 
 		beforeEach(function() {
-			this.groupView = new TemplateGroupView([{
+			this.layout = [{
 				property:'flex-direction',
 				value: 'row'
 			}, {
-				property: 'justify-content':
+				property: 'justify-content',
 				value: 'flex-start'
 			}, {
 				property: 'align-items',
 				value: 'center'
-			}]);
+			}];
+			this.groupView = new TemplateGroupView( this.layout );
 			this.groupView.render();
 			this.spy = spyOn(this.groupView, 'update');
 		});
 
 		it('should respond to layout change events for itself', function() {
-			var newItem = new Item({
-				title: 'My Item',
-				style: 'font-size:16px;color:#3a3a3a;margin-left:12px;'
-			});
-
 			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.StyleView.layoutDidChangeForGroupView', false, false, { item: newItem });
+			event.initCustomEvent('Columns.StyleView.LayoutDidChangeForGroupView', false, false, {
+				styleView: {},
+				groupView: this.groupView,
+				layout: this.layout
+			});
 			document.dispatchEvent( event );
 
 			expect( this.spy ).toHaveBeenCalled();
-			expect( this.groupView.item ).toEqual( newItem );
 		});
 
 		it('should ignore Item change events for other items', function() {
-			var newItem = new Item({
-				title: 'Other Item',
-				style: 'font-size:16px;color:#3a3a3a;margin-left:12px;'
-			});
-
+			var newGroupView = new TemplateGroupView( this.layout );
 			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.Item.DidChange', false, false, { item: newItem });
+			event.initCustomEvent('Columns.Item.DidChange', false, false, {
+				styleView: {},
+				groupView: newGroupView,
+				layout: this.layout
+			});
 			document.dispatchEvent( event );
 
 			expect( this.spy ).not.toHaveBeenCalled();
-			expect( this.groupView.item ).toEqual( this.item );
+		});
+	});
+
+	describe('Dropping', function() {
+
+		beforeEach(function() {
+			this.groupView	= new TemplateGroupView([{
+				property:'flex-direction',
+				value: 'row'
+			}, {
+				property: 'justify-content',
+				value: 'flex-start'
+			}, {
+				property: 'align-items',
+				value: 'center'
+			}]);;
+			this.$group		= this.groupView.render();
+			this.valueView 	= new TemplateValueView( new Item({ title: "My Item" }) );
+			this.fakeUI		= {
+				droppable: this.valueView
+			};
+
+			spyOn(document, 'dispatchEvent');
+		});
+
+		it('should be droppable', function() {
+			expect( this.$group.droppable('instance') ).toBeDefined();
+		});
+
+		it('should emit an event on drop over', function() {
+			this.$group.trigger('dropover', this.fakeUI);
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+		});
+
+		it('should emit an event on drop out', function() {
+			this.$group.trigger('dropout', this.fakeUI);
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+		});
+
+		it('should emit an event on drop', function() {
+			this.$group.trigger('drop', this.fakeUI);
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.GroupDidDropWithValueView');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
 		});
 	});
 });

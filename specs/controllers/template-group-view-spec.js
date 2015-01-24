@@ -12,7 +12,11 @@ describe('Template Group View', function() {
 			}, {
 				property: 'align-items',
 				value: 'center'
-			}]
+			}];
+			this.style = new Style([{
+				property: 'padding',
+				value: '12px'
+			}])
 		});
 
 		it('should initialize without any properties', function() {
@@ -22,19 +26,25 @@ describe('Template Group View', function() {
 		});
 
 		it('should iniialize with a layout', function() {
-			var group = new TemplateGroupView( this.layout );
+			var group = new TemplateGroupView({ layout: this.layout });
+			expect( group.layout ).toEqual( this.layout );
+			expect( group.placeholder ).toBe( false );
+		});
+
+		it('should initialize with a style object', function() {
+			var group = new TemplateGroupView({ layout: this.layout, style: this.style });
 			expect( group.layout ).toEqual( this.layout );
 			expect( group.placeholder ).toBe( false );
 		});
 
 		it('should optionally iniialize as a placeholder', function() {
-			var group = new TemplateGroupView( this.layout, true );
+			var group = new TemplateGroupView({ layout: this.layout, placeholder: true });
 			expect( group.layout ).toEqual( this.layout );
 			expect( group.placeholder ).toBe( true );
 		});
 
 		it('should initialize with the correct template', function()  {
-			var group = new TemplateGroupView( this.layout );
+			var group = new TemplateGroupView({ layout: this.layout });
 			expect( group.template ).toEqual( Columns.Templates['templates/layout/row-group.hbs'] );
 		});
 	});
@@ -52,7 +62,7 @@ describe('Template Group View', function() {
 				property: 'align-items',
 				value: 'center'
 			}]
-			this.groupView = new TemplateGroupView( this.layout );
+			this.groupView = new TemplateGroupView({ layout: this.layout });
 		});
 
 		it('should render the group with the correct layout', function() {
@@ -63,7 +73,7 @@ describe('Template Group View', function() {
 		});
 
 		it('should render as a placeholder when apppropriate', function() {
-			var groupView = new TemplateGroupView( this.item, true );
+			var groupView = new TemplateGroupView({ layout: this.item, placeholder: true });
 			var $group = groupView.render();
 			expect( $group ).toHaveClass('placeholder');
 		});
@@ -83,16 +93,18 @@ describe('Template Group View', function() {
 	describe('Updating', function() {
 
 		beforeEach(function() {
-			this.groupView = new TemplateGroupView([{
-				property:'flex-direction',
-				value: 'row'
-			}, {
-				property: 'justify-content',
-				value: 'flex-start'
-			}, {
-				property: 'align-items',
-				value: 'center'
-			}]);
+			this.groupView = new TemplateGroupView({
+				layout: [{
+					property:'flex-direction',
+					value: 'row'
+				}, {
+					property: 'justify-content',
+					value: 'flex-start'
+				}, {
+					property: 'align-items',
+					value: 'center'
+				}]
+			});
 			this.groupView.render();
 		});
 
@@ -170,7 +182,7 @@ describe('Template Group View', function() {
 				property: 'align-items',
 				value: 'center'
 			}];
-			this.groupView = new TemplateGroupView( this.layout );
+			this.groupView = new TemplateGroupView({ layout: this.layout });
 			this.groupView.render();
 			this.spy = spyOn(this.groupView, 'update');
 		});
@@ -204,16 +216,18 @@ describe('Template Group View', function() {
 	describe('Dropping', function() {
 
 		beforeEach(function() {
-			this.groupView	= new TemplateGroupView([{
-				property:'flex-direction',
-				value: 'row'
-			}, {
-				property: 'justify-content',
-				value: 'flex-start'
-			}, {
-				property: 'align-items',
-				value: 'center'
-			}]);;
+			this.groupView	= new TemplateGroupView({
+				layout: [{
+					property:'flex-direction',
+					value: 'row'
+				}, {
+					property: 'justify-content',
+					value: 'flex-start'
+				}, {
+					property: 'align-items',
+					value: 'center'
+				}]
+			});
 			this.$group		= this.groupView.render();
 			this.valueView 	= new TemplateValueView( new Item({ title: "My Item" }) );
 			this.fakeUI		= {

@@ -123,7 +123,12 @@ module.exports = function(grunt) {
 						'vendor/jquery-ui.min.js',
 						'bower_components/jasmine-jquery/lib/jasmine-jquery.js'
 					],
-					helpers: ['templates/embeddable-templates.js', 'templates/templates.js']
+					helpers: [
+						'templates/embeddable-templates.js',
+						'templates/templates.js',
+						'javscripts/styling/layouts.js',
+						'compiled-javascripts/config.js'
+					]
 				}
 			}
 		},

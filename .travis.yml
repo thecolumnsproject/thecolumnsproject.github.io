@@ -13,6 +13,7 @@ install:
   - bower install
 script:
   - grunt build
+  - npm test
 before_deploy:
   - rm -R node_modules
   - rm -R fonts/vectors

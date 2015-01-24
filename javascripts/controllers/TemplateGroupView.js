@@ -6,17 +6,26 @@
 Handlebars.registerPartial('layout', Columns.Templates['templates/layout/layout.hbs']);
 Handlebars.registerPartial('style', Columns.Templates['templates/layout/style.hbs']);
 
-TemplateGroupView = function( layout, placeholder ) {
+TemplateGroupView = function( params ) {
 
-	this.layout 		= layout || [];
-	this.placeholder 	= placeholder || false;
-	this.template 		= Columns.Templates['templates/layout/row-group.hbs'];
+	if ( params ) {
+		this.layout 		= params.layout || [];
+		this.style			= new Style( params.style || [] );
+		this.placeholder 	= params.placeholder || false;
+	} else {
+		this.layout 		= [];
+		this.style			= new Style( [] );
+		this.placeholder 	= false;
+	}
+
+	this.template = Columns.Templates['templates/layout/row-group.hbs'];
 	this.$group;
 };
 
 TemplateGroupView.prototype.render = function() {
 	var $template = $( this.template({
 		placeholder: 	this.placeholder,
+		style: 			this.style.styles,
 		layout: 		this.layout
 	}));
 	this.$group = $template;

@@ -315,32 +315,6 @@ describe('Template View', function() {
 			});
 		});
 
-		describe('Drag Start', function() {
-
-			beforeEach(function() {
-				this.newItem = new Item({ title: "My Item" });
-				this.valueView = new TemplateValueView( this.newItem, false );
-				this.event = document.createEvent('CustomEvent');
-				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
-					valueView: 	this.valueView,
-					item: 		this.newItem,
-					event: 		event,
-					ui: 		{}
-				});
-			});
-
-			it('should update the current dragging item', function() {
-				document.dispatchEvent( this.event );
-				expect( this.templateView.draggingItem ).toEqual( this.valueView );
-			});
-
-			it('should dissolve any groups that surround just a single value', function() {
-				spyOn( this.templateView, 'dissolveSingleValueGroups' );
-				document.dispatchEvent( this.event );
-				expect( this.templateView.dissolveSingleValueGroups ).toHaveBeenCalled();
-			});
-		});
-
 		describe('Drag Stop', function() {
 
 			beforeEach(function() {
@@ -415,7 +389,52 @@ describe('Template View', function() {
 		});
 	});
 
-	describe('Respond to Group Drop Events', function() {
+	xdescribe('Respond to Group Drop Events', function() {
+
+		beforeEach(function() {
+			this.templateView = new TemplateView( this.defaultLayout );
+			this.templateView.render();
+			this.newItem = new Item({ title: "My Item" });
+			this.valueView = new TemplateValueView( this.newItem );
+			this.groupView = new TemplateGroupView();
+			this.event = document.createEvent('CustomEvent');
+		});
+
+		describe('Drop Over', function() {
+
+			beforeEach(function() {
+				this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', false, false, {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
+			});
+
+			it('should add the group to the droppable items array only if not already present', function() {
+				document.dispatchEvent( this.event );
+				expect( this.templateView.droppableItems.filter(function( item, i ) {
+					console.log(item === this.groupView)
+					return item == this.groupView;
+				}).length ).toBe( 1 );
+			});
+
+			it('should not add the group to the droppable items array if already present', function() {
+				this.templateView.droppableItems.push( this.groupView );
+				document.dispatchEvent( this.event );
+				expect( this.templateView.droppableItems.filter(function( item, i ) {
+					return item === this.groupView
+				}).length ).toBe( 1 );
+			});
+		});
+
+		describe('Drop Out', function() {
+
+		});
+
+		describe('Drop', function() {
+
+		});
 
 	});
 

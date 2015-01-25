@@ -117,6 +117,11 @@ TemplateView.prototype._setupEvents = function() {
 	document.addEventListener( 'Columns.TemplateValueView.ValueDidBeginDragWithItem', this._onValueDidBeginDrag.bind( this ), false);
 	document.addEventListener( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ), false);
 	document.addEventListener( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ), false);
+
+	// Listen to drop events for groups
+	document.addEventListener( 'Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', this._onGroupDidBeginDropOver.bind( this ), false);
+	// document.addEventListener( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ), false);
+	// document.addEventListener( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ), false);
 };
 
 TemplateView.prototype._onItemDidBeginDrag = function( event ) {
@@ -152,6 +157,10 @@ TemplateView.prototype._onValueDidDrag = function( event ) {
 		this.removePlaceholders();
 		this.positionDropForDragEventInParentWithPlaceholder( event, $( this.droppableItems[ this.droppableItems.length - 1 ] ), true );
 	}
+};
+
+TemplateView.prototype._onGroupDidBeginDropOver = function( event ) {
+	this.droppableItems.push( event.detail.groupView );
 };
 
 TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = function( event, $parent, placeholder ) {

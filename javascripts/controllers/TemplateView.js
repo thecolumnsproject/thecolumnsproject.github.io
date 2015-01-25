@@ -76,12 +76,47 @@ TemplateView.prototype.removePlaceholders = function() {
 	$(ROW_GROUP_SELECTOR).filter('.placeholder').children().unwrap();
 };
 
+// If this there's only one item left in the surrouning group, dissolve the group.
+// Unless the parent group is the very first group in the cell.
+TemplateView.prototype.dissolveSingleValueGroups = function() {
+
+	// Get any groups that only have a single item
+	// but exclude the first group in the row
+	var $groups = $( ROW_VALUE_SELECTOR + ':only-child' )
+		.parent()
+		.not( 'master > ' + ROW_GROUP_SELECTOR );
+
+	// Unwrap the 'only children' of these groups
+	$groups.children().unwrap();
+};
+
+// Remove the dragging item from the template
+// if it is a value. Presumably this is because
+// the user just dragged it out of the template
+TemplateView.prototype.removeValue = function( valueView ) {
+
+	if ( valueView instanceof TemplateValueView ) {
+		valueView.$value.remove();
+	} else {
+		throw "exception: value must be of type TemplateValueView";
+	}
+};
+
+TemplateView.prototype._emitChange = function() {
+
+};
+
 TemplateView.prototype._setupEvents = function() {
 
 	// Listen to drag events for items
 	document.addEventListener( 'Columns.ItemView.ItemDidBeginDrag', this._onItemDidBeginDrag.bind( this ), false);
 	document.addEventListener( 'Columns.ItemView.ItemDidEndDrag', this._onItemDidEndDrag.bind( this ), false);
 	document.addEventListener( 'Columns.ItemView.ItemDidDrag', this._onItemDidDrag.bind( this ), false);
+
+	// Listen to drag events for values
+	document.addEventListener( 'Columns.TemplateValueView.ValueDidBeginDragWithItem', this._onValueDidBeginDrag.bind( this ), false);
+	document.addEventListener( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ), false);
+	document.addEventListener( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ), false);
 };
 
 TemplateView.prototype._onItemDidBeginDrag = function( event ) {
@@ -94,6 +129,25 @@ TemplateView.prototype._onItemDidEndDrag = function( event ) {
 };
 
 TemplateView.prototype._onItemDidDrag = function( event ) {
+	if ( this.droppableItems.length ) {
+		this.removePlaceholders();
+		this.positionDropForDragEventInParentWithPlaceholder( event, $( this.droppableItems[ this.droppableItems.length - 1 ] ), true );
+	}
+};
+
+TemplateView.prototype._onValueDidBeginDrag = function( event ) {
+	this.draggingItem = event.detail.valueView;
+	this.dissolveSingleValueGroups();
+};
+
+TemplateView.prototype._onValueDidEndDrag = function( event ) {
+	if ( !this.droppableItems.length ) {
+		this.removeValue( event.detail.valueView );
+		this._emitChange();
+	}
+}
+
+TemplateView.prototype._onValueDidDrag = function( event ) {
 	if ( this.droppableItems.length ) {
 		this.removePlaceholders();
 		this.positionDropForDragEventInParentWithPlaceholder( event, $( this.droppableItems[ this.droppableItems.length - 1 ] ), true );

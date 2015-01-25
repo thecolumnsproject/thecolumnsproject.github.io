@@ -134,9 +134,9 @@ describe('Template View', function() {
 		});
 	});
 
-	describe('Managing Placholders', function() {
+	describe('Template Management', function() {
 
-		describe('Removal', function() {
+		describe('Removing Placeholders', function() {
 
 			beforeEach(function() {
 				loadFixtures('template-with-placeholders.html');
@@ -152,6 +152,51 @@ describe('Template View', function() {
 			it('should preserve non-placeholder values of placeholder groups', function() {
 				this.templateView.removePlaceholders();
 				expect( $('.layout-template-row-value').length ).toBe( 1 );
+			});
+		});
+
+		// This is used once a user starts to drag a template value.
+		// If that value leaves a single other value its former group, we should remove that group.
+		// The only exception is if the group is the master group for the row (i.e. the first group)
+		describe('Dissolving Groups with A Single Value', function() {
+
+			beforeEach(function() {
+				loadFixtures('template-with-lonely-group.html');
+				this.templateView = new TemplateView();
+			});
+
+			it('should dissolve any groups that only have a single non-dragging value', function() {
+				this.templateView.dissolveSingleValueGroups();
+				expect( $('.layout-template-row-value:only-child').parent().not('master > layout-template-row-group').length ).toBe( 0 );
+			});
+		});
+
+		// We want to do this when a user
+		// drags a value out of the tempate
+		describe('Removing a Value', function() {
+
+			beforeEach(function() {
+				this.templateView = new TemplateView();
+				loadFixtures('template-without-placeholders.html');
+			});
+
+			it('should remove a dragging value from the template when the current dragging item is a value view', function() {
+				var item = new Item({ title: "My Item" });
+				var valueView = new TemplateValueView( item, false );
+				var $value = valueView.render();
+				$('.layout-template-row-group').first().append( $value );
+				expect( $value ).toBeInDOM();
+				this.templateView.removeValue( valueView );
+				expect( $value ).not.toBeInDOM();
+			});
+
+			it('should throw an error when not passed a value view', function() {
+				var item = new Item({ title: "My Item" });
+				var itemView = new ItemView( item );
+				expect(function() {
+					this.templateView.removeValue( itemView );
+				}.bind(this) )
+				.toThrow("exception: value must be of type TemplateValueView");
 			});
 		});
 	});
@@ -228,11 +273,146 @@ describe('Template View', function() {
 				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual('div.fake');
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
+
+			it('should do nothing if there is no active droppable item', function() {
+				document.dispatchEvent( this.event );
+				expect( this.templateView.removePlaceholders ).not.toHaveBeenCalled();
+				expect( this.positionSpy ).not.toHaveBeenCalled();
+			});
 		});
 	});
 
 	describe('Responding to Value Drags', function() {
 
+		beforeEach(function() {
+			this.templateView = new TemplateView( this.defaultLayout );
+			this.templateView.render();
+		});
+
+		describe('Drag Start', function() {
+
+			beforeEach(function() {
+				this.newItem = new Item({ title: "My Item" });
+				this.valueView = new TemplateValueView( this.newItem, false );
+				this.event = document.createEvent('CustomEvent');
+				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
+			});
+
+			it('should update the current dragging item', function() {
+				document.dispatchEvent( this.event );
+				expect( this.templateView.draggingItem ).toEqual( this.valueView );
+			});
+
+			it('should dissolve any groups that surround just a single value', function() {
+				spyOn( this.templateView, 'dissolveSingleValueGroups' );
+				document.dispatchEvent( this.event );
+				expect( this.templateView.dissolveSingleValueGroups ).toHaveBeenCalled();
+			});
+		});
+
+		describe('Drag Start', function() {
+
+			beforeEach(function() {
+				this.newItem = new Item({ title: "My Item" });
+				this.valueView = new TemplateValueView( this.newItem, false );
+				this.event = document.createEvent('CustomEvent');
+				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
+			});
+
+			it('should update the current dragging item', function() {
+				document.dispatchEvent( this.event );
+				expect( this.templateView.draggingItem ).toEqual( this.valueView );
+			});
+
+			it('should dissolve any groups that surround just a single value', function() {
+				spyOn( this.templateView, 'dissolveSingleValueGroups' );
+				document.dispatchEvent( this.event );
+				expect( this.templateView.dissolveSingleValueGroups ).toHaveBeenCalled();
+			});
+		});
+
+		describe('Drag Stop', function() {
+
+			beforeEach(function() {
+				this.newItem = new Item({ title: "My Item" });
+				this.valueView = new TemplateValueView( this.newItem, false );
+				this.valueView.render();
+				this.event = document.createEvent('CustomEvent');
+				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidEndDragWithItem', false, false, {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
+
+				spyOn( this.templateView, 'removeValue' );
+				spyOn( this.templateView, '_emitChange' );
+			});
+
+			it('should remove the value from the template if there is no active droppable item', function() {
+				document.dispatchEvent( this.event );
+				expect( this.templateView.removeValue ).toHaveBeenCalledWith( this.valueView );
+			});
+
+			it('should emit a change event if there is no active droppable item', function() {
+				document.dispatchEvent( this.event );
+				expect( this.templateView._emitChange ).toHaveBeenCalled();
+			});
+
+			it('should do nothing if there is an active droppable item', function() {
+				var droppable = '<div class="fake"></div>';
+				this.templateView.droppableItems.push( droppable );
+				document.dispatchEvent( this.event );
+
+				expect( this.templateView.removeValue ).not.toHaveBeenCalledWith();
+				expect( this.templateView._emitChange ).not.toHaveBeenCalled();
+			});
+
+		});
+
+		describe('Drag', function() {
+			beforeEach(function() {
+				this.newItem = new Item({ title: "My Item" });
+				this.valueView = new TemplateValueView( this.newItem, false );
+				this.event = document.createEvent('CustomEvent');
+				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidDragWithItem', false, false, {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
+
+				spyOn( this.templateView, 'removePlaceholders' );
+				this.positionSpy = spyOn( this.templateView, 'positionDropForDragEventInParentWithPlaceholder' );
+			});
+
+			it('should remove existing placeholders and set up new ones if there is an active droppable item', function() {
+				var droppable = '<div class="fake"></div>';
+				this.templateView.droppableItems.push( droppable );
+				document.dispatchEvent( this.event );
+				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
+				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
+				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual('div.fake');
+				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
+			});
+
+			it('should do nothing if there is no active droppable item', function() {
+				document.dispatchEvent( this.event );
+				expect( this.templateView.removePlaceholders ).not.toHaveBeenCalled();
+				expect( this.positionSpy ).not.toHaveBeenCalled();
+			});
+
+		});
 	});
 
 	describe('Respond to Group Drop Events', function() {

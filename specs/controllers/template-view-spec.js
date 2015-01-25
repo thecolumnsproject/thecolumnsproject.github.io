@@ -216,15 +216,17 @@ describe('Template View', function() {
 				});
 
 				spyOn( this.templateView, 'removePlaceholders' );
-				spyOn( this.templateView, 'positionDropForDragEventInParentWithPlaceholder' );
+				this.positionSpy = spyOn( this.templateView, 'positionDropForDragEventInParentWithPlaceholder' );
 			});
 
 			it('should remove existing placeholders and set up new ones if there is an active droppable item', function() {
-				var droppable = '<div></div>';
+				var droppable = '<div class="fake"></div>';
 				this.templateView.droppableItems.push( droppable );
 				document.dispatchEvent( this.event );
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
-				expect( this.templateView.positionDropForDragEventInParentWithPlaceholder ).toHaveBeenCalledWith( this.event, $(droppable), true );
+				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
+				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual('div.fake');
+				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
 		});
 	});

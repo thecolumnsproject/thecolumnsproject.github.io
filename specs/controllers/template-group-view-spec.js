@@ -265,4 +265,16 @@ describe('Template Group View', function() {
 			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
 		});
 	});
+
+	describe('Managing UI', function() {
+
+		it('should remove inner placeholders', function() {
+			var groupView 		= new TemplateGroupView();
+			var $group 			= groupView.render();
+			$group.append( readFixtures('inner-template-with-placeholders.html') );
+			groupView.removePlaceholders();
+			expect( $group.find('.layout-template-row-value').length ).toBe( 1 );
+			expect( $group.find('.layout-template-row-group').length ).toBe( 0 );
+		});
+	});
 });

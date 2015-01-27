@@ -6,6 +6,9 @@
 Handlebars.registerPartial('layout', Columns.Templates['templates/layout/layout.hbs']);
 Handlebars.registerPartial('style', Columns.Templates['templates/layout/style.hbs']);
 
+var ROW_GROUP_SELECTOR = '.layout-template-row-group', 
+	ROW_VALUE_SELECTOR = '.layout-template-row-value';
+
 TemplateGroupView = function( params ) {
 
 	if ( params ) {
@@ -54,6 +57,15 @@ TemplateGroupView.prototype.update = function() {
 	document.dispatchEvent(event);
 
 	return this.$group;
+};
+
+TemplateGroupView.prototype.removePlaceholders = function() {
+
+	// Remove any placeholder values
+	this.$group.find(ROW_VALUE_SELECTOR).filter('.placeholder').remove();
+
+	// Remove any placeholder groups while leaving their children
+	this.$group.find(ROW_GROUP_SELECTOR).filter('.placeholder').children().unwrap();
 };
 
 TemplateGroupView.prototype._setupDrop = function() {

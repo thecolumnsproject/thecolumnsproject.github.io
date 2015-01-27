@@ -389,7 +389,7 @@ describe('Template View', function() {
 		});
 	});
 
-	xdescribe('Respond to Group Drop Events', function() {
+	describe('Respond to Group Drop Events', function() {
 
 		beforeEach(function() {
 			this.templateView = new TemplateView( this.defaultLayout );
@@ -413,23 +413,40 @@ describe('Template View', function() {
 
 			it('should add the group to the droppable items array only if not already present', function() {
 				document.dispatchEvent( this.event );
-				expect( this.templateView.droppableItems.filter(function( item, i ) {
-					console.log(item === this.groupView)
-					return item == this.groupView;
-				}).length ).toBe( 1 );
+				expect( this.templateView.droppableItems.length ).toBe( 1 );
 			});
 
 			it('should not add the group to the droppable items array if already present', function() {
 				this.templateView.droppableItems.push( this.groupView );
 				document.dispatchEvent( this.event );
-				expect( this.templateView.droppableItems.filter(function( item, i ) {
-					return item === this.groupView
-				}).length ).toBe( 1 );
+				expect( this.templateView.droppableItems.length ).toBe( 1 );
 			});
 		});
 
 		describe('Drop Out', function() {
 
+			beforeEach(function() {
+				this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', false, false, {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
+				spyOn( this.groupView, 'removePlaceholders' );
+			});
+
+			it('should clear any placeholders within the group', function() {
+				document.dispatchEvent( this.event );
+				expect( this.groupView.removePlaceholders ).toHaveBeenCalled();
+			});
+
+			it('should remove the droppable item from the droppable items array', function() {
+				this.templateView.droppableItems.push( {} );
+				this.templateView.droppableItems.push( this.groupView );
+				this.templateView.droppableItems.push( {} );
+				document.dispatchEvent( this.event );
+				expect( this.templateView.droppableItems.indexOf( this.groupView ) ).toBe( -1 );
+			});
 		});
 
 		describe('Drop', function() {

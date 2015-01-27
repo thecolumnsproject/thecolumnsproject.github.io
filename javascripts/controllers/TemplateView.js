@@ -121,8 +121,8 @@ TemplateView.prototype._setupEvents = function() {
 	// Listen to drop events for groups
 	document.addEventListener( 'Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', this._onGroupDidBeginDropOver.bind( this ), false);
 	document.addEventListener( 'Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', this._onGroupDidEndDropOver.bind( this ), false);
-	// document.addEventListener( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ), false);
-	// document.addEventListener( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ), false);
+	document.addEventListener( 'Columns.TemplateGroupView.GroupDidDropWithValueView', this._onGroupDidDrop.bind( this ), false);
+
 };
 
 TemplateView.prototype._onItemDidBeginDrag = function( event ) {
@@ -137,7 +137,7 @@ TemplateView.prototype._onItemDidEndDrag = function( event ) {
 TemplateView.prototype._onItemDidDrag = function( event ) {
 	if ( this.droppableItems.length ) {
 		this.removePlaceholders();
-		this.positionDropForDragEventInParentWithPlaceholder( event, $( this.droppableItems[ this.droppableItems.length - 1 ] ), true );
+		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$item, true );
 	}
 };
 
@@ -156,7 +156,7 @@ TemplateView.prototype._onValueDidEndDrag = function( event ) {
 TemplateView.prototype._onValueDidDrag = function( event ) {
 	if ( this.droppableItems.length ) {
 		this.removePlaceholders();
-		this.positionDropForDragEventInParentWithPlaceholder( event, $( this.droppableItems[ this.droppableItems.length - 1 ] ), true );
+		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$value , true );
 	}
 };
 
@@ -167,8 +167,30 @@ TemplateView.prototype._onGroupDidBeginDropOver = function( event ) {
 };
 
 TemplateView.prototype._onGroupDidEndDropOver = function( event ) {
-	event.detail.groupView.removePlaceholders();
-	this.droppableItems.splice( this.droppableItems.indexOf( event.detail.groupView ), 1 );
+	var groupView = event.detail.groupView;
+
+	groupView.removePlaceholders();
+	this.droppableItems.splice( this.droppableItems.indexOf( groupView ), 1 );
+};
+
+TemplateView.prototype._onGroupDidDrop = function( event ) {
+	var groupView = event.detail.groupView;
+
+	// Don't do anything if this group isn't the most recently hovered over
+	// of if there are currently no hovered groups (which should never be the case)
+	if ( !this.droppableItems.length || this.droppableItems[ this.droppableItems.length - 1 ] !== groupView ) {
+		return;
+	}
+
+	// Otherwise, clear all the group's placeholders
+	groupView.removePlaceholders();
+
+	// And finally position the new item in the template
+	this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group , true )
+
+	// Empty the droppable items array
+	this.droppableItems = [];
+
 };
 
 TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = function( event, $parent, placeholder ) {

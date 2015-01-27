@@ -265,12 +265,13 @@ describe('Template View', function() {
 			});
 
 			it('should remove existing placeholders and set up new ones if there is an active droppable item', function() {
-				var droppable = '<div class="fake"></div>';
-				this.templateView.droppableItems.push( droppable );
+				var itemView 	= new ItemView( this.newItem );
+				var $item 		= itemView.render();
+				this.templateView.droppableItems.push( itemView );
 				document.dispatchEvent( this.event );
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
 				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
-				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual('div.fake');
+				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $item );
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
 
@@ -371,12 +372,12 @@ describe('Template View', function() {
 			});
 
 			it('should remove existing placeholders and set up new ones if there is an active droppable item', function() {
-				var droppable = '<div class="fake"></div>';
-				this.templateView.droppableItems.push( droppable );
+				var $value = this.valueView.render();
+				this.templateView.droppableItems.push( this.valueView );
 				document.dispatchEvent( this.event );
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
 				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
-				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual('div.fake');
+				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $value );
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
 
@@ -451,6 +452,60 @@ describe('Template View', function() {
 
 		describe('Drop', function() {
 
+			beforeEach(function() {
+				this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidDropWithValueView', false, false, {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
+				spyOn( this.groupView, 'removePlaceholders' );
+				this.positionSpy = spyOn( this.templateView, 'positionDropForDragEventInParentWithPlaceholder' );
+			});
+
+			it('should do nothing if there are no droppable items', function() {
+				document.dispatchEvent( this.event );
+
+				expect( this.groupView.removePlaceholders ).not.toHaveBeenCalled();
+				expect( this.templateView.positionDropForDragEventInParentWithPlaceholder ).not.toHaveBeenCalled();
+			});
+
+			it('should do nothing if this group is not the most recent droppable item', function() {
+				this.templateView.droppableItems.push( this.groupView );
+				this.templateView.droppableItems.push( {} );
+				document.dispatchEvent( this.event );
+
+				expect( this.groupView.removePlaceholders ).not.toHaveBeenCalled();
+				expect( this.templateView.positionDropForDragEventInParentWithPlaceholder ).not.toHaveBeenCalled();
+			});
+
+			it('should clear any placeholders within the group', function() {
+				this.templateView.droppableItems.push( {} );
+				this.templateView.droppableItems.push( this.groupView );
+				document.dispatchEvent( this.event );
+
+				expect( this.groupView.removePlaceholders ).toHaveBeenCalled();
+			});
+
+			it('should position the drop within the template', function() {
+				var $group = this.groupView.render();
+				this.templateView.droppableItems.push( {} );
+				this.templateView.droppableItems.push( this.groupView );
+				document.dispatchEvent( this.event );
+
+				expect( this.positionSpy ).toHaveBeenCalled();
+				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
+				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $group );
+				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
+			});
+
+			it('should clear the droppable items array', function() {
+				this.templateView.droppableItems.push( {} );
+				this.templateView.droppableItems.push( this.groupView );
+				document.dispatchEvent( this.event );
+
+				expect( this.templateView.droppableItems.length ).toBe( 0 );
+			});
 		});
 
 	});

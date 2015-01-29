@@ -378,7 +378,48 @@ describe('Template View', function() {
 
 			describe('Inserting a New Value', function() {
 
-				
+				beforeEach(function() {
+					this.item 		= new Item({ title: "My Item" });
+					this.$group 	= new TemplateGroupView().render();
+					this.$previous 	= new TemplateValueView( new Item({ title: "Other Item" }) ).render();
+				});
+
+				it('should place the new value as the first child of the parent if the previous item is null', function() {
+					this.templateView.insertDropBeforeElementInParentWithPlaceholder( this.item, null, this.$group, false );
+					expect( this.$group.children().eq( 0 ) ).toContainText("My Item");
+				});
+
+				it('should place the new value after the previous item if it is not null', function() {
+					this.$group.append( this.$previous );
+					this.templateView.insertDropBeforeElementInParentWithPlaceholder( this.item, this.$previous, this.$group, false );
+					expect( this.$group.children().eq( 1 ) ).toContainText("My Item");
+				});
+
+				it('should create the new item as a placeholder if appropriate', function() {
+					this.$group.append( this.$previous );
+					this.templateView.insertDropBeforeElementInParentWithPlaceholder( this.item, this.$previous, this.$group, true );
+					expect( this.$group.children().eq( 1 ) ).toHaveClass("placeholder");
+				});
+
+				it('should not create the new item as a placeholder when appropriate', function() {
+					this.$group.append( this.$previous );
+					this.templateView.insertDropBeforeElementInParentWithPlaceholder( this.item, this.$previous, this.$group, false );
+					expect( this.$group.children().eq( 1 ) ).not.toHaveClass("placeholder");
+				});
+
+				it('should emit a change event with the new item when not a placeholder', function() {
+					spyOn(document, 'dispatchEvent');
+					this.$group.append( this.$previous );
+					this.templateView.insertDropBeforeElementInParentWithPlaceholder( this.item, this.$previous, this.$group, false );
+
+					expect( document.dispatchEvent ).toHaveBeenCalled();
+					expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateView.DidChange');
+					expect( document.dispatchEvent.calls.argsFor(0)[0].detail.templateView ).toEqual( this.templateView );
+				});
+
+				xit('should send an analytics event about the new item when not a placeholder', function() {
+
+				});
 			});
 		});
 	});

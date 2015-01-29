@@ -254,6 +254,31 @@ TemplateView.prototype.wrapValueWithGroup = function( $value ) {
 	$value.wrap( $group );
 };
 
+TemplateView.prototype.insertDropBeforeElementInParentWithPlaceholder = function( item, $previous, $parent, placeholder ) {
+
+	// Create a new value view with the appropriate placeholder status
+	var valueView 	= new TemplateValueView( item, placeholder ),
+		$value 		= valueView.render();
+
+	// If there is a previous item, insert the new item just after it
+	// Otherwise just add the item to the parent as the first child
+	if ( $previous ) {
+		$previous.after( $value );
+	} else {	
+		$parent.prepend( $value );
+	}
+
+	// Emit a change event
+	// var event = new CustomEvent( 'Columns.TemplateView.DidChange', {
+	// templateView: 	this
+	// });
+	var event = document.createEvent('CustomEvent');
+	event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
+		templateView: 	this
+	});
+	document.dispatchEvent(event);
+};
+
 TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = function( event, $parent, placeholder ) {
 
 };

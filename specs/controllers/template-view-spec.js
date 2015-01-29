@@ -199,6 +199,55 @@ describe('Template View', function() {
 				.toThrow("exception: value must be of type TemplateValueView");
 			});
 		});
+
+		describe('Inserting a New Value', function() {
+
+			beforeEach(function() {
+				this.templateView = new TemplateView( this.defaultLayout );
+			});
+
+			describe('Getting Positioning Information for a Given Value', function() {
+
+				beforeEach(function() {
+					this.$value = new TemplateValueView( new Item({ title: "My Item" }) ).render();
+					this.$value.css({
+						position: 'absolute',
+						top: '50px',
+						left: '26px',
+						width: '46px',
+						height: '24px',
+
+					});
+					console.log( this.$value.width() );
+					console.log( this.$value.height() );
+				});
+
+				it('should determine values for all edges and the item middle given a drag threshold and buffer', function() {
+					var value = this.templateView.dimensionsForValue( this.$value );
+					expect( value.top ).toBe( 50 );
+					expect( value.left ).toBe( 26 );
+				});
+			});
+
+			describe('Testing Whether A Drag Intersects A Value', function() {
+
+			});
+
+			describe('Wrapping Existing Values with a New Group', function() {
+
+			});
+
+			describe('Testing Whether an Existing Value is to the Left of a Drag', function() {
+
+			});
+
+			describe('Positioning the New Value', function() {
+
+				it('should position the new value at the beginning of the template if there are no other values', function() {
+
+				});
+			});
+		});
 	});
 
 	describe('Responding to Item Drags', function() {
@@ -211,10 +260,11 @@ describe('Template View', function() {
 		describe('Drag Start', function() {
 
 			beforeEach(function() {
-				this.newItem = new ItemView( new Item({ title: "My Item" }) );
+				this.newItem = new Item({ title: "My Item" });
+				this.newItemView = new ItemView( this.newItem );
 				this.event = document.createEvent('CustomEvent');
 				this.event.initCustomEvent('Columns.ItemView.ItemDidBeginDrag', false, false, {
-					item: 	this.newItem,
+					item: 	this.newItemView,
 					event: 	event,
 					ui: 	{}
 				});
@@ -306,7 +356,7 @@ describe('Template View', function() {
 
 			it('should update the current dragging item', function() {
 				document.dispatchEvent( this.event );
-				expect( this.templateView.draggingItem ).toEqual( this.valueView );
+				expect( this.templateView.draggingItem ).toEqual( this.newItem );
 			});
 
 			it('should dissolve any groups that surround just a single value', function() {
@@ -496,7 +546,7 @@ describe('Template View', function() {
 				expect( this.positionSpy ).toHaveBeenCalled();
 				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
 				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $group );
-				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
+				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( false );
 			});
 
 			it('should clear the droppable items array', function() {

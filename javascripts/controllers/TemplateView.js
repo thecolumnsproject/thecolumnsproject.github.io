@@ -126,7 +126,7 @@ TemplateView.prototype._setupEvents = function() {
 };
 
 TemplateView.prototype._onItemDidBeginDrag = function( event ) {
-	this.draggingItem = event.detail.item;
+	this.draggingItem = event.detail.item.item;
 };
 
 TemplateView.prototype._onItemDidEndDrag = function( event ) {
@@ -142,7 +142,7 @@ TemplateView.prototype._onItemDidDrag = function( event ) {
 };
 
 TemplateView.prototype._onValueDidBeginDrag = function( event ) {
-	this.draggingItem = event.detail.valueView;
+	this.draggingItem = event.detail.valueView.item;
 	this.dissolveSingleValueGroups();
 };
 
@@ -186,7 +186,7 @@ TemplateView.prototype._onGroupDidDrop = function( event ) {
 	groupView.removePlaceholders();
 
 	// And finally position the new item in the template
-	this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group , true )
+	this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group , false )
 
 	// Empty the droppable items array
 	this.droppableItems = [];

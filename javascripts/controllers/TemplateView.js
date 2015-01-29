@@ -236,7 +236,7 @@ TemplateView.prototype.isIntersected = function( values, event ) {
 
 TemplateView.prototype.isPrevious = function( values, dragPoint ) {
 	return dragPoint >= values.dragMiddle;
-}
+};
 
 TemplateView.prototype.wrapValueWithGroup = function( $value ) {
 	

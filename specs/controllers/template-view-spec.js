@@ -215,7 +215,7 @@ describe('Template View', function() {
 						top: '50px',
 						left: '26px',
 						width: '46px',
-						height: '24px',
+						height: '24px'
 
 					});
 					console.log( this.$value.width() );
@@ -226,6 +226,11 @@ describe('Template View', function() {
 					var value = this.templateView.dimensionsForValue( this.$value );
 					expect( value.top ).toBe( 50 );
 					expect( value.left ).toBe( 26 );
+					expect( value.bottom ).toBe( 74 );
+					expect( value.right ).toBe( 72 );
+					expect( value.middleX ).toBe( 49 );
+					expect( value.middleY ).toBe( 62 );
+					
 				});
 			});
 

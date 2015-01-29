@@ -203,6 +203,7 @@ describe('Template View', function() {
 		describe('Inserting a New Value', function() {
 
 			beforeEach(function() {
+				loadFixtures('template-without-placeholders.html');
 				this.templateView = new TemplateView( this.defaultLayout );
 			});
 
@@ -216,13 +217,14 @@ describe('Template View', function() {
 						left: '26px',
 						width: '46px',
 						height: '24px'
-
 					});
-					console.log( this.$value.width() );
-					console.log( this.$value.height() );
 				});
 
-				it('should determine values for all edges and the item middle given a drag threshold and buffer', function() {
+				it('should determine values for all edges and the item middle with a default buffer and parent direction', function() {
+					var $group = new TemplateGroupView().render();
+					$group.append( this.$value );
+					$('.layout-template-row-group').first().append( $group );
+
 					var value = this.templateView.dimensionsForValue( this.$value );
 					expect( value.top ).toBe( 50 );
 					expect( value.left ).toBe( 26 );
@@ -230,20 +232,141 @@ describe('Template View', function() {
 					expect( value.right ).toBe( 72 );
 					expect( value.middleX ).toBe( 49 );
 					expect( value.middleY ).toBe( 62 );
-					
+					expect( value.dragMiddleX ).toBe( 49 );
+					expect( value.dragMiddleY ).toBe( 62 );
+					expect( value.dragMiddle ).toBe( 49 );
+					expect( value.bufferTop ).toBe( 50 );
+					expect( value.bufferLeft ).toBe( 35.2 );
+					expect( value.bufferBottom ).toBe( 74 );
+					expect( value.bufferRight ).toBe( 62.8 );
+				});
+
+				it('should determine values for all edges and the item middle with a given buffer and parent direction', function() {
+					var $group = new TemplateGroupView({ layout: [{
+						property: 	'flex-direction',
+						value: 		'column'
+					}] }).render();
+					$group.append( this.$value );
+					$('.layout-template-row-group').first().append( $group );
+
+					var value = this.templateView.dimensionsForValue( this.$value, 0.6, 0.4 );
+					expect( value.top ).toBe( 50 );
+					expect( value.left ).toBe( 26 );
+					expect( value.bottom ).toBe( 74 );
+					expect( value.right ).toBe( 72 );
+					expect( value.middleX ).toBe( 49 );
+					expect( value.middleY ).toBe( 62 );
+					expect( value.dragMiddleX ).toBe( 26 + this.$value.width() * 0.6 );
+					expect( value.dragMiddleY ).toBe( 50 + this.$value.height() * 0.6 );
+					expect( value.dragMiddle ).toBe( 50 + this.$value.height() * 0.6 );
+					expect( value.bufferTop ).toBe( 50 + this.$value.height() * 0.4 );
+					expect( value.bufferLeft ).toBe( 26 );
+					expect( value.bufferBottom ).toBe( 74 - this.$value.height() * 0.4 );
+					expect( value.bufferRight ).toBe( 72 );
 				});
 			});
 
 			describe('Testing Whether A Drag Intersects A Value', function() {
 
+				beforeEach(function() {
+					this.values = {
+						top: 			50,
+						left: 			26,
+						bottom: 		74,
+						right: 			72,
+						middleX: 		49,
+						middleY: 		62,
+						dragMiddleX: 	49,
+						dragMiddleY: 	62,
+						bufferTop: 		50,
+						bufferLeft: 	35.2,
+						bufferBottom: 	74,
+						bufferRight: 	62.8
+					};
+					this.event = document.createEvent("MouseEvent");
+				});
+
+				it('should return true if the drag event is entirely inside the buffered item', function() {
+					this.event.initMouseEvent( "mousemove", true, true, window, 1, 800, 600, 40, 60, false, false, false, false, 0, null );
+					expect( this.templateView.isIntersected( this.values, this.event ) ).toBe( true );
+				});
+
+				it('should return false if the drag event is above the buffered item', function() {
+					this.event.initMouseEvent( "mousemove", true, true, window, 1, 800, 600, 40, 40, false, false, false, false, 0, null );
+					expect( this.templateView.isIntersected( this.values, this.event ) ).toBe( false );
+				});
+
+				it('should return false if the drag event is below the buffered item', function() {
+					this.event.initMouseEvent( "mousemove", true, true, window, 1, 800, 600, 40, 80, false, false, false, false, 0, null );
+					expect( this.templateView.isIntersected( this.values, this.event ) ).toBe( false );
+				});
+
+				it('should return false if the drag event is left of the buffered item', function() {
+					this.event.initMouseEvent( "mousemove", true, true, window, 1, 800, 600, 30, 60, false, false, false, false, 0, null );
+					expect( this.templateView.isIntersected( this.values, this.event ) ).toBe( false );
+				});
+
+				it('should return false if the drag event is right of the buffered item', function() {
+					this.event.initMouseEvent( "mousemove", true, true, window, 1, 800, 600, 70, 60, false, false, false, false, 0, null );
+					expect( this.templateView.isIntersected( this.values, this.event ) ).toBe( false );
+				});
+
 			});
 
 			describe('Wrapping Existing Values with a New Group', function() {
 
+				beforeEach(function() {
+					this.$value = new TemplateValueView( new Item({ title: "My Item" }) ).render();
+					this.$value.css({
+						position: 'absolute',
+						top: '50px',
+						left: '26px',
+						width: '46px',
+						height: '24px'
+					});
+					$('.layout-template-row-group').first().append( this.$value );
+				});
+
+				it('should render a group with the value inside', function() {
+					this.templateView.wrapValueWithGroup( this.$value );
+					expect( this.$value.parent().parent().parent() ).toEqual('.layout-template-row');
+				});
+
+				it('should render the group with the correct layout direction', function() {
+					this.templateView.wrapValueWithGroup( this.$value );
+					expect( this.$value.parent().data('flex-direction') ).toBe('column');
+				});
 			});
 
 			describe('Testing Whether an Existing Value is to the Left of a Drag', function() {
+				beforeEach(function() {
+					this.values = {
+						top: 			50,
+						left: 			26,
+						bottom: 		74,
+						right: 			72,
+						middleX: 		49,
+						middleY: 		62,
+						dragMiddleX: 	49,
+						dragMiddleY: 	62,
+						dragMiddle: 	49,
+						bufferTop: 		50,
+						bufferLeft: 	35.2,
+						bufferBottom: 	74,
+						bufferRight: 	62.8
+					};
+					this.event = document.createEvent("MouseEvent");
+				});
 
+				it('should return true if the drag event is after the item drag threshold point', function() {
+					this.event.initMouseEvent( "mousemove", true, true, window, 1, 800, 600, 50, 60, false, false, false, false, 0, null );
+					expect( this.templateView.isPrevious( this.values, this.event.clientX ) ).toBe( true );
+				});
+
+				it('should return false if the drag event is before the item drag threshold point', function() {
+					this.event.initMouseEvent( "mousemove", true, true, window, 1, 800, 600, 40, 40, false, false, false, false, 0, null );
+					expect( this.templateView.isPrevious( this.values, this.event.clientX ) ).toBe( false );
+				});
 			});
 
 			describe('Positioning the New Value', function() {

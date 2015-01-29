@@ -193,6 +193,67 @@ TemplateView.prototype._onGroupDidDrop = function( event ) {
 
 };
 
+TemplateView.prototype.dimensionsForValue = function( $value, dragThreshold, buffer ) {
+	var dragThreshold	= dragThreshold || 0.5,
+		buffer 			= buffer || 0.2,
+		direction 		= $value.parent().data('flex-direction') || 'row',
+		bufferX			= direction === 'row' ? buffer : 0,
+		bufferY			= direction === 'column' ? buffer : 0;
+
+	return {
+		top: 			$value.offset().top,
+		left: 			$value.offset().left,
+		bottom: 		$value.offset().top + $value.height(),
+		right: 			$value.offset().left + $value.width(),
+
+		middleX: 		$value.offset().left + ( $value.width() / 2 ),
+		middleY: 		$value.offset().top + ( $value.height() / 2 ),
+
+		dragMiddleX: 	$value.offset().left + ( $value.width() * dragThreshold ),
+		dragMiddleY: 	$value.offset().top + ( $value.height() * dragThreshold ),
+		dragMiddle: 	direction === 'row' ? 	$value.offset().left + ( $value.width() * dragThreshold ) :
+												$value.offset().top + ( $value.height() * dragThreshold ),
+
+		bufferTop: 		$value.offset().top + ( $value.height() * bufferY ),
+		bufferLeft: 	$value.offset().left + ( $value.width() * bufferX ),
+		bufferBottom: 	$value.offset().top + $value.height() - ( $value.height() * bufferY ),
+		bufferRight: 	$value.offset().left + $value.width() - ( $value.width() * bufferX )
+	};
+};
+
+TemplateView.prototype.isIntersected = function( values, event ) {
+
+	// Account for the layout's scroll offset, which can mess up the calculations
+	var scrollOffset 	= parseInt($.Velocity.hook($("#layout"), "translateY")) || 0,
+		dragOffsetX 	= event.clientX,
+		dragOffsetY		= event.clientY;
+
+	return 	values.bufferLeft 					<= dragOffsetX &&
+			values.bufferRight 					>= dragOffsetX &&
+			values.bufferTop - scrollOffset 	<= dragOffsetY &&
+			values.bufferBottom - scrollOffset 	>= dragOffsetY;
+};
+
+TemplateView.prototype.isPrevious = function( values, dragPoint ) {
+	return dragPoint >= values.dragMiddle;
+}
+
+TemplateView.prototype.wrapValueWithGroup = function( $value ) {
+	
+	// Make sure the group has the opposite direction of its parent
+	var direction 	= $value.parent().data('flex-direction') === 'column' ? 'row' : 'column';
+	var $group 		= new TemplateGroupView({
+		placeholder: true,
+		layout: [{
+			property:  	'flex-direction',
+			value: 		 direction
+		}]
+	}).render();
+
+	// Wrap the value with the new group
+	$value.wrap( $group );
+};
+
 TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = function( event, $parent, placeholder ) {
 
 };

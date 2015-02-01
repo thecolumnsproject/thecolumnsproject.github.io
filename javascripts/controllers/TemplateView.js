@@ -123,6 +123,11 @@ TemplateView.prototype._setupEvents = function() {
 	document.addEventListener( 'Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', this._onGroupDidEndDropOver.bind( this ), false);
 	document.addEventListener( 'Columns.TemplateGroupView.GroupDidDropWithValueView', this._onGroupDidDrop.bind( this ), false);
 
+	// Listen to embedded table events
+	$(document).on('ColumnsTableDidRenderData', this._onTableDidRenderData.bind( this ) );
+	$(document).on('ColumnsTableDidScroll', this._onTableDidScroll.bind( this ) );
+	$(document).on('ColumnsTableWillExpand', this._onTableWillExpand.bind( this ) );
+
 };
 
 TemplateView.prototype._removeEvents = function() {
@@ -142,8 +147,43 @@ TemplateView.prototype._removeEvents = function() {
 	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', this._onGroupDidEndDropOver.bind( this ), false);
 	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidDropWithValueView', this._onGroupDidDrop.bind( this ), false);
 
+	// Listen to embedded table events
+	$(document).off('ColumnsTableDidRenderData', this._onTableDidRenderData.bind( this ) );
+	$(document).off('ColumnsTableDidScroll', this._onTableDidScroll.bind( this ) );
+	$(document).off('ColumnsTableWillExpand', this._onTableWillExpand.bind( this ) );
+
 };
 
+TemplateView.prototype._onTableDidRenderData = function( event, data ) {
+	this.$template.find('.layout-template-row').css({
+		height: data.table.tallestRowHeight()
+	});
+};
+
+TemplateView.prototype._onTableWillExpand = function( event ) {
+
+	// Move the template down below the header
+	this.$template.velocity({
+		translateY: 0
+	}, {
+		duration: 400
+	});
+};
+
+TemplateView.prototype._onTableDidScroll = function( event ) {
+
+	// Move the template up until it hits the header
+	var minScroll = -24,
+		maxScroll = 0,
+		scroll = -$('.columns-table-container').scrollTop();
+
+	// Make sure the scroll is within bounds
+	scroll = scroll < minScroll ? minScroll : scroll;
+
+	// Adjust the template
+	$.Velocity.hook( this.$template, "translateY", scroll + "px" );
+};
+ 
 TemplateView.prototype._onItemDidBeginDrag = function( event ) {
 	this.draggingItem = event.detail.item.item;
 };

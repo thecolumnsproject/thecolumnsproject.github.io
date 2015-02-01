@@ -844,11 +844,78 @@ describe('Template View', function() {
 
 	});
 
-	describe('Dragging', function() {
-
-	});
-
 	describe('Respond to Embeddable Table Events', function() {
+
+		beforeEach(function() {
+			this.templateView 	= new TemplateView();
+			this.$template 		= this.templateView.render();
+		});
+
+		describe('Table Will Expand', function() {
+
+			beforeEach(function( done ) {
+				$.Velocity.hook(this.$template, "translateY", "-100px");
+				$(document).trigger('ColumnsTableWillExpand');
+				setTimeout(function() {
+					done();
+				}, 400);
+			});
+
+			it('should adjust the template position when the table is about to expand', function( done ) {
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( 0 );
+				done();
+			});
+		});
+
+		xdescribe('Table Has Expanded', function() {
+
+			it('should add the expanded class to the template once the table has expanded', function() {
+				$(document).trigger('ColumnsTableWillExpand');
+				expect( this.$template ).toHaveClass('expanded');
+			});
+		});
+
+		xit('should remove the expanded class from the template once the table has collapsed', function() {
+
+		});
+
+		describe('Table Did Render', function() {
+
+			it('should adjust the template height to match the tallest row once the table renders', function() {
+				var table = { tallestRowHeight: function() {} };
+				loadFixtures('embed-table.html');
+				spyOn( table, 'tallestRowHeight' ).and.returnValue( 186 );
+				$(document).trigger('ColumnsTableDidRenderData', { table: table });
+				expect( this.$template.find('.layout-template-row').height() ).toBe( 186 );
+
+			});
+		});
+
+		xdescribe('Scrolling the Template with the Table', function() {
+
+			beforeEach(function() {
+				loadFixtures('embed-table.html');
+				this.$table = $('.columns-table-container');
+			});
+
+			it('should scroll with the expanded table', function() {
+				this.$table.scrollTop( 12 );
+				$(document).trigger('ColumnsTableDidScroll');
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-12px' );
+			});
+
+			it('should have a maximum scroll position', function() {
+				this.$table.scrollTop( -12 );
+				$(document).trigger('ColumnsTableDidScroll');
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '0px' );
+			});
+
+			it('should have a minimum scroll position', function() {
+				this.$table.scrollTop( 36 );
+				$(document).trigger('ColumnsTableDidScroll');
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-24px' );
+			});
+		});
 
 	});
 });

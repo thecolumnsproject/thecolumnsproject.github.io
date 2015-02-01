@@ -59,6 +59,12 @@ describe('Template View', function() {
 		};
 	});
 
+	afterEach(function() {
+		if ( this.templateView ) {
+			this.templateView._removeEvents();
+		}
+	});
+
 	describe('Initialization', function() {
 
 		it('should initialize with a layout object', function() {
@@ -371,8 +377,108 @@ describe('Template View', function() {
 
 			describe('Positioning the New Value', function() {
 
-				it('should position the new value at the beginning of the template if there are no other values', function() {
+				beforeEach(function() {
+					this.dropSpy = spyOn( this.templateView, 'insertDropBeforeElementInParentWithPlaceholder' );
+					jasmine.getFixtures().cleanUp();
+					loadFixtures('template-bare.html');
+				});
 
+				it('should do nothing if the parent is undefined', function() {
+					// Create mouse event coordinates that we know will be inside the group
+					// and set up the currently dragging item
+					var item = new Item({ title: "My Item "});
+					var $group = $('.layout-template-row-group');
+					var event = {
+						originalEvent: {
+							clientX: $group.offset().left + ( $group.width() / 2 ),
+							clientY: $group.offset().top + ( $group.height() / 2 )
+						}
+					};	
+
+					this.draggingItem = item;
+					this.templateView.positionDropForDragEventInParentWithPlaceholder( event, undefined, false );
+					expect( this.dropSpy ).not.toHaveBeenCalled();
+				});
+
+				it('should position the new value at the beginning of the template if there are no other values', function() {
+					// Create mouse event coordinates that we know will be inside the group
+					// and set up the currently dragging item
+					var item = new Item({ title: "My Item "});
+					var $group = $('.layout-template-row-group');
+					var event = {
+						originalEvent: {
+							clientX: $group.offset().left + ( $group.width() / 2 ),
+							clientY: $group.offset().top + ( $group.height() / 2 )
+						}
+					};	
+
+					this.templateView.draggingItem = item;
+					this.templateView.positionDropForDragEventInParentWithPlaceholder( event, $group, false );
+					expect( this.dropSpy ).toHaveBeenCalledWith( item, null, $group, false );
+				});
+
+				it('should position the new value after the correct existing item', function() {
+					// Add a value to the group
+					var $group = $('.layout-template-row-group').first();
+					var $value = new TemplateValueView( new Item({ title: "My Existing Item"}) ).render();
+					$group.append( $value );
+
+					// Create mouse event coordinates that we know will be after the existing value view
+					// and set up the currently dragging item
+					var item = new Item({ title: "My Item "});
+					var event = {
+						originalEvent: {
+							clientX: $value.offset().left + ( $value.width() * .6 ),
+							clientY: $value.offset().top + ( $value.height() * 2 )
+						}
+					};
+
+					this.templateView.draggingItem = item;
+					this.templateView.positionDropForDragEventInParentWithPlaceholder( event, $group, false );
+					expect( this.dropSpy ).toHaveBeenCalledWith( item, $value, $group, false );
+
+				});
+
+				it('should create a new group if the new value itersects an existing value', function() {
+					// Add a value to the group
+					var $group = $('.layout-template-row-group').first();
+					var $value = new TemplateValueView( new Item({ title: "My Existing Item"}) ).render();
+					$group.append( $value );
+
+					// Create mouse event coordinates that we know will be after the existing value view
+					// and set up the currently dragging item
+					var item = new Item({ title: "My Item "});
+					var event = {
+						originalEvent: {
+							clientX: $value.offset().left + ( $value.width() * .6 ),
+							clientY: $value.offset().top + ( $value.height() * .6 )
+						}
+					};
+
+					this.templateView.draggingItem = item;
+					this.templateView.positionDropForDragEventInParentWithPlaceholder( event, $group, false );
+					expect( this.dropSpy ).toHaveBeenCalledWith( item, $value, $('.layout-template-row-group').eq( 1 ), false );
+				});
+
+				it('should position the new value in a new group before the other item when appropriate', function() {
+					// Add a value to the group
+					var $group = $('.layout-template-row-group').first();
+					var $value = new TemplateValueView( new Item({ title: "My Existing Item"}) ).render();
+					$group.append( $value );
+
+					// Create mouse event coordinates that we know will be after the existing value view
+					// and set up the currently dragging item
+					var item = new Item({ title: "My Item "});
+					var event = {
+						originalEvent: {
+							clientX: $value.offset().left + ( $value.width() * .2 ),
+							clientY: $value.offset().top + ( $value.height() * .2 )
+						}
+					};
+
+					this.templateView.draggingItem = item;
+					this.templateView.positionDropForDragEventInParentWithPlaceholder( event, $group, false );
+					expect( this.dropSpy ).toHaveBeenCalledWith( item, null, $('.layout-template-row-group').eq( 1 ), false );
 				});
 			});
 
@@ -489,13 +595,15 @@ describe('Template View', function() {
 			});
 
 			it('should remove existing placeholders and set up new ones if there is an active droppable item', function() {
-				var itemView 	= new ItemView( this.newItem );
-				var $item 		= itemView.render();
-				this.templateView.droppableItems.push( itemView );
+				var groupView	 	= new TemplateGroupView();
+				var $group 			= groupView.render();
+				var item 	 		= new Item({ title: "My Item"});
+				this.templateView.draggingItem = item;
+				this.templateView.droppableItems.push( groupView );
 				document.dispatchEvent( this.event );
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
 				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
-				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $item );
+				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $group );
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
 
@@ -596,12 +704,15 @@ describe('Template View', function() {
 			});
 
 			it('should remove existing placeholders and set up new ones if there is an active droppable item', function() {
-				var $value = this.valueView.render();
-				this.templateView.droppableItems.push( this.valueView );
+				var groupView	 	= new TemplateGroupView();
+				var $group 			= groupView.render();
+				var item 	 		= new Item({ title: "My Item"});
+				this.templateView.draggingItem = item;
+				this.templateView.droppableItems.push( groupView );
 				document.dispatchEvent( this.event );
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
 				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
-				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $value );
+				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $group );
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
 
@@ -610,7 +721,6 @@ describe('Template View', function() {
 				expect( this.templateView.removePlaceholders ).not.toHaveBeenCalled();
 				expect( this.positionSpy ).not.toHaveBeenCalled();
 			});
-
 		});
 	});
 

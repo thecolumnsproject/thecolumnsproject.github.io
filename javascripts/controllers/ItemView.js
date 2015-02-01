@@ -36,13 +36,13 @@ ItemView.prototype.setupEvents = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.ItemView.ItemDidBeginDrag', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.ItemView.ItemDidBeginDrag', false, false, {
 			item: 	this,
 			event: 	event,
 			ui: 	ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -54,13 +54,13 @@ ItemView.prototype.setupEvents = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.ItemView.ItemDidEndDrag', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.ItemView.ItemDidEndDrag', false, false, {
 			item: 	this,
 			event: 	event,
 			ui: 	ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -72,13 +72,13 @@ ItemView.prototype.setupEvents = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.ItemView.ItemDidDrag', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.ItemView.ItemDidDrag', false, false, {
 			item: 	this,
 			event: 	event,
 			ui: 	ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 };

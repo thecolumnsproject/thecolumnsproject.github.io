@@ -125,6 +125,25 @@ TemplateView.prototype._setupEvents = function() {
 
 };
 
+TemplateView.prototype._removeEvents = function() {
+
+	// Listen to drag events for items
+	document.removeEventListener( 'Columns.ItemView.ItemDidBeginDrag', this._onItemDidBeginDrag.bind( this ), false);
+	document.removeEventListener( 'Columns.ItemView.ItemDidEndDrag', this._onItemDidEndDrag.bind( this ), false);
+	document.removeEventListener( 'Columns.ItemView.ItemDidDrag', this._onItemDidDrag.bind( this ), false);
+
+	// Listen to drag events for values
+	document.removeEventListener( 'Columns.TemplateValueView.ValueDidBeginDragWithItem', this._onValueDidBeginDrag.bind( this ), false);
+	document.removeEventListener( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ), false);
+	document.removeEventListener( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ), false);
+
+	// Listen to drop events for groups
+	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', this._onGroupDidBeginDropOver.bind( this ), false);
+	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', this._onGroupDidEndDropOver.bind( this ), false);
+	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidDropWithValueView', this._onGroupDidDrop.bind( this ), false);
+
+};
+
 TemplateView.prototype._onItemDidBeginDrag = function( event ) {
 	this.draggingItem = event.detail.item.item;
 };
@@ -137,7 +156,7 @@ TemplateView.prototype._onItemDidEndDrag = function( event ) {
 TemplateView.prototype._onItemDidDrag = function( event ) {
 	if ( this.droppableItems.length ) {
 		this.removePlaceholders();
-		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$item, true );
+		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group, true );
 	}
 };
 
@@ -156,7 +175,7 @@ TemplateView.prototype._onValueDidEndDrag = function( event ) {
 TemplateView.prototype._onValueDidDrag = function( event ) {
 	if ( this.droppableItems.length ) {
 		this.removePlaceholders();
-		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$value , true );
+		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group , true );
 	}
 };
 
@@ -251,7 +270,7 @@ TemplateView.prototype.wrapValueWithGroup = function( $value ) {
 	}).render();
 
 	// Wrap the value with the new group
-	$value.wrap( $group );
+	return $value.wrap( $group );
 };
 
 TemplateView.prototype.insertDropBeforeElementInParentWithPlaceholder = function( item, $previous, $parent, placeholder ) {
@@ -280,5 +299,65 @@ TemplateView.prototype.insertDropBeforeElementInParentWithPlaceholder = function
 };
 
 TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = function( event, $parent, placeholder ) {
+		
+		// Make sure we have a parent
+		if ( !$parent ) {
+			return;
+		}
 
+		// Set up necessary variables. Then,
+		// Get all the items in the group
+		// and filter out the placeholders
+		// and the dragging item
+		var dimensions,
+			dragPoint,
+			$previousChild,
+			$child,
+			$children = $parent.children()
+						.not('.placeholder')
+						.not('.inactive')
+						.not('.ui-draggable-dragging');
+
+		// If there aren't any children,
+		// just insert the placeholder at the beginning
+		if ( !$children.length ) {
+			this.insertDropBeforeElementInParentWithPlaceholder( this.draggingItem, null, $parent, placeholder);
+			return;
+		}
+
+		$children.each(function( i, child ) {
+			$child = $( child );
+
+			// Are we intersecting directly with the child?
+			dimensions = this.dimensionsForValue( $child );
+			if ( this.isIntersected( dimensions, event.originalEvent ) ) {
+				// Reset the previous child
+				$previousChild = null;
+
+				// Wrap the two items in a group
+				// and make the new group the new parent
+				$parent = this.wrapValueWithGroup( $child ).parent();
+
+				// Determine whether the new value goes first or second in the new group
+				// using new dimensions as a result of the new group
+				dimensions = this.dimensionsForValue( $child );
+				dragPoint = $parent.data('flex-direction') == 'row' ? event.originalEvent.clientX : event.originalEvent.clientY;
+				if ( this.isPrevious( dimensions, dragPoint) ) {
+					$previousChild = $child;
+				}
+
+			} else {
+				// Prepare dimensions for determining which values goes first in the group
+				dimensions = this.dimensionsForValue( $child );
+				dragPoint = $parent.data('flex-direction') == 'row' ? event.originalEvent.clientX : event.originalEvent.clientY;
+				if ( this.isPrevious( dimensions, dragPoint) ) {
+					$previousChild = $child;
+				}
+			}
+
+		}.bind( this ));
+
+		// Add the new item to the new group
+		this.insertDropBeforeElementInParentWithPlaceholder( this.draggingItem, $previousChild, $parent, placeholder );
+		
 };

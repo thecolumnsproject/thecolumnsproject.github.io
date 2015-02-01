@@ -75,14 +75,14 @@ TemplateValueView.prototype._setupDrag = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
 			valueView: 	this,
 			item: 		this.item,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -94,14 +94,14 @@ TemplateValueView.prototype._setupDrag = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.TemplateValueView.ValueDidEndDragWithItem', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidEndDragWithItem', false, false, {
 			valueView: 	this,
 			item: 		this.item,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -113,14 +113,14 @@ TemplateValueView.prototype._setupDrag = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.TemplateValueView.ValueDidDragWithItem', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidDragWithItem', false, false, {
 			valueView: 	this,
 			item: 		this.item,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 };

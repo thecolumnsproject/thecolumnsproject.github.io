@@ -82,14 +82,14 @@ TemplateGroupView.prototype._setupDrop = function() {
 		// event: 		event,
 		// ui: 		ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', false, false, {
 			groupView: 	this,
 			valueView: 	ui.droppable,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -102,14 +102,14 @@ TemplateGroupView.prototype._setupDrop = function() {
 		// event: 		event,
 		// ui: 		ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', false, false, {
 			groupView: 	this,
 			valueView: 	ui.droppable,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -122,14 +122,14 @@ TemplateGroupView.prototype._setupDrop = function() {
 		// event: 		event,
 		// ui: 		ui
 		// });
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent('Columns.TemplateGroupView.GroupDidDropWithValueView', false, false, {
+		var columnsEvent = document.createEvent('CustomEvent');
+		columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidDropWithValueView', false, false, {
 			groupView: 	this,
 			valueView: 	ui.droppable,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 };

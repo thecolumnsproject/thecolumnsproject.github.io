@@ -179,6 +179,7 @@ TemplateView.prototype._onTableDidScroll = function( event ) {
 
 	// Make sure the scroll is within bounds
 	scroll = scroll < minScroll ? minScroll : scroll;
+	scroll = scroll > maxScroll ? maxScroll : scroll;
 
 	// Adjust the template
 	$.Velocity.hook( this.$template, "translateY", scroll + "px" );

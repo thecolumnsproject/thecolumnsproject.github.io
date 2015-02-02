@@ -867,17 +867,17 @@ describe('Template View', function() {
 			});
 		});
 
-		xdescribe('Table Has Expanded', function() {
+		// xdescribe('Table Has Expanded', function() {
 
-			it('should add the expanded class to the template once the table has expanded', function() {
-				$(document).trigger('ColumnsTableWillExpand');
-				expect( this.$template ).toHaveClass('expanded');
-			});
-		});
+		// 	it('should add the expanded class to the template once the table has expanded', function() {
+		// 		$(document).trigger('ColumnsTableWillExpand');
+		// 		expect( this.$template ).toHaveClass('expanded');
+		// 	});
+		// });
 
-		xit('should remove the expanded class from the template once the table has collapsed', function() {
+		// xit('should remove the expanded class from the template once the table has collapsed', function() {
 
-		});
+		// });
 
 		describe('Table Did Render', function() {
 
@@ -891,7 +891,7 @@ describe('Template View', function() {
 			});
 		});
 
-		xdescribe('Scrolling the Template with the Table', function() {
+		describe('Scrolling the Template with the Table', function() {
 
 			beforeEach(function() {
 				loadFixtures('embed-table.html');
@@ -899,20 +899,26 @@ describe('Template View', function() {
 			});
 
 			it('should scroll with the expanded table', function() {
-				this.$table.scrollTop( 12 );
+				spyOn( $.fn, 'scrollTop' ).and.returnValue( 12 );
 				$(document).trigger('ColumnsTableDidScroll');
+
+				expect( $.fn.scrollTop ).toHaveBeenCalled();
 				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-12px' );
 			});
 
 			it('should have a maximum scroll position', function() {
-				this.$table.scrollTop( -12 );
+				spyOn( $.fn, 'scrollTop' ).and.returnValue( -12 );
 				$(document).trigger('ColumnsTableDidScroll');
+
+				expect( $.fn.scrollTop ).toHaveBeenCalled();
 				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '0px' );
 			});
 
 			it('should have a minimum scroll position', function() {
-				this.$table.scrollTop( 36 );
+				spyOn( $.fn, 'scrollTop' ).and.returnValue( 36 );
 				$(document).trigger('ColumnsTableDidScroll');
+
+				expect( $.fn.scrollTop ).toHaveBeenCalled();
 				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-24px' );
 			});
 		});

@@ -1,18 +1,21 @@
-<div class="style-component-section-row-input {{#if prependIcon}}prepend{{/if}} {{#if appendControls}}append{{/if}}">
-	{{#if prependIcon}}
-		<div class="style-component-section-row-input-prepend">
-			<i class="icon-{{prependIcon}}"></i>
-		</div>
-	{{/if}}
-	<input type="{{type}}" data-property='{{property.name}}' value='{{property.current_value}}' data-negative='{{canBeNegative}}'/>
-	{{#if appendControls}}
-		<div class="style-component-section-row-input-append">
-			<button class='increment'>
-				<i class="icon-caret-up"></i>
-			</button>
-			<button class='decrement'>
-				<i class="icon-caret-down"></i>
-			</button>
-		</div>
-	{{/if}}
+<div class="style-component-section-row-item">
+	<div class="style-component-section-row-input {{#if prependIcon}}prepend{{/if}} {{#if appendControls}}append{{/if}}">
+		{{#if prependIcon}}
+			<div class="style-component-section-row-input-prepend">
+				<i class="icon-{{prependIcon}}"></i>
+			</div>
+		{{/if}}
+		<input type="{{type}}" data-property='{{property}}' value='{{value}}' data-negative='{{canBeNegative}}'/>
+		{{#if appendControls}}
+			<div class="style-component-section-row-input-append">
+				<button class='increment'>
+					<i class="icon-caret-up"></i>
+				</button>
+				<button class='decrement'>
+					<i class="icon-caret-down"></i>
+				</button>
+			</div>
+		{{/if}}
+	</div>
+	<label class='style-component-section-row-item-label'>{{label}}</label>
 </div>

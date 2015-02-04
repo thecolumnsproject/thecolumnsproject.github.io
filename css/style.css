@@ -13,7 +13,7 @@ body {
   font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif; }
 
 h2 {
-  color: #3e97bd;
+  color: #3E97BD;
   font-size: 32px;
   font-weight: 300; }
 
@@ -27,12 +27,12 @@ h2 {
   font-weight: 500;
   text-transform: uppercase;
   color: #fff;
-  background-color: #3e97bd;
+  background-color: #3E97BD;
   margin-left: auto;
   cursor: pointer; }
   .columns-button:active {
     background-color: #fff;
-    color: #3e97bd; }
+    color: #3E97BD; }
   .columns-button:focus {
     outline: none; }
 
@@ -49,19 +49,21 @@ h2 {
   padding: 0 20px; }
 
 .button-secondary {
-  border-color: #3e97bd;
+  border-color: #3E97BD;
   background-color: transparent;
-  color: #3e97bd; }
+  color: #3E97BD; }
   .button-secondary:active {
     color: #fff;
-    background-color: #3e97bd; }
+    background-color: #3E97BD; }
 
 .button-tertiary {
   border-radius: 0;
   border-color: transparent;
   background-color: transparent;
-  color: #3e97bd;
+  color: #3E97BD;
   padding: 0; }
   .button-tertiary:active {
     color: #317897;
     background-color: transparent; }
+
+/*# sourceMappingURL=style.css.map */

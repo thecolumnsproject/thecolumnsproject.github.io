@@ -1,3 +1,5 @@
+jasmine.getFixtures().fixturesPath = 'specs/fixtures';
+
 describe('Template Group View', function() {
 
 	describe('Initialization', function() {
@@ -169,28 +171,61 @@ describe('Template Group View', function() {
 		});
 	});	
 
-	xdescribe('Getting Layout Values for Group', function() {
+	describe('Getting Group Titles', function() {
 
 		beforeEach(function() {
-			var groupView = new TemplateGroupView({ layout: [{
-				property:'flex-direction',
-				value: 'row'
-			}, {
-				property: 'justify-content',
-				value: 'flex-start'
-			}, {
-				property: 'align-items',
-				value: 'center'
-			}] });
-			this.$group = groupView.render();
+			loadFixtures('template-bare.html');
+			this.groupView = new TemplateGroupView();
+			this.$group = this.groupView.render();
+		})
+
+		it('should return "Row" if the group is the first in the template', function() {
+			$('.layout-template-row').append( this.$group );
+			expect( this.groupView.title() ).toBe('Row');
 		});
 
-		it('should return the corret layout value for an existing property', function() {
-			expect( TemplateGroupView.getLayout( 'align-items' ) ).toBe('flex-end');
+		it('should return "Group" for any other group', function() {
+			$('.layout-template-row-group').append( this.$group );
+			expect( this.groupView.title() ).toBe('Group');
+		});
+	});
+
+	describe('Getting Layout Values for Group', function() {
+
+		beforeEach(function() {
+			this.groupView = new TemplateGroupView({
+				layout: [{
+					property:'flex-direction',
+					value: 'row'
+				}, {
+					property: 'justify-content',
+					value: 'flex-start'
+				}, {
+					property: 'align-items',
+					value: 'center'
+				}],
+				style: [{
+					property: 'font-size',
+					value: '12px'
+				}]
+			});
+			this.$group = this.groupView.render();
 		});
 
-		it('should return undefined for a property that does not exist for the group', function() {
+		it('should return the correct layout value for an existing property', function() {
+			expect( this.groupView.getStyle( 'align-items' ) ).toBe('center');
+		});
 
+		it('should return the style value of a property if it is not part of the layout object', function() {
+			expect( this.groupView.getStyle( 'font-size' ) ).toBe('12px');
+		});
+
+		it('should return the default css value of a property that is not part of the layout or style objects', function() {
+			expect( this.groupView.getStyle( 'text-align' ) ).toBe( '' );
+		});
+
+		xit('should return undefined for a property that does not exist for the group', function() {
+			expect( this.groupView.getStyle( 'text-align' ) ).toBeUndefined();
 		});
 	});
 

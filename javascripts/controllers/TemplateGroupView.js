@@ -59,6 +59,51 @@ TemplateGroupView.prototype.update = function() {
 	return this.$group;
 };
 
+// Return the correct layout attribute for a given property
+// @param { string } property -- the requested layout property
+// @return { string } the corresponding value
+TemplateGroupView.prototype.getStyle = function( property ) {
+	var value;
+
+	// If there was not match in the layout object,
+	// check the style object
+	// Loop through each property until we find a match
+	if ( this.style ) {
+		value = this.style.get( property )
+	}
+
+	// Loop through each layout property
+	// until we find a match
+	// potentially a better one that in the style set
+	this.layout.forEach(function( layout, i ) {
+		if ( layout.property === property ) {
+			value = layout.value
+		}
+	});
+
+	// As a last resort, check the css for the element
+	// and return its value
+	if ( value ) {
+		return value;
+	} else {
+		return this.$group.css( property );
+	}
+};
+
+// Get the template's title for display
+// Should be 'Row' for the first group in the template
+// and 'Group' for all others
+// @return { string } -- The group's title
+TemplateGroupView.prototype.title = function() {
+
+	// Is this the first group in the template?
+	if ( this.$group.parent('.layout-template-row').length ) {
+		return 'Row';
+	} else {
+		return 'Group';
+	}
+};
+
 TemplateGroupView.prototype.removePlaceholders = function() {
 
 	// Remove any placeholder values

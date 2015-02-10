@@ -60,6 +60,24 @@ describe('Item Model', function() {
 		});
 	});
 
+	xdescribe('Getting Style Attributes', function() {
+
+		beforeEach(function() {
+			this.item = new Item({
+				title: "My Item",
+				style: 'font-size:14px;color:#3a3a3a;'
+			});
+		});
+
+		it('should return the style value of a property if it is not part of the layout object', function() {
+			expect( this.item.getStyle( 'font-size' ) ).toBe('12px');
+		});
+
+		it('should return the default css value of a property that is not part of the layout or style objects', function() {
+			expect( this.item.getStyle( 'text-align' ) ).toBe( '' );
+		});
+	});
+
 	describe('Comparing Items', function() {
 
 		beforeEach(function() {

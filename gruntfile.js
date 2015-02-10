@@ -126,7 +126,7 @@ module.exports = function(grunt) {
 					helpers: [
 						'templates/embeddable-templates.js',
 						'templates/templates.js',
-						'javscripts/styling/layouts.js',
+						'javscripts/styling/**/*.js',
 						'compiled-javascripts/config.js'
 					]
 				}

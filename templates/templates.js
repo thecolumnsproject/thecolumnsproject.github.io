@@ -336,93 +336,36 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["Columns"]["Templates"]["templates/styling/component.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["Columns"]["Templates"]["templates/styling/component-section-row.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, helper, options, self=this, helperMissing=helpers.helperMissing, functionType="function", escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing;
-
-function program1(depth0,data) {
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
-  var buffer = "", stack1, helper, options;
-  buffer += "\n		<div class=\"style-component-section\">\n			<div class=\"style-component-section-title\">\n				";
+
+
+  return "<div class=\"style-component-section-row\">\n\n</div>";
+  });
+
+this["Columns"]["Templates"]["templates/styling/component-section.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"style-component-section\">\n	<div class=\"style-component-section-title\">\n		";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\n			</div>\n			<div class=\"style-component-section-rows\">\n				";
-  options={hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}
-  if (helper = helpers.rows) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.rows); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.rows) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			</div>\n		</div>\n		";
+    + "\n	</div>\n	<div class=\"style-component-section-rows\">\n	</div>\n</div>";
   return buffer;
-  }
-function program2(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n					<div class=\"style-component-section-row\">\n						";
-  options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}
-  if (helper = helpers.items) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.items); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.items) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					</div>\n				";
-  return buffer;
-  }
-function program3(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n							<div class=\"style-component-section-row-item\">\n								";
-  stack1 = (helper = helpers.ifIsInput || (depth0 && depth0.ifIsInput),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsInput", (depth0 && depth0.kind), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  stack1 = (helper = helpers.ifIsSingleSegmentedButton || (depth0 && depth0.ifIsSingleSegmentedButton),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsSingleSegmentedButton", (depth0 && depth0.kind), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  stack1 = (helper = helpers.ifIsMultipleSegmentedButton || (depth0 && depth0.ifIsMultipleSegmentedButton),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.kind), options) : helperMissing.call(depth0, "ifIsMultipleSegmentedButton", (depth0 && depth0.kind), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								<label class='style-component-section-row-item-label'>";
-  if (helper = helpers.label) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.label); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</label>\n							</div>\n						";
-  return buffer;
-  }
-function program4(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n									";
-  stack1 = self.invokePartial(partials.input, 'input', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  return buffer;
-  }
+  });
 
-function program6(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n									";
-  stack1 = self.invokePartial(partials['single-segmented-button'], 'single-segmented-button', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  return buffer;
-  }
+this["Columns"]["Templates"]["templates/styling/component.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
-function program8(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n									";
-  stack1 = self.invokePartial(partials['multiple-segmented-button'], 'multiple-segmented-button', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								";
-  return buffer;
-  }
 
-  buffer += "<div class=\"style-component\" data-component-index='";
-  if (helper = helpers.index) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.index); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n	<div class=\"style-component-header\">\n		<i class=\"icon-";
+  buffer += "<div class=\"style-component\">\n	<div class=\"style-component-header\">\n		<i class=\"icon-";
   if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -430,13 +373,7 @@ function program8(depth0,data) {
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\n	</div>\n	<div class=\"style-component-body\">\n		";
-  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
-  if (helper = helpers.styles) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.styles); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.styles) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		\n	</div>\n</div>";
+    + "</span>\n	</div>\n	<div class=\"style-component-body\">\n		\n		\n	</div>\n</div>";
   return buffer;
   });
 

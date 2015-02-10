@@ -38,6 +38,26 @@ Item.prototype.unformattedTitle = function() {
 	}
 }
 
+// // Return the correct style attribute for a given property
+// // @param { string } property -- the requested layout property
+// // @return { string } the corresponding value
+// Item.prototype.getStyle = function( property ) {
+// 	var value;
+
+// 	// Loop through each property until we find a match
+// 	if ( this.style ) {
+// 		value = this.style.get( property )
+// 	}
+
+// 	// As a last resort, check the css for the element
+// 	// and return its value
+// 	if ( value ) {
+// 		return value;
+// 	} else {
+// 		return this.$group.css( property );
+// 	}
+// };
+
 Item.prototype.is = function( item ) {
 	if ( item instanceof Item ) {
 		return this.title === item.title;

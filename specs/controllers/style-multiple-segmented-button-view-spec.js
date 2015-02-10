@@ -7,6 +7,13 @@ describe('Style Multiple Segmented Button View', function() {
 			expect( buttonsView.label ).toBe( '' );
 			expect( buttonsView.buttons ).toEqual( [] );
 			expect( buttonsView.properties ).toEqual( {} );
+			expect( buttonsView.item ).toBeUndefined();
+		});
+
+		it('should be associated with an object that it styles', function() {
+			var item = new Item({ title: "My Item" });
+			var buttonsView = new StyleMultipleSegmentedButtonView({ item: item });
+			expect( buttonsView.item ).toEqual( item );
 		});
 
 		it('should allow initiation with a label', function() {
@@ -182,10 +189,13 @@ describe('Style Multiple Segmented Button View', function() {
 		});
 
 		it('should notify the app of the new value', function() {
+			var item = new Item({ title: "My Item" });
 			spyOn(document, 'dispatchEvent');
+			this.buttonsView.item = item;
 			this.buttonsView.update( 'text-align', 'right' );
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForProperty');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( item );
 			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.property ).toBe( 'text-align' );
 			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.value ).toBe( 'right' );
 		});

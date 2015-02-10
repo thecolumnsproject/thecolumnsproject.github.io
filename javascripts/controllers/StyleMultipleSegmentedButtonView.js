@@ -9,10 +9,12 @@ function StyleMultipleSegmentedButtonView( options ) {
 	this.label = '';
 	this.buttons = [];
 	this.properties = {};
+	this.item = undefined;
 
 	if ( options ) {
 		this.label = options.label || this.label;
 		this.buttons = options.buttons || this.buttons;
+		this.item = options.item || this.item;
 	}
 
 	this.buttons.forEach(function( button, i ) {
@@ -45,7 +47,8 @@ StyleMultipleSegmentedButtonView.prototype.update = function( property, value ) 
 	// 	ui: 	ui
 	// });
 	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForProperty', false, false, {
+	columnsEvent.initCustomEvent('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', false, false, {
+		item: this.item,
 		property: property,
 		value: 	value
 	});

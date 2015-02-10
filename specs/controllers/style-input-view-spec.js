@@ -13,6 +13,13 @@ describe('Style Input View', function() {
 			expect( inputView.prependIcon ).toBeUndefined();
 			expect( inputView.appendControls ).toBe( false );
 			expect( inputView.label ).toBeFalsy();
+			expect( inputView.item ).toBeUndefined();
+		});
+
+		it('should be associated with an object that it styles', function() {
+			var item = new Item({ title: "My Item" });
+			var inputView = new StyleInputView({ item: item });
+			expect( inputView.item ).toEqual( item );
 		});
 
 		it('should allow a custom unit', function() {
@@ -116,11 +123,14 @@ describe('Style Input View', function() {
 		});
 
 		it('should fire an update event', function() {
+			var item = new Item({ title: "My Item" });
 			spyOn(document, 'dispatchEvent');
+			this.inputView.item = item;
 			this.inputView.property = 'font-size';
 			this.inputView.update( '4' );
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleInputView.ValueDidUpdateForProperty');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleInputView.ValueDidUpdateForPropertyAndItem');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( item );
 			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.property ).toBe( 'font-size' );
 			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.value ).toBe( '4' );
 		});

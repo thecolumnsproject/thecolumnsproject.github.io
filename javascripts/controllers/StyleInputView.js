@@ -9,6 +9,7 @@ function StyleInputView( options ) {
 	this.prependIcon = undefined;
 	this.appendControls = false;
 	this.label = '';
+	this.item = undefined;
 
 	if ( options ) {
 		this.unit = options.unit || this.unit;
@@ -20,6 +21,7 @@ function StyleInputView( options ) {
 		this.prependIcon = options.prependIcon || this.prependIcon;
 		this.appendControls = options.appendControls === true ? true : this.appendControls;
 		this.label = options.label || this.label;
+		this.item = options.item || this.item;
 	}
 
 	this.template = Columns.Templates['templates/styling/components/input.hbs'];
@@ -79,7 +81,8 @@ StyleInputView.prototype.update = function( value ) {
 	// 	ui: 	ui
 	// });
 	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.StyleInputView.ValueDidUpdateForProperty', false, false, {
+	columnsEvent.initCustomEvent('Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', false, false, {
+		item: this.item,
 		property: this.property,
 		value: 	value
 	});

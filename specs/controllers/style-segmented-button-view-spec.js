@@ -12,6 +12,13 @@ describe('Style Segmented Button View', function() {
 			expect( this.buttonsView.label ).toBe( '' );
 			expect( this.buttonsView.property ).toBe( '' );
 			expect( this.buttonsView.buttons ).toEqual( [] );
+			expect( this.buttonsView.item ).toBeUndefined();
+		});
+
+		it('should be associated with an object that it styles', function() {
+			var item = new Item({ title: "My Item" });
+			var buttonsView = new StyleSegmentedButtonView({ item: item });
+			expect( buttonsView.item ).toEqual( item );
 		});
 
 		it('should allow initiation with a label', function() {
@@ -113,10 +120,13 @@ describe('Style Segmented Button View', function() {
 		});
 
 		it('should notify the app of the new value', function() {
+			var item = new Item({ title: "My Item" });
 			spyOn(document, 'dispatchEvent');
+			this.buttonsView.item = item;
 			this.buttonsView.update( 'right' );
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleSegmentedButtonView.ValueDidUpdateForProperty');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( item );
 			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.property ).toBe( 'text-align' );
 			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.value ).toBe( 'right' );
 		});

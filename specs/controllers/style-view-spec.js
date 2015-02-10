@@ -1,43 +1,36 @@
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
-describe('Style View Spec', function() {
+describe('Style View', function() {
 
-	describe('Initialization', function() {
+	beforeEach(function() {
+		loadFixtures('style-bare.html');
+	});
+
+	describe('Initalization', function() {
+
+		it('should attach to the #style element already on the page', function() {
+			var styleView = new StyleView();
+			expect( styleView.$style ).toEqual('#styling');
+		});
+	});
+
+	describe('Updating Components', function() {
 
 		beforeEach(function() {
-			// this.$groups = 'fake groups';
-			// spyOn( TemplateView, 'getGroupsForItem' ).and.returnValue( this.$groups );
+			this.styleView = new StyleView();
 		});
 
-		it('should initialize with the correct defaults', function() {
-			var styleView = new StyleView();
-			expect( styleView.item ).toBeUndefined();
-			// expect( styleView.templateGroups ).toEqual( [] );
+		it('should replace existing components with item components', function() {
+			var selection = new Item({ title: "My Item" });
+			this.styleView.updateWithSelection( selection );
+			expect( $('.style-component').length ).toBe( 1 );
 		});
 
-		it('should optionally initialize with an item', function() {
-			var item = new Item({ title: "My Item" });
-			var styleView = new StyleView( item );
-			expect( styleView.item ).toEqual( item );
-		});
-
-		it('should optionally initialize with a TemplateGroupView', function() {
-			var item = new TemplateGroupView();
-			var styleView = new StyleView( item );
-			expect( styleView.item ).toEqual( item );
-		});
-
-		it('should throw an error if initialized with anything other than an Item, ItemView, TemplateValueView or TemplateGroupView', function() {
-			expect(function() {
-				new StyleView( "nope" );
-			}).toThrow("exception: Selection must be an Item, ItemView, TemplateValueView or TemplateGroupView");
-		});
-
-		xit('should determine all parent groups', function() {
-			var item = new Item({ title: "My Item" });
-			var styleView = new StyleView( item );
-			expect( TemplateView.getGroupsForItem ).toHaveBeenCalledWith( item );
-			expect( styleView.templateGroups ).toEqual( this.$groups );
+		it('should append group compoents to existing components ', function() {
+			var selection = new TemplateGroupView();
+			selection.render();
+			this.styleView.updateWithSelection( selection );
+			expect( $('.style-component').length ).toBe( 2 );
 		});
 	});
 
@@ -77,150 +70,33 @@ describe('Style View Spec', function() {
 		});
 	});
 
-	xdescribe('Getting Current Values', function() {
-
-		beforeEach(function() {
-			this.item = new Item({
-				title: 'My Item',
-				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
-			});
-			this.valueView = new TemplateValueView( this.item );
-			this.styleView = new StyleView();
-		});
-
-		describe('Get Single Current Value', function() {
-
-			it('should accept a jQuery object representing either a value or group', function() {
-				expect(function() {
-					this.styleView.getCurrentValue( this.valueView.render() );
-				}.bind( this ))
-				.not.toThrow();
-			});
-
-			it('should get the current value of a layout property', function() {
-				expect( this.styleView.getCurrentValue( this.valueView.render() ) ).toBe()
-			});
-
-			it('should get the current value of a style property', function() {
-
-			});
-
-			it('should return undefined if the value has not been set', function() {
-
-			});
-		});
-
-		describe('Get All Current Values', function() {
-
-		});
-	});
-
-	describe('Rendering', function() {
-
-		beforeEach(function() {
-			loadFixtures('style-bare.html');
-
-			var item = new Item({
-				title: 'My Item',
-				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
-			});
-			var group = new TemplateGroupView({
-				layout: [{
-					property:'flex-direction',
-					value: 'row'
-				}, {
-					property: 'justify-content',
-					value: 'flex-start'
-				}, {
-					property: 'align-items',
-					value: 'center'
-				}],
-				style: [{
-					property: 'font-size',
-					value: '12px'
-				}]
-			});
-
-			// spyOn( this.groupStyleView, 'getStyle' );
-			// spyOn( this.groupStyleView, 'getStyle' );
-
-			this.$itemStyle = new StyleView( item ).render();
-			
-			group.render();
-			this.groupStyleView = new StyleView( group );
-			spyOn( group, 'title' ).and.returnValue('Group');
-			this.$groupStyle = this.groupStyleView.render();
-		});
-
-		it('should have the correct class', function() {
-			expect( this.$itemStyle ).toHaveClass('style-component');
-			expect( this.$groupStyle ).toHaveClass('style-component');
-		});
-
-		it('should render component with the correct item title', function() {
-			expect( this.$itemStyle.find('.style-component-header-title') ).toHaveText('My Item');
-			expect( this.$groupStyle.find('.style-component-header-title') ).toHaveText('Group');
-		});
-
-		it('should render the correct sub-components for text', function() {
-			console.log( this.$itemStyle.html() );
-			expect( this.$itemStyle.find('.style-component-section').length ).toBe( 2 );
-			expect( this.$itemStyle.find('.style-component-section-row').length ).toBe( 4 );
-			expect( this.$itemStyle.find('.style-component-section-row-input').length ).toBe( 6 );
-			expect( this.$itemStyle.find('.style-component-section-row-segmented-button').length ).toBe( 1 );
-			expect( this.$itemStyle.find('.style-component-section-row-multiple-segmented-button').length ).toBe( 1 );
-		});
-
-		it('should render the correct sub-components for a group', function() {
-			expect( this.$groupStyle.find('.style-component-section').length ).toBe( 1 );
-			expect( this.$groupStyle.find('.style-component-section-row').length ).toBe( 1 );
-			expect( this.$groupStyle.find('.style-component-section-row-segmented-button').length ).toBe( 2 );
-		});
-
-		xit('should render sub-components with the correct default values', function() {
-
-		});
-
-		it('should clear existing components on item rendering', function() {
-			expect( this.$itemStyle.prevAll().length ).toBe( 0 );
-		});
-
-		it('should append to existing components on group rendering', function() {
-			expect( this.$groupStyle.prevAll().length ).toBe( 1 );
-		});
-	});
-
-	xdescribe('Updating', function() {
-
-		it('should remove existing components', function() {
-
-		});
-
-		it('should update the item and / or value view and / or group', function() {
-
-		});
-
-		it('should render the new components', function() {
-
-		});
-	});
-
-	xdescribe('Determining Parent Selections', function() {
-
-		it('throw an error if not passed an Item, ItemView or TemplateValueView', function() {
-
-		});
-	});
-
-	describe('Listening to Style View Updates', function() {
-
-	});
-
 	describe('Listening to Template Events', function() {
 
 	});
 
 	describe('Listening to Items Events', function() {
 
+	});
+
+	describe('Listening to Style Updates', function() {
+
+		it('should respond to input view events', function() {
+			
+		});
+
+		it('should respond to segmented button view events', function() {
+
+		});
+
+		it('should respond to multiple segmented button view events', function() {
+
+		});
+	});
+
+	describe('Emitting Change Events', function() {
+
+		it('should alert the app the style changes', function() {
+
+		});
 	});
 });

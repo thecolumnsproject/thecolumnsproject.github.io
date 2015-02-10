@@ -8,12 +8,14 @@ function StyleSegmentedButtonView( options ) {
 	this.property = '';
 	this.buttons = [];
 	this.value = '';
+	this.item = undefined;
 
 	if( options ) {
 		this.label = options.label || this.label;
 		this.property = options.property || this.property;
 		this.buttons = options.buttons || this.buttons;
 		this.value = options.value || this.value;
+		this.item = options.item || this.item;
 	}
 
 	this.template = Columns.Templates['templates/styling/components/segmented-button.hbs'];
@@ -46,7 +48,8 @@ StyleSegmentedButtonView.prototype.update = function( value ) {
 	// 	ui: 	ui
 	// });
 	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.StyleSegmentedButtonView.ValueDidUpdateForProperty', false, false, {
+	columnsEvent.initCustomEvent('Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', false, false, {
+		item: this.item,
 		property: this.property,
 		value: 	value
 	});

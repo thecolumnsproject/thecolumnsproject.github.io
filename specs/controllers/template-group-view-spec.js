@@ -169,6 +169,31 @@ describe('Template Group View', function() {
 		});
 	});	
 
+	xdescribe('Getting Layout Values for Group', function() {
+
+		beforeEach(function() {
+			var groupView = new TemplateGroupView({ layout: [{
+				property:'flex-direction',
+				value: 'row'
+			}, {
+				property: 'justify-content',
+				value: 'flex-start'
+			}, {
+				property: 'align-items',
+				value: 'center'
+			}] });
+			this.$group = groupView.render();
+		});
+
+		it('should return the corret layout value for an existing property', function() {
+			expect( TemplateGroupView.getLayout( 'align-items' ) ).toBe('flex-end');
+		});
+
+		it('should return undefined for a property that does not exist for the group', function() {
+
+		});
+	});
+
 	describe('Responding to Events', function() {
 
 		beforeEach(function() {

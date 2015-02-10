@@ -615,6 +615,83 @@ describe('Template View', function() {
 		});
 	});
 
+	describe('Template Querying', function() {
+
+		beforeEach(function() {
+			loadFixtures('template-with-values.html');
+		});
+
+		describe('Getting the value element for an Item', function() {
+
+			it('should return a jQuery object representing the template value view for the item', function() {
+				var item = new Item({ title: "My Item" });
+				expect( TemplateView.getValueForItem( item ) ).toBeInDOM();
+			});
+
+			it('should return undefined if the item does not exist in the template', function() {
+				var item = new Item({ title: "No Item" });
+				expect( TemplateView.getValueForItem( item ) ).toBeUndefined();
+			});
+
+			it('should only return DOM elements with the correct value class', function() {
+				var item = new Item({ title: "My Item" });
+				expect( TemplateView.getValueForItem( item ) ).toHaveClass('layout-template-row-value');
+			});
+
+			it('should throw an error if passing anything other than an Item', function() {
+				expect(function() {
+					TemplateView.getValueForItem( "hi" );
+				}.bind( this ))
+				.toThrow("expection: item must be of type Item");
+			});
+		});
+
+		describe('Getting the group elements for an item', function() {
+
+			beforeEach(function() {
+				spyOn( TemplateView, 'getValueForItem' ).and.callThrough();
+			});
+
+			it('should convert the item into a value jQuery object', function() {
+				var item = new Item({ title: "My Item" });
+				$groups = TemplateView.getGroupsForItem( item );
+				expect( TemplateView.getValueForItem ).toHaveBeenCalledWith( item );
+			});
+
+			it('should return an array of jQuery objects for a value with parents', function() {
+				var item = new Item({ title: "My Item" });
+				expect( TemplateView.getGroupsForItem( item ) ).toBeInDOM();
+			});
+
+			it('should return a minimum of one parent for the wrapper group', function() {
+				var item = new Item({ title: "Lonely Item" });
+				expect( TemplateView.getGroupsForItem( item ).length ).toBe( 1 );
+			});
+
+			it('should return undefined for an item that is not in the template', function() {
+				var item = new Item({ title: "No Item" });
+				expect( TemplateView.getGroupsForItem( item ) ).toBeUndefined();
+			});	
+
+			it('should return the right number of groups', function() {
+				var item = new Item({ title: "My Item" });
+				expect( TemplateView.getGroupsForItem( item ).length ).toBe( 2 );
+			});
+
+			it('should only return DOM elements with the correct group class', function() {
+				var item = new Item({ title: "My Item" });
+				expect( TemplateView.getGroupsForItem( item ) ).toHaveClass('layout-template-row-group');
+			});
+
+			it('should throw an error if passing anything other than a jQuery object or Item', function() {
+				expect(function() {
+					TemplateView.getGroupsForItem( "hi" );
+				}.bind( this ))
+				.toThrow("expection: item must be of type Item or jQuery template row");
+			});
+		});
+	})
+
 	describe('Responding to Value Drags', function() {
 
 		beforeEach(function() {

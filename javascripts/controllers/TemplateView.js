@@ -14,6 +14,58 @@ TemplateView = function( layout )  {
 	this.droppableItems = [];
 };
 
+// Class Methods
+// ----------------
+
+// Return the correct value DOM representation for an item
+// @param { Item } item -- the Item to retrive
+// @return { jQuery } the corresponding template represetation
+TemplateView.getValueForItem = function( item ) {
+	var $values;
+
+	// Throw an error if the item isn't of the correct type
+	if( !( item instanceof Item) ) {
+		throw "expection: item must be of type Item";
+		return;
+	}
+
+	// Find all the current values in the template
+	// and filter them by their inner text
+	// returning only the first that matches the item's title
+	$values = $(ROW_VALUE_SELECTOR).filter(function( i, element ) {
+		return $( element ).text().trim() === item.title;
+	});
+
+	// Return undefined if there are no resulting values
+	if ( !$values.length ) {
+		return undefined;
+	} else {
+		return $values;
+	}
+}
+
+TemplateView.getGroupsForItem = function( item ) {
+	var $value;
+
+	// If the item is of type Item, convert it into a value
+	if ( item instanceof Item ) {
+		$value = this.getValueForItem( item );
+	} else if ( item instanceof jQuery && item.hasClass(ROW_VALUE_SELECTOR) ) {
+		$value = item;
+	} else {
+		throw "expection: item must be of type Item or jQuery template row";
+	}
+
+	// If this value isn't in the template, return undefined
+	if( !$value ) {
+		return undefined;
+	}
+
+	// Return the value's parent groups
+	return $value.parents(ROW_GROUP_SELECTOR);
+
+}
+
 TemplateView.prototype.render = function() {
 
 	// Render the layout preview

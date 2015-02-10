@@ -44,6 +44,22 @@ Style.prototype.css = function() {
 	return css;
 };
 
+// Return the style value for a given property
+// @param { string } property
+// @return { string } value
+Style.prototype.get = function( property ) {
+	var value;
+
+	// Loop through each property until we find a match
+	this.styles.forEach(function( style, i ) {
+		if ( style.property === property ) {
+			value = style.value
+		}
+	});
+
+	return value;
+};
+
 Style.prototype._parseCSS = function( css ) {
 
 	// Accept a CSS string

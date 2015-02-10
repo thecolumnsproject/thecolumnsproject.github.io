@@ -1,11 +1,14 @@
-<div class="style-component-section-row-segmentedButton {{kind}}" {{#if property}}data-property='{{property.name}}'{{/if}}>
-	{{#buttons}}
-		<button data-property='{{property.name}}'
-				data-active-value='{{values.active}}'
-				data-inactive-value='{{values.inactive}}'
-				class="{{#ifIsCurrentValue values.active property.current_value}}active{{/ifIsCurrentValue}}">
-			{{#if icon}}<i class="icon-{{icon}}"></i>{{/if}}
-			{{#if text}}<span></span>{{/if}}
-		</button>
-	{{/buttons}}
+<div class="style-component-section-row-item">
+	<div class="style-component-section-row-multiple-segmented-button">
+		{{#buttons}}
+			<button data-property='{{property}}'
+					data-active-value='{{values.active}}'
+					data-inactive-value='{{values.inactive}}'
+					class="{{#ifIsCurrentValue values.active values.current}}active{{/ifIsCurrentValue}}">
+				{{#if icon}}<i class="icon-{{icon}}"></i>{{/if}}
+				{{#if text}}<span></span>{{/if}}
+			</button>
+		{{/buttons}}
+	</div>
+	<label class='style-component-section-row-item-label'>{{label}}</label>
 </div>

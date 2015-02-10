@@ -87,6 +87,33 @@ describe('Style Model', function() {
 		});
 	});
 
+	describe('Querying', function() {
+
+		beforeEach(function() {
+			this.style = new Style([{
+				property: 'font-size',
+				value: '12px'
+			}, {
+				property: 'color',
+				value: '#888'
+			}, {
+				property: 'font-weight',
+				value: '300'
+			}, {
+				property: 'margin-right',
+				value: '10px'
+			}]);
+		})
+		
+		it('should return the style attribute for a given property', function() {
+			expect( this.style.get('font-size') ).toBe('12px');
+		});
+
+		it('should return undefined if the item does not have the property set', function() {
+			expect( this.style.get('text-align') ).toBeUndefined();
+		});
+	});
+
 	describe('Merging', function() {
 
 		beforeEach(function() {

@@ -2,7 +2,7 @@ Columns.styleData.components['items'] = {
 	title: 'Items',
 	rows: [{
 		items: [{
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Layout',
 			property: {
 				name:'flex-direction'
@@ -15,7 +15,7 @@ Columns.styleData.components['items'] = {
 				icon: 'layout-vertical'
 			}]
 		}, {
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Alignment',
 			property: {
 				name:'align-items'

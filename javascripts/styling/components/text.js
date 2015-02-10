@@ -7,9 +7,7 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: true,
 			label: 'Size',
-			property: {
-				name: 'font-size'
-			}
+			property: 'font-size'
 		}, {
 			kind: 'multiple-segmented-button',
 			label: 'Style',
@@ -49,11 +47,9 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: false,
 			label: 'Color',
-			property: {
-				name:'color'
-			}
+			property: 'color'
 		}, {
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Alignment',
 			property: {
 				name: 'text-align'

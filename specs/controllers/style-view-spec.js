@@ -21,6 +21,12 @@ describe('Style View Spec', function() {
 			expect( styleView.item ).toEqual( item );
 		});
 
+		it('should optionally initialize with a TemplateGroupView', function() {
+			var item = new TemplateGroupView();
+			var styleView = new StyleView( item );
+			expect( styleView.item ).toEqual( item );
+		});
+
 		it('should throw an error if initialized with anything other than an Item, ItemView, TemplateValueView or TemplateGroupView', function() {
 			expect(function() {
 				new StyleView( "nope" );
@@ -109,7 +115,7 @@ describe('Style View Spec', function() {
 		});
 	});
 
-	xdescribe('Rendering', function() {
+	describe('Rendering', function() {
 
 		beforeEach(function() {
 			loadFixtures('style-bare.html');
@@ -135,26 +141,29 @@ describe('Style View Spec', function() {
 				}]
 			});
 
-			spyOn( this.groupStyleView, 'title' ).and.returnValue('group');
 			// spyOn( this.groupStyleView, 'getStyle' );
 			// spyOn( this.groupStyleView, 'getStyle' );
 
 			this.$itemStyle = new StyleView( item ).render();
+			
+			group.render();
 			this.groupStyleView = new StyleView( group );
+			spyOn( group, 'title' ).and.returnValue('Group');
 			this.$groupStyle = this.groupStyleView.render();
 		});
 
 		it('should have the correct class', function() {
 			expect( this.$itemStyle ).toHaveClass('style-component');
-			expect( this.$grouptyle ).toHaveClass('style-component');
+			expect( this.$groupStyle ).toHaveClass('style-component');
 		});
 
 		it('should render component with the correct item title', function() {
 			expect( this.$itemStyle.find('.style-component-header-title') ).toHaveText('My Item');
-			expect( this.$grouptyle.find('.style-component-header-title') ).toHaveText('Group');
+			expect( this.$groupStyle.find('.style-component-header-title') ).toHaveText('Group');
 		});
 
 		it('should render the correct sub-components for text', function() {
+			console.log( this.$itemStyle.html() );
 			expect( this.$itemStyle.find('.style-component-section').length ).toBe( 2 );
 			expect( this.$itemStyle.find('.style-component-section-row').length ).toBe( 4 );
 			expect( this.$itemStyle.find('.style-component-section-row-input').length ).toBe( 6 );

@@ -6,7 +6,7 @@ Columns.styleData.components['items'] = {
 	title: 'Items',
 	rows: [{
 		items: [{
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Layout',
 			property: {
 				name:'flex-direction'
@@ -19,7 +19,7 @@ Columns.styleData.components['items'] = {
 				icon: 'layout-vertical'
 			}]
 		}, {
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Alignment',
 			property: {
 				name:'align-items'
@@ -47,9 +47,7 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-top',
 			appendControls: true,
 			label: 'Top',
-			property: {
-				name:'margin-top'
-			}
+			property: 'margin-top'
 		}, {
 			kind: 'input',
 			type: 'tel',
@@ -57,9 +55,7 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-bottom',
 			appendControls: true,
 			label: 'Bottom',
-			property: {
-				name:'margin-bottom'
-			}
+			property: 'margin-bottom'
 		}]
 	}, {
 		items: [{
@@ -69,9 +65,7 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-left',
 			appendControls: true,
 			label: 'Left',
-			property: {
-				name:'margin-left'
-			}
+			property: 'margin-left'
 		}, {
 			kind: 'input',
 			type: 'tel',
@@ -79,9 +73,7 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-right',
 			appendControls: true,
 			label: 'Right',
-			property: {
-				name:'margin-right'
-			}
+			property: 'margin-right'
 		}]
 	}]
 };
@@ -94,9 +86,7 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: true,
 			label: 'Size',
-			property: {
-				name: 'font-size'
-			}
+			property: 'font-size'
 		}, {
 			kind: 'multiple-segmented-button',
 			label: 'Style',
@@ -136,11 +126,9 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: false,
 			label: 'Color',
-			property: {
-				name:'color'
-			}
+			property: 'color'
 		}, {
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Alignment',
 			property: {
 				name: 'text-align'

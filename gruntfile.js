@@ -113,7 +113,7 @@ module.exports = function(grunt) {
 		},
 		jasmine: {
 			app: {
-				src: ['javascripts/models/*.js', 'javascripts/controllers/*.js'],
+				src: ['javascripts/models/*.js', 'javascripts/controllers/*.js', 'javascripts/styling/**/*.js'],
 				options: {
 					specs: 'specs/**/*.js',
 					vendor: [
@@ -126,7 +126,6 @@ module.exports = function(grunt) {
 					helpers: [
 						'templates/embeddable-templates.js',
 						'templates/templates.js',
-						'javscripts/styling/**/*.js',
 						'compiled-javascripts/config.js'
 					]
 				}

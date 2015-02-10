@@ -40,10 +40,10 @@ StyleView.prototype.render = function() {
 	// First create the component skeleton
 	$component = $( COMPONENT_TEMPLATE({
 		type: type,
-		title: title
+		name: title
 	}) );
 
-	$componentBody = component.find('.style-component-body');
+	$componentBody = $component.find('.style-component-body');
 
 	// Next, loop through the data
 	// creating the sections from the inside out
@@ -54,13 +54,19 @@ StyleView.prototype.render = function() {
 
 	this.$style = $component;
 
-	$('#style').append( this.$style );
+	// Clear the style pane if we're about to render an item.
+	// Otherwise, append to the end of the pane
+	if( this.item instanceof Item ) {
+		$('.style-component').remove();
+	}
+	
+	$('#styling').append( this.$style );
 	return this.$style;
 };
 
 StyleView.prototype._renderSection = function( section ) {
 	var $section,
-		$sectionRows;
+		$sectionRows,
 		$row;
 
 	$section = $( SECTION_TEMPLATE({
@@ -100,6 +106,7 @@ StyleView.prototype._renderItem = function( item ) {
 	var item;
 
 	if ( item.kind === 'input' ) {
+
 		item = new StyleInputView({
 			unit: item.unit,
 			type: item.type,
@@ -108,8 +115,38 @@ StyleView.prototype._renderItem = function( item ) {
 			prependIcon: item.prependIcon,
 			label: item.label,
 			property: item.property,
-			value: item instanceof Item ? item.style.get( item.property ) : item.getStyle( item.property )
+			value: this.item instanceof Item ? this.item.style.get( item.property ) : this.item.getStyle( item.property )
 		});
-	}
+		return item.render();
 
-}
+	} else if ( item.kind === 'segmented-button' ) {
+
+		item = new StyleSegmentedButtonView({
+			label: item.label,
+			property: item.property,
+			buttons: item.buttons,
+			value: this.item instanceof Item ? this.item.style.get( item.property ) : this.item.getStyle( item.property )
+		});
+		return item.render();
+
+	} else if ( item.kind === 'multiple-segmented-button' ) {
+
+		item = new StyleMultipleSegmentedButtonView({
+			label: item.label,
+			buttons: item.buttons.map(function( button, i ) {
+				return {
+					property: button.property,
+					values: {
+						active: button.values.active,
+						inactive: button.values.inactive,
+						current: this.item instanceof Item ? this.item.style.get( button.property ) : this.item.getStyle( button.property )
+					}
+				};
+			}.bind( this ))
+		});
+		return item.render();
+
+	} else {
+		return undefined;
+	}
+};

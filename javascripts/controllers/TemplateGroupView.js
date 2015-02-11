@@ -39,7 +39,7 @@ TemplateGroupView.prototype.render = function() {
 	return this.$group;
 };
 
-TemplateGroupView.prototype.update = function() {
+TemplateGroupView.prototype.update = function( property, value ) {
 
 	// Replace each layout value with a potential new one
 	this.layout.forEach(function( layout, i ) {
@@ -113,6 +113,30 @@ TemplateGroupView.prototype.removePlaceholders = function() {
 	this.$group.find(ROW_GROUP_SELECTOR).filter('.placeholder').children().unwrap();
 };
 
+TemplateGroupView.prototype._mergeLayout = function( property, value ) {
+	var existingProperty = false;
+
+	// Loop through the old properties
+	// comparing each with the new property.
+	// Replace an existing property anytime a new one matches it.
+	// At the end, append any remaining new properties to the merged styles array.
+	this.layout.forEach(function( layout, i ) {
+		if ( layout.property === property ) {
+			layout.value = value;
+			this.layout[ i ] = layout;
+			existingProperty = true;
+		}
+	}.bind( this ));
+
+	// Add all remaining new styles to the styles array
+	if ( !existingProperty ) {
+		this.layout.push({
+			property: property,
+			value: value
+		});
+	}
+};
+
 TemplateGroupView.prototype._setupDrop = function() {
 	this.$group.droppable({
 		tolerance: 'pointer'
@@ -183,12 +207,12 @@ TemplateGroupView.prototype._setupEvents = function() {
 
 	// Listen to updates for this group
 	// and update if there's a match
-	document.addEventListener( 'Columns.StyleView.LayoutDidChangeForGroupView', this._onGroupDidChange.bind( this ), false);
+	document.addEventListener( 'Columns.StyleView.PropertyDidUpdateWithValueForGroupView', this._onGroupDidChange.bind( this ), false);
 };
 
-TemplateGroupView.prototype._onGroupDidChange = function() {
+TemplateGroupView.prototype._onGroupDidChange = function( event ) {
 	var $newGroup = event.detail.groupView.$group;
 	if ( this.$group.is( $newGroup ) ) {
-		this.update();
+		this.update( event.detail.property, event.detail.value );
 	}
 };

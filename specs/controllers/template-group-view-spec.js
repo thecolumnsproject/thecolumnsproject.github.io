@@ -92,7 +92,56 @@ describe('Template Group View', function() {
 		});
 	});
 
-	describe('Updating', function() {
+	describe('Updating the Layout Object', function() {
+
+		beforeEach(function() {
+			this.groupView = new TemplateGroupView({
+				layout: [{
+					property:'flex-direction',
+					value: 'row'
+				}, {
+					property: 'justify-content',
+					value: 'flex-start'
+				}, {
+					property: 'align-items',
+					value: 'center'
+				}]
+			});
+		});
+
+		it('should replace existing layouts', function() {
+			this.groupView._mergeLayout( 'align-items', 'left' );
+			expect( this.groupView.layout ).toEqual( [{
+				property:'flex-direction',
+				value: 'row'
+			}, {
+				property: 'justify-content',
+				value: 'flex-start'
+			}, {
+				property: 'align-items',
+				value: 'left'
+			}] );
+		});
+
+		it('should append new layouts', function() {
+			this.groupView._mergeLayout( 'flex-grow', '0' );
+			expect( this.groupView.layout ).toEqual( [{
+				property:'flex-direction',
+				value: 'row'
+			}, {
+				property: 'justify-content',
+				value: 'flex-start'
+			}, {
+				property: 'align-items',
+				value: 'center'
+			}, {
+				property: 'flex-grow',
+				value: '0'
+			}] );
+		});
+	});
+
+	describe('Updating the Group View', function() {
 
 		beforeEach(function() {
 			this.groupView = new TemplateGroupView({
@@ -249,23 +298,23 @@ describe('Template Group View', function() {
 
 		it('should respond to layout change events for itself', function() {
 			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.StyleView.LayoutDidChangeForGroupView', false, false, {
-				styleView: {},
+			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', false, false, {
 				groupView: this.groupView,
-				layout: this.layout
+				property: 'align-items',
+				value: 'left'
 			});
 			document.dispatchEvent( event );
 
-			expect( this.spy ).toHaveBeenCalled();
+			expect( this.spy ).toHaveBeenCalledWith( 'align-items', 'left' );
 		});
 
 		it('should ignore Item change events for other items', function() {
 			var newGroupView = new TemplateGroupView( this.layout );
 			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.Item.DidChange', false, false, {
-				styleView: {},
+			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', false, false, {
 				groupView: newGroupView,
-				layout: this.layout
+				property: 'align-items',
+				value: 'left'
 			});
 			document.dispatchEvent( event );
 

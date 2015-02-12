@@ -213,6 +213,7 @@ TemplateGroupView.prototype._setupEvents = function() {
 TemplateGroupView.prototype._onGroupDidChange = function( event ) {
 	var $newGroup = event.detail.groupView.$group;
 	if ( this.$group.is( $newGroup ) ) {
-		this.update( event.detail.property, event.detail.value );
+		this._mergeLayout( event.detail.property, event.detail.value )
+		this.update();
 	}
 };

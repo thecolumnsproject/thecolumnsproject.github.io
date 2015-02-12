@@ -14,6 +14,8 @@ Item = function( params ) {
 		this.title 	= params.title || '';
 		this.style 	= new Style( params.style );
 	}
+
+	this._setupEventListeners();
 }
 
 Item.prototype.formattedTitle = function() {
@@ -65,3 +67,32 @@ Item.prototype.is = function( item ) {
 		throw "exception: Comparison must be with another Item";
 	}
 }
+
+Item.prototype._setupEventListeners = function() {
+
+	// Listen for style changes on this Item
+	document.addEventListener( 'Columns.StyleView.PropertyDidUpdateWithValueForItem', this._onItemStyleDidChange.bind( this ), false );
+};
+
+Item.prototype._onItemStyleDidChange = function( event ) {
+	if ( this.is( event.detail.item ) ) {
+		this.style.update( [{
+			property: event.detail.property,
+			value: event.detail.value
+		}] );
+		this._emitChange();
+	}
+};
+
+Item.prototype._emitChange = function() {
+
+	// Alert any listeners that the group has changed
+	// var event = new CustomEvent( 'Columns.Item.DidChange', {
+	// 	groupView: 	this
+	// });
+	var event = document.createEvent('CustomEvent');
+	event.initCustomEvent('Columns.Item.DidChange', false, false, {
+		item: 	this
+	});
+	document.dispatchEvent(event);
+};

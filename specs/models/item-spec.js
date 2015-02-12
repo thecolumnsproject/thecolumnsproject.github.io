@@ -101,5 +101,54 @@ describe('Item Model', function() {
 			}.bind( this ))
 			.toThrow("exception: Comparison must be with another Item");
 		});
-	})
+	});
+
+	describe('Responding to Events', function() {
+
+		beforeEach(function() {
+			this.item = new Item({ title: "My Item" });
+			spyOn( this.item.style, 'update');
+			spyOn( this.item, '_emitChange' );
+		});
+
+		it('should respond to style change events for itself', function() {
+			var event = document.createEvent('CustomEvent');
+			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForItem', false, false, {
+				item: this.item,
+				property: 'font-size',
+				value: '12px'
+			});
+			document.dispatchEvent( event );
+
+			expect( this.item.style.update ).toHaveBeenCalledWith( [{ property: 'font-size', value: '12px' }] );
+			expect( this.item._emitChange ).toHaveBeenCalled();
+		});
+
+		it('should ignore Item change events for other items', function() {
+			var newItem = new Item({ title: "Other Item" });
+			var event = document.createEvent('CustomEvent');
+			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupItem', false, false, {
+				item: newItem,
+				property: 'font-size',
+				value: '12px'
+			});
+			document.dispatchEvent( event );
+
+			expect( this.item.style.update ).not.toHaveBeenCalled();
+			expect( this.item._emitChange ).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('Emitting Change Events', function() {
+
+		it('should alert the app that it has been updated', function() {
+			var item = new Item({ title: "My Item" });
+			spyOn( document, 'dispatchEvent' );
+			item._emitChange();
+
+			expect( document.dispatchEvent ).toHaveBeenCalled();
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Item.DidChange');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( item );
+		});
+	});
 });

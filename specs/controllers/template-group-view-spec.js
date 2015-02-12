@@ -293,7 +293,8 @@ describe('Template Group View', function() {
 			}];
 			this.groupView = new TemplateGroupView({ layout: this.layout });
 			this.groupView.render();
-			this.spy = spyOn(this.groupView, 'update');
+			spyOn( this.groupView, '_mergeLayout');
+			spyOn( this.groupView, 'update');
 		});
 
 		it('should respond to layout change events for itself', function() {
@@ -305,10 +306,11 @@ describe('Template Group View', function() {
 			});
 			document.dispatchEvent( event );
 
-			expect( this.spy ).toHaveBeenCalledWith( 'align-items', 'left' );
+			expect( this.groupView._mergeLayout ).toHaveBeenCalledWith( 'align-items', 'left' );
+			expect( this.groupView.update ).toHaveBeenCalled();
 		});
 
-		it('should ignore Item change events for other items', function() {
+		it('should ignore change events for other groups', function() {
 			var newGroupView = new TemplateGroupView( this.layout );
 			var event = document.createEvent('CustomEvent');
 			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', false, false, {
@@ -318,7 +320,8 @@ describe('Template Group View', function() {
 			});
 			document.dispatchEvent( event );
 
-			expect( this.spy ).not.toHaveBeenCalled();
+			expect( this.groupView._mergeLayout ).not.toHaveBeenCalled();
+			expect( this.groupView.update ).not.toHaveBeenCalled();
 		});
 	});
 

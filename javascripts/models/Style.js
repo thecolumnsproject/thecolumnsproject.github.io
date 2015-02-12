@@ -17,6 +17,31 @@ Style = function( styles ) {
 	}
 };
 
+Style.parseCSS = function( css ) {
+
+	// Accept a CSS string
+	// and convert it into an array of css properties and values
+	if ( typeof css !== 'string' ) throw "exception: CSS must be in string format";
+
+	var styleObj = [];
+
+	// Remove all spaces
+	css = css.replace(/ /g, '');
+	// Remove the last semicolon
+	css = css.slice(0, -1);
+	// Split styles
+	styles = css.split(';');
+	// Creat object for each style
+	styles.forEach(function(style, i) {
+		style = style.split(':');
+		styleObj.push({
+			property: style[0],
+			value: style[1]
+		});
+	});
+	return styleObj;
+};
+
 Style.prototype.update = function( styles ) {
 	var newStyles = [];
 
@@ -62,27 +87,7 @@ Style.prototype.get = function( property ) {
 
 Style.prototype._parseCSS = function( css ) {
 
-	// Accept a CSS string
-	// and convert it into an array of css properties and values
-	if ( typeof css !== 'string' ) throw "exception: CSS must be in string format";
-
-	var styleObj = [];
-
-	// Remove all spaces
-	css = css.replace(/ /g, '');
-	// Remove the last semicolon
-	css = css.slice(0, -1);
-	// Split styles
-	styles = css.split(';');
-	// Creat object for each style
-	styles.forEach(function(style, i) {
-		style = style.split(':');
-		styleObj.push({
-			property: style[0],
-			value: style[1]
-		});
-	});
-	return styleObj;	
+	return Style.parseCSS( css );	
 };
 
 Style.prototype._mergeCSS = function( css ) {

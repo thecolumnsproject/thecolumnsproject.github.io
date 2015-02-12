@@ -488,6 +488,7 @@ describe('Template View', function() {
 					this.item 		= new Item({ title: "My Item" });
 					this.$group 	= new TemplateGroupView().render();
 					this.$previous 	= new TemplateValueView( new Item({ title: "Other Item" }) ).render();
+					spyOn( this.templateView, '_emitChange' );
 				});
 
 				it('should place the new value as the first child of the parent if the previous item is null', function() {
@@ -513,14 +514,11 @@ describe('Template View', function() {
 					expect( this.$group.children().eq( 1 ) ).not.toHaveClass("placeholder");
 				});
 
-				it('should emit a change event with the new item when not a placeholder', function() {
-					spyOn(document, 'dispatchEvent');
+				it('should emit a change event if the new item is not a placeholder', function() {
 					this.$group.append( this.$previous );
 					this.templateView.insertDropBeforeElementInParentWithPlaceholder( this.item, this.$previous, this.$group, false );
 
-					expect( document.dispatchEvent ).toHaveBeenCalled();
-					expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateView.DidChange');
-					expect( document.dispatchEvent.calls.argsFor(0)[0].detail.templateView ).toEqual( this.templateView );
+					expect( this.templateView._emitChange ).toHaveBeenCalled();
 				});
 
 				xit('should send an analytics event about the new item when not a placeholder', function() {
@@ -999,6 +997,18 @@ describe('Template View', function() {
 				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-24px' );
 			});
 		});
+	});
 
+	describe('Emitting Change Events', function() {
+
+		it('should emit a change event', function() {
+			var templateView = new TemplateView();
+			spyOn(document, 'dispatchEvent');
+			templateView._emitChange();
+
+			expect( document.dispatchEvent ).toHaveBeenCalled();
+			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateView.DidChange');
+			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.templateView ).toEqual( templateView );
+		});
 	});
 });

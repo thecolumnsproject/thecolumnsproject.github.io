@@ -7,7 +7,12 @@ Handlebars.registerPartial('layout', Columns.Templates['templates/layout/layout.
 Handlebars.registerPartial('style', Columns.Templates['templates/layout/style.hbs']);
 
 var ROW_GROUP_SELECTOR = '.layout-template-row-group', 
-	ROW_VALUE_SELECTOR = '.layout-template-row-value';
+	ROW_VALUE_SELECTOR = '.layout-template-row-value',
+	LAYOUT_PROPERTIES = [
+		'align-items',
+		'flex-direction',
+		'justify-content',
+	];
 
 TemplateGroupView = function( params ) {
 
@@ -23,6 +28,27 @@ TemplateGroupView = function( params ) {
 
 	this.template = Columns.Templates['templates/layout/row-group.hbs'];
 	this.$group;
+};
+
+// Return the layout properties as an object,
+// given any jQuery group object
+TemplateGroupView.layoutForGroup = function( $group ) {
+	var layout = [];
+
+	if ( !( $group instanceof jQuery ) ) {
+		throw "exception: group must be jQuery object";
+	}
+
+	LAYOUT_PROPERTIES.forEach(function( property, i ) {
+		var value = $group.data( property );
+		if ( value ) {
+			layout.push({
+				property: property,
+				value: value
+			});
+		}
+	});
+	return layout;
 };
 
 TemplateGroupView.prototype.render = function() {

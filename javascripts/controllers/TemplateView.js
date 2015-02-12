@@ -155,7 +155,16 @@ TemplateView.prototype.removeValue = function( valueView ) {
 };
 
 TemplateView.prototype._emitChange = function() {
-
+	
+	// Emit a change event
+	// var event = new CustomEvent( 'Columns.TemplateView.DidChange', {
+	// templateView: 	this
+	// });
+	var event = document.createEvent('CustomEvent');
+	event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
+		templateView: 	this
+	});
+	document.dispatchEvent(event);
 };
 
 TemplateView.prototype._setupEvents = function() {
@@ -380,15 +389,9 @@ TemplateView.prototype.insertDropBeforeElementInParentWithPlaceholder = function
 		$parent.prepend( $value );
 	}
 
-	// Emit a change event
-	// var event = new CustomEvent( 'Columns.TemplateView.DidChange', {
-	// templateView: 	this
-	// });
-	var event = document.createEvent('CustomEvent');
-	event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
-		templateView: 	this
-	});
-	document.dispatchEvent(event);
+	if ( !placeholder ) {
+		this._emitChange();
+	} 
 };
 
 TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = function( event, $parent, placeholder ) {

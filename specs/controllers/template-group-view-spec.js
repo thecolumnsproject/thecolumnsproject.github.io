@@ -51,6 +51,29 @@ describe('Template Group View', function() {
 		});
 	});
 
+	describe('Generating Layout Objects', function() {
+
+		it('should return a layout object given a jQuery object', function() {
+			var $group = $('<div />').data({
+				'align-items': 'center',
+				'flex-direction': 'column'
+			});
+			expect( TemplateGroupView.layoutForGroup( $group ) ).toEqual([{
+				property: 'align-items',
+				value: 'center'
+			}, {
+				property: 'flex-direction',
+				value: 'column'
+			}]);
+		});
+
+		it('should throw an error if not passed a jQuery object', function() {
+			expect(function() {
+				TemplateGroupView.layoutForGroup( 'Hi' );
+			}).toThrow("exception: group must be jQuery object");
+		});
+	});
+
 	describe('Rendering', function() {
 
 		beforeEach(function() {

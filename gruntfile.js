@@ -121,7 +121,8 @@ module.exports = function(grunt) {
 						'bower_components/handlebars/handlebars.js',
 						'bower_components/velocity/velocity.js',
 						'vendor/jquery-ui.min.js',
-						'bower_components/jasmine-jquery/lib/jasmine-jquery.js'
+						'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+						'bower_components/Papa-Parse/papaparse.js'
 					],
 					helpers: [
 						'templates/embeddable-templates.js',

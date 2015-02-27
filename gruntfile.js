@@ -122,6 +122,7 @@ module.exports = function(grunt) {
 						'bower_components/velocity/velocity.js',
 						'vendor/jquery-ui.min.js',
 						'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+						'bower_components/jasmine-ajax/lib/mock-ajax.js',
 						'bower_components/Papa-Parse/papaparse.js'
 					],
 					helpers: [

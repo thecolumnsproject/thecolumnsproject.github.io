@@ -120,7 +120,7 @@ UploadView.prototype._parseFile = function( file ) {
 			this._parseRow( row, handle, file.name );
 		}.bind( this ),
 		complete: function( results ) {
-			this._onParseComplete( results, file.name );
+			this._onParseComplete( results, file );
 		}.bind( this )
 	});
 };
@@ -164,7 +164,7 @@ UploadView.prototype._createColumnItems = function( data, fileName ) {
 	document.dispatchEvent(columnsEvent);
 };
 
-UploadView.prototype._createRow = function( data, fileName ) {
+UploadView.prototype._createRow = function( row, fileName ) {
 
 	// Announce row parsing
 	// Alert any listeners that the group has changed
@@ -177,12 +177,12 @@ UploadView.prototype._createRow = function( data, fileName ) {
 	columnsEvent.initCustomEvent('Columns.UploadView.DidParseDataRowForFile', false, false, {
 		uploadView: 	this,
 		fileName: 		fileName,
-		row: 			data
+		row: 			row
 	});
 	document.dispatchEvent(columnsEvent);
 };
 
-UploadView.prototype._onParseComplete = function( results, fileName ) {
+UploadView.prototype._onParseComplete = function( results, file ) {
 
 	// Announce parsing complete
 	// Alert any listeners that the group has changed
@@ -193,7 +193,7 @@ UploadView.prototype._onParseComplete = function( results, fileName ) {
 	var columnsEvent = document.createEvent('CustomEvent');
 	columnsEvent.initCustomEvent('Columns.UploadView.DidCompleteParseForFile', false, false, {
 		uploadView: 	this,
-		fileName: 		fileName
+		file: 			file
 	});
 	document.dispatchEvent(columnsEvent);
 };

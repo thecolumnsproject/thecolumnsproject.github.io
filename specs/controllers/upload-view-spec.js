@@ -207,16 +207,18 @@ describe('Upload View', function() {
 			});
 
 			it('should emit an event announcing the parsing of a data row', function() {
-				var data = [
-					'Jeremy',
-					'Lubin',
-					'Princeton'
-				];
-				this.upload._createRow( data, 'test.csv' );
+				var row = {
+					data: [
+						'Jeremy',
+						'Lubin',
+						'Princeton'
+					]
+				};
+				this.upload._createRow( row, 'test.csv' );
 				expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.UploadView.DidParseDataRowForFile');
 				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.uploadView ).toEqual( this.upload );
 				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.fileName ).toEqual( 'test.csv' );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.row ).toEqual( data );
+				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.row ).toEqual( row );
 			});
 		});
 
@@ -228,10 +230,11 @@ describe('Upload View', function() {
 
 			it('should emit an event with the data', function() {
 				var results = {};
-				this.upload._onParseComplete( results, 'test.csv' );
+				var file = { name: 'test.csv' };
+				this.upload._onParseComplete( results, file );
 				expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.UploadView.DidCompleteParseForFile');
 				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.uploadView ).toEqual( this.upload );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.fileName ).toEqual( 'test.csv' );
+				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.file ).toEqual( file );
 			});
 		});
 	});

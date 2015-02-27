@@ -75,6 +75,12 @@ UploadView.prototype._setupEventListeners = function() {
 
 	// Listen for window resize events
 	$(window).on( 'resize', this._onWindowResize.bind( this ) );
+
+	// Listen for successful table uploads
+	document.addEventListener( 'Columns.Table.DidUploadWithSuccess', this._onTableUploadSuccess.bind( this ), false );
+
+	// Listen for failed table uploads
+	document.addEventListener( 'Columns.Table.DidUploadWithFailure', this._onTableUploadFail.bind( this ), false );
 };
 
 UploadView.prototype._onUploadClick = function( event ) {
@@ -112,6 +118,17 @@ UploadView.prototype._onFileChoice = function( event ) {
 
 UploadView.prototype._onWindowResize = function( event ) {
 
+};
+
+UploadView.prototype._onTableUploadSuccess = function( event ) {
+
+	this._setLoading( false );
+	this.hide();
+};
+
+UploadView.prototype._onTableUploadFail = function( event ) {
+
+	this._setLoading( false, "Shoot, something went wrong. Mind trying a different .csv?")
 };
 
 UploadView.prototype._parseFile = function( file ) {

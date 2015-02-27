@@ -122,6 +122,50 @@ describe('Upload View', function() {
 		});
 	});
 
+	describe('Responding to Table Events', function() {
+
+		describe('Upload Success', function() {
+
+			beforeEach(function() {
+				this.columnsEvent = document.createEvent('CustomEvent');
+				this.columnsEvent.initCustomEvent('Columns.Table.DidUploadWithSuccess', false, false, {
+					table: 	new Table()
+				});
+				this.upload.render();
+			});
+
+			it('should turn off the loading message', function() {
+				spyOn( this.upload, '_setLoading' );
+				document.dispatchEvent( this.columnsEvent );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false );
+			});
+
+			it('should hide', function() {
+				spyOn( this.upload, 'hide' );
+				document.dispatchEvent( this.columnsEvent );
+				expect( this.upload.hide ).toHaveBeenCalled();
+			});
+		});
+
+		describe('Upload Failure', function() {
+
+			beforeEach(function() {
+				this.columnsEvent = document.createEvent('CustomEvent');
+				this.columnsEvent.initCustomEvent('Columns.Table.DidUploadWithFailure', false, false, {
+					table: 	new Table()
+				});
+				this.upload.render();
+			});
+
+			it('should update the loading message', function() {
+				spyOn( this.upload, '_setLoading' );
+				document.dispatchEvent( this.columnsEvent );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong. Mind trying a different .csv?" );
+			});
+
+		});
+	});
+
 	describe('Parsing a CSV', function() {
 
 		beforeEach(function() {

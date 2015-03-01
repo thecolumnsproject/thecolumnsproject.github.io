@@ -122,17 +122,6 @@ Table.prototype._updateTable = function() {
 		columns: this.stringFromColumns( this.columns )
 	};
 	$.post(config.api.host + '/columns/table/' + this.id, data, this._onUpdateSuccess.bind( this ) );
-
-		// function(response) {
-		// if (response.status == 'success') {
-		// 	console.log('Data updated!');
-		// } else {
-		// 	console.log('Problem updating!');
-		// 	console.log(response.message);
-		// }
-	// }
-
-	// );
 };
 
 Table.prototype._setupEventListeners = function() {
@@ -145,6 +134,9 @@ Table.prototype._setupEventListeners = function() {
 
 	// Listen for parsing completion
 	document.addEventListener( 'Columns.UploadView.DidCompleteParseForFile', this._onParseComplete.bind( this ), false );
+
+	// Listen for updates from the details panel
+	document.addEventListener( 'Columns.EmbedDetailsView.DidUpdatePropertyWithValue', this._onTableUpdate.bind( this ), false );
 
 };
 
@@ -193,6 +185,15 @@ Table.prototype._onUpdateSuccess = function( data, status, request ) {
 	}
 
 	this._emitUpdateSuccess();
+};
+
+Table.prototype._onTableUpdate = function( event ) {
+	var props = {};
+
+	props[ event.detail.property ] = event.detail.value;
+
+	this._update( props );
+	this._updateTable();
 };
 
 Table.prototype.stringFromColumns = function( columns ) {

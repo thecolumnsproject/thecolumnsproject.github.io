@@ -257,9 +257,20 @@ describe('Table', function () {
 			expect( this.table._uploadFile ).toHaveBeenCalledWith( file );
 		});
 
-		xit('should listen for updates to table meta-data', function() {
+		it('should listen for updates to table meta-data', function() {
 			spyOn( this.table, '_update' );
+			spyOn( this.table, '_updateTable' );
 
+			var columnsEvent = document.createEvent('CustomEvent');
+			columnsEvent.initCustomEvent('Columns.EmbedDetailsView.DidUpdatePropertyWithValue', false, false, {
+				embed: 	new EmbedDetailsView(),
+				property: 'title',
+				value: 'My New Table Name'
+			});
+			document.dispatchEvent(columnsEvent);
+
+			expect( this.table._update ).toHaveBeenCalledWith({ title: 'My New Table Name' });
+			expect( this.table._updateTable ).toHaveBeenCalled();
 		});
 
 	});

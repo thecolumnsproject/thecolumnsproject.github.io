@@ -130,7 +130,7 @@ Columns.Layout = new function() {
 					},{
 						type: 'single',
 						data: Columns.data.columns[1].toLowerCase().replace(/ /g, '_'),
-						style: Columns.Layout.defaults.style[1]
+						style: Columns.Layout.defaults.styles[1]
 					}]
 				}];
 				break;

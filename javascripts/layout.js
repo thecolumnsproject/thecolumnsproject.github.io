@@ -83,8 +83,8 @@ Columns['data'] = {
 	// }]
 };
 
-Columns.Upload.init();
-Columns.Template.init();
+// Columns.Upload.init();
+// Columns.Template.init();
 // Columns.Items.init();
 // Columns.Styling.init();
 // Columns.Styling.updateStyling($(Columns.Template.$template).first());

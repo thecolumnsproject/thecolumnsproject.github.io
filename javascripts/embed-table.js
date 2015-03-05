@@ -498,7 +498,12 @@ $$(function() {
 		closeMc.on('tap', function(e) {
 			var $$table = _this.$$table.find('.columns-table');
 			if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
-				_this.collapse();
+				
+				// Add a set timeout here to allow the
+				// Prevent Ghost Click to do its work
+				setTimeout(function() {
+					_this.collapse();
+				}, 0 );
 
 				// Track this tap
 				if ( _this.preview ) {

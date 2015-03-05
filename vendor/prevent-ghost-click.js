@@ -38,7 +38,8 @@
             var y = coordinates[i][1];
  
             // within the range, so prevent the click
-            if (Math.abs(ev.clientX - x) < threshold && Math.abs(ev.clientY - y) < threshold) {
+            // if (Math.abs(ev.clientX - x) < threshold && Math.abs(ev.clientY - y) < threshold) {
+            if ( document.elementFromPoint(x,y) === ev.target ) {
                 ev.stopPropagation();
                 ev.preventDefault();
                 break;

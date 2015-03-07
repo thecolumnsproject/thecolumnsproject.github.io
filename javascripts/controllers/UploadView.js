@@ -77,10 +77,10 @@ UploadView.prototype._setupEventListeners = function() {
 	$(window).on( 'resize', this._onWindowResize.bind( this ) );
 
 	// Listen for successful table uploads
-	document.addEventListener( 'Columns.Table.DidUploadWithSuccess', this._onTableUploadSuccess.bind( this ), false );
+	ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', this._onTableUploadSuccess.bind( this ) );
 
 	// Listen for failed table uploads
-	document.addEventListener( 'Columns.Table.DidUploadWithFailure', this._onTableUploadFail.bind( this ), false );
+	ColumnsEvent.on( 'Columns.Table.DidUploadWithFailure', this._onTableUploadFail.bind( this ) );
 };
 
 UploadView.prototype._onUploadClick = function( event ) {
@@ -108,12 +108,16 @@ UploadView.prototype._onFileChoice = function( event ) {
 		// uploadView: 	this,
 		// file: 			file
 	// });
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.UploadView.DidChooseFile', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.UploadView.DidChooseFile', false, false, {
+	// 	uploadView: 	this,
+	// 	file: 			file
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.UploadView.DidChooseFile', {
 		uploadView: 	this,
 		file: 			file
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 UploadView.prototype._onWindowResize = function( event ) {
@@ -152,9 +156,9 @@ UploadView.prototype._parseRow = function( row, handle, fileName ) {
 	// 
 	// If it's beyond the 20th row, stop the parsing
 	if ( this.parsedRows === 0 ) {
-		this._createColumnItems( row.data, fileName );
+		this._createColumnItems( row.data[ 0 ], fileName );
 	} else if ( this.parsedRows <= MAX_ROWS ) {
-		this._createRow( row.data, fileName );
+		this._createRow( row.data[ 0 ], fileName );
 	} else {
 		handle.abort();
 	}
@@ -172,13 +176,18 @@ UploadView.prototype._createColumnItems = function( data, fileName ) {
 		// fileName: 		fileName,
 		// colums: 		data
 	// });
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.UploadView.DidParseColumnNamesForFile', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.UploadView.DidParseColumnNamesForFile', false, false, {
+	// 	uploadView: 	this,
+	// 	fileName: 		fileName,
+	// 	columns: 		data
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.UploadView.DidParseColumnNamesForFile', {
 		uploadView: 	this,
 		fileName: 		fileName,
 		columns: 		data
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 UploadView.prototype._createRow = function( row, fileName ) {
@@ -190,13 +199,18 @@ UploadView.prototype._createRow = function( row, fileName ) {
 		// fileName: 		fileName,
 		// row: 			data
 	// });
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.UploadView.DidParseDataRowForFile', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.UploadView.DidParseDataRowForFile', false, false, {
+	// 	uploadView: 	this,
+	// 	fileName: 		fileName,
+	// 	row: 			row
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.UploadView.DidParseDataRowForFile', {
 		uploadView: 	this,
 		fileName: 		fileName,
 		row: 			row
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 UploadView.prototype._onParseComplete = function( results, file ) {
@@ -207,10 +221,14 @@ UploadView.prototype._onParseComplete = function( results, file ) {
 		// uploadView: 		this,
 		// fileName: 		fileName
 	// });
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.UploadView.DidCompleteParseForFile', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.UploadView.DidCompleteParseForFile', false, false, {
+	// 	uploadView: 	this,
+	// 	file: 			file
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.UploadView.DidCompleteParseForFile', {
 		uploadView: 	this,
 		file: 			file
 	});
-	document.dispatchEvent(columnsEvent);
 };

@@ -76,11 +76,15 @@ TemplateGroupView.prototype.update = function( property, value ) {
 	// var event = new CustomEvent( 'Columns.GroupView.DidChange', {
 	// 	groupView: 	this
 	// });
-	var event = document.createEvent('CustomEvent');
-	event.initCustomEvent('Columns.TemplateGroupView.DidChange', false, false, {
+	// var event = document.createEvent('CustomEvent');
+	// event.initCustomEvent('Columns.TemplateGroupView.DidChange', false, false, {
+	// 	groupView: 	this
+	// });
+	// document.dispatchEvent(event);
+
+	ColumnsEvent.send('Columns.TemplateGroupView.DidChange', {
 		groupView: 	this
 	});
-	document.dispatchEvent(event);
 
 	return this.$group;
 };
@@ -177,14 +181,20 @@ TemplateGroupView.prototype._setupDrop = function() {
 		// event: 		event,
 		// ui: 		ui
 		// });
-		var columnsEvent = document.createEvent('CustomEvent');
-		columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', false, false, {
+		// var columnsEvent = document.createEvent('CustomEvent');
+		// columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', false, false, {
+		// 	groupView: 	this,
+		// 	valueView: 	ui.droppable,
+		// 	event: 		event,
+		// 	ui: 		ui
+		// });
+		// document.dispatchEvent(columnsEvent);
+		ColumnsEvent.send('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', {
 			groupView: 	this,
 			valueView: 	ui.droppable,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -197,14 +207,20 @@ TemplateGroupView.prototype._setupDrop = function() {
 		// event: 		event,
 		// ui: 		ui
 		// });
-		var columnsEvent = document.createEvent('CustomEvent');
-		columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', false, false, {
+		// var columnsEvent = document.createEvent('CustomEvent');
+		// columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', false, false, {
+		// 	groupView: 	this,
+		// 	valueView: 	ui.droppable,
+		// 	event: 		event,
+		// 	ui: 		ui
+		// });
+		// document.dispatchEvent(columnsEvent);
+		ColumnsEvent.send('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', {
 			groupView: 	this,
 			valueView: 	ui.droppable,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -217,14 +233,20 @@ TemplateGroupView.prototype._setupDrop = function() {
 		// event: 		event,
 		// ui: 		ui
 		// });
-		var columnsEvent = document.createEvent('CustomEvent');
-		columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidDropWithValueView', false, false, {
+		// var columnsEvent = document.createEvent('CustomEvent');
+		// columnsEvent.initCustomEvent('Columns.TemplateGroupView.GroupDidDropWithValueView', false, false, {
+		// 	groupView: 	this,
+		// 	valueView: 	ui.droppable,
+		// 	event: 		event,
+		// 	ui: 		ui
+		// });
+		// document.dispatchEvent(columnsEvent);
+		ColumnsEvent.send('Columns.TemplateGroupView.GroupDidDropWithValueView', {
 			groupView: 	this,
 			valueView: 	ui.droppable,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 };
@@ -233,13 +255,13 @@ TemplateGroupView.prototype._setupEvents = function() {
 
 	// Listen to updates for this group
 	// and update if there's a match
-	document.addEventListener( 'Columns.StyleView.PropertyDidUpdateWithValueForGroupView', this._onGroupDidChange.bind( this ), false);
+	ColumnsEvent.on( 'Columns.StyleView.PropertyDidUpdateWithValueForGroupView', this._onGroupDidChange.bind( this ) );
 };
 
-TemplateGroupView.prototype._onGroupDidChange = function( event ) {
-	var $newGroup = event.detail.groupView.$group;
+TemplateGroupView.prototype._onGroupDidChange = function( event, data ) {
+	var $newGroup = data.groupView.$group;
 	if ( this.$group.is( $newGroup ) ) {
-		this._mergeLayout( event.detail.property, event.detail.value )
+		this._mergeLayout( data.property, data.value )
 		this.update();
 	}
 };

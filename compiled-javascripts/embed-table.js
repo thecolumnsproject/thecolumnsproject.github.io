@@ -4116,7 +4116,7 @@ $$(function() {
 			this.data = data;
 		}
 
-		var numRows = data.data.length;
+		// var numRows = data.data.length;
 
 		// Generate table layouts with data
 		var header = Columns.EmbeddableTemplates['templates/embed-table/header.hbs'];
@@ -4154,7 +4154,7 @@ $$(function() {
 		}
 
 		var shouldRunRowIntroAnimation = false;
-		if ($$rows.length == 0) {
+		if ($$rows.length == 0 || this.preview ) {
 			shouldRunRowIntroAnimation = true;
 		}
 
@@ -4825,6 +4825,19 @@ $$(function() {
 		});
 	}
 
+	Table.prototype._onTableDidUpload = function( event ) {
+		var table = event.detail.table;
+
+		// Generate a layout
+		this.generateLayout( table.layout.model, false );
+
+		// Render Data
+		this.renderData( table );
+
+		// Expand yourself
+		this.expand();
+	}
+
 	// Basic setup operations before we start creating tables
 	// ------------------------------------------------------
 
@@ -4895,9 +4908,10 @@ $$(function() {
 			tables.push(table);
 			table.render();
 
-			// If we're in preview mode, make sure the template is listening to expand and collapse events
+			// If we're in preview mode, make sure we listen for data update events
 			if (table.preview) {
-				Columns.Template.setupTableEventListeners(table.$$table);
+				// Columns.Template.setupTableEventListeners(table.$$table);
+				document.addEventListener('Columns.Table.DidUploadWithSuccess', table._onTableDidUpload.bind( table ), false );
 			} else {
 				table.fetchData();
 			}
@@ -7413,7 +7427,8 @@ if (typeof module != 'undefined' && module.exports) {
             var y = coordinates[i][1];
  
             // within the range, so prevent the click
-            if (Math.abs(ev.clientX - x) < threshold && Math.abs(ev.clientY - y) < threshold) {
+            // if (Math.abs(ev.clientX - x) < threshold && Math.abs(ev.clientY - y) < threshold) {
+            if ( document.elementFromPoint(x,y) === ev.target ) {
                 ev.stopPropagation();
                 ev.preventDefault();
                 break;

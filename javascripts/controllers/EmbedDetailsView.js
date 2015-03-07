@@ -41,13 +41,18 @@ EmbedDetailsView.prototype.hide = function() {
 };
 
 EmbedDetailsView.prototype._emitChange = function( property, value ) {
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.EmbedDetailsView.DidUpdatePropertyWithValue', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.EmbedDetailsView.DidUpdatePropertyWithValue', false, false, {
+	// 	embed: 	this,
+	// 	property: property,
+	// 	value: value
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send( 'Columns.EmbedDetailsView.DidUpdatePropertyWithValue', {
 		embed: 	this,
 		property: property,
 		value: value
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 EmbedDetailsView.prototype._setupEventListeners = function() {

@@ -1,5 +1,9 @@
 describe('Style Model', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Construction', function() {
 
 		it('should allow construction without a style object', function() {

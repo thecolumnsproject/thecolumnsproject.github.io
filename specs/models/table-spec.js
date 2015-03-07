@@ -1,5 +1,9 @@
 describe('Table', function () {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initialization', function() {
 
 		it('should initialize with the correct defaults', function() {
@@ -136,43 +140,43 @@ describe('Table', function () {
 		});
 
 		it('should emit a change event', function() {
-			spyOn( document, 'dispatchEvent' );
+			spyOn( ColumnsEvent, 'send' );
 			this.table._emitChange();
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Table.DidChange');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.table ).toEqual( this.table );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
 		});
 
 		it('should emit an upload success event', function() {
-			spyOn( document, 'dispatchEvent' );
+			spyOn( ColumnsEvent, 'send' );
 			this.table._emitUploadSuccess();
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Table.DidUploadWithSuccess');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.table ).toEqual( this.table );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidUploadWithSuccess');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
 		});
 
 		it('should emit an upload failure event', function() {
-			spyOn( document, 'dispatchEvent' );
+			spyOn( ColumnsEvent, 'send' );
 			this.table._emitUploadFail();
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Table.DidUploadWithFailure');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.table ).toEqual( this.table );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidUploadWithFailure');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
 		});
 
 		it('should emit an update success event', function() {
-			spyOn( document, 'dispatchEvent' );
+			spyOn( ColumnsEvent, 'send' );
 			this.table._emitUpdateSuccess();
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Table.DidUpdateWithSuccess');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.table ).toEqual( this.table );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidUpdateWithSuccess');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
 		});
 
 		it('should emit an update failure event', function() {
-			spyOn( document, 'dispatchEvent' );
+			spyOn( ColumnsEvent, 'send' );
 			this.table._emitUpdateFail();
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Table.DidUpdateWithFailure');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.table ).toEqual( this.table );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidUpdateWithFailure');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
 		});
 	});
 
@@ -196,6 +200,19 @@ describe('Table', function () {
 			expect( columns[ 0 ].title ).toEqual("First Name");
 		});
 
+		it('should return items if passed an array of items', function() {
+			var items = [ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' }) ];
+			var columns = this.table.itemsFromColumnNames( items );
+			expect( columns.length ).toBe( 4 );
+			expect( columns ).toEqual([ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' })] );
+		});
+
+		it('should return an item if passed a single item', function() {
+			var item = new Item({ title: "My Item" });
+			var columns = this.table.itemsFromColumnNames( item );
+			expect( columns[ 0 ].title ).toEqual("My Item");
+		});
+
 		it('should throw an error if sent anything other than an array or a string', function() {
 			var names = 5;
 			expect(function() {
@@ -213,13 +230,20 @@ describe('Table', function () {
 		it('should listen for item creation', function() {
 			spyOn( this.table, 'itemsFromColumnNames' ).and.callThrough();
 			var columns = [ "First Name", "Last Name", "Hometown" ];
-			var columnsEvent = document.createEvent('CustomEvent');
-			columnsEvent.initCustomEvent('Columns.UploadView.DidParseColumnNamesForFile', false, false, {
+			// var columnsEvent = document.createEvent('CustomEvent');
+			// columnsEvent.initCustomEvent('Columns.UploadView.DidParseColumnNamesForFile', false, false, {
+			// 	uploadView: 	new UploadView(),
+			// 	fileName: 		"My File",
+			// 	columns: 		columns
+			// });
+			// document.dispatchEvent(columnsEvent);
+
+			ColumnsEvent.send('Columns.UploadView.DidParseColumnNamesForFile', {
 				uploadView: 	new UploadView(),
 				fileName: 		"My File",
 				columns: 		columns
 			});
-			document.dispatchEvent(columnsEvent);
+
 			expect( this.table.itemsFromColumnNames ).toHaveBeenCalledWith( columns );
 			expect( this.table.columns[ 0 ].title ).toEqual("First Name");
 			expect( this.table.columns[ 1 ].title ).toEqual("Last Name");
@@ -227,33 +251,65 @@ describe('Table', function () {
 		});
 
 		it('should listen for row creation', function() {
-			this.table.data = [ [ 'Jeremy', 'Lubin', 'Princeton' ], [ 'Jess', 'Schwartz', 'Mechanicsburg' ] ];
-			var row = {
-				data: [ [ 'Amir', 'Kanpurwala', 'West Windsor' ] ]
-			};
-			var columnsEvent = document.createEvent('CustomEvent');
-			columnsEvent.initCustomEvent('Columns.UploadView.DidParseDataRowForFile', false, false, {
+			this.table.columns = [ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' }) ];
+			this.table.data = [{
+				'first_name': 'Jeremy',
+				'last_name': 'Lubin',
+				'hometown': 'Princeton'				
+			}, {
+				'first_name': 'Jess',
+				'last_name': 'Schwartz',
+				'hometown': 'Mechanicsburg'	
+			}];
+			var row = [ 'Amir', 'Kanpurwala', 'West Windsor' ];
+			// var columnsEvent = document.createEvent('CustomEvent');
+			// columnsEvent.initCustomEvent('Columns.UploadView.DidParseDataRowForFile', false, false, {
+			// 	uploadView: 	this,
+			// 	fileName: 		"My File",
+			// 	row: 			row
+			// });
+			// document.dispatchEvent(columnsEvent);
+
+			ColumnsEvent.send('Columns.UploadView.DidParseDataRowForFile', {
 				uploadView: 	this,
 				fileName: 		"My File",
 				row: 			row
 			});
-			document.dispatchEvent(columnsEvent);
-			expect( this.table.data ).toEqual([
-				[ 'Jeremy', 'Lubin', 'Princeton' ],
-				[ 'Jess', 'Schwartz', 'Mechanicsburg' ],
-				[ 'Amir', 'Kanpurwala', 'West Windsor' ]
-			]);
+
+			// expect( this.table.data ).toEqual([
+			// 	[ 'Jeremy', 'Lubin', 'Princeton' ],
+			// 	[ 'Jess', 'Schwartz', 'Mechanicsburg' ],
+			// 	[ 'Amir', 'Kanpurwala', 'West Windsor' ]
+			// ]);
+			expect( this.table.data ).toEqual([{
+				'first_name': 'Jeremy',
+				'last_name': 'Lubin',
+				'hometown': 'Princeton'				
+			}, {
+				'first_name': 'Jess',
+				'last_name': 'Schwartz',
+				'hometown': 'Mechanicsburg'	
+			}, {
+				'first_name': 'Amir',
+				'last_name': 'Kanpurwala',
+				'hometown': 'West Windsor'	
+			}]);
 		});
 
 		it('should listen for parsing completion', function() {
 			spyOn( this.table, '_uploadFile' );
 			var file = { name: 'test.csv' };
-			var columnsEvent = document.createEvent('CustomEvent');
-			columnsEvent.initCustomEvent('Columns.UploadView.DidCompleteParseForFile', false, false, {
+			// var columnsEvent = document.createEvent('CustomEvent');
+			// columnsEvent.initCustomEvent('Columns.UploadView.DidCompleteParseForFile', false, false, {
+			// 	uploadView: 	this,
+			// 	file: 			file
+			// });
+			
+			ColumnsEvent.send('Columns.UploadView.DidCompleteParseForFile', {
 				uploadView: 	this,
 				file: 			file
 			});
-			document.dispatchEvent(columnsEvent);
+
 			expect( this.table._uploadFile ).toHaveBeenCalledWith( file );
 		});
 
@@ -261,13 +317,18 @@ describe('Table', function () {
 			spyOn( this.table, '_update' );
 			spyOn( this.table, '_updateTable' );
 
-			var columnsEvent = document.createEvent('CustomEvent');
-			columnsEvent.initCustomEvent('Columns.EmbedDetailsView.DidUpdatePropertyWithValue', false, false, {
+			// var columnsEvent = document.createEvent('CustomEvent');
+			// columnsEvent.initCustomEvent('Columns.EmbedDetailsView.DidUpdatePropertyWithValue', false, false, {
+			// 	embed: 	new EmbedDetailsView(),
+			// 	property: 'title',
+			// 	value: 'My New Table Name'
+			// });
+			
+			ColumnsEvent.send('Columns.EmbedDetailsView.DidUpdatePropertyWithValue', {
 				embed: 	new EmbedDetailsView(),
 				property: 'title',
 				value: 'My New Table Name'
 			});
-			document.dispatchEvent(columnsEvent);
 
 			expect( this.table._update ).toHaveBeenCalledWith({ title: 'My New Table Name' });
 			expect( this.table._updateTable ).toHaveBeenCalled();
@@ -362,7 +423,7 @@ describe('Table', function () {
       			title: "My Table",
       			source: "The Noun Project",
       			source_url: "https://thenounproject.com/my-table",
-      			layout: JSON.stringify( new Layout( this.table.columns ) ),
+      			layout: JSON.stringify( new Layout( this.table.columns ).model ),
       			columns: "First Name,Last Name,Hometown"
       		});
 		});

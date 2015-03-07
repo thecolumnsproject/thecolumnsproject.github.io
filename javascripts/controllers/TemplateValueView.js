@@ -46,11 +46,14 @@ TemplateValueView.prototype.update = function() {
 	// var event = new CustomEvent( 'Columns.ValueView.DidChange', {
 	// 	valueView: 	this
 	// });
-	var event = document.createEvent('CustomEvent');
-	event.initCustomEvent('Columns.TemplateValueView.DidChange', false, false, {
+	// var event = document.createEvent('CustomEvent');
+	// event.initCustomEvent('Columns.TemplateValueView.DidChange', false, false, {
+	// 	valueView: 	this
+	// });
+	// document.dispatchEvent(event);
+	ColumnsEvent.send('Columns.TemplateValueView.DidChange', {
 		valueView: 	this
 	});
-	document.dispatchEvent(event);
 
 	return this.$value;
 };
@@ -61,9 +64,9 @@ TemplateValueView.prototype._setupDrag = function() {
 		revert: 'invalid',
 		revertDuration: 200,
 		helper: function() {
-			var itemView = new ItemView({ item: this.item });
+			var itemView = new ItemView( this.item );
 			return itemView.render();
-		},
+		}.bind( this ),
 		opacity: .2
 	});
 
@@ -75,14 +78,20 @@ TemplateValueView.prototype._setupDrag = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var columnsEvent = document.createEvent('CustomEvent');
-		columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
+		// var columnsEvent = document.createEvent('CustomEvent');
+		// columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
+		// 	valueView: 	this,
+		// 	item: 		this.item,
+		// 	event: 		event,
+		// 	ui: 		ui
+		// });
+		// document.dispatchEvent(columnsEvent);
+		ColumnsEvent.send('Columns.TemplateValueView.ValueDidBeginDragWithItem', {
 			valueView: 	this,
 			item: 		this.item,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -94,14 +103,20 @@ TemplateValueView.prototype._setupDrag = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var columnsEvent = document.createEvent('CustomEvent');
-		columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidEndDragWithItem', false, false, {
+		// var columnsEvent = document.createEvent('CustomEvent');
+		// columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidEndDragWithItem', false, false, {
+		// 	valueView: 	this,
+		// 	item: 		this.item,
+		// 	event: 		event,
+		// 	ui: 		ui
+		// });
+		// document.dispatchEvent(columnsEvent);
+		ColumnsEvent.send('Columns.TemplateValueView.ValueDidEndDragWithItem', {
 			valueView: 	this,
 			item: 		this.item,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 
@@ -113,14 +128,20 @@ TemplateValueView.prototype._setupDrag = function() {
 		// 	event: 	event,
 		// 	ui: 	ui
 		// });
-		var columnsEvent = document.createEvent('CustomEvent');
-		columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidDragWithItem', false, false, {
+		// var columnsEvent = document.createEvent('CustomEvent');
+		// columnsEvent.initCustomEvent('Columns.TemplateValueView.ValueDidDragWithItem', false, false, {
+		// 	valueView: 	this,
+		// 	item: 		this.item,
+		// 	event: 		event,
+		// 	ui: 		ui
+		// });
+		// document.dispatchEvent(columnsEvent);
+		ColumnsEvent.send('Columns.TemplateValueView.ValueDidDragWithItem', {
 			valueView: 	this,
 			item: 		this.item,
 			event: 		event,
 			ui: 		ui
 		});
-		document.dispatchEvent(columnsEvent);
 
 	}, this) );
 };
@@ -129,11 +150,11 @@ TemplateValueView.prototype._setupEvents = function() {
 
 	// Listen to updates for this item
 	// and update if there's a match
-	document.addEventListener( 'Columns.Item.DidChange', this._onItemDidChange.bind( this ), false);
+	ColumnsEvent.on( 'Columns.Item.DidChange', this._onItemDidChange.bind( this ) );
 };
 
-TemplateValueView.prototype._onItemDidChange = function( event ) {
-	var newItem = event.detail.item;
+TemplateValueView.prototype._onItemDidChange = function( event, data ) {
+	var newItem = data.item;
 	if ( this.item.is( newItem ) ) {
 		this.item = newItem;
 		this.update();

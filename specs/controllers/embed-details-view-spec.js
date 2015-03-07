@@ -2,6 +2,10 @@ jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Embed Details View', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initialization', function() {
 
 		it('should initialize with a table object', function() {
@@ -160,13 +164,13 @@ describe('Embed Details View', function() {
 		});
 
 		it('should emit an event on change', function() {
-			spyOn( document, 'dispatchEvent' );
+			spyOn( ColumnsEvent, 'send' );
 			this.embed._emitChange( 'property', 'value' );
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.EmbedDetailsView.DidUpdatePropertyWithValue');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.embed ).toEqual( this.embed );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.property ).toBe( 'property' );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.value ).toBe( 'value' );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.EmbedDetailsView.DidUpdatePropertyWithValue');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].embed ).toEqual( this.embed );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].property ).toBe( 'property' );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].value ).toBe( 'value' );
 		});
 	});
 

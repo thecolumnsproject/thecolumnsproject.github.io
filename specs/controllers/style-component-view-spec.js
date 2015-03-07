@@ -2,6 +2,10 @@ jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Style View Spec', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initialization', function() {
 
 		beforeEach(function() {

@@ -1,5 +1,9 @@
 describe('Item View', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initialization', function() {
 
 		it('should initialize with a given item', function() {
@@ -24,7 +28,8 @@ describe('Item View', function() {
 		beforeEach(function() {
 			var item = new Item({
 				title: 'my_item',
-				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
+				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;',
+				active: false
 			});
 			this.itemView = new ItemView(item);
 		});
@@ -49,6 +54,18 @@ describe('Item View', function() {
 				value: '12px'
 			}]);
 		});
+
+		it('should have the correct active status', function() {
+			expect( this.itemView.render() ).toHaveClass('inactive');
+		});
+
+		it('should replace itself if already rendered', function() {
+			var $old = this.itemView.render();
+			this.itemView.item.title = "New Title";
+			var $new = this.itemView.render();
+			expect( this.itemView.$item ).toEqual( $new );
+			expect( this.itemView.$item ).not.toEqual( $old );
+		});
 	});
 
 	describe('Dragging', function() {
@@ -63,7 +80,7 @@ describe('Item View', function() {
 			this.item 		= new ItemView( item );
 			this.$item		= this.item.render();
 
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 
 		});
 
@@ -71,25 +88,41 @@ describe('Item View', function() {
 			expect( this.$item.draggable('instance') ).toBeDefined();
 		});
 
-		it('should emit an event on drag start', function() {
-			this.$item.trigger('dragstart', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.ItemView.ItemDidBeginDrag');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+		describe('Drag Start', function() {
+
+			it('should emit an event on drag start', function() {
+				this.$item.trigger('dragstart', this.fakeUI);
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.ItemView.ItemDidBeginDrag');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.item );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+			});
+
+			it('should get dragging class on drag start', function() {
+				this.$item.trigger('dragstart', this.fakeUI);
+				expect( this.$item ).toHaveClass('dragging');
+			});
 		});
 
-		it('should emit an event on drag stop', function() {
-			this.$item.trigger('dragstop', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.ItemView.ItemDidEndDrag');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+		describe('Drag Stop', function() {
+
+			it('should emit an event on drag stop', function() {
+				this.$item.trigger('dragstop', this.fakeUI);
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.ItemView.ItemDidEndDrag');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.item );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+			});
+
+			it('should lose dragging class on drag stop', function() {
+				this.$item.trigger('dragstop', this.fakeUI);
+				expect( this.$item ).not.toHaveClass('dragging');
+			});
 		});
 
 		it('should emit an event on drag', function() {
 			this.$item.trigger('drag', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.ItemView.ItemDidDrag');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.ItemView.ItemDidDrag');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.item );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 	});
 });

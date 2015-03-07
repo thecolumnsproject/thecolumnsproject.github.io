@@ -38,43 +38,58 @@ Table.prototype._update = function( props ) {
 
 Table.prototype._emitChange = function() {
 	// Let everyone know that the table has been uploaded successfully
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.Table.DidChange', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.Table.DidChange', false, false, {
+	// 	table: 	this
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.Table.DidChange', {
 		table: 	this
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 Table.prototype._emitUploadSuccess = function() {
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.Table.DidUploadWithSuccess', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.Table.DidUploadWithSuccess', false, false, {
+	// 	table: 	this
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.Table.DidUploadWithSuccess', {
 		table: 	this
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 Table.prototype._emitUploadFail = function() {
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.Table.DidUploadWithFailure', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.Table.DidUploadWithFailure', false, false, {
+	// 	table: 	this
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.Table.DidUploadWithFailure', {
 		table: 	this
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 Table.prototype._emitUpdateSuccess = function() {
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.Table.DidUpdateWithSuccess', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.Table.DidUpdateWithSuccess', false, false, {
+	// 	table: 	this
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.Table.DidUpdateWithSuccess', {
 		table: 	this
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 Table.prototype._emitUpdateFail = function() {
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.Table.DidUpdateWithFailure', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.Table.DidUpdateWithFailure', false, false, {
+	// 	table: 	this
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.Table.DidUpdateWithFailure', {
 		table: 	this
 	});
-	document.dispatchEvent(columnsEvent);
 };
 
 Table.prototype.itemsFromColumnNames = function( columnNames ) {
@@ -83,12 +98,16 @@ Table.prototype.itemsFromColumnNames = function( columnNames ) {
 		columnNames = [ columnNames ];
 	}
 
+	if( columnNames instanceof Item ) {
+		columnNames = [ columnNames ];
+	}
+
 	if( !Array.isArray( columnNames ) ) {
 		throw "exception: Column names must be a string or an array of strings";
 	}
 
 	return columnNames.map(function( columnName ) {
-		return new Item({ title: columnName });
+		return columnName instanceof Item ? columnName : new Item({ title: columnName });
 	});
 }
 
@@ -101,12 +120,12 @@ Table.prototype._uploadFile = function( file ) {
 	formData.append( "source", this.source );
 	formData.append( "source_url", this.source_url );
 	formData.append( "columns", this.stringFromColumns( this.columns ) );
-	formData.append( "layout", JSON.stringify( this.layout ) );
+	formData.append( "layout", JSON.stringify( this.layout.model ) );
 
 	$.ajax({
         url: config.api.host + '/columns/table',  //Server script to process data
         type: 'POST',
-        contentType: 'multipart/form-data',
+        contentType: false,
         processData: false,
         data: formData,
         success: this._onUploadSuccess.bind( this )
@@ -118,7 +137,7 @@ Table.prototype._updateTable = function() {
 		title: this.title,
 		source: this.source,
 		source_url: this.source_url,
-		layout: JSON.stringify( this.layout ),
+		layout: JSON.stringify( this.layout.model ),
 		columns: this.stringFromColumns( this.columns )
 	};
 	$.post(config.api.host + '/columns/table/' + this.id, data, this._onUpdateSuccess.bind( this ) );
@@ -127,32 +146,38 @@ Table.prototype._updateTable = function() {
 Table.prototype._setupEventListeners = function() {
 
 	// Listen for column names parsing
-	document.addEventListener( 'Columns.UploadView.DidParseColumnNamesForFile', this._onColumnNamesParsed.bind( this ), false );
+	ColumnsEvent.on( 'Columns.UploadView.DidParseColumnNamesForFile', this._onColumnNamesParsed.bind( this ));
 
 	// Listen for row data parsing
-	document.addEventListener( 'Columns.UploadView.DidParseDataRowForFile', this._onRowParsed.bind( this ), false );	
+	ColumnsEvent.on( 'Columns.UploadView.DidParseDataRowForFile', this._onRowParsed.bind( this ) );	
 
 	// Listen for parsing completion
-	document.addEventListener( 'Columns.UploadView.DidCompleteParseForFile', this._onParseComplete.bind( this ), false );
+	ColumnsEvent.on( 'Columns.UploadView.DidCompleteParseForFile', this._onParseComplete.bind( this ) );
 
 	// Listen for updates from the details panel
-	document.addEventListener( 'Columns.EmbedDetailsView.DidUpdatePropertyWithValue', this._onTableUpdate.bind( this ), false );
+	ColumnsEvent.on( 'Columns.EmbedDetailsView.DidUpdatePropertyWithValue', this._onTableUpdate.bind( this ) );
 
 };
 
-Table.prototype._onColumnNamesParsed = function( event ) {
+Table.prototype._onColumnNamesParsed = function( event, data ) {
 
-	this.columns = this.itemsFromColumnNames( event.detail.columns );
+	this.columns = this.itemsFromColumnNames( data.columns );
 };
 
-Table.prototype._onRowParsed = function( event ) {
+Table.prototype._onRowParsed = function( event, data ) {
+	var row = data.row,
+		data = {};
 
-	this.data.push( event.detail.row.data[ 0 ] );
+	row.forEach(function( value, i ) {
+		data[ this.columns[ i ].unformattedTitle() ] = value;
+	}.bind( this ));
+
+	this.data.push( data );
 };
 
-Table.prototype._onParseComplete = function( event ) {
+Table.prototype._onParseComplete = function( event, data ) {
 
-	this._uploadFile( event.detail.file );
+	this._uploadFile( data.file );
 };
 
 Table.prototype._onUploadSuccess = function( data, status, request ) {
@@ -187,10 +212,10 @@ Table.prototype._onUpdateSuccess = function( data, status, request ) {
 	this._emitUpdateSuccess();
 };
 
-Table.prototype._onTableUpdate = function( event ) {
+Table.prototype._onTableUpdate = function( event, data ) {
 	var props = {};
 
-	props[ event.detail.property ] = event.detail.value;
+	props[ data.property ] = data.value;
 
 	this._update( props );
 	this._updateTable();

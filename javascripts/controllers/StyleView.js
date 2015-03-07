@@ -39,14 +39,14 @@ StyleView.prototype.getItemForSelection = function( selection ) {
 StyleView.prototype._setupEventListeners = function() {
 
 	// Listen to udpates from styling controls
-	document.addEventListener( 'Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ), false);
-	document.addEventListener( 'Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ), false);
-	document.addEventListener( 'Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ), false);
+	ColumnsEvent.on( 'Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
+	ColumnsEvent.on( 'Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
+	ColumnsEvent.on( 'Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
 };
 
-StyleView.prototype._onStyleUpdate = function( event ) {
+StyleView.prototype._onStyleUpdate = function( event, data ) {
 
-	this._emitChange( event.detail.item, event.detail.property, event.detail.value );
+	this._emitChange( data.item, data.property, data.value );
 };
 
 StyleView.prototype._emitChange = function( item, property, value ) {
@@ -58,28 +58,28 @@ StyleView.prototype._emitChange = function( item, property, value ) {
 		// value: value
 	// });
 
-	var columnsEvent = document.createEvent('CustomEvent'),
-		eventType;
+	var eventType,
+		data;
 
 	if ( item instanceof Item ) {
 
 		eventType = 'Columns.StyleView.PropertyDidUpdateWithValueForItem';
-		columnsEvent.initCustomEvent( eventType, false, false, {
+		data = {
 			item: 	item,
 			property: property,
 			value: value
-		});
-		document.dispatchEvent(columnsEvent);
+		};
+		ColumnsEvent.send( eventType, data );
 
 	} else if ( item instanceof TemplateGroupView ) {
 		
 		eventType = 'Columns.StyleView.PropertyDidUpdateWithValueForGroupView';
-		columnsEvent.initCustomEvent( eventType, false, false, {
+		data = {
 			groupView: 	item,
 			property: property,
 			value: value
-		});
-		document.dispatchEvent(columnsEvent);
+		};
+		ColumnsEvent.send( eventType, data );
 
 	} else {
 		// Do nothing

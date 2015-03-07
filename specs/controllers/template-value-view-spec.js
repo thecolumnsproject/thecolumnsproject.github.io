@@ -1,5 +1,9 @@
 describe('Template Value View', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initiation', function() {
 
 		it('should initiate with an item', function() {
@@ -107,15 +111,15 @@ describe('Template Value View', function() {
 		});
 
 		it('should emit an event once the update has finished', function() {
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 			this.valueView.item = new Item({
 				title: 'My Item',
 				style: 'font-size:16px;color:#888888;margin-left:14px;'
 			});
 			var $value = this.valueView.update();
-			expect( document.dispatchEvent ).toHaveBeenCalled();
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateValueView.DidChange');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send ).toHaveBeenCalled();
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
 		});
 	});
 
@@ -137,9 +141,10 @@ describe('Template Value View', function() {
 				style: 'font-size:16px;color:#3a3a3a;margin-left:12px;'
 			});
 
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.Item.DidChange', false, false, { item: newItem });
-			document.dispatchEvent( event );
+			// var event = document.createEvent('CustomEvent');
+			// event.initCustomEvent('Columns.Item.DidChange', false, false, { item: newItem });
+			// document.dispatchEvent( event );
+			ColumnsEvent.send( 'Columns.Item.DidChange', { item: newItem } );
 
 			expect( this.spy ).toHaveBeenCalled();
 			expect( this.valueView.item ).toEqual( newItem );
@@ -151,9 +156,10 @@ describe('Template Value View', function() {
 				style: 'font-size:16px;color:#3a3a3a;margin-left:12px;'
 			});
 
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.Item.DidChange', false, false, { item: newItem });
-			document.dispatchEvent( event );
+			// var event = document.createEvent('CustomEvent');
+			// event.initCustomEvent('Columns.Item.DidChange', false, false, { item: newItem });
+			// document.dispatchEvent( event );
+			ColumnsEvent.send( 'Columns.Item.DidChange', { item: newItem } );
 
 			expect( this.spy ).not.toHaveBeenCalled();
 			expect( this.valueView.item ).toEqual( this.item );
@@ -167,7 +173,7 @@ describe('Template Value View', function() {
 			this.$value		= this.valueView.render();
 			this.fakeUI		= {};
 
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 		});
 
 		it('should be draggable', function() {
@@ -176,26 +182,26 @@ describe('Template Value View', function() {
 
 		it('should emit an event on drag start', function() {
 			this.$value.trigger('dragstart', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateValueView.ValueDidBeginDragWithItem');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.valueView.item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidBeginDragWithItem');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 
 		it('should emit an event on drag stop', function() {
 			this.$value.trigger('dragstop', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateValueView.ValueDidEndDragWithItem');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.valueView.item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidEndDragWithItem');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 
 		it('should emit an event on drag', function() {
 			this.$value.trigger('drag', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateValueView.ValueDidDragWithItem');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( this.valueView.item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidDragWithItem');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 	});
 

@@ -37,26 +37,33 @@ var DEFAULTS = {
 
 describe('Layout', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initialization', function() {
 
 		it('should initialize with a default layout given no items', function() {
-			var layout = new Layout();
+			this.layout = new Layout();
 
-			expect( layout.items ).toEqual( [] );
-			expect( layout.model ).toEqual({
+			expect( this.layout.items ).toEqual( [] );
+			expect( this.layout.model ).toEqual({
+				type: 'group',
 				style: [{
 					property: 'padding',
 					value: '12px'
-				}]
+				}],
+				values: []
 			});
 		});
 
 		it('should initialize with a default layout given 1 item', function() {
 			var items = [ new Item({ title: "My Item" }) ];
-			var layout = new Layout( items );
+			this.layout = new Layout( items );
 
-			expect( layout.items ).toEqual( items );
-			expect( layout.model ).toEqual({
+			expect( this.layout.items ).toEqual( items );
+			expect( this.layout.model ).toEqual({
+				type: 'group',
 				style: [{
 					property: 'padding',
 					value: '12px'
@@ -71,10 +78,11 @@ describe('Layout', function() {
 
 		it('should initialize with a default layout given 2 items', function() {
 			var items = [ new Item({ title: "First Item" }), new Item({ title: "Second Item" }) ];
-			var layout = new Layout( items );
+			this.layout = new Layout( items );
 
-			expect( layout.items ).toEqual( items );
-			expect( layout.model ).toEqual({
+			expect( this.layout.items ).toEqual( items );
+			expect( this.layout.model ).toEqual({
+				type: 'group',
 				style: [{
 					property: 'padding',
 					value: '12px'
@@ -101,10 +109,11 @@ describe('Layout', function() {
 				new Item({ title: "Second Item" }),
 				new Item({ title: "Third Item" })
 			];
-			var layout = new Layout( items );
+			this.layout = new Layout( items );
 
-			expect( layout.items ).toEqual( items );
-			expect( layout.model ).toEqual({
+			expect( this.layout.items ).toEqual( items );
+			expect( this.layout.model ).toEqual({
+				type: 'group',
 				style: [{
 					property: 'padding',
 					value: '12px'
@@ -137,10 +146,11 @@ describe('Layout', function() {
 				new Item({ title: "Fourth Item" }),
 				new Item({ title: "Fifth Item" }),
 			];
-			var layout = new Layout( items );
+			this.layout = new Layout( items );
 
-			expect( layout.items ).toEqual( items );
-			expect( layout.model ).toEqual({
+			expect( this.layout.items ).toEqual( items );
+			expect( this.layout.model ).toEqual({
+				type: 'group',
 				style: [{
 					property: 'padding',
 					value: '12px'
@@ -168,8 +178,8 @@ describe('Layout', function() {
 		it('should throw an error if any of the items are not of type Item', function() {
 			var items = [ "hi" ];
 			expect(function() {
-				var layout = new Layout( items );
-			}).toThrow("exception: all items must of type Item");
+				this.layout = new Layout( items );
+			}.bind( this )).toThrow("exception: all items must of type Item");
 		});
 
 	});
@@ -274,12 +284,15 @@ describe('Layout', function() {
 
 		it('should listen for template change events', function() {
 			var templateView = new TemplateView();
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
+			// var event = document.createEvent('CustomEvent');
+			// event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
+			// 	templateView: 	templateView
+			// });
+
+			// document.dispatchEvent( event );
+			ColumnsEvent.send('Columns.TemplateView.DidChange', {
 				templateView: 	templateView
 			});
-
-			document.dispatchEvent( event );
 			expect( this.layout.update ).toHaveBeenCalled();
 		});
 	});
@@ -287,12 +300,12 @@ describe('Layout', function() {
 	describe('Emitting Change Events', function() {
 
 		it('should emit a change event', function() {
-			var layout = new Layout();
-			spyOn( document, 'dispatchEvent' );
-			layout._emitChange();
+			this.layout = new Layout();
+			spyOn( ColumnsEvent, 'send' );
+			this.layout._emitChange();
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Layout.DidChange');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.layout ).toEqual( layout );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Layout.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].layout ).toEqual( this.layout );
 		});
 	});
 });

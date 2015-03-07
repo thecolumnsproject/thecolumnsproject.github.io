@@ -46,13 +46,18 @@ StyleMultipleSegmentedButtonView.prototype.update = function( property, value ) 
 	// 	event: 	event,
 	// 	ui: 	ui
 	// });
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', false, false, {
+	// 	item: this.item,
+	// 	property: property,
+	// 	value: 	value
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send( 'Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', {
 		item: this.item,
 		property: property,
 		value: 	value
-	});
-	document.dispatchEvent(columnsEvent);
+	} );
 }
 
 StyleMultipleSegmentedButtonView.prototype._setupControls = function() {

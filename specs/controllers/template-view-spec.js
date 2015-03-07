@@ -3,66 +3,88 @@ jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 describe('Template View', function() {
 
 	beforeEach(function() {
-		this.defaultLayout = {
-			type: 'group',
-			style: [{
-				property: 'padding',
-				value: '12px'
-			}],
-			values: [{
-				type: 'group',
-				layout: [{
-					property: 'flex-direction',
-					value: 'column'
-				}, {
-					property: 'align-items',
-					value: 'flex-start'
-				}],
-				values: [{
-					type: 'single',
-					item: new Item({
-						title: 'First Name',
-						style: new Style([{
-							property: 'color',
-							value: '#3a3a3a'
-						}])
-					})
-				},{
-					type: 'single',
-					item: new Item({
-						title: 'Hometown',
-						style: new Style([{
-							property: 'color',
-							value: '#888'
-						},{
-							property: 'font-size',
-							value: '14px'
-						}, {
-							property: 'margin-top',
-							value: '4px'
-						}])
-					})
-				}]
-			}, {
-				type: 'single',
-				item: new Item({
-					title: 'Age',
-					style: new Style([{
-						property: 'color',
-						value: '#3a3a3a'
-					},{
-						property: 'font-size',
-						value: '24px'
-					}])
-				})
-			}]
-		};
+		this.defaultLayout = new Layout([
+			new Item({
+				title: 'First Name',
+				style: new Style([{
+					property: 'color',
+					value: '#3a3a3a'
+				}])
+			}),
+			new Item({
+				title: 'Hometown',
+				style: new Style([{
+					property: 'color',
+					value: '#3a3a3a'
+				}])
+			}),
+			new Item({
+				title: 'Age',
+				style: new Style([{
+					property: 'color',
+					value: '#3a3a3a'
+				}])
+			})
+		]);
+		
+		// this.defaultLayout = {
+		// 	type: 'group',
+		// 	style: [{
+		// 		property: 'padding',
+		// 		value: '12px'
+		// 	}],
+		// 	values: [{
+		// 		type: 'group',
+		// 		layout: [{
+		// 			property: 'flex-direction',
+		// 			value: 'column'
+		// 		}, {
+		// 			property: 'align-items',
+		// 			value: 'flex-start'
+		// 		}],
+		// 		values: [{
+		// 			type: 'single',
+		// 			item: new Item({
+		// 				title: 'First Name',
+		// 				style: new Style([{
+		// 					property: 'color',
+		// 					value: '#3a3a3a'
+		// 				}])
+		// 			})
+		// 		},{
+		// 			type: 'single',
+		// 			item: new Item({
+		// 				title: 'Hometown',
+		// 				style: new Style([{
+		// 					property: 'color',
+		// 					value: '#888'
+		// 				},{
+		// 					property: 'font-size',
+		// 					value: '14px'
+		// 				}, {
+		// 					property: 'margin-top',
+		// 					value: '4px'
+		// 				}])
+		// 			})
+		// 		}]
+		// 	}, {
+		// 		type: 'single',
+		// 		item: new Item({
+		// 			title: 'Age',
+		// 			style: new Style([{
+		// 				property: 'color',
+		// 				value: '#3a3a3a'
+		// 			},{
+		// 				property: 'font-size',
+		// 				value: '24px'
+		// 			}])
+		// 		})
+		// 	}]
+		// };
 	});
 
 	afterEach(function() {
-		if ( this.templateView ) {
-			this.templateView._removeEvents();
-		}
+		ColumnsEvent.offAll();
 	});
 
 	describe('Initialization', function() {
@@ -74,7 +96,7 @@ describe('Template View', function() {
 
 		it('should initialize without a layout object', function() {
 			var templateView = new TemplateView();
-			expect( templateView.layout ).toEqual( {} );
+			expect( templateView.layout ).toEqual( new Layout() );
 		});
 
 		it('should initalize with the correct template', function() {
@@ -86,6 +108,12 @@ describe('Template View', function() {
 			var templateView = new TemplateView();
 			expect( templateView.droppableItems ).toEqual( [] );
 		});
+
+		it('should render the preview', function() {
+			loadFixtures('layout.html');
+			var templateView = new TemplateView( this.defaultLayout );
+			expect( $('#layout .layout-table-preview')[0] ).toBeInDOM();
+		});
 	});
 
 	describe('Rendering', function() {
@@ -95,47 +123,75 @@ describe('Template View', function() {
 			this.templateView = new TemplateView( this.defaultLayout );
 		});
 
-		describe('Overall Rendering', function() {
-
+		describe('Preview Rendering', function() {
 			it('should render the embeddable', function() {
-				this.templateView.render();
+				this.templateView._renderPreview();
 				expect( $('#layout .layout-table-preview')[0] ).toBeInDOM();
 			});
 
+			it('should create reference to the preview', function() {
+				var $preview = this.templateView._renderPreview();
+				expect( this.templateView.$preview ).toEqual( $preview );
+			});
+		});
+
+		describe('Template Rendering', function() {
 			it('should render the template', function() {
-				this.templateView.render();
+				this.templateView._renderTemplate();
 				expect( $('#layout .layout-template')[0] ).toBeInDOM();
 			});
 
 			it('should kick off the rendering of components', function() {
-				spyOn(this.templateView, '_renderRowComponent');
-				this.templateView.render();
-				expect( this.templateView._renderRowComponent ).toHaveBeenCalledWith( this.defaultLayout );
+				var layoutString = JSON.stringify( this.templateView.layout.model );
+				spyOn( this.templateView, '_renderRowComponent' );
+				this.templateView._renderTemplate();
+				expect( JSON.stringify( this.templateView._renderRowComponent.calls.argsFor(0)[0] ) ).toBe( layoutString );
 			});
 
 			it('should create a reference to the rendered template', function() {
-				var $template = this.templateView.render();
+				var $template = this.templateView._renderTemplate();
 				expect( $template ).toEqual( this.templateView.$template );
+			});
+
+			it('should emit a change event', function() {
+				spyOn( this.templateView, '_emitChange' );
+				this.templateView._renderTemplate();
+				expect( this.templateView._emitChange ).toHaveBeenCalled();
 			});
 		});
 
 		describe('Component Rendering', function() {
 
 			it('should render the correct number of groups', function() {
-				var $template = this.templateView.render();
+				var $template = this.templateView._renderTemplate();
 				expect( $template.find('.layout-template-row-group').length ).toBe(2);
 			});
 
 			it('should render the correct number of values', function() {
-				var $template = this.templateView.render();
+				var $template = this.templateView._renderTemplate();
 				expect( $template.find('.layout-template-row-value').length ).toBe(3);
 			});
 
 			it('should nest the groups and values properly', function() {
-				var $template = this.templateView.render();
+				var $template = this.templateView._renderTemplate();
 				expect( $template.find('.layout-template-row-value').parent() ).toHaveClass('layout-template-row-group');
 				expect( $template.find('.layout-template-row-group').parent().first() ).toHaveClass('layout-template-row');
 				expect( $template.find('.layout-template-row-group').eq(1).parent() ).toHaveClass('layout-template-row-group');
+			});
+		});
+
+		describe('Overall Rendering', function() {
+
+			it('should render the preview', function() {
+				spyOn( this.templateView, '_renderPreview' );
+				this.templateView.render();
+				expect( this.templateView._renderPreview ).toHaveBeenCalled();
+			});
+
+			it('should render the template', function() {
+				spyOn( this.templateView, '_renderTemplate' );
+				this.templateView.render();
+				expect( this.templateView._renderTemplate ).toHaveBeenCalled();
 			});
 		});
 	});
@@ -389,10 +445,8 @@ describe('Template View', function() {
 					var item = new Item({ title: "My Item "});
 					var $group = $('.layout-template-row-group');
 					var event = {
-						originalEvent: {
-							clientX: $group.offset().left + ( $group.width() / 2 ),
-							clientY: $group.offset().top + ( $group.height() / 2 )
-						}
+						clientX: $group.offset().left + ( $group.width() / 2 ),
+						clientY: $group.offset().top + ( $group.height() / 2 )
 					};	
 
 					this.draggingItem = item;
@@ -406,10 +460,8 @@ describe('Template View', function() {
 					var item = new Item({ title: "My Item "});
 					var $group = $('.layout-template-row-group');
 					var event = {
-						originalEvent: {
-							clientX: $group.offset().left + ( $group.width() / 2 ),
-							clientY: $group.offset().top + ( $group.height() / 2 )
-						}
+						clientX: $group.offset().left + ( $group.width() / 2 ),
+						clientY: $group.offset().top + ( $group.height() / 2 )
 					};	
 
 					this.templateView.draggingItem = item;
@@ -427,10 +479,8 @@ describe('Template View', function() {
 					// and set up the currently dragging item
 					var item = new Item({ title: "My Item "});
 					var event = {
-						originalEvent: {
-							clientX: $value.offset().left + ( $value.width() * .6 ),
-							clientY: $value.offset().top + ( $value.height() * 2 )
-						}
+						clientX: $value.offset().left + ( $value.width() * .6 ),
+						clientY: $value.offset().top + ( $value.height() * 2 )
 					};
 
 					this.templateView.draggingItem = item;
@@ -449,10 +499,8 @@ describe('Template View', function() {
 					// and set up the currently dragging item
 					var item = new Item({ title: "My Item "});
 					var event = {
-						originalEvent: {
-							clientX: $value.offset().left + ( $value.width() * .6 ),
-							clientY: $value.offset().top + ( $value.height() * .6 )
-						}
+						clientX: $value.offset().left + ( $value.width() * .6 ),
+						clientY: $value.offset().top + ( $value.height() * .6 )
 					};
 
 					this.templateView.draggingItem = item;
@@ -470,10 +518,8 @@ describe('Template View', function() {
 					// and set up the currently dragging item
 					var item = new Item({ title: "My Item "});
 					var event = {
-						originalEvent: {
-							clientX: $value.offset().left + ( $value.width() * .2 ),
-							clientY: $value.offset().top + ( $value.height() * .2 )
-						}
+						clientX: $value.offset().left + ( $value.width() * .2 ),
+						clientY: $value.offset().top + ( $value.height() * .2 )
 					};
 
 					this.templateView.draggingItem = item;
@@ -529,6 +575,7 @@ describe('Template View', function() {
 	});
 
 	describe('Responding to Item Drags', function() {
+		var event = {};
 
 		beforeEach(function() {
 			this.templateView = new TemplateView( this.defaultLayout );
@@ -540,16 +587,20 @@ describe('Template View', function() {
 			beforeEach(function() {
 				this.newItem = new Item({ title: "My Item" });
 				this.newItemView = new ItemView( this.newItem );
-				this.event = document.createEvent('CustomEvent');
-				this.event.initCustomEvent('Columns.ItemView.ItemDidBeginDrag', false, false, {
+				// this.event = document.createEvent('CustomEvent');
+				// this.event.initCustomEvent('Columns.ItemView.ItemDidBeginDrag', false, false, {
+				// 	item: 	this.newItemView,
+				// 	event: 	event,
+				// 	ui: 	{}
+				// });
+			});
+
+			it('should update the current dragging item', function() {
+				ColumnsEvent.send('Columns.ItemView.ItemDidBeginDrag', {
 					item: 	this.newItemView,
 					event: 	event,
 					ui: 	{}
 				});
-			});
-
-			it('should update the current dragging item', function() {
-				document.dispatchEvent( this.event );
 				expect( this.templateView.draggingItem ).toEqual( this.newItem );
 			});
 		});
@@ -557,36 +608,45 @@ describe('Template View', function() {
 		describe('Drag Stop', function() {
 			beforeEach(function() {
 				this.newItem = new Item({ title: "My Item" });
-				this.event = document.createEvent('CustomEvent');
-				this.event.initCustomEvent('Columns.ItemView.ItemDidEndDrag', false, false, {
-					item: 	this.newItem,
-					event: 	event,
-					ui: 	{}
-				});
+				// this.event = document.createEvent('CustomEvent');
+				// this.event.initCustomEvent('Columns.ItemView.ItemDidEndDrag', false, false, {
+				// 	item: 	this.newItem,
+				// 	event: 	event,
+				// 	ui: 	{}
+				// });
 
 				spyOn( this.templateView, 'removePlaceholders');
 			});
 
 			it('should remove any placeholders', function() {
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.ItemView.ItemDidEndDrag', {
+					item: 	this.newItem,
+					event: 	event,
+					ui: 	{}
+				});
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
 			});
 
 			it('should reset the dragging item', function() {
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.ItemView.ItemDidEndDrag', {
+					item: 	this.newItem,
+					event: 	event,
+					ui: 	{}
+				});
 				expect( this.templateView.draggingItem ).toBeUndefined();
 			});
 		});
 
 		describe('Drag', function() {
 			beforeEach(function() {
+				var event = {};
 				this.newItem = new Item({ title: "My Item" });
-				this.event = document.createEvent('CustomEvent');
-				this.event.initCustomEvent('Columns.ItemView.ItemDidDrag', false, false, {
-					item: 	this.newItem,
-					event: 	event,
-					ui: 	{}
-				});
+				// this.event = document.createEvent('CustomEvent');
+				// this.event.initCustomEvent('Columns.ItemView.ItemDidDrag', false, false, {
+				// 	item: 	this.newItem,
+				// 	event: 	event,
+				// 	ui: 	{}
+				// });
 
 				spyOn( this.templateView, 'removePlaceholders' );
 				this.positionSpy = spyOn( this.templateView, 'positionDropForDragEventInParentWithPlaceholder' );
@@ -598,18 +658,52 @@ describe('Template View', function() {
 				var item 	 		= new Item({ title: "My Item"});
 				this.templateView.draggingItem = item;
 				this.templateView.droppableItems.push( groupView );
-				document.dispatchEvent( this.event );
+
+				ColumnsEvent.send('Columns.ItemView.ItemDidDrag', {
+					item: 	this.newItem,
+					event: 	event,
+					ui: 	{}
+				});
+
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
-				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
+				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( event );
 				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $group );
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
 
 			it('should do nothing if there is no active droppable item', function() {
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.ItemView.ItemDidDrag', {
+					item: 	this.newItem,
+					event: 	event,
+					ui: 	{}
+				});
+
 				expect( this.templateView.removePlaceholders ).not.toHaveBeenCalled();
 				expect( this.positionSpy ).not.toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe('Responding to Table Events', function() {
+
+		beforeEach(function() {
+			this.templateView = new TemplateView();
+		});
+
+		it('should render the template when the table is initially uploaded', function() {
+			spyOn( this.templateView, '_renderTemplate' );
+
+			// var columnsEvent = document.createEvent('CustomEvent');
+			// columnsEvent.initCustomEvent('Columns.Table.DidUploadWithSuccess', false, false, {
+			// 	table: 	new Table({ layout: new Layout() })
+			// });
+			// document.dispatchEvent(columnsEvent);
+			ColumnsEvent.send('Columns.Table.DidUploadWithSuccess', {
+				table: 	new Table({ layout: new Layout() })
+			});
+
+			expect( this.templateView.layout ).toEqual( new Layout() );
+			expect( this.templateView._renderTemplate ).toHaveBeenCalled();
 		});
 	});
 
@@ -691,6 +785,7 @@ describe('Template View', function() {
 	})
 
 	describe('Responding to Value Drags', function() {
+		var event = {};
 
 		beforeEach(function() {
 			this.templateView = new TemplateView( this.defaultLayout );
@@ -702,23 +797,35 @@ describe('Template View', function() {
 			beforeEach(function() {
 				this.newItem = new Item({ title: "My Item" });
 				this.valueView = new TemplateValueView( this.newItem, false );
-				this.event = document.createEvent('CustomEvent');
-				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
+				// this.event = document.createEvent('CustomEvent');
+				// this.event.initCustomEvent('Columns.TemplateValueView.ValueDidBeginDragWithItem', false, false, {
+				// 	valueView: 	this.valueView,
+				// 	item: 		this.newItem,
+				// 	event: 		event,
+				// 	ui: 		{}
+				// });
+			});
+
+			it('should update the current dragging item', function() {
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidBeginDragWithItem', {
 					valueView: 	this.valueView,
 					item: 		this.newItem,
 					event: 		event,
 					ui: 		{}
 				});
-			});
-
-			it('should update the current dragging item', function() {
-				document.dispatchEvent( this.event );
 				expect( this.templateView.draggingItem ).toEqual( this.newItem );
 			});
 
 			it('should dissolve any groups that surround just a single value', function() {
 				spyOn( this.templateView, 'dissolveSingleValueGroups' );
-				document.dispatchEvent( this.event );
+				
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidBeginDragWithItem', {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
+
 				expect( this.templateView.dissolveSingleValueGroups ).toHaveBeenCalled();
 			});
 		});
@@ -729,32 +836,47 @@ describe('Template View', function() {
 				this.newItem = new Item({ title: "My Item" });
 				this.valueView = new TemplateValueView( this.newItem, false );
 				this.valueView.render();
-				this.event = document.createEvent('CustomEvent');
-				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidEndDragWithItem', false, false, {
-					valueView: 	this.valueView,
-					item: 		this.newItem,
-					event: 		event,
-					ui: 		{}
-				});
+				// this.event = document.createEvent('CustomEvent');
+				// this.event.initCustomEvent('Columns.TemplateValueView.ValueDidEndDragWithItem', false, false, {
+				// 	valueView: 	this.valueView,
+				// 	item: 		this.newItem,
+				// 	event: 		event,
+				// 	ui: 		{}
+				// });
 
 				spyOn( this.templateView, 'removeValue' );
 				spyOn( this.templateView, '_emitChange' );
 			});
 
 			it('should remove the value from the template if there is no active droppable item', function() {
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidEndDragWithItem', {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
 				expect( this.templateView.removeValue ).toHaveBeenCalledWith( this.valueView );
 			});
 
 			it('should emit a change event if there is no active droppable item', function() {
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidEndDragWithItem', {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
 				expect( this.templateView._emitChange ).toHaveBeenCalled();
 			});
 
 			it('should do nothing if there is an active droppable item', function() {
 				var droppable = '<div class="fake"></div>';
 				this.templateView.droppableItems.push( droppable );
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidEndDragWithItem', {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
 
 				expect( this.templateView.removeValue ).not.toHaveBeenCalledWith();
 				expect( this.templateView._emitChange ).not.toHaveBeenCalled();
@@ -766,13 +888,13 @@ describe('Template View', function() {
 			beforeEach(function() {
 				this.newItem = new Item({ title: "My Item" });
 				this.valueView = new TemplateValueView( this.newItem, false );
-				this.event = document.createEvent('CustomEvent');
-				this.event.initCustomEvent('Columns.TemplateValueView.ValueDidDragWithItem', false, false, {
-					valueView: 	this.valueView,
-					item: 		this.newItem,
-					event: 		event,
-					ui: 		{}
-				});
+				// this.event = document.createEvent('CustomEvent');
+				// this.event.initCustomEvent('Columns.TemplateValueView.ValueDidDragWithItem', false, false, {
+				// 	valueView: 	this.valueView,
+				// 	item: 		this.newItem,
+				// 	event: 		event,
+				// 	ui: 		{}
+				// });
 
 				spyOn( this.templateView, 'removePlaceholders' );
 				this.positionSpy = spyOn( this.templateView, 'positionDropForDragEventInParentWithPlaceholder' );
@@ -784,15 +906,28 @@ describe('Template View', function() {
 				var item 	 		= new Item({ title: "My Item"});
 				this.templateView.draggingItem = item;
 				this.templateView.droppableItems.push( groupView );
-				document.dispatchEvent( this.event );
+
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidDragWithItem', {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
+
 				expect( this.templateView.removePlaceholders ).toHaveBeenCalled();
-				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
+				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( event );
 				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $group );
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( true );
 			});
 
 			it('should do nothing if there is no active droppable item', function() {
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidDragWithItem', {
+					valueView: 	this.valueView,
+					item: 		this.newItem,
+					event: 		event,
+					ui: 		{}
+				});
+
 				expect( this.templateView.removePlaceholders ).not.toHaveBeenCalled();
 				expect( this.positionSpy ).not.toHaveBeenCalled();
 			});
@@ -807,46 +942,76 @@ describe('Template View', function() {
 			this.newItem = new Item({ title: "My Item" });
 			this.valueView = new TemplateValueView( this.newItem );
 			this.groupView = new TemplateGroupView();
-			this.event = document.createEvent('CustomEvent');
+			// this.event = document.createEvent('CustomEvent');
 		});
 
 		describe('Drop Over', function() {
 
 			beforeEach(function() {
-				this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', false, false, {
+				// this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', false, false, {
+				// 	groupView: 	this.groupView,
+				// 	valueView: 	this.valueView,
+				// 	event: 		event,
+				// 	ui: 		{}
+				// });
+			});
+
+			it('should add the group to the droppable items array only if not already present', function() {
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', {
 					groupView: 	this.groupView,
 					valueView: 	this.valueView,
 					event: 		event,
 					ui: 		{}
 				});
-			});
-
-			it('should add the group to the droppable items array only if not already present', function() {
-				document.dispatchEvent( this.event );
 				expect( this.templateView.droppableItems.length ).toBe( 1 );
 			});
 
 			it('should not add the group to the droppable items array if already present', function() {
 				this.templateView.droppableItems.push( this.groupView );
-				document.dispatchEvent( this.event );
+				
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
+
 				expect( this.templateView.droppableItems.length ).toBe( 1 );
+			});
+
+			it('should make sure the dragging element gets the droppable class', function() {
+				loadFixtures('dragging-item-view.html');
+
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
+
+				expect( $('.ui-draggable-dragging') ).toHaveClass('droppable');
 			});
 		});
 
 		describe('Drop Out', function() {
 
 			beforeEach(function() {
-				this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', false, false, {
+				// this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', false, false, {
+				// 	groupView: 	this.groupView,
+				// 	valueView: 	this.valueView,
+				// 	event: 		event,
+				// 	ui: 		{}
+				// });
+				spyOn( this.groupView, 'removePlaceholders' );
+			});
+
+			it('should clear any placeholders within the group', function() {
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', {
 					groupView: 	this.groupView,
 					valueView: 	this.valueView,
 					event: 		event,
 					ui: 		{}
 				});
-				spyOn( this.groupView, 'removePlaceholders' );
-			});
-
-			it('should clear any placeholders within the group', function() {
-				document.dispatchEvent( this.event );
 				expect( this.groupView.removePlaceholders ).toHaveBeenCalled();
 			});
 
@@ -854,26 +1019,53 @@ describe('Template View', function() {
 				this.templateView.droppableItems.push( {} );
 				this.templateView.droppableItems.push( this.groupView );
 				this.templateView.droppableItems.push( {} );
-				document.dispatchEvent( this.event );
-				expect( this.templateView.droppableItems.indexOf( this.groupView ) ).toBe( -1 );
-			});
-		});
 
-		describe('Drop', function() {
-
-			beforeEach(function() {
-				this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidDropWithValueView', false, false, {
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', {
 					groupView: 	this.groupView,
 					valueView: 	this.valueView,
 					event: 		event,
 					ui: 		{}
 				});
+
+				expect( this.templateView.droppableItems.indexOf( this.groupView ) ).toBe( -1 );
+			});
+
+			it('should make sure the dragging element loses the droppable class', function() {
+				loadFixtures('dragging-item-view.html');
+				$('.ui-draggable-dragging').addClass('droppable');
+				
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
+
+				expect( $('.ui-draggable-dragging') ).not.toHaveClass('droppable');
+			});
+		});
+
+		describe('Drop', function() {
+			var event = {};
+
+			beforeEach(function() {
+				// this.event.initCustomEvent('Columns.TemplateGroupView.GroupDidDropWithValueView', false, false, {
+				// 	groupView: 	this.groupView,
+				// 	valueView: 	this.valueView,
+				// 	event: 		event,
+				// 	ui: 		{}
+				// });
 				spyOn( this.groupView, 'removePlaceholders' );
 				this.positionSpy = spyOn( this.templateView, 'positionDropForDragEventInParentWithPlaceholder' );
 			});
 
 			it('should do nothing if there are no droppable items', function() {
-				document.dispatchEvent( this.event );
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidDropWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
 
 				expect( this.groupView.removePlaceholders ).not.toHaveBeenCalled();
 				expect( this.templateView.positionDropForDragEventInParentWithPlaceholder ).not.toHaveBeenCalled();
@@ -882,7 +1074,13 @@ describe('Template View', function() {
 			it('should do nothing if this group is not the most recent droppable item', function() {
 				this.templateView.droppableItems.push( this.groupView );
 				this.templateView.droppableItems.push( {} );
-				document.dispatchEvent( this.event );
+				
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidDropWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
 
 				expect( this.groupView.removePlaceholders ).not.toHaveBeenCalled();
 				expect( this.templateView.positionDropForDragEventInParentWithPlaceholder ).not.toHaveBeenCalled();
@@ -891,7 +1089,13 @@ describe('Template View', function() {
 			it('should clear any placeholders within the group', function() {
 				this.templateView.droppableItems.push( {} );
 				this.templateView.droppableItems.push( this.groupView );
-				document.dispatchEvent( this.event );
+				
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidDropWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
 
 				expect( this.groupView.removePlaceholders ).toHaveBeenCalled();
 			});
@@ -900,10 +1104,16 @@ describe('Template View', function() {
 				var $group = this.groupView.render();
 				this.templateView.droppableItems.push( {} );
 				this.templateView.droppableItems.push( this.groupView );
-				document.dispatchEvent( this.event );
+				
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidDropWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
 
 				expect( this.positionSpy ).toHaveBeenCalled();
-				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( this.event );
+				expect( this.positionSpy.calls.argsFor(0)[0] ).toEqual( event );
 				expect( this.positionSpy.calls.argsFor(0)[1] ).toEqual( $group );
 				expect( this.positionSpy.calls.argsFor(0)[2] ).toBe( false );
 			});
@@ -911,7 +1121,13 @@ describe('Template View', function() {
 			it('should clear the droppable items array', function() {
 				this.templateView.droppableItems.push( {} );
 				this.templateView.droppableItems.push( this.groupView );
-				document.dispatchEvent( this.event );
+				
+				ColumnsEvent.send('Columns.TemplateGroupView.GroupDidDropWithValueView', {
+					groupView: 	this.groupView,
+					valueView: 	this.valueView,
+					event: 		event,
+					ui: 		{}
+				});
 
 				expect( this.templateView.droppableItems.length ).toBe( 0 );
 			});
@@ -926,33 +1142,31 @@ describe('Template View', function() {
 			this.$template 		= this.templateView.render();
 		});
 
-		describe('Table Will Expand', function() {
+		// describe('Table Will Expand', function() {
 
-			beforeEach(function( done ) {
-				$.Velocity.hook(this.$template, "translateY", "-100px");
-				$(document).trigger('ColumnsTableWillExpand');
-				setTimeout(function() {
-					done();
-				}, 400);
-			});
-
-			it('should adjust the template position when the table is about to expand', function( done ) {
-				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( 0 );
-				done();
-			});
-		});
-
-		// xdescribe('Table Has Expanded', function() {
-
-		// 	it('should add the expanded class to the template once the table has expanded', function() {
+		// 	beforeEach(function( done ) {
+		// 		$.Velocity.hook(this.$template, "translateY", "-100px");
 		// 		$(document).trigger('ColumnsTableWillExpand');
-		// 		expect( this.$template ).toHaveClass('expanded');
+		// 		setTimeout(function() {
+		// 			done();
+		// 		}, 400);
+		// 	});
+
+		// 	it('should adjust the template position when the table is about to expand', function( done ) {
+		// 		expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( 0 );
+		// 		done();
 		// 	});
 		// });
 
-		// xit('should remove the expanded class from the template once the table has collapsed', function() {
+		it('should add the expanded class to the template once the table has expanded', function() {
+			$(document).trigger('ColumnsTableDidExpand');
+			expect( this.templateView.$preview ).toHaveClass('expanded');
+		});
 
-		// });
+		it('should remove the expanded class from the template once the table has collapsed', function() {
+			$(document).trigger('ColumnsTableDidCollapse');
+			expect( this.templateView.$preview ).not.toHaveClass('expanded');
+		});
 
 		describe('Table Did Render', function() {
 
@@ -1003,12 +1217,12 @@ describe('Template View', function() {
 
 		it('should emit a change event', function() {
 			var templateView = new TemplateView();
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 			templateView._emitChange();
 
-			expect( document.dispatchEvent ).toHaveBeenCalled();
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateView.DidChange');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.templateView ).toEqual( templateView );
+			expect( ColumnsEvent.send ).toHaveBeenCalled();
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateView.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].templateView ).toEqual( templateView );
 		});
 	});
 });

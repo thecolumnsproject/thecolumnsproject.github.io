@@ -8,11 +8,13 @@ Item = function( params ) {
 	this.id;
 	this.title;
 	this.style;
+	this.active = true;
 
 	if ( params ) {
 		// this.id 	= 
 		this.title 	= params.title || '';
 		this.style 	= new Style( params.style );
+		this.active = params.active === false ? false : true;
 	}
 
 	this._setupEventListeners();
@@ -68,19 +70,43 @@ Item.prototype.is = function( item ) {
 	}
 }
 
+Item.prototype._setActive = function( active ) {
+
+	if ( this.active !== active ) {
+		this.active = active;
+		this._emitChange();		
+	}
+	
+};
+
 Item.prototype._setupEventListeners = function() {
 
 	// Listen for style changes on this Item
-	document.addEventListener( 'Columns.StyleView.PropertyDidUpdateWithValueForItem', this._onItemStyleDidChange.bind( this ), false );
+	// $(document).on( 'Columns.StyleView.PropertyDidUpdateWithValueForItem', this, false );
+	ColumnsEvent.on( 'Columns.StyleView.PropertyDidUpdateWithValueForItem', this._onItemStyleDidChange.bind( this ) );
+
+	// Listen for template update events
+	// $(document).on( 'Columns.TemplateView.DidChange', this, false );
+	ColumnsEvent.on( 'Columns.TemplateView.DidChange', this._onTemplateChange.bind( this ) );
 };
 
-Item.prototype._onItemStyleDidChange = function( event ) {
-	if ( this.is( event.detail.item ) ) {
+Item.prototype._onItemStyleDidChange = function( event, data ) {
+	if ( this.is( data.item ) ) {
 		this.style.update( [{
-			property: event.detail.property,
-			value: event.detail.value
+			property: data.property,
+			value: data.value
 		}] );
 		this._emitChange();
+	}
+};
+
+Item.prototype._onTemplateChange = function( event ) {
+
+	// Check whether the item exists in the template
+	if ( TemplateView.getValueForItem( this ) ) {
+		this._setActive( false );
+	} else {
+		this._setActive( true );
 	}
 };
 
@@ -90,9 +116,12 @@ Item.prototype._emitChange = function() {
 	// var event = new CustomEvent( 'Columns.Item.DidChange', {
 	// 	groupView: 	this
 	// });
-	var event = document.createEvent('CustomEvent');
-	event.initCustomEvent('Columns.Item.DidChange', false, false, {
+	// var event = document.createEvent('CustomEvent');
+	// event.initCustomEvent('Columns.Item.DidChange', false, false, {
+	// 	item: 	this
+	// });
+	// document.dispatchEvent(event);
+	ColumnsEvent.send('Columns.Item.DidChange', {
 		item: 	this
 	});
-	document.dispatchEvent(event);
 };

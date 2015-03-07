@@ -80,13 +80,18 @@ StyleInputView.prototype.update = function( value ) {
 	// 	event: 	event,
 	// 	ui: 	ui
 	// });
-	var columnsEvent = document.createEvent('CustomEvent');
-	columnsEvent.initCustomEvent('Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', false, false, {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', false, false, {
+	// 	item: this.item,
+	// 	property: this.property,
+	// 	value: 	value
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send( 'Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', {
 		item: this.item,
 		property: this.property,
 		value: 	value
-	});
-	document.dispatchEvent(columnsEvent);
+	} )
 }
 
 StyleInputView.prototype.increment = function( value ) {

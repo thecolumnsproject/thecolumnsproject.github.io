@@ -48,7 +48,12 @@ $layout-column-width: 278px;
 	@include display(flex);
 	@include align-items(center);
 	cursor: pointer;
-	@include transition(opacity 0.2s);
+	@include transition(opacity 0.2s, border-color 0.2s);
+}
+
+.layout-column.dragging {
+	border-color: $primary-color;
+	color: $gray-20;
 }
 
 .layout-column.ui-draggable-dragging {

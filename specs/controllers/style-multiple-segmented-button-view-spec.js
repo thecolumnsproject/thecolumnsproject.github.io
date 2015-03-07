@@ -1,5 +1,9 @@
 describe('Style Multiple Segmented Button View', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initiation', function() {
 
 		it('should have the correct defaults', function() {
@@ -190,14 +194,14 @@ describe('Style Multiple Segmented Button View', function() {
 
 		it('should notify the app of the new value', function() {
 			var item = new Item({ title: "My Item" });
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 			this.buttonsView.item = item;
 			this.buttonsView.update( 'text-align', 'right' );
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.property ).toBe( 'text-align' );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.value ).toBe( 'right' );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( item );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].property ).toBe( 'text-align' );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].value ).toBe( 'right' );
 		});
 	});
 

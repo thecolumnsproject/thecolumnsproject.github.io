@@ -1,5 +1,9 @@
 describe('Style Input View', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initialization', function() {
 
 		it('should default to text type', function() {
@@ -124,15 +128,15 @@ describe('Style Input View', function() {
 
 		it('should fire an update event', function() {
 			var item = new Item({ title: "My Item" });
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 			this.inputView.item = item;
 			this.inputView.property = 'font-size';
 			this.inputView.update( '4' );
 
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.StyleInputView.ValueDidUpdateForPropertyAndItem');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( item );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.property ).toBe( 'font-size' );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.value ).toBe( '4' );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.StyleInputView.ValueDidUpdateForPropertyAndItem');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( item );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].property ).toBe( 'font-size' );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].value ).toBe( '4' );
 		});
 
 	});

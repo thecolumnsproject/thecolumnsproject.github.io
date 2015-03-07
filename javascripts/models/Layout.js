@@ -120,17 +120,20 @@ Layout.prototype._emitChange = function() {
 	// var event = new CustomEvent( 'Columns.Layout.DidChange', {
 	// 	groupView: 	this
 	// });
-	var event = document.createEvent('CustomEvent');
-	event.initCustomEvent('Columns.Layout.DidChange', false, false, {
+	// var event = document.createEvent('CustomEvent');
+	// event.initCustomEvent('Columns.Layout.DidChange', false, false, {
+	// 	layout: 	this
+	// });
+	// document.dispatchEvent(event);
+	ColumnsEvent.send('Columns.Layout.DidChange', {
 		layout: 	this
 	});
-	document.dispatchEvent(event);
 };
 
 Layout.prototype._setupEventListeners = function() {
 
 	// Listen to template change events
-	document.addEventListener( 'Columns.TemplateView.DidChange', this._onTemplateViewChange.bind( this ), false );
+	ColumnsEvent.on( 'Columns.TemplateView.DidChange', this._onTemplateViewChange.bind( this ) );
 };
 
 Layout.prototype._onTemplateViewChange = function( event ) {
@@ -142,10 +145,12 @@ Layout.prototype.defaultLayout = function( items ) {
 	
 	// Set up the default layout
 	var layout = {
+		type: 'group',
 		style: [{
 			property: 'padding',
 			value: '12px'
-		}]
+		}],
+		values: []
 	};
 
 	// Add to the default layout

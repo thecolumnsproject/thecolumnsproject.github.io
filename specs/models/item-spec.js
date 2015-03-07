@@ -1,5 +1,9 @@
 describe('Item Model', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Construction', function() {
 
 		it ('should allow construction with no parameters', function() {
@@ -8,10 +12,16 @@ describe('Item Model', function() {
 			expect(item.style).toBeUndefined();
 		});
 
-		it('should allow construction with a title and style', function() {
+		it('should default to the active state', function() {
+			var item = new Item();
+			expect( item.active ).toBeTruthy();
+		});
+
+		it('should allow construction with a title, style and active state', function() {
 			var item = new Item({
 				title: "My Item",
-				style: 'font-size:14px;color:#3a3a3a;'
+				style: 'font-size:14px;color:#3a3a3a;',
+				active: false
 			});
 			expect(item.title).toBe('My Item');
 			expect(item.style.styles).toEqual([{
@@ -21,6 +31,7 @@ describe('Item Model', function() {
 				property: 'color',
 				value: '#3a3a3a'
 			}]);
+			expect( item.active ).toBe( false );
 		});
 
 		xit('should assign itself an id based on the unformatted item name', function() {
@@ -107,48 +118,124 @@ describe('Item Model', function() {
 
 		beforeEach(function() {
 			this.item = new Item({ title: "My Item" });
-			spyOn( this.item.style, 'update');
 			spyOn( this.item, '_emitChange' );
 		});
 
-		it('should respond to style change events for itself', function() {
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForItem', false, false, {
-				item: this.item,
-				property: 'font-size',
-				value: '12px'
-			});
-			document.dispatchEvent( event );
+		describe('Style Events', function() {
 
-			expect( this.item.style.update ).toHaveBeenCalledWith( [{ property: 'font-size', value: '12px' }] );
+			beforeEach(function() {
+				spyOn( this.item.style, 'update');
+			});
+
+			it('should respond to style change events for itself', function() {
+				// var event = document.createEvent('CustomEvent');
+				// event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForItem', false, false, {
+				// 	item: this.item,
+				// 	property: 'font-size',
+				// 	value: '12px'
+				// });
+				// document.dispatchEvent( event );
+				ColumnsEvent.send('Columns.StyleView.PropertyDidUpdateWithValueForItem', {
+					item: this.item,
+					property: 'font-size',
+					value: '12px'
+				});
+
+				expect( this.item.style.update ).toHaveBeenCalledWith( [{ property: 'font-size', value: '12px' }] );
+				expect( this.item._emitChange ).toHaveBeenCalled();
+			});
+
+			it('should ignore Item change events for other items', function() {
+				var newItem = new Item({ title: "Other Item" });
+				// var event = document.createEvent('CustomEvent');
+				// event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupItem', false, false, {
+				// 	item: newItem,
+				// 	property: 'font-size',
+				// 	value: '12px'
+				// });
+				// document.dispatchEvent( event );
+				ColumnsEvent.send('Columns.StyleView.PropertyDidUpdateWithValueForGroupItem', {
+					item: newItem,
+					property: 'font-size',
+					value: '12px'
+				});
+
+				expect( this.item.style.update ).not.toHaveBeenCalled();
+				expect( this.item._emitChange ).not.toHaveBeenCalled();
+			});
+		});
+
+		describe('Template Events', function() {
+
+			beforeEach(function() {
+				spyOn( this.item, '_setActive' );
+				// this.event = document.createEvent('CustomEvent');
+				// this.event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
+				// 	templateView: 	new TemplateView()
+				// });
+			});
+
+			it('should set itself as inactive if found in the template', function() {
+				spyOn( TemplateView, 'getValueForItem' ).and.returnValue( undefined );
+
+				ColumnsEvent.send('Columns.TemplateView.DidChange', {
+					templateView: 	new TemplateView()
+				});
+
+				expect( this.item._setActive ).toHaveBeenCalledWith( true );
+			});
+
+			it('should set itself as active if not found in the template', function() {
+				spyOn( TemplateView, 'getValueForItem' ).and.returnValue( new TemplateValueView( this.item ) );
+
+				ColumnsEvent.send('Columns.TemplateView.DidChange', {
+					templateView: 	new TemplateView()
+				});
+
+				expect( this.item._setActive ).toHaveBeenCalledWith( false );
+			});
+		});
+	});
+
+	describe('Managing Active State', function() {
+
+		beforeEach(function() {
+			this.item = new Item({ title: "My Item" });
+			spyOn( this.item, '_emitChange' );
+		});
+
+		it('should set active attribute to true', function() {
+			this.item._setActive( true );
+			expect( this.item.active ).toBe( true );
+		});
+
+		it('should set active attribute to false', function() {
+			this.item._setActive( false );
+			expect( this.item.active ).toBe( false );
+		});
+
+		it('should emit a change event if the active state was changed', function() {
+			this.item._setActive( false );
 			expect( this.item._emitChange ).toHaveBeenCalled();
 		});
 
-		it('should ignore Item change events for other items', function() {
-			var newItem = new Item({ title: "Other Item" });
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupItem', false, false, {
-				item: newItem,
-				property: 'font-size',
-				value: '12px'
-			});
-			document.dispatchEvent( event );
-
-			expect( this.item.style.update ).not.toHaveBeenCalled();
+		it('should not emit a change event if the active state was not changed', function() {
+			this.item._setActive( true );
 			expect( this.item._emitChange ).not.toHaveBeenCalled();
 		});
+
 	});
 
 	describe('Emitting Change Events', function() {
 
 		it('should alert the app that it has been updated', function() {
 			var item = new Item({ title: "My Item" });
-			spyOn( document, 'dispatchEvent' );
+			spyOn( ColumnsEvent, 'send' );
 			item._emitChange();
 
-			expect( document.dispatchEvent ).toHaveBeenCalled();
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.Item.DidChange');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.item ).toEqual( item );
+			expect( ColumnsEvent.send ).toHaveBeenCalled();
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Item.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( item );
 		});
 	});
 });

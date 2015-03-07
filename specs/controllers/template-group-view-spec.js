@@ -2,6 +2,10 @@ jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Template Group View', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	describe('Initialization', function() {
 
 		beforeEach(function() {
@@ -222,7 +226,7 @@ describe('Template Group View', function() {
 		});
 
 		it('should emit an event once the update has finished', function() {
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 			this.groupView.layout = [{
 				property:'flex-direction',
 				value: 'column'
@@ -237,9 +241,9 @@ describe('Template Group View', function() {
 				value: 'stretch'
 			}];
 			this.groupView.update();
-			expect( document.dispatchEvent ).toHaveBeenCalled();
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.DidChange');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
+			expect( ColumnsEvent.send ).toHaveBeenCalled();
+			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.TemplateGroupView.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].groupView ).toEqual( this.groupView );
 		});
 	});	
 
@@ -321,13 +325,18 @@ describe('Template Group View', function() {
 		});
 
 		it('should respond to layout change events for itself', function() {
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', false, false, {
+			// var event = document.createEvent('CustomEvent');
+			// event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', false, false, {
+			// 	groupView: this.groupView,
+			// 	property: 'align-items',
+			// 	value: 'left'
+			// });
+			// document.dispatchEvent( event );
+			ColumnsEvent.send('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', {
 				groupView: this.groupView,
 				property: 'align-items',
 				value: 'left'
 			});
-			document.dispatchEvent( event );
 
 			expect( this.groupView._mergeLayout ).toHaveBeenCalledWith( 'align-items', 'left' );
 			expect( this.groupView.update ).toHaveBeenCalled();
@@ -335,13 +344,18 @@ describe('Template Group View', function() {
 
 		it('should ignore change events for other groups', function() {
 			var newGroupView = new TemplateGroupView( this.layout );
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', false, false, {
+			// var event = document.createEvent('CustomEvent');
+			// event.initCustomEvent('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', false, false, {
+			// 	groupView: newGroupView,
+			// 	property: 'align-items',
+			// 	value: 'left'
+			// });
+			// document.dispatchEvent( event );
+			ColumnsEvent.send('Columns.StyleView.PropertyDidUpdateWithValueForGroupView', {
 				groupView: newGroupView,
 				property: 'align-items',
 				value: 'left'
 			});
-			document.dispatchEvent( event );
 
 			expect( this.groupView._mergeLayout ).not.toHaveBeenCalled();
 			expect( this.groupView.update ).not.toHaveBeenCalled();
@@ -369,7 +383,7 @@ describe('Template Group View', function() {
 				droppable: this.valueView
 			};
 
-			spyOn(document, 'dispatchEvent');
+			spyOn( ColumnsEvent, 'send' );
 		});
 
 		it('should be droppable', function() {
@@ -378,26 +392,26 @@ describe('Template Group View', function() {
 
 		it('should emit an event on drop over', function() {
 			this.$group.trigger('dropover', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].groupView ).toEqual( this.groupView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 
 		it('should emit an event on drop out', function() {
 			this.$group.trigger('dropout', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.TemplateGroupView.GroupDidEndDropOverWithValueView');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].groupView ).toEqual( this.groupView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 
 		it('should emit an event on drop', function() {
 			this.$group.trigger('drop', this.fakeUI);
-			expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.TemplateGroupView.GroupDidDropWithValueView');
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.groupView ).toEqual( this.groupView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.valueView ).toEqual( this.valueView );
-			expect( document.dispatchEvent.calls.argsFor(0)[0].detail.ui ).toEqual( this.fakeUI );
+			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.TemplateGroupView.GroupDidDropWithValueView');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].groupView ).toEqual( this.groupView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 	});
 

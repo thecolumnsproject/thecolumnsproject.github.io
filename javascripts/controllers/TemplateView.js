@@ -1,17 +1,23 @@
 // Object to manage properties of and interaction
 // with the template itself.
 
-var ROW_GROUP_SELECTOR = '.layout-template-row-group', 
-	ROW_VALUE_SELECTOR = '.layout-template-row-value';
+var ROW_GROUP_SELECTOR 		= '.layout-template-row-group', 
+	ROW_VALUE_SELECTOR 		= '.layout-template-row-value',
+	DRAGGING_ITEM_SELECTOR 	= '.ui-draggable-dragging',
+	EXPANDED_CLASS 			= 'expanded',
+	DROPPABLE_CLASS 		= 'droppable';
 
 TemplateView = function( layout )  {
 
-	this.layout = layout || {};
+	this.layout = layout || new Layout();
 	this.template = Columns.Templates['templates/layout/template.hbs'];
 	this.$template;
 
 	this.draggingItem;
 	this.droppableItems = [];
+
+	this._renderPreview();
+	this._setupEventListeners();
 };
 
 // Class Methods
@@ -69,26 +75,45 @@ TemplateView.getGroupsForItem = function( item ) {
 TemplateView.prototype.render = function() {
 
 	// Render the layout preview
-	var preview = Columns.Templates['templates/layout/preview.hbs'];
-	$('#layout').append(preview({
-		source: config.embed.host + config.embed.path
-	}));
+	this._renderPreview();
+
+	// Render and return the template
+	return this._renderTemplate();
+};
+
+TemplateView.prototype._renderPreview = function() {
+
+	var preview = Columns.Templates['templates/layout/preview.hbs'],
+		$preview = $( preview({
+			source: config.embed.host + config.embed.path
+		}) );
+
+	this.$preview = $preview
+	$('#layout').append( $preview );
+
+	return this.$preview;
+
+};
+
+TemplateView.prototype._renderTemplate = function() {
 
 	// For each node in the layout object,
 	// render either a group or value
 	// and recursively append them to each other
 	// until we've constructed the full template
-	var $row = this._renderRowComponent( this.layout );
+	var $row = this._renderRowComponent( this.layout.model );
 	var $template = $( this.template() );
 	$template.find('.layout-template-row').append( $row );
 	$('#layout').append( $template );
 	this.$template = $template;
 
-	this._setupEvents();
+	this._setupTemplateEvents();
+	this._emitChange();
 
 	return this.$template;
 
-};
+}
+
 
 // Render a portion of the row layout object
 // @param { object } component -- The component to render (either a group or value)
@@ -113,7 +138,8 @@ TemplateView.prototype._renderRowComponent = function( component ) {
 		return $component;
 
 	} else if ( component.type === 'single' ) {
-		componentView = new TemplateValueView( component.item );
+		var item = new Item({ title: component.data, style: component.style });
+		componentView = new TemplateValueView( item );
 		return componentView.render();
 	}
 
@@ -160,59 +186,52 @@ TemplateView.prototype._emitChange = function() {
 	// var event = new CustomEvent( 'Columns.TemplateView.DidChange', {
 	// templateView: 	this
 	// });
-	var event = document.createEvent('CustomEvent');
-	event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
-		templateView: 	this
+	// var event = document.createEvent('CustomEvent');
+	// event.initCustomEvent('Columns.TemplateView.DidChange', false, false, {
+	// 	templateView: 	this
+	// });
+	// document.dispatchEvent(event);
+
+	ColumnsEvent.send('Columns.TemplateView.DidChange', {
+		templateView: this
 	});
-	document.dispatchEvent(event);
 };
 
-TemplateView.prototype._setupEvents = function() {
+TemplateView.prototype._setupEventListeners = function() {
+
+	// Listen to the table upload event
+	ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', this._onTemplateUpload.bind( this ) );
+};
+
+TemplateView.prototype._setupTemplateEvents = function() {
 
 	// Listen to drag events for items
-	document.addEventListener( 'Columns.ItemView.ItemDidBeginDrag', this._onItemDidBeginDrag.bind( this ), false);
-	document.addEventListener( 'Columns.ItemView.ItemDidEndDrag', this._onItemDidEndDrag.bind( this ), false);
-	document.addEventListener( 'Columns.ItemView.ItemDidDrag', this._onItemDidDrag.bind( this ), false);
+	ColumnsEvent.on( 'Columns.ItemView.ItemDidBeginDrag', this._onItemDidBeginDrag.bind( this ));
+	ColumnsEvent.on( 'Columns.ItemView.ItemDidEndDrag', this._onItemDidEndDrag.bind( this ));
+	ColumnsEvent.on( 'Columns.ItemView.ItemDidDrag', this._onItemDidDrag.bind( this ));
 
 	// Listen to drag events for values
-	document.addEventListener( 'Columns.TemplateValueView.ValueDidBeginDragWithItem', this._onValueDidBeginDrag.bind( this ), false);
-	document.addEventListener( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ), false);
-	document.addEventListener( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ), false);
+	ColumnsEvent.on( 'Columns.TemplateValueView.ValueDidBeginDragWithItem', this._onValueDidBeginDrag.bind( this ));
+	ColumnsEvent.on( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ));
+	ColumnsEvent.on( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ));
 
 	// Listen to drop events for groups
-	document.addEventListener( 'Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', this._onGroupDidBeginDropOver.bind( this ), false);
-	document.addEventListener( 'Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', this._onGroupDidEndDropOver.bind( this ), false);
-	document.addEventListener( 'Columns.TemplateGroupView.GroupDidDropWithValueView', this._onGroupDidDrop.bind( this ), false);
+	ColumnsEvent.on( 'Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', this._onGroupDidBeginDropOver.bind( this ));
+	ColumnsEvent.on( 'Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', this._onGroupDidEndDropOver.bind( this ));
+	ColumnsEvent.on( 'Columns.TemplateGroupView.GroupDidDropWithValueView', this._onGroupDidDrop.bind( this ));
 
 	// Listen to embedded table events
-	$(document).on('ColumnsTableDidRenderData', this._onTableDidRenderData.bind( this ) );
-	$(document).on('ColumnsTableDidScroll', this._onTableDidScroll.bind( this ) );
-	$(document).on('ColumnsTableWillExpand', this._onTableWillExpand.bind( this ) );
+	ColumnsEvent.on('ColumnsTableDidRenderData', this._onTableDidRenderData.bind( this ) );
+	ColumnsEvent.on('ColumnsTableDidScroll', this._onTableDidScroll.bind( this ) );
+	ColumnsEvent.on('ColumnsTableWillExpand', this._onTableWillExpand.bind( this ) );
+	ColumnsEvent.on('ColumnsTableDidExpand', this._onTableDidExpand.bind( this ) );
+	ColumnsEvent.on('ColumnsTableDidCollapse', this._onTableDidCollapse.bind( this ) );
 
 };
 
-TemplateView.prototype._removeEvents = function() {
-
-	// Listen to drag events for items
-	document.removeEventListener( 'Columns.ItemView.ItemDidBeginDrag', this._onItemDidBeginDrag.bind( this ), false);
-	document.removeEventListener( 'Columns.ItemView.ItemDidEndDrag', this._onItemDidEndDrag.bind( this ), false);
-	document.removeEventListener( 'Columns.ItemView.ItemDidDrag', this._onItemDidDrag.bind( this ), false);
-
-	// Listen to drag events for values
-	document.removeEventListener( 'Columns.TemplateValueView.ValueDidBeginDragWithItem', this._onValueDidBeginDrag.bind( this ), false);
-	document.removeEventListener( 'Columns.TemplateValueView.ValueDidEndDragWithItem', this._onValueDidEndDrag.bind( this ), false);
-	document.removeEventListener( 'Columns.TemplateValueView.ValueDidDragWithItem', this._onValueDidDrag.bind( this ), false);
-
-	// Listen to drop events for groups
-	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidBeginDropOverWithValueView', this._onGroupDidBeginDropOver.bind( this ), false);
-	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidEndDropOverWithValueView', this._onGroupDidEndDropOver.bind( this ), false);
-	document.removeEventListener( 'Columns.TemplateGroupView.GroupDidDropWithValueView', this._onGroupDidDrop.bind( this ), false);
-
-	// Listen to embedded table events
-	$(document).off('ColumnsTableDidRenderData', this._onTableDidRenderData.bind( this ) );
-	$(document).off('ColumnsTableDidScroll', this._onTableDidScroll.bind( this ) );
-	$(document).off('ColumnsTableWillExpand', this._onTableWillExpand.bind( this ) );
-
+TemplateView.prototype._onTemplateUpload = function( event, data ) {
+	this.layout = data.table.layout;
+	this._renderTemplate();
 };
 
 TemplateView.prototype._onTableDidRenderData = function( event, data ) {
@@ -221,7 +240,7 @@ TemplateView.prototype._onTableDidRenderData = function( event, data ) {
 	});
 };
 
-TemplateView.prototype._onTableWillExpand = function( event ) {
+TemplateView.prototype._onTableWillExpand = function( event, data ) {
 
 	// Move the template down below the header
 	this.$template.velocity({
@@ -231,7 +250,17 @@ TemplateView.prototype._onTableWillExpand = function( event ) {
 	});
 };
 
-TemplateView.prototype._onTableDidScroll = function( event ) {
+TemplateView.prototype._onTableDidExpand = function( event, data ) {
+
+	this.$preview.addClass( EXPANDED_CLASS );
+};
+
+TemplateView.prototype._onTableDidCollapse = function( event, data ) {
+
+	this.$preview.removeClass( EXPANDED_CLASS );
+};
+	
+TemplateView.prototype._onTableDidScroll = function( event, data ) {
 
 	// Move the template up until it hits the header
 	var minScroll = -24,
@@ -246,56 +275,60 @@ TemplateView.prototype._onTableDidScroll = function( event ) {
 	$.Velocity.hook( this.$template, "translateY", scroll + "px" );
 };
  
-TemplateView.prototype._onItemDidBeginDrag = function( event ) {
-	this.draggingItem = event.detail.item.item;
+TemplateView.prototype._onItemDidBeginDrag = function( event, data ) {
+	this.draggingItem = data.item.item;
 };
 
-TemplateView.prototype._onItemDidEndDrag = function( event ) {
+TemplateView.prototype._onItemDidEndDrag = function( event, data ) {
 	this.draggingItem = undefined;
 	this.removePlaceholders();
 };
 
-TemplateView.prototype._onItemDidDrag = function( event ) {
+TemplateView.prototype._onItemDidDrag = function( event, data ) {
 	if ( this.droppableItems.length ) {
 		this.removePlaceholders();
-		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group, true );
+		this.positionDropForDragEventInParentWithPlaceholder( data.event, this.droppableItems[ this.droppableItems.length - 1 ].$group, true );
 	}
 };
 
-TemplateView.prototype._onValueDidBeginDrag = function( event ) {
-	this.draggingItem = event.detail.valueView.item;
+TemplateView.prototype._onValueDidBeginDrag = function( event, data ) {
+	this.draggingItem = data.valueView.item;
 	this.dissolveSingleValueGroups();
 };
 
-TemplateView.prototype._onValueDidEndDrag = function( event ) {
+TemplateView.prototype._onValueDidEndDrag = function( event, data ) {
 	if ( !this.droppableItems.length ) {
-		this.removeValue( event.detail.valueView );
+		this.removeValue( data.valueView );
 		this._emitChange();
 	}
 }
 
-TemplateView.prototype._onValueDidDrag = function( event ) {
+TemplateView.prototype._onValueDidDrag = function( event, data ) {
 	if ( this.droppableItems.length ) {
 		this.removePlaceholders();
-		this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group , true );
+		this.positionDropForDragEventInParentWithPlaceholder( data.event, this.droppableItems[ this.droppableItems.length - 1 ].$group , true );
 	}
 };
 
-TemplateView.prototype._onGroupDidBeginDropOver = function( event ) {
-	if ( this.droppableItems.indexOf( event.detail.groupView ) == -1 ) {
-		this.droppableItems.push( event.detail.groupView );
+TemplateView.prototype._onGroupDidBeginDropOver = function( event, data ) {
+	if ( this.droppableItems.indexOf( data.groupView ) == -1 ) {
+		this.droppableItems.push( data.groupView );
 	}
+
+	$( DRAGGING_ITEM_SELECTOR ).addClass( DROPPABLE_CLASS );
 };
 
-TemplateView.prototype._onGroupDidEndDropOver = function( event ) {
-	var groupView = event.detail.groupView;
+TemplateView.prototype._onGroupDidEndDropOver = function( event, data ) {
+	var groupView = data.groupView;
 
 	groupView.removePlaceholders();
 	this.droppableItems.splice( this.droppableItems.indexOf( groupView ), 1 );
+
+	$( DRAGGING_ITEM_SELECTOR ).removeClass( DROPPABLE_CLASS );
 };
 
-TemplateView.prototype._onGroupDidDrop = function( event ) {
-	var groupView = event.detail.groupView;
+TemplateView.prototype._onGroupDidDrop = function( event, data ) {
+	var groupView = data.groupView;
 
 	// Don't do anything if this group isn't the most recently hovered over
 	// of if there are currently no hovered groups (which should never be the case)
@@ -307,7 +340,7 @@ TemplateView.prototype._onGroupDidDrop = function( event ) {
 	groupView.removePlaceholders();
 
 	// And finally position the new item in the template
-	this.positionDropForDragEventInParentWithPlaceholder( event, this.droppableItems[ this.droppableItems.length - 1 ].$group , false )
+	this.positionDropForDragEventInParentWithPlaceholder( data.event, this.droppableItems[ this.droppableItems.length - 1 ].$group , false )
 
 	// Empty the droppable items array
 	this.droppableItems = [];
@@ -426,7 +459,7 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 
 			// Are we intersecting directly with the child?
 			dimensions = this.dimensionsForValue( $child );
-			if ( this.isIntersected( dimensions, event.originalEvent ) ) {
+			if ( this.isIntersected( dimensions, event ) ) {
 				// Reset the previous child
 				$previousChild = null;
 
@@ -437,7 +470,7 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 				// Determine whether the new value goes first or second in the new group
 				// using new dimensions as a result of the new group
 				dimensions = this.dimensionsForValue( $child );
-				dragPoint = $parent.data('flex-direction') == 'row' ? event.originalEvent.clientX : event.originalEvent.clientY;
+				dragPoint = $parent.data('flex-direction') == 'row' ? event.clientX : event.clientY;
 				if ( this.isPrevious( dimensions, dragPoint) ) {
 					$previousChild = $child;
 				}
@@ -445,7 +478,7 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 			} else {
 				// Prepare dimensions for determining which values goes first in the group
 				dimensions = this.dimensionsForValue( $child );
-				dragPoint = $parent.data('flex-direction') == 'row' ? event.originalEvent.clientX : event.originalEvent.clientY;
+				dragPoint = $parent.data('flex-direction') == 'row' ? event.clientX : event.clientY;
 				if ( this.isPrevious( dimensions, dragPoint) ) {
 					$previousChild = $child;
 				}

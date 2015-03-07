@@ -2,6 +2,10 @@ jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Upload View', function() {
 
+	afterEach(function() {
+		ColumnsEvent.offAll();
+	});
+
 	beforeEach(function() {
 		loadFixtures('upload.html');
 		this.upload = new UploadView();
@@ -52,7 +56,7 @@ describe('Upload View', function() {
 			beforeEach(function() {
 				spyOn( this.upload, '_setLoading' );
 				spyOn( this.upload, '_parseFile' );
-				spyOn( document, 'dispatchEvent' );	
+				spyOn( ColumnsEvent, 'send' );	
 			});
 
 			it('should set the loading message with the file name', function() {				
@@ -100,9 +104,9 @@ describe('Upload View', function() {
 					}
 				});
 
-				expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.UploadView.DidChooseFile');
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.uploadView ).toEqual( this.upload );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.file ).toEqual( file );
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.UploadView.DidChooseFile');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].uploadView ).toEqual( this.upload );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].file ).toEqual( file );
 			});
 
 			xit('should respond to the user choosing a file', function() {
@@ -127,22 +131,30 @@ describe('Upload View', function() {
 		describe('Upload Success', function() {
 
 			beforeEach(function() {
-				this.columnsEvent = document.createEvent('CustomEvent');
-				this.columnsEvent.initCustomEvent('Columns.Table.DidUploadWithSuccess', false, false, {
-					table: 	new Table()
-				});
+				// this.columnsEvent = document.createEvent('CustomEvent');
+				// this.columnsEvent.initCustomEvent('Columns.Table.DidUploadWithSuccess', false, false, {
+				// 	table: 	new Table()
+				// });
 				this.upload.render();
 			});
 
 			it('should turn off the loading message', function() {
 				spyOn( this.upload, '_setLoading' );
-				document.dispatchEvent( this.columnsEvent );
+
+				ColumnsEvent.send('Columns.Table.DidUploadWithSuccess', {
+					table: 	new Table()
+				});
+
 				expect( this.upload._setLoading ).toHaveBeenCalledWith( false );
 			});
 
 			it('should hide', function() {
 				spyOn( this.upload, 'hide' );
-				document.dispatchEvent( this.columnsEvent );
+				
+				ColumnsEvent.send('Columns.Table.DidUploadWithSuccess', {
+					table: 	new Table()
+				});
+
 				expect( this.upload.hide ).toHaveBeenCalled();
 			});
 		});
@@ -150,16 +162,20 @@ describe('Upload View', function() {
 		describe('Upload Failure', function() {
 
 			beforeEach(function() {
-				this.columnsEvent = document.createEvent('CustomEvent');
-				this.columnsEvent.initCustomEvent('Columns.Table.DidUploadWithFailure', false, false, {
-					table: 	new Table()
-				});
+				// this.columnsEvent = document.createEvent('CustomEvent');
+				// this.columnsEvent.initCustomEvent('Columns.Table.DidUploadWithFailure', false, false, {
+				// 	table: 	new Table()
+				// });
 				this.upload.render();
 			});
 
 			it('should update the loading message', function() {
 				spyOn( this.upload, '_setLoading' );
-				document.dispatchEvent( this.columnsEvent );
+				
+				ColumnsEvent.send('Columns.Table.DidUploadWithFailure', {
+					table: 	new Table()
+				});
+
 				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong. Mind trying a different .csv?" );
 			});
 
@@ -202,16 +218,16 @@ describe('Upload View', function() {
 			});
 
 			it('should identify the header row and create items from the column names', function() {
-				var row = { data: {} };
+				var row = { data: [ 'data' ] };
 				this.upload._parseRow( row, this.handle, 'test.csv' );
-				expect( this.upload._createColumnItems ).toHaveBeenCalledWith( row.data, 'test.csv' );
+				expect( this.upload._createColumnItems ).toHaveBeenCalledWith( row.data[ 0 ], 'test.csv' );
 			});
 
 			it('should identify subsequent rows and compile them as data points', function() {
 				this.upload.parsedRows = 1;
-				var row = { data: {} };
+				var row = { data: [ 'data' ] };
 				this.upload._parseRow( row, this.handle, 'test.csv' );
-				expect( this.upload._createRow ).toHaveBeenCalledWith( row.data, 'test.csv' );
+				expect( this.upload._createRow ).toHaveBeenCalledWith( row.data[ 0 ], 'test.csv' );
 			});
 
 			it('should stop after the first 20 rows', function() {
@@ -227,7 +243,7 @@ describe('Upload View', function() {
 		describe('Create Column Items', function() {
 
 			beforeEach(function() {
-				spyOn( document, 'dispatchEvent' );
+				spyOn( ColumnsEvent, 'send' );
 			});
 
 			it('should emit an event announcing the parsing of column items', function() {
@@ -237,17 +253,17 @@ describe('Upload View', function() {
 					'Hometown'
 				];
 				this.upload._createColumnItems( columnNames, 'test.csv' );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.UploadView.DidParseColumnNamesForFile');
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.uploadView ).toEqual( this.upload );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.fileName ).toEqual( 'test.csv' );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.columns ).toEqual( columnNames );
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.UploadView.DidParseColumnNamesForFile');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].uploadView ).toEqual( this.upload );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].fileName ).toEqual( 'test.csv' );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].columns ).toEqual( columnNames );
 			});
 		});
 
 		describe('Create Data Row', function() {
 
 			beforeEach(function() {
-				spyOn( document, 'dispatchEvent' );
+				spyOn( ColumnsEvent, 'send' );
 			});
 
 			it('should emit an event announcing the parsing of a data row', function() {
@@ -259,26 +275,26 @@ describe('Upload View', function() {
 					]
 				};
 				this.upload._createRow( row, 'test.csv' );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.UploadView.DidParseDataRowForFile');
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.uploadView ).toEqual( this.upload );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.fileName ).toEqual( 'test.csv' );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.row ).toEqual( row );
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.UploadView.DidParseDataRowForFile');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].uploadView ).toEqual( this.upload );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].fileName ).toEqual( 'test.csv' );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].row ).toEqual( row );
 			});
 		});
 
 		describe('Completion of Parsing', function() {
 
 			beforeEach(function() {
-				spyOn( document, 'dispatchEvent' );
+				spyOn( ColumnsEvent, 'send' );
 			});
 
 			it('should emit an event with the data', function() {
 				var results = {};
 				var file = { name: 'test.csv' };
 				this.upload._onParseComplete( results, file );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].type ).toBe('Columns.UploadView.DidCompleteParseForFile');
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.uploadView ).toEqual( this.upload );
-				expect( document.dispatchEvent.calls.argsFor(0)[0].detail.file ).toEqual( file );
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.UploadView.DidCompleteParseForFile');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].uploadView ).toEqual( this.upload );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].file ).toEqual( file );
 			});
 		});
 	});

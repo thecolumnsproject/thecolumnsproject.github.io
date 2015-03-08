@@ -200,6 +200,15 @@ describe('Table', function () {
 			expect( columns[ 0 ].title ).toEqual("First Name");
 		});
 
+		it('should attach default styles to the first three items', function() {
+			var names = [ "First Name", "Last Name", "Hometown", "Age" ];
+			var columns = this.table.itemsFromColumnNames( names );
+			expect( columns[ 0 ].style.styles ).toEqual( DEFAULTS.styles[0] );
+			expect( columns[ 1 ].style.styles ).toEqual( DEFAULTS.styles[1] );
+			expect( columns[ 2 ].style.styles ).toEqual( DEFAULTS.styles[2] );
+			expect( columns[ 3 ].style.styles ).toEqual( [] );
+		});
+
 		it('should return items if passed an array of items', function() {
 			var items = [ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' }) ];
 			var columns = this.table.itemsFromColumnNames( items );

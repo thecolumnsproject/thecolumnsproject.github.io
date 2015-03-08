@@ -72,6 +72,8 @@ TemplateValueView.prototype._setupDrag = function() {
 
 	this.$value.on( 'dragstart', $.proxy(function( event, ui ) {
 
+		$( event.target ).addClass('inactive');
+
 		// Alert any listeners that the item has started drag
 		// var event = new CustomEvent( 'Columns.ItemView.ItemDidBeginDrag', {
 		// 	item: 	this,
@@ -117,6 +119,8 @@ TemplateValueView.prototype._setupDrag = function() {
 			event: 		event,
 			ui: 		ui
 		});
+
+		$( event.target ).remove();
 
 	}, this) );
 

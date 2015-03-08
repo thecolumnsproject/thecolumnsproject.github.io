@@ -39,7 +39,7 @@ TemplateView.getValueForItem = function( item ) {
 	// and filter them by their inner text
 	// returning only the first that matches the item's title
 	$values = $(ROW_VALUE_SELECTOR).filter(function( i, element ) {
-		return $( element ).text().trim() === item.title;
+		return $( element ).text().trim() === item.formattedTitle();
 	});
 
 	// Return undefined if there are no resulting values
@@ -392,12 +392,12 @@ TemplateView.prototype.isPrevious = function( values, dragPoint ) {
 	return dragPoint >= values.dragMiddle;
 };
 
-TemplateView.prototype.wrapValueWithGroup = function( $value ) {
+TemplateView.prototype.wrapValueWithGroup = function( $value, placeholder ) {
 	
 	// Make sure the group has the opposite direction of its parent
 	var direction 	= $value.parent().data('flex-direction') === 'column' ? 'row' : 'column';
 	var $group 		= new TemplateGroupView({
-		placeholder: true,
+		placeholder: placeholder,
 		layout: [{
 			property:  	'flex-direction',
 			value: 		 direction
@@ -465,12 +465,12 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 
 				// Wrap the two items in a group
 				// and make the new group the new parent
-				$parent = this.wrapValueWithGroup( $child ).parent();
+				$parent = this.wrapValueWithGroup( $child, placeholder ).parent();
 
 				// Determine whether the new value goes first or second in the new group
 				// using new dimensions as a result of the new group
 				dimensions = this.dimensionsForValue( $child );
-				dragPoint = $parent.data('flex-direction') == 'row' ? event.clientX : event.clientY;
+				dragPoint = $parent.data('flex-direction') == 'column' ? event.clientY : event.clientX;
 				if ( this.isPrevious( dimensions, dragPoint) ) {
 					$previousChild = $child;
 				}
@@ -478,7 +478,7 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 			} else {
 				// Prepare dimensions for determining which values goes first in the group
 				dimensions = this.dimensionsForValue( $child );
-				dragPoint = $parent.data('flex-direction') == 'row' ? event.clientX : event.clientY;
+				dragPoint = $parent.data('flex-direction') == 'column' ? event.clientY : event.clientX;
 				if ( this.isPrevious( dimensions, dragPoint) ) {
 					$previousChild = $child;
 				}

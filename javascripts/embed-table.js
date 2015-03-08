@@ -992,8 +992,8 @@ $$(function() {
 		});
 	}
 
-	Table.prototype._onTableDidUpload = function( event ) {
-		var table = event.detail.table;
+	Table.prototype._onTableDidUpload = function( event, data ) {
+		var table = data.table;
 
 		// Generate a layout
 		this.generateLayout( table.layout.model, false );
@@ -1003,7 +1003,13 @@ $$(function() {
 
 		// Expand yourself
 		this.expand();
-	}
+	};
+
+	Table.prototype._onLayoutDidChange = function( event, data ) {
+
+		// Generate a new layout and reload
+		this.generateLayout( data.layout.model, true );
+	};
 
 	// Basic setup operations before we start creating tables
 	// ------------------------------------------------------
@@ -1078,7 +1084,8 @@ $$(function() {
 			// If we're in preview mode, make sure we listen for data update events
 			if (table.preview) {
 				// Columns.Template.setupTableEventListeners(table.$$table);
-				document.addEventListener('Columns.Table.DidUploadWithSuccess', table._onTableDidUpload.bind( table ), false );
+				ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', table._onTableDidUpload.bind( table ) );
+				ColumnsEvent.on( 'Columns.Layout.DidChange', table._onLayoutDidChange.bind( table ) );
 			} else {
 				table.fetchData();
 			}

@@ -398,6 +398,11 @@ describe('Template View', function() {
 					this.templateView.wrapValueWithGroup( this.$value );
 					expect( this.$value.parent().data('flex-direction') ).toBe('column');
 				});
+
+				it('should render the group with the correct placeholder status', function() {
+					this.templateView.wrapValueWithGroup( this.$value, true );
+					expect( this.$value.parent() ).toHaveClass('placeholder');
+				});
 			});
 
 			describe('Testing Whether an Existing Value is to the Left of a Drag', function() {

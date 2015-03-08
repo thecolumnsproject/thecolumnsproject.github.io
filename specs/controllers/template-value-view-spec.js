@@ -180,12 +180,20 @@ describe('Template Value View', function() {
 			expect( this.$value.draggable('instance') ).toBeDefined();
 		});
 
-		it('should emit an event on drag start', function() {
-			this.$value.trigger('dragstart', this.fakeUI);
-			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidBeginDragWithItem');
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+		describe('Drag Start', function() {
+
+			it('should emit an event on drag start', function() {
+				this.$value.trigger('dragstart', this.fakeUI);
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidBeginDragWithItem');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+			});
+
+			it('should become inactive on drag start', function() {
+				this.$value.trigger('dragstart', this.fakeUI);
+				expect( this.valueView.$value ).toHaveClass('inactive');
+			});
 		});
 
 		it('should emit an event on drag stop', function() {
@@ -196,13 +204,22 @@ describe('Template Value View', function() {
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 
-		it('should emit an event on drag', function() {
-			this.$value.trigger('drag', this.fakeUI);
-			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidDragWithItem');
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+		describe('Drag Stop', function() {
+
+			it('should emit an event on drag', function() {
+				this.$value.trigger('drag', this.fakeUI);
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidDragWithItem');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+			});
+
+			it('should remove itself from the template', function() {
+				this.$value.trigger('drag', this.fakeUI);
+				expect( this.valueView.$value ).not.toBeInDOM();
+			});
 		});
+			
 	});
 
 	// afterEach(function() {

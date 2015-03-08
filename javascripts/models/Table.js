@@ -106,8 +106,18 @@ Table.prototype.itemsFromColumnNames = function( columnNames ) {
 		throw "exception: Column names must be a string or an array of strings";
 	}
 
-	return columnNames.map(function( columnName ) {
-		return columnName instanceof Item ? columnName : new Item({ title: columnName });
+	return columnNames.map(function( columnName, i ) {
+		// var item;
+
+		// if ( columnName instanceof Item ) {
+		// 	return columnName;
+		// } else {
+		// 	item = new Item({
+		// 		title: columnName,
+		// 		style: DEFAULTS.styles[ i ];
+		// 	})
+		// }
+		return columnName instanceof Item ? columnName : new Item({ title: columnName, style: DEFAULTS.styles[ i ] });
 	});
 }
 

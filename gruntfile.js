@@ -106,7 +106,8 @@ module.exports = function(grunt) {
 			styling: {
 				src: [
 					'javascripts/styling/components/*.js',
-					'javascripts/styling/types.js'
+					'javascripts/styling/types.js',
+					'javascripts/styling/defaults.js'
 				],
 				dest: 'compiled-javascripts/styling/compiled-data.js'
 			}

@@ -9,7 +9,7 @@ var ROW_GROUP_SELECTOR 		= '.layout-template-row-group',
 
 TemplateView = function( layout )  {
 
-	this.layout = layout || new Layout();
+	this.layout = layout;;
 	this.template = Columns.Templates['templates/layout/template.hbs'];
 	this.$template;
 
@@ -18,10 +18,13 @@ TemplateView = function( layout )  {
 
 	this._renderPreview();
 	this._setupEventListeners();
+
+	TemplateView.groups = [];
 };
 
 // Class Methods
 // ----------------
+TemplateView.groups = [];
 
 // Return the correct value DOM representation for an item
 // @param { Item } item -- the Item to retrive
@@ -68,9 +71,58 @@ TemplateView.getGroupsForItem = function( item ) {
 	}
 
 	// Return the value's parent groups
-	return $value.parents(ROW_GROUP_SELECTOR);
+	return $value.parents(ROW_GROUP_SELECTOR).map(function( i, group ) {
+		return TemplateView.getGroupViewForGroup( $( group ) );
+	}).toArray();
 
-}
+};
+
+TemplateView.getGroupViewForGroup = function( group ) {
+	var newGroup = [];
+
+	if ( !( group instanceof TemplateGroupView ) && !( group instanceof jQuery ) ) {
+		throw "exception: group must be TemplateGroupView or jQuery object";
+	}
+
+	newGroup = TemplateView.groups.filter(function( oldGroup, i ) {
+		if ( group instanceof TemplateGroupView && group === oldGroup ) {
+			return true;
+		} else if ( group instanceof jQuery && group.is( oldGroup.$group ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+
+	if ( newGroup.length ) {
+		return newGroup[ 0 ];
+	} else {
+		return undefined;
+	}
+};
+
+TemplateView.removeGroup = function( group ) {
+	var groupView = group,
+		index;
+
+	// If the group is a jquery object, get its group view
+	if ( groupView instanceof jQuery ) {
+		groupView = TemplateView.getGroupViewForGroup( groupView );
+	}
+
+	// Get the group's index in the groups array
+	index = TemplateView.groups.indexOf( groupView );
+
+	// Let the group know that it's about to be removed
+	// and then remove it
+	if ( index >= 0 ) {
+		ColumnsEvent.send('Columns.TemplateView.WillRemoveGroupView', {
+			groupView: 	groupView
+		});
+
+		TemplateView.groups.splice( index, 1 );
+	}
+};
 
 TemplateView.prototype.render = function() {
 
@@ -129,6 +181,9 @@ TemplateView.prototype._renderRowComponent = function( component ) {
 		componentView = new TemplateGroupView({ layout: component.layout, style: component.style });
 		$component = componentView.render();
 
+		// Add the group to the groups array
+		TemplateView.groups.push( componentView );
+
 		// Loop through all group subvalues and render those as well
 		component.values.forEach(function (value, i) {
 			$component.append( this._renderRowComponent( value ) );
@@ -158,13 +213,21 @@ TemplateView.prototype.removePlaceholders = function() {
 // Unless the parent group is the very first group in the cell.
 TemplateView.prototype.dissolveSingleValueGroups = function() {
 
-	// Get any groups that only have a single item
+	// Get any groups that only have a single active item
 	// but exclude the first group in the row
-	var $groups = $( ROW_VALUE_SELECTOR + ':only-child' )
-		.parent()
-		.not( 'master > ' + ROW_GROUP_SELECTOR );
+	var $groups = $( ROW_GROUP_SELECTOR ).not( '.master > ' + ROW_GROUP_SELECTOR ).filter(function( i, group ) {
+		return $( group ).children( ROW_VALUE_SELECTOR ).not( '.inactive' ).length === 1;
+	});
+
+	// var $groups = $( ROW_VALUE_SELECTOR + ':only-child' )
+	// 	.parent()
+	// 	.not( 'master > ' + ROW_GROUP_SELECTOR );
 
 	// Unwrap the 'only children' of these groups
+	$groups.each(function( i, group ) {
+		TemplateView.removeGroup( $( group ) );
+	});
+
 	$groups.children().unwrap();
 };
 
@@ -178,6 +241,51 @@ TemplateView.prototype.removeValue = function( valueView ) {
 	} else {
 		throw "exception: value must be of type TemplateValueView";
 	}
+};
+
+// Animate the dragging helper to the position of its respective item
+TemplateView.prototype.removeDraggingValue = function( callback ) {
+	var $helper = $('.ui-draggable-dragging.ui-draggable-handle')
+		$clone = $helper.clone(),
+		$item = $('#columns .layout-column').filter(function( i, item ) {
+			// console.log($( item ).text().trim());
+			return $clone.text().trim() === $( item ).text().trim();
+		}).first();
+
+	// Find the position of the original token
+	// var originalPosition = {
+	// 	top: $match.offset().top,
+	// 	left: $match.offset().left
+	// };
+
+	// Change the clone to position fixed
+	// and add to columns container
+	$('.layout-columns').append( $clone );
+	$clone.css({
+		position: 'fixed',
+		top: $helper.offset().top,
+		left: $helper.offset().left
+	});
+
+	// $clone.appendTo('.layout-columns');
+
+	$clone.velocity({
+		translateX: $item.offset().left - $clone.offset().left,
+		translateY: $item.offset().top - $clone.offset().top
+	}, {
+		duration: 200,
+		complete: this._onDraggingValueRemoved.bind( this )
+	});
+};
+
+TemplateView.prototype._onDraggingValueRemoved = function ( elements ) {
+	
+	// Remove the clone from the DOM
+	$( elements[ 0 ] ).remove();
+
+	// Emit a change event
+	this._emitChange();
+
 };
 
 TemplateView.prototype._emitChange = function() {
@@ -297,9 +405,10 @@ TemplateView.prototype._onValueDidBeginDrag = function( event, data ) {
 };
 
 TemplateView.prototype._onValueDidEndDrag = function( event, data ) {
-	if ( !this.droppableItems.length ) {
-		this.removeValue( data.valueView );
-		this._emitChange();
+	// if ( !this.droppableItems.length ) {
+	if ( !TemplateView.getValueForItem( data.valueView.item ) ) {
+		this.removeDraggingValue();
+		// this._emitChange();
 	}
 }
 
@@ -396,13 +505,19 @@ TemplateView.prototype.wrapValueWithGroup = function( $value, placeholder ) {
 	
 	// Make sure the group has the opposite direction of its parent
 	var direction 	= $value.parent().data('flex-direction') === 'column' ? 'row' : 'column';
-	var $group 		= new TemplateGroupView({
+	var group 		= new TemplateGroupView({
 		placeholder: placeholder,
 		layout: [{
 			property:  	'flex-direction',
 			value: 		 direction
 		}]
-	}).render();
+	});
+
+	var $group = group.render();
+
+	if ( !placeholder ) {
+		TemplateView.groups.push( group );
+	}
 
 	// Wrap the value with the new group
 	return $value.wrap( $group );

@@ -365,7 +365,8 @@
     position: relative;
     top: 1px; }
 
-.style-component-section-row-segmentedButton {
+.style-component-section-row-segmented-button,
+.style-component-section-row-multiple-segmented-button {
   height: 24px;
   background-color: #fff;
   box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.2);
@@ -380,7 +381,8 @@
   display: -ms-flexbox;
   display: flex;
   width: 85px; }
-  .style-component-section-row-segmentedButton button {
+  .style-component-section-row-segmented-button button,
+  .style-component-section-row-multiple-segmented-button button {
     background-color: #fff;
     border: none;
     padding: 0;
@@ -392,15 +394,20 @@
     -moz-flex-grow: 1;
     flex-grow: 1;
     -ms-flex-positive: 1; }
-    .style-component-section-row-segmentedButton button:last-child {
+    .style-component-section-row-segmented-button button:last-child,
+    .style-component-section-row-multiple-segmented-button button:last-child {
       border-right: none; }
-    .style-component-section-row-segmentedButton button.active {
+    .style-component-section-row-segmented-button button.active,
+    .style-component-section-row-multiple-segmented-button button.active {
       background-color: transparent; }
-      .style-component-section-row-segmentedButton button.active i {
+      .style-component-section-row-segmented-button button.active i,
+      .style-component-section-row-multiple-segmented-button button.active i {
         color: #3E97BD; }
-    .style-component-section-row-segmentedButton button:active {
+    .style-component-section-row-segmented-button button:active,
+    .style-component-section-row-multiple-segmented-button button:active {
       background-color: transparent; }
-    .style-component-section-row-segmentedButton button i {
+    .style-component-section-row-segmented-button button i,
+    .style-component-section-row-multiple-segmented-button button i {
       font-size: 14px;
       color: rgba(0, 0, 0, 0.8); }
 

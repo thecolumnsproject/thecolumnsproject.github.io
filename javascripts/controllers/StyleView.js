@@ -42,11 +42,29 @@ StyleView.prototype._setupEventListeners = function() {
 	ColumnsEvent.on( 'Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
 	ColumnsEvent.on( 'Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
 	ColumnsEvent.on( 'Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
+
+	// Listen to value view selection
+	ColumnsEvent.on( 'Columns.TemplateValueView.ValueDidSelectWithItem', this._onTemplateValueSelection.bind( this ));
 };
 
 StyleView.prototype._onStyleUpdate = function( event, data ) {
 
 	this._emitChange( data.item, data.property, data.value );
+};
+
+StyleView.prototype._onTemplateValueSelection = function( event, data ) {
+	var item = data.item,
+		groups = TemplateView.getGroupsForItem( item );
+
+	// Update the style panel with the selected item
+	this.updateWithSelection( item );
+
+	// Also update with any parent groups
+	if ( groups && groups.length ) {
+		groups.forEach(function( group ) {
+			this.updateWithSelection( group );
+		}.bind( this ));
+	}
 };
 
 StyleView.prototype._emitChange = function( item, property, value ) {

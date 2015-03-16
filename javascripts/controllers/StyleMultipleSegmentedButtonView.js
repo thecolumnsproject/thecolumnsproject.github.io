@@ -66,7 +66,7 @@ StyleMultipleSegmentedButtonView.prototype._setupControls = function() {
 };
 
 StyleMultipleSegmentedButtonView.prototype._onClick = function( event ) {
-	var $button = $( event.target ),
+	var $button = $( event.target ).is('button') ? $( event.target ) : $( event.target ).parents('button').first(),
 		property = $button.data('property'),
 		value;
 

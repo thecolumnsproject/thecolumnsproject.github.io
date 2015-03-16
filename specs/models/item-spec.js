@@ -71,7 +71,7 @@ describe('Item Model', function() {
 		});
 	});
 
-	xdescribe('Getting Style Attributes', function() {
+	describe('Getting Style Attributes', function() {
 
 		beforeEach(function() {
 			this.item = new Item({
@@ -80,12 +80,12 @@ describe('Item Model', function() {
 			});
 		});
 
-		it('should return the style value of a property if it is not part of the layout object', function() {
-			expect( this.item.getStyle( 'font-size' ) ).toBe('12px');
+		it('should return the style value of a property if it is part of the style object', function() {
+			expect( this.item.getStyle( 'font-size' ) ).toBe('14px');
 		});
 
-		it('should return the default css value of a property that is not part of the layout or style objects', function() {
-			expect( this.item.getStyle( 'text-align' ) ).toBe( '' );
+		xit('should return the default css value of a property that is not part of the style object', function() {
+			expect( this.item.getStyle( 'text-align' ) ).toBe( 'left' );
 		});
 	});
 

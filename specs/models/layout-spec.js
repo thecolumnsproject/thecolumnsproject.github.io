@@ -273,6 +273,74 @@ describe('Layout', function() {
 			});
 		});
 
+		it('should not include inactive items', function() {
+			loadFixtures('template-with-inactive-style.html');
+			var $row = $('.layout-template-row-group').first();
+			expect( this.layout._generateModelForTemplate( $row ) ).toEqual({
+				type: 'group',
+				style: [{
+					property: 'padding',
+					value: '12px'
+				}],
+				layout: [{
+					property: 'align-items',
+					value: 'center'
+				}, {
+					property: 'flex-direction',
+					value: 'row'
+				}],
+				values: [{
+					type: 'group',
+					style: [],
+					layout: [{
+						property: 'align-items',
+						value: 'center'
+					}, {
+						property: 'flex-direction',
+						value: 'column'
+					}],
+					values: [{
+						type: 'single',
+						style: [{
+							property: 'font-size',
+							value: '16px'
+						}, {
+							property: 'color',
+							value: '#3a3a3a'
+						}],
+						data: 'my_item'
+					}, {
+						type: 'single',
+						style: [{
+							property: 'font-size',
+							value: '12px'
+						}, {
+							property: 'color',
+							value: '#888888'
+						}, {
+							property: 'margin-top',
+							value: '6px'
+						}],
+						data: 'another_item'
+					}]
+				}, {
+					type: 'single',
+					style: [{
+						property: 'font-size',
+						value: '24px'
+					}, {
+						property: 'color',
+						value: '#3a3a3a'
+					}, {
+						property: 'font-weight',
+						value: 'bold'
+					}],
+					data: 'lonely_item'
+				}]
+			});
+
+		});
+
 	});
 
 	describe('Listening for Template Updates', function() {

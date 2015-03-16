@@ -169,7 +169,7 @@ describe('Template Value View', function() {
 	describe('Dragging', function() {
 
 		beforeEach(function() {
-			this.valueView	= new TemplateValueView( new Item({ title: "My Item" }) );;
+			this.valueView	= new TemplateValueView( new Item({ title: "My Item" }) );
 			this.$value		= this.valueView.render();
 			this.fakeUI		= {};
 
@@ -214,12 +214,33 @@ describe('Template Value View', function() {
 				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 			});
 
-			it('should remove itself from the template', function() {
+			xit('should remove itself from the template', function() {
 				this.$value.trigger('drag', this.fakeUI);
 				expect( this.valueView.$value ).not.toBeInDOM();
 			});
 		});
 			
+	});
+
+	describe('Clicking', function() {
+
+		beforeEach(function() {
+			this.valueView	= new TemplateValueView( new Item({ title: "My Item" }) );
+			this.$value		= this.valueView.render();
+			spyOn( ColumnsEvent, 'send' );
+		});
+
+		it('should emit an event on click', function() {
+			this.$value.trigger('click');
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidSelectWithItem');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+		});
+
+		it('should get selected on click', function() {
+			this.$value.trigger('click');
+			expect( this.$value ).toHaveClass('selected');
+		});
 	});
 
 	// afterEach(function() {

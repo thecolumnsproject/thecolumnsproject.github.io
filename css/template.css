@@ -131,7 +131,7 @@
   padding: 12px;
   background-color: #fff; }
 
-.layout-template-row.empty > .layout-template-row-group:after {
+.layout-template-row > .layout-template-row-group:empty:after {
   content: 'Drag columns here';
   font-style: italic;
   font-size: 20px;

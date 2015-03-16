@@ -35,8 +35,14 @@ Layout.prototype.update = function() {
 
 Layout.prototype._generateModelForTemplate = function( $template ) {
 	var model = {},
+		subModel,
 		item,
 		group;
+
+	// Skip inactive items
+	if ( $template.hasClass('inactive') ) {
+		return;
+	}
 	
 	// Is the template a value or a group?
 	if ( $template.hasClass('layout-template-row-group') ) {
@@ -54,23 +60,28 @@ Layout.prototype._generateModelForTemplate = function( $template ) {
 		// Get the group's values
 		model['values'] = [];
 		$template.children().each(function( i, child ) {
-			model.values.push( this._generateModelForTemplate( $( child ) ) );
+			subModel = this._generateModelForTemplate( $( child ) );
+			if ( subModel ) {
+				model.values.push( subModel );
+			}
 		}.bind( this ) );
 
 	} else if ( $template.hasClass('layout-template-row-value') ) {
-		item = new Item({
-			title: $template.text().trim(),
-			style: $template.attr('style')
-		});
+		// item = new Item({
+		// 	title: $template.text().trim(),
+		// 	style: $template.attr('style')
+		// });
+
+		// style = new Style( $template.attr('style') ).styles;
 
 		// Set the model type
 		model['type'] = 'single';
 
 		// Set the model's style
-		model['style'] = item.style.styles;
+		model['style'] = new Style( $template.attr('style') ).styles;
 
 		// Set the value's data
-		model['data'] = item.unformattedTitle();
+		model['data'] = Item.unformattedTitle( $template.text().trim() );
 	}
 
 	return model;

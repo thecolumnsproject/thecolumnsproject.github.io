@@ -32,7 +32,7 @@ StyleComponentView.prototype.render = function() {
 
 	// Get the appropriate data for the current item
 	var type = this.item instanceof TemplateGroupView ? 'group' : 'text',
-		title = this.item instanceof TemplateGroupView ? this.item.title() : this.item.title,
+		title = this.item instanceof TemplateGroupView ? this.item.title() : this.item.formattedTitle(),
 		componentData = Columns.styleData.types[type],
 		$component,
 		$componentBody,
@@ -109,7 +109,7 @@ StyleComponentView.prototype._renderItem = function( item ) {
 			prependIcon: item.prependIcon,
 			label: item.label,
 			property: item.property,
-			value: this.item instanceof Item ? this.item.style.get( item.property ) : this.item.getStyle( item.property )
+			value: this.item.getStyle( item.property ) || item.default
 		});
 		return item.render();
 
@@ -117,9 +117,9 @@ StyleComponentView.prototype._renderItem = function( item ) {
 
 		item = new StyleSegmentedButtonView({
 			label: item.label,
-			property: item.property,
+			property: item.property.name,
 			buttons: item.buttons,
-			value: this.item instanceof Item ? this.item.style.get( item.property ) : this.item.getStyle( item.property )
+			value: this.item.getStyle( item.property.name ) || item.property.default
 		});
 		return item.render();
 
@@ -129,11 +129,12 @@ StyleComponentView.prototype._renderItem = function( item ) {
 			label: item.label,
 			buttons: item.buttons.map(function( button, i ) {
 				return {
-					property: button.property,
+					icon: button.icon,
+					property: button.property.name,
 					values: {
 						active: button.values.active,
 						inactive: button.values.inactive,
-						current: this.item instanceof Item ? this.item.style.get( button.property ) : this.item.getStyle( button.property )
+						current: this.item.getStyle( button.property.name ) || button.values.default
 					}
 				};
 			}.bind( this ))

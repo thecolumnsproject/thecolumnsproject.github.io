@@ -13,7 +13,7 @@ function StyleInputView( options ) {
 
 	if ( options ) {
 		this.unit = options.unit || this.unit;
-		// this.type = options.type || this.type;
+		this.type = options.type || this.type;
 		this.canBeNegative = options.canBeNegative === false ? false : this.canBeNegative;
 		this.canBeDecimal = options.canBeDecimal === true ? true : this.canBeDecimal;
 		this.property = options.property || this.property;

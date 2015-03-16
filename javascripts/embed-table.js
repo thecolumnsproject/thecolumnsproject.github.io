@@ -321,7 +321,7 @@ $$(function() {
 		}
 
 		var shouldRunRowIntroAnimation = false;
-		if ($$rows.length == 0 || this.preview ) {
+		if ($$rows.length == 0 && !this.preview ) {
 			shouldRunRowIntroAnimation = true;
 		}
 
@@ -365,13 +365,13 @@ $$(function() {
 				if (index > 0 && index <= 2) {
 					var $$row = $$(row);
 					// Velocity($$rows.get(0), {
-					$$rows.velocity({
+					$$row.velocity({
 						translateY: 5
 					}, {duration: ANIMATION_DURATION / 6,
 						delay: delay * index
 					});
 					// Velocity($$rows.get(0), {
-					$$rows.velocity({
+					$$row.velocity({
 						translateY: 0
 					}, {
 						duration: ANIMATION_DURATION / 6
@@ -1009,6 +1009,7 @@ $$(function() {
 
 		// Generate a new layout and reload
 		this.generateLayout( data.layout.model, true );
+
 	};
 
 	// Basic setup operations before we start creating tables

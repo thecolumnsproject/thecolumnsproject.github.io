@@ -67,7 +67,7 @@ StyleSegmentedButtonView.prototype._setupControls = function() {
 };
 
 StyleSegmentedButtonView.prototype._onClick = function( event ) {
-	var $button = $( event.target );
+	var $button = $( event.target ).is('button') ? $( event.target ) : $( event.target ).parents('button').first();
 
 	this.$template.find('button').removeClass('active');
 	$button.addClass('active');

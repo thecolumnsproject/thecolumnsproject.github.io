@@ -20,6 +20,11 @@ describe('Style Input View', function() {
 			expect( inputView.item ).toBeUndefined();
 		});
 
+		it('should allow a custom type', function() {
+			var inputView = new StyleInputView({ type: 'color' });
+			expect( inputView.type ).toEqual( 'color' );
+		});
+
 		it('should be associated with an object that it styles', function() {
 			var item = new Item({ title: "My Item" });
 			var inputView = new StyleInputView({ item: item });

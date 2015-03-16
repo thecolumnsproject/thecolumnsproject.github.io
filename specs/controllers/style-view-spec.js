@@ -76,10 +76,31 @@ describe('Style View', function() {
 
 	describe('Listening to Template Events', function() {
 
+		beforeEach(function() {
+			this.styleView = new StyleView();
+			spyOn( this.styleView, 'updateWithSelection' );
+		});
+
+		xit('should update the styling item and parent groups on value view selection', function() {
+			loadFixtures('template-with-values.html');
+			var item = new Item({ title: "My Item"});
+			var valueView = new TemplateValueView( item );
+			ColumnsEvent.send('Columns.TemplateValueView.ValueDidSelectWithItem', {
+				valueView: 	valueView,
+				item: 		item
+			});
+			expect( this.styleView.updateWithSelection.calls.count() ).toBe( 3 );
+			expect( this.styleView.updateWithSelection.calls.argsFor(0)[0] ).toEqual( item );
+			expect( this.styleView.updateWithSelection.calls.argsFor(1)[0] instanceof TemplateGroupView ).toBeTruthy();
+			expect( this.styleView.updateWithSelection.calls.argsFor(2)[0] instanceof TemplateGroupView ).toBeTruthy();
+		});
 	});
 
 	describe('Listening to Items Events', function() {
 
+		it('should update with the item that was selected', function() {
+
+		});
 	});
 
 	describe('Listening to Style Updates', function() {

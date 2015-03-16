@@ -20,47 +20,72 @@ Item = function( params ) {
 	this._setupEventListeners();
 }
 
+Item.formattedTitle = function( title ) {
+	// Return a lowercase version of the title
+	// with underscores instead of spaces
+	if ( !title ) {
+		return '_';
+	} else if ( title === '_' ) {
+		return title;
+	} else {
+		return title.toLowerCase().replace( /_/g, ' ' ).replace(/\b./g, function(m){ return m.toUpperCase(); });
+	}
+};
+
+Item.unformattedTitle = function( title ) {
+	if (!title) {
+		return '_';
+	} else {
+		return title.toLowerCase().replace(/ /g, '_');
+	}
+};
+
 Item.prototype.formattedTitle = function() {
 	// Return a lowercase version of the title
 	// with underscores instead of spaces
-	if ( !this.title ) {
-		return '_';
-	} else if ( this.title === '_' ) {
-		return this.title;
-	} else {
-		return this.title.toLowerCase().replace( /_/g, ' ' ).replace(/\b./g, function(m){ return m.toUpperCase(); });
-	}
-}
+	// if ( !this.title ) {
+	// 	return '_';
+	// } else if ( this.title === '_' ) {
+	// 	return this.title;
+	// } else {
+	// 	return this.title.toLowerCase().replace( /_/g, ' ' ).replace(/\b./g, function(m){ return m.toUpperCase(); });
+	// }
+	return Item.formattedTitle( this.title );
+};
 
 Item.prototype.unformattedTitle = function() {
 	// Return a lowercase version of the title
 	// with underscores instead of spaces
-	if (!this.title) {
-		return '_';
-	} else {
-		return this.title.toLowerCase().replace(/ /g, '_');
+	// if (!this.title) {
+	// 	return '_';
+	// } else {
+	// 	return this.title.toLowerCase().replace(/ /g, '_');
+	// }
+	return Item.unformattedTitle( this.title );
+};
+
+// Return the correct style attribute for a given property
+// @param { string } property -- the requested layout property
+// @return { string } the corresponding value
+Item.prototype.getStyle = function( property ) {
+	var value;
+
+	// Check whether this is a known style
+	if ( this.style ) {
+		value = this.style.get( property );
 	}
-}
 
-// // Return the correct style attribute for a given property
-// // @param { string } property -- the requested layout property
-// // @return { string } the corresponding value
-// Item.prototype.getStyle = function( property ) {
-// 	var value;
+	return value;
 
-// 	// Loop through each property until we find a match
-// 	if ( this.style ) {
-// 		value = this.style.get( property )
-// 	}
-
-// 	// As a last resort, check the css for the element
-// 	// and return its value
-// 	if ( value ) {
-// 		return value;
-// 	} else {
-// 		return this.$group.css( property );
-// 	}
-// };
+	// If not, check the css for the element
+	// and return its value
+	// if ( value ) {
+	// 	return value;
+	// } else {
+	// 	// This is a hack!!!
+	// 	return this.$group.css( property );
+	// }
+};
 
 Item.prototype.is = function( item ) {
 	if ( item instanceof Item ) {

@@ -31,6 +31,7 @@ TemplateValueView.prototype.render = function() {
 
 	this._setupEvents();
 	this._setupDrag();
+	this._setupClick();
 
 	return this.$value;
 };
@@ -61,8 +62,8 @@ TemplateValueView.prototype.update = function() {
 TemplateValueView.prototype._setupDrag = function() {
 
 	this.$value.draggable({
-		revert: 'invalid',
-		revertDuration: 200,
+		// revert: 'invalid',
+		// revertDuration: 200,
 		helper: function() {
 			var itemView = new ItemView( this.item );
 			return itemView.render();
@@ -99,6 +100,8 @@ TemplateValueView.prototype._setupDrag = function() {
 
 	this.$value.on( 'dragstop', $.proxy(function( event, ui ) {
 
+		$( event.target ).remove();
+
 		// Alert any listeners that the item has started drag
 		// var event = new CustomEvent( 'Columns.ItemView.ItemDidBEndDrag', {
 		// 	item: 	this,
@@ -119,8 +122,6 @@ TemplateValueView.prototype._setupDrag = function() {
 			event: 		event,
 			ui: 		ui
 		});
-
-		$( event.target ).remove();
 
 	}, this) );
 
@@ -148,6 +149,20 @@ TemplateValueView.prototype._setupDrag = function() {
 		});
 
 	}, this) );
+};
+
+TemplateValueView.prototype._setupClick = function() {
+
+	this.$value.on( 'click', $.proxy(function( event ) {
+
+		this.$value.addClass('selected');
+
+		ColumnsEvent.send('Columns.TemplateValueView.ValueDidSelectWithItem', {
+			valueView: 	this,
+			item: 		this.item
+		});
+
+	}, this ) );
 };
 
 TemplateValueView.prototype._setupEvents = function() {

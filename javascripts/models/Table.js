@@ -5,7 +5,7 @@ function Table( props )  {
 	this.source = '';
 	this.source_url = '';
 	this.columns = [];
-	this.layout = new Layout();
+	this.layout;
 	this.id;
 
 	this._update( props );
@@ -130,16 +130,23 @@ Table.prototype._uploadFile = function( file ) {
 	formData.append( "source", this.source );
 	formData.append( "source_url", this.source_url );
 	formData.append( "columns", this.stringFromColumns( this.columns ) );
-	formData.append( "layout", JSON.stringify( this.layout.model ) );
+	// formData.append( "layout", JSON.stringify( this.layout.model ) );
 
-	$.ajax({
-        url: config.api.host + '/columns/table',  //Server script to process data
-        type: 'POST',
-        contentType: false,
-        processData: false,
-        data: formData,
-        success: this._onUploadSuccess.bind( this )
-    });
+	this._onUploadSuccess( {
+		status: 'success',
+		data: {
+			table_id: 1
+		}
+	});
+
+	// $.ajax({
+ //        url: config.api.host + '/columns/table',  //Server script to process data
+ //        type: 'POST',
+ //        contentType: false,
+ //        processData: false,
+ //        data: formData,
+ //        success: this._onUploadSuccess.bind( this )
+ //    });
 };
 
 Table.prototype._updateTable = function() {

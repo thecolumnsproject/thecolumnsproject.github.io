@@ -228,7 +228,7 @@ function program5(depth0,data) {
   buffer += "\n			";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.style), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n			\n</div>	";
+  buffer += "></div>\n				";
   return buffer;
   });
 
@@ -428,11 +428,11 @@ function program7(depth0,data) {
   buffer += "\">\n		";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.prependIcon), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		<input type=\"";
+  buffer += "\n		<input type='";
   if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" data-property='";
+    + "' data-property='";
   if (helper = helpers.property) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.property); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

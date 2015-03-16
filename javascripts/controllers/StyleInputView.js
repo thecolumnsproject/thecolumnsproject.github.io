@@ -41,14 +41,19 @@ StyleInputView.prototype.render = function() {
 
 	this.$template = $( template );
 
-	if ( this.appendControls ) {
+	// if ( this.appendControls ) {
 		this._setupControls();
-	}
+	// }
 
 	return this.$template;
 }
 
 StyleInputView.prototype._setupControls = function() {
+
+	if ( this.type === 'color' ) {
+		this.$template.find('input').on( 'input', this._onChange.bind( this ) );
+	}
+
 	this.$template.find('input').on( 'keyup', this._onChange.bind( this ) );
 	this.$template.find('input').on( 'change', this._onChange.bind( this ) );
 	this.$template.find('.increment').on( 'click', this._onIncrement.bind( this ) );
@@ -147,6 +152,12 @@ StyleInputView.prototype.validateValue = function( value ) {
 }
 
 StyleInputView.prototype.formatValue = function( value ) {
+
+	// Don't do anything if this is a color value
+	if ( this.type === 'color' ) {
+		return value;
+	}
+
 	var	parsedValue = this.parseValue( value ),
 		number = this.validateValue( parsedValue.number ),
 		unit = parsedValue.unit || this.unit;

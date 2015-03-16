@@ -163,6 +163,12 @@ describe('Template View', function() {
 				this.templateView._renderTemplate();
 				expect( this.templateView._emitChange ).toHaveBeenCalled();
 			});
+
+			it('should emit a render event', function() {
+				spyOn( this.templateView, '_emitRender' );
+				this.templateView._renderTemplate();
+				expect( this.templateView._emitRender ).toHaveBeenCalled();
+			});
 		});
 
 		describe('Component Rendering', function() {
@@ -1431,6 +1437,16 @@ describe('Template View', function() {
 
 			expect( ColumnsEvent.send ).toHaveBeenCalled();
 			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateView.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].templateView ).toEqual( templateView );
+		});
+
+		it('should emit an even when it initally renders', function() {
+			var templateView = new TemplateView();
+			spyOn( ColumnsEvent, 'send' );
+			templateView._emitRender();
+
+			expect( ColumnsEvent.send ).toHaveBeenCalled();
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateView.DidRender');
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].templateView ).toEqual( templateView );
 		});
 	});

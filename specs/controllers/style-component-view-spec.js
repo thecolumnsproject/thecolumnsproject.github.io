@@ -1,6 +1,6 @@
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
-describe('Style View Spec', function() {
+describe('Style Component View Spec', function() {
 
 	afterEach(function() {
 		ColumnsEvent.offAll();
@@ -153,6 +153,8 @@ describe('Style View Spec', function() {
 			group.render();
 			this.groupStyleView = new StyleComponentView( group );
 			spyOn( group, 'title' ).and.returnValue('Group');
+			spyOn( this.groupStyleView, '_setupEventListeners' );
+			spyOn( this.groupStyleView, 'updateAlignmentButtons' );
 			this.$groupStyle = this.groupStyleView.render();
 		});
 
@@ -190,6 +192,50 @@ describe('Style View Spec', function() {
 
 		xit('should append to existing components on group rendering', function() {
 			expect( this.$groupStyle.prevAll().length ).toBe( 1 );
+		});
+
+		it('should update the alignment buttons for the flex-direction', function() {
+			expect( this.groupStyleView.updateAlignmentButtons ).toHaveBeenCalled();
+		});
+	});
+
+	describe('Rotating Alignment Buttons For Layout Changes', function() {
+
+		beforeEach(function() {
+			loadFixtures('style-bare.html');
+			this.group = new TemplateGroupView({
+				layout: [{
+					property:'flex-direction',
+					value: 'row'
+				}, {
+					property: 'justify-content',
+					value: 'flex-start'
+				}, {
+					property: 'align-items',
+					value: 'center'
+				}],
+				style: [{
+					property: 'font-size',
+					value: '12px'
+				}]
+			});
+
+			this.groupStyleView = new StyleComponentView( this.group );
+
+			spyOn( this.group, 'title' ).and.returnValue('Group');
+
+			this.$groupStyle = this.groupStyleView.render();
+		});
+
+		it('should apply the correct classes to the alignment buttons', function() {
+			ColumnsEvent.send( 'Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', {
+				item: this.group,
+				property: 'flex-direction',
+				value: 	'column'
+			});
+
+			expect( this.$groupStyle.find('[data-property="align-items"]') ).toHaveClass( 'column' );
+			expect( this.$groupStyle.find('[data-property="align-items"]') ).not.toHaveClass( 'row' );
 		});
 	});
 

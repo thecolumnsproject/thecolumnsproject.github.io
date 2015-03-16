@@ -125,4 +125,92 @@ describe('Item View', function() {
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 		});
 	});
+
+	describe('Clicking', function() {
+
+		beforeEach(function() {
+			this.itemView	= new ItemView( new Item({ title: "My Item" }) );
+			this.$item		= this.itemView.render();
+			spyOn( ColumnsEvent, 'send' );
+		});
+
+		it('should emit an event on click', function() {
+			this.$item.trigger('click');
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.ItemView.ItemDidSelect');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].itemView ).toEqual( this.itemView );
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.itemView.item );
+		});
+
+		it('should get selected on click', function() {
+			this.$item.trigger('click');
+			expect( this.$item ).toHaveClass('selected');
+		});
+
+	});
+
+	describe('Listening to Events', function() {
+
+		describe('Value Selection', function() {
+			var item;
+
+			beforeEach(function() {
+				item = new Item({ title: "My Item" });
+				this.itemView = new ItemView( item );
+				this.itemView.render();
+			});
+
+			it('should set itself as selected if the value represents this item', function() {
+				spyOn( item, 'is' ).and.returnValue( true );
+
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidSelectWithItem', {
+					valueView: 	new TemplateValueView(),
+					item: 		item
+				});
+
+				expect( this.itemView.$item ).toHaveClass('selected');
+			});
+
+			it('should set itself as unselected if the value does not represent this item', function () {
+				spyOn( item, 'is' ).and.returnValue( false );
+
+				this.itemView.$item.addClass('selected');
+				ColumnsEvent.send('Columns.TemplateValueView.ValueDidSelectWithItem', {
+					valueView: 	new TemplateValueView(),
+					item: 		item
+				});
+
+				expect( this.itemView.$item ).not.toHaveClass('selected');
+			});
+		});
+
+		describe('Item View Selection', function() {
+			var item;
+
+			beforeEach(function() {
+				item = new Item({ title: "My Item" });
+				this.itemView = new ItemView( item );
+				this.itemView.render();
+				this.itemView.$item.addClass('selected');
+			});
+
+			it('should do nothing if the view represents this item', function() {
+				ColumnsEvent.send( 'Columns.ItemView.ItemDidSelect', {
+					itemView: 	this.itemView,
+					item: 		item
+				});
+
+				expect( this.itemView.$item ).toHaveClass('selected');
+			});
+
+			it('should set itself as unselected if the view does not represent this item', function () {
+				var otherItem = new Item({ title: 'Other Item' });
+				ColumnsEvent.send( 'Columns.ItemView.ItemDidSelect', {
+					itemView: 	new ItemView( otherItem ),
+					item: 		otherItem
+				});
+
+				expect( this.itemView.$item ).not.toHaveClass('selected');
+			});
+		});
+	});
 });

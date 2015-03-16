@@ -205,6 +205,11 @@ describe('Template Group View', function() {
 			expect( $group.data('justify-content') ).toBe('flex-start');
 			expect( $group.data('align-items') ).toBe('flex-end');
 			expect( $group.data('align-content') ).toBe('stretch');
+
+			expect( $group.attr('layout-flex-direction') ).toBe('column');
+			expect( $group.attr('layout-justify-content') ).toBe('flex-start');
+			expect( $group.attr('layout-align-items') ).toBe('flex-end');
+			expect( $group.attr('layout-align-content') ).toBe('stretch');
 		});
 
 		it('should create a reference to its UI', function() {

@@ -16,6 +16,13 @@ describe('Style View', function() {
 			var styleView = new StyleView();
 			expect( styleView.$style ).toEqual('#styling');
 		});
+
+		xit('should initialize with the row as its default component', function() {
+			var styleView = new StyleView();
+			console.log( $('#styling').html() );
+			expect( styleView.$style.find('.style-component').length ).toBe( 1 );
+			expect( styleView.$style.find('.style-component') ).toHaveText( 'Row' );
+		});
 	});
 
 	describe('Updating Components', function() {
@@ -79,9 +86,13 @@ describe('Style View', function() {
 		beforeEach(function() {
 			this.styleView = new StyleView();
 			spyOn( this.styleView, 'updateWithSelection' );
+			spyOn( TemplateView, 'getGroupsForItem' ).and.returnValue([
+				new TemplateGroupView(),
+				new TemplateGroupView()
+			]);
 		});
 
-		xit('should update the styling item and parent groups on value view selection', function() {
+		it('should update the styling item and parent groups on value view selection', function() {
 			loadFixtures('template-with-values.html');
 			var item = new Item({ title: "My Item"});
 			var valueView = new TemplateValueView( item );
@@ -94,12 +105,47 @@ describe('Style View', function() {
 			expect( this.styleView.updateWithSelection.calls.argsFor(1)[0] instanceof TemplateGroupView ).toBeTruthy();
 			expect( this.styleView.updateWithSelection.calls.argsFor(2)[0] instanceof TemplateGroupView ).toBeTruthy();
 		});
+
+		it('should render the row component when the table initially uploads', function() {
+			
+			var templateView = new TemplateView();
+			var groupView = new TemplateGroupView();
+			TemplateView.groups.push( groupView );
+
+			ColumnsEvent.send('Columns.TemplateView.DidRender', {
+				templateView: templateView
+			});
+
+			expect( this.styleView.updateWithSelection ).toHaveBeenCalledWith( groupView );
+		});
+
 	});
 
 	describe('Listening to Items Events', function() {
 
-		it('should update with the item that was selected', function() {
+		beforeEach(function() {
+			this.styleView = new StyleView();
+			spyOn( this.styleView, 'updateWithSelection' );
+			spyOn( TemplateView, 'getGroupsForItem' ).and.returnValue([
+				new TemplateGroupView(),
+				new TemplateGroupView()
+			]);
+		});
 
+		it('should update with the item that was selected', function() {
+			loadFixtures('template-with-values.html');
+			var item = new Item({ title: "My Item" });
+			var itemView = new ItemView( item );
+
+			ColumnsEvent.send( 'Columns.ItemView.ItemDidSelect', {
+				itemView: 	itemView,
+				item: 		item
+			});
+
+			expect( this.styleView.updateWithSelection.calls.count() ).toBe( 3 );
+			expect( this.styleView.updateWithSelection.calls.argsFor(0)[0] ).toEqual( item );
+			expect( this.styleView.updateWithSelection.calls.argsFor(1)[0] instanceof TemplateGroupView ).toBeTruthy();
+			expect( this.styleView.updateWithSelection.calls.argsFor(2)[0] instanceof TemplateGroupView ).toBeTruthy();
 		});
 	});
 

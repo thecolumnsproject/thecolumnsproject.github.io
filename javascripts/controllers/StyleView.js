@@ -44,7 +44,13 @@ StyleView.prototype._setupEventListeners = function() {
 	ColumnsEvent.on( 'Columns.StyleMultipleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
 
 	// Listen to value view selection
-	ColumnsEvent.on( 'Columns.TemplateValueView.ValueDidSelectWithItem', this._onTemplateValueSelection.bind( this ));
+	ColumnsEvent.on( 'Columns.TemplateValueView.ValueDidSelectWithItem', this._onItemSelection.bind( this ));
+
+	// Listen to item selection
+	ColumnsEvent.on( 'Columns.ItemView.ItemDidSelect', this._onItemSelection.bind( this ));
+
+	// Listen for the template to finish rendering
+	ColumnsEvent.on( 'Columns.TemplateView.DidRender', this._onTemplateDidRender.bind( this ));	
 };
 
 StyleView.prototype._onStyleUpdate = function( event, data ) {
@@ -52,7 +58,7 @@ StyleView.prototype._onStyleUpdate = function( event, data ) {
 	this._emitChange( data.item, data.property, data.value );
 };
 
-StyleView.prototype._onTemplateValueSelection = function( event, data ) {
+StyleView.prototype._onItemSelection = function( event, data ) {
 	var item = data.item,
 		groups = TemplateView.getGroupsForItem( item );
 
@@ -65,6 +71,10 @@ StyleView.prototype._onTemplateValueSelection = function( event, data ) {
 			this.updateWithSelection( group );
 		}.bind( this ));
 	}
+};
+
+StyleView.prototype._onTemplateDidRender = function( event, data ) {
+	this.updateWithSelection( TemplateView.groups[ 0 ] );
 };
 
 StyleView.prototype._emitChange = function( item, property, value ) {

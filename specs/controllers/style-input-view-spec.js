@@ -158,6 +158,21 @@ describe('Style Input View', function() {
 			spyOn( this.inputView, 'update' );
 		});
 
+		it('should update upon input event for the color field', function() {
+			this.inputView = new StyleInputView({
+				canBeDecimal: false,
+				canBeNegative: false,
+				appendControls: false,
+				type: 'color',
+				value: '#3a3a3a'
+			});
+			this.$input = this.inputView.render();
+			spyOn( this.inputView, 'update' );
+
+			this.$input.find('input').trigger('input');
+			expect( this.inputView.update ).toHaveBeenCalledWith( '#3a3a3a' );
+		});
+
 		it('should update upon value change', function() {
 			this.$input.find('input').val( 2 );
 			this.$input.find('input').trigger('change');
@@ -248,6 +263,11 @@ describe('Style Input View', function() {
 			this.inputView.unit = 'px';
 			expect( this.inputView.formatValue( '200%' ) ).toBe( "200%" );
 			expect( this.inputView.formatValue( '200em' ) ).toBe( "200em" );
+		});
+
+		it('should do nothing if the field is type color', function() {
+			this.inputView.type = 'color';
+			expect( this.inputView.formatValue( '#3a3a3a' ) ).toBe( "#3a3a3a" );
 		});
 	});
 

@@ -70,6 +70,7 @@ TemplateGroupView.prototype.update = function( property, value ) {
 	// Replace each layout value with a potential new one
 	this.layout.forEach(function( layout, i ) {
 		this.$group.data( layout.property, layout.value );
+		this.$group.attr( 'layout-' + layout.property, layout.value );
 	}.bind( this ));
 
 	// Alert any listeners that the group has changed

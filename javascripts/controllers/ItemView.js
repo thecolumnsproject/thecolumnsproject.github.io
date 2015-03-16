@@ -1,5 +1,7 @@
 var DRAGGING_CLASS = 'dragging',
-	INACTIVE_CLASS = 'inactive'
+	INACTIVE_CLASS = 'inactive',
+	SELECTED_CLASS = 'selected',
+	ITEM_SELECTOR = '.layout-column';
 
 // Manage the display of a single item
 // within the list of items
@@ -19,6 +21,7 @@ ItemView.prototype.render = function() {
 	this.$item = $item;
 
 	this.setupEvents();
+	this._setupEventListeners();
 
 	return this.$item;
 };
@@ -108,4 +111,42 @@ ItemView.prototype.setupEvents = function() {
 		} )
 
 	}, this) );
+
+	this.$item.on( 'click', $.proxy(function( event ) {;
+
+		this.$item.addClass('selected');
+
+		ColumnsEvent.send( 'Columns.ItemView.ItemDidSelect', {
+			itemView: 	this,
+			item: 		this.item
+		} );
+
+	}, this ) );
+};
+
+ItemView.prototype._setupEventListeners = function() {
+
+	// Listen to value selection events
+	ColumnsEvent.on( 'Columns.TemplateValueView.ValueDidSelectWithItem', this._onValueViewSelection.bind( this ));
+
+	// Listen to item view selection events
+	ColumnsEvent.on( 'Columns.ItemView.ItemDidSelect', this._onItemSelection.bind( this ));	
+};
+
+ItemView.prototype._onValueViewSelection = function( event, data ) {
+	var item = data.item;
+
+	if ( this.item.is( item ) ) {
+		this.$item.addClass('selected');
+	} else {
+		this.$item.removeClass('selected');
+	}
+};
+
+ItemView.prototype._onItemSelection = function( event, data ) {
+	var item = data.item;
+
+	if ( !this.item.is( item ) ) {
+		this.$item.removeClass('selected');
+	}
 };

@@ -160,6 +160,7 @@ TemplateView.prototype._renderTemplate = function() {
 	this.$template = $template;
 
 	this._setupTemplateEvents();
+	this._emitRender();
 	this._emitChange();
 
 	return this.$template;
@@ -301,6 +302,12 @@ TemplateView.prototype._emitChange = function() {
 	// document.dispatchEvent(event);
 
 	ColumnsEvent.send('Columns.TemplateView.DidChange', {
+		templateView: this
+	});
+};
+
+TemplateView.prototype._emitRender = function() {
+	ColumnsEvent.send('Columns.TemplateView.DidRender', {
 		templateView: this
 	});
 };

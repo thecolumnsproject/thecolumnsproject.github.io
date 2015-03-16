@@ -54,6 +54,11 @@ StyleComponentView.prototype.render = function() {
 	}.bind( this ) );
 
 	this.$style = $component;
+	this._setupEventListeners();
+
+	if ( this.item instanceof TemplateGroupView ) {
+		this.updateAlignmentButtons( this.item.getStyle('flex-direction') );
+	}
 
 	return this.$style;
 };
@@ -102,6 +107,7 @@ StyleComponentView.prototype._renderItem = function( item ) {
 	if ( item.kind === 'input' ) {
 
 		item = new StyleInputView({
+			item: this.item,
 			unit: item.unit,
 			type: item.type,
 			canBeNegative: item.canBeNegative,
@@ -116,6 +122,7 @@ StyleComponentView.prototype._renderItem = function( item ) {
 	} else if ( item.kind === 'segmented-button' ) {
 
 		item = new StyleSegmentedButtonView({
+			item: this.item,
 			label: item.label,
 			property: item.property.name,
 			buttons: item.buttons,
@@ -126,6 +133,7 @@ StyleComponentView.prototype._renderItem = function( item ) {
 	} else if ( item.kind === 'multiple-segmented-button' ) {
 
 		item = new StyleMultipleSegmentedButtonView({
+			item: this.item,
 			label: item.label,
 			buttons: item.buttons.map(function( button, i ) {
 				return {
@@ -144,4 +152,35 @@ StyleComponentView.prototype._renderItem = function( item ) {
 	} else {
 		return undefined;
 	}
+};
+
+StyleComponentView.prototype._setupEventListeners = function() {
+
+	// Listen for input updates
+	// if this is for a group
+	if ( this.item instanceof TemplateGroupView ) {
+		ColumnsEvent.on( 'Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
+	}
+};
+
+StyleComponentView.prototype._onStyleUpdate = function( event, data ) {
+
+	// If this is a change for the flex-direction property,
+	// update the classes on the alignment buttons
+	if ( data.property === 'flex-direction' ) {
+		this.updateAlignmentButtons( data.value );
+	}
+};
+
+StyleComponentView.prototype.updateAlignmentButtons = function( direction ) {
+	var $buttons = this.$style.find('[data-property="align-items"]');
+
+	if ( direction === 'column' ) {
+		$buttons.addClass('column');
+		$buttons.removeClass('row');
+	} else {
+		$buttons.addClass('row');
+		$buttons.removeClass('column');
+	}
+
 };

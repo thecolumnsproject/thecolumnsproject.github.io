@@ -167,7 +167,7 @@ StyleComponentView.prototype._onStyleUpdate = function( event, data ) {
 
 	// If this is a change for the flex-direction property,
 	// update the classes on the alignment buttons
-	if ( data.property === 'flex-direction' ) {
+	if ( data.item === this.item && data.property === 'flex-direction' ) {
 		this.updateAlignmentButtons( data.value );
 	}
 };

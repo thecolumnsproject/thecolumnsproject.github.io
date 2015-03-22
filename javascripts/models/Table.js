@@ -147,21 +147,21 @@ Table.prototype._uploadFile = function( file ) {
 	formData.append( "columns", this.stringFromColumns( this.columns ) );
 	// formData.append( "layout", JSON.stringify( this.layout.model ) );
 
-	this._onUploadSuccess( {
-		status: 'success',
-		data: {
-			table_id: 1
-		}
-	});
+	// this._onUploadSuccess( {
+	// 	status: 'success',
+	// 	data: {
+	// 		table_id: 1
+	// 	}
+	// });
 
-	// $.ajax({
- //        url: config.api.host + '/columns/table',  //Server script to process data
- //        type: 'POST',
- //        contentType: false,
- //        processData: false,
- //        data: formData,
- //        success: this._onUploadSuccess.bind( this )
- //    });
+	$.ajax({
+        url: config.api.host + '/columns/table',  //Server script to process data
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        data: formData,
+        success: this._onUploadSuccess.bind( this )
+    });
 };
 
 Table.prototype._updateTable = function() {

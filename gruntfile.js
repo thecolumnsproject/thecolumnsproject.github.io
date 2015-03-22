@@ -54,6 +54,29 @@ module.exports = function(grunt) {
 					}
 				}]
 			},
+			specs: {
+				src: ['specs/compiled-specs.js'],
+				dest: 'specs/compiled-specs.js',
+				replacements: [{
+					from: '{{api_host}}',
+					to: function(matchedWord) {
+						if (process.env.NODE_ENV == 'production') {
+							return 'http://api.thecolumnsproject.com';
+						} else {
+							return 'http://127.0.0.1:8080'
+						}
+					}
+				}, {
+					from: '{{root_path}}',
+					to: function(matchedWord) {
+						if (process.env.NODE_ENV == 'production') {
+							return 'http://colum.nz';
+						} else {
+							return 'http://127.0.0.1'
+						}
+					}
+				}]
+			},
 			app: {
 				src: ['javascripts/config.js'],
 				dest: 'compiled-javascripts/config.js',
@@ -81,6 +104,10 @@ module.exports = function(grunt) {
 			embed: {
 				src: ['javascripts/embed-table.js'],
 				dest: 'compiled-javascripts/embed-table.js'
+			},
+			specs: {
+				src: ['specs/**/*.js', '!specs/compiled-specs.js'],
+				dest: 'specs/compiled-specs.js'
 			}
 		},
 		concat: {
@@ -114,9 +141,14 @@ module.exports = function(grunt) {
 		},
 		jasmine: {
 			app: {
-				src: ['javascripts/models/*.js', 'javascripts/controllers/*.js', 'javascripts/styling/**/*.js'],
+				src: [
+					'javascripts/models/*.js',
+					'javascripts/controllers/*.js',
+					'javascripts/styling/**/*.js',
+					'!javascripts/models/ColumnsTable.js'
+				],
 				options: {
-					specs: 'specs/**/*.js',
+					specs: 'specs/compiled-specs.js',
 					vendor: [
 						'bower_components/jquery/dist/jquery.js',
 						'bower_components/handlebars/handlebars.js',
@@ -129,7 +161,8 @@ module.exports = function(grunt) {
 					helpers: [
 						'templates/embeddable-templates.js',
 						'templates/templates.js',
-						'compiled-javascripts/config.js'
+						'compiled-javascripts/config.js',
+						// 'compiled-javascripts/embed-table.js'
 					]
 				}
 			}
@@ -152,6 +185,10 @@ module.exports = function(grunt) {
 			javascript: {
 				files: 'javascripts/**/*.js',
 				tasks: ['replace', 'browserify', 'replace', 'concat']
+			},
+			specs: {
+				files: ['specs/**/*.js', 'specs/**/*.html', '!specs/compiled-specs.js'],
+				tasks: ['browserify', 'replace']
 			}
 		}
 	});

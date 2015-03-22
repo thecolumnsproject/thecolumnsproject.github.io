@@ -23,6 +23,11 @@ describe('Items View', function() {
 			var itemsView = new ItemsView();
 			expect( itemsView.template ).toEqual( Columns.Templates['templates/layout/columns.hbs'] );
 		});
+
+		it('should initiatize with an empty item views array', function() {
+			var itemsView = new ItemsView();
+			expect( itemsView.views ).toEqual( [] );
+		});
 	});
 
 	describe('Rendering', function() {
@@ -49,6 +54,21 @@ describe('Items View', function() {
 			expect( $columns.length ).toBe( 9 );
 			expect( $columns.eq( 4 ) ).toContainText('Batting Average');
 			// expect( $columns ).not.toContainText('First Name');
+		});
+
+		it('should create references to item views', function() {
+			// this.itemsView.render();
+			expect( this.itemsView.views.length ).toBe( 4 );
+			expect( this.itemsView.views[ 2 ].item.title ).toBe('Hometown');
+		});
+
+		it('should append new item views', function() {
+			var newItems = [ new Item({ title: 'Batting Average' }), new Item({ title: 'Baseball Player' }), new Item({ title: 'Season' }), new Item({ title: 'Team' }), new Item({ title: 'Coach' }) ];
+			this.itemsView._updateWithItems( newItems );
+			this.itemsView.render();
+
+			expect( this.itemsView.views.length ).toBe( 9 );
+			expect( this.itemsView.views[ 4 ].item.title ).toBe('Batting Average');
 		});
 	});
 
@@ -100,6 +120,12 @@ describe('Items View', function() {
 				new Item({ title: 'Middle Name' }),
 			] );
 
+		});
+
+		xit('should add new item views to the array', function() {
+			this.itemsView.render();
+			this.itemsView._updateWithItems( this.newItems );
+			expect( this.itemsView.views.length ).toBe( 6 );
 		});
 
 		it('should do nothing if not passed any items', function() {
@@ -168,6 +194,25 @@ describe('Items View', function() {
 			] );
 		});
 	});
+
+	describe('Get an itemview for a given item', function() {
+
+		beforeEach(function() {
+			this.itemsView = new ItemsView([ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' }) ]);
+		});
+
+		it('should return the first itemview that matches the given item', function() {
+			expect( this.itemsView.itemViewForItem( new Item({ title: 'Last Name' }) ) ).toEqual( this.itemsView.views[ 1 ] );
+		});
+
+		it('should return undefined if there is no match', function() {
+			expect( this.itemsView.itemViewForItem( new Item({ title: 'Birthday' }) ) ).toBeUndefined();
+		});
+
+		it('should return undefined if not passed an item', function() {
+			expect( this.itemsView.itemViewForItem( "hi" ) ).toBeUndefined();
+		});
+	});	
 
 	describe('Responding to Events', function() {
 

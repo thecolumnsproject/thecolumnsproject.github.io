@@ -88,16 +88,6 @@ Layout.prototype._generateModelForTemplate = function( $template ) {
 };
 
 Layout.prototype._emitChange = function() {
-
-	// Alert any listeners that the group has changed
-	// var event = new CustomEvent( 'Columns.Layout.DidChange', {
-	// 	groupView: 	this
-	// });
-	// var event = document.createEvent('CustomEvent');
-	// event.initCustomEvent('Columns.Layout.DidChange', false, false, {
-	// 	layout: 	this
-	// });
-	// document.dispatchEvent(event);
 	ColumnsEvent.send('Columns.Layout.DidChange', {
 		layout: 	this
 	});

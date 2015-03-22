@@ -21,6 +21,11 @@ describe('Item View', function() {
 			var itemView = new ItemView();
 			expect(itemView.template).toEqual(Columns.Templates['templates/layout/column.hbs']);
 		});
+
+		it('should initiatize as unselected', function() {
+			var itemView = new ItemView();
+			expect( itemView.selected ).toBeFalsy();
+		});
 	});
 
 	describe('Rendering', function() {
@@ -57,6 +62,11 @@ describe('Item View', function() {
 
 		it('should have the correct active status', function() {
 			expect( this.itemView.render() ).toHaveClass('inactive');
+		});
+
+		it('should have the correct selected status', function() {
+			this.itemView.selected = true;
+			expect( this.itemView.render() ).toHaveClass('selected');
 		});
 
 		it('should replace itself if already rendered', function() {
@@ -143,6 +153,7 @@ describe('Item View', function() {
 
 		it('should get selected on click', function() {
 			this.$item.trigger('click');
+			expect( this.itemView.selected ).toBeTruthy();
 			expect( this.$item ).toHaveClass('selected');
 		});
 
@@ -190,6 +201,7 @@ describe('Item View', function() {
 				item = new Item({ title: "My Item" });
 				this.itemView = new ItemView( item );
 				this.itemView.render();
+				this.itemView.selected = true;
 				this.itemView.$item.addClass('selected');
 			});
 
@@ -199,6 +211,7 @@ describe('Item View', function() {
 					item: 		item
 				});
 
+				expect( this.itemView.selected ).toBeTruthy();
 				expect( this.itemView.$item ).toHaveClass('selected');
 			});
 
@@ -209,7 +222,34 @@ describe('Item View', function() {
 					item: 		otherItem
 				});
 
+				expect( this.itemView.selected ).toBeFalsy();
 				expect( this.itemView.$item ).not.toHaveClass('selected');
+			});
+		});
+
+		describe('Setting Selection State', function() {
+
+			beforeEach(function() {
+				item = new Item({ title: "My Item" });
+				this.itemView = new ItemView( item );
+				this.$itemView = this.itemView.render();
+			});
+
+			it('should set selected as true', function() {
+				this.itemView._setSelected( true );
+				expect( this.itemView.selected ).toBeTruthy();
+				expect( this.itemView.$item ).toHaveClass('selected');
+			});
+
+			it('should set selected as false', function() {
+				this.itemView.selected = true;
+				this.itemView.$item.addClass('selected');
+
+				this.itemView._setSelected( false );
+
+				expect( this.itemView.selected ).toBeFalsy();
+				expect( this.itemView.$item ).not.toHaveClass('selected');
+
 			});
 		});
 	});

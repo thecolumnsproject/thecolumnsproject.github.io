@@ -58,7 +58,7 @@ StyleSegmentedButtonView.prototype.update = function( value ) {
 		item: this.item,
 		property: this.property,
 		value: 	value
-	} );
+	});
 };
 
 StyleSegmentedButtonView.prototype._setupControls = function() {

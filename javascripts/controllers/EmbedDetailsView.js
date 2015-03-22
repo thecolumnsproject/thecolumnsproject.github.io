@@ -6,6 +6,7 @@ var PANEL_TEMPLATE 			= Columns.Templates['templates/panels/panel.hbs'],
 
 function EmbedDetailsView( table ) {
 	this.table = table;
+	this._setupEventListeners();
 }
 
 EmbedDetailsView.prototype.render = function() {
@@ -26,7 +27,7 @@ EmbedDetailsView.prototype.render = function() {
 	}) );
 
 	this.$embed = $embed;
-	this._setupEventListeners();
+	this._setupInteractionListeners();
 
 	$('body').append( this.$embed );
 	return this.$embed;
@@ -57,6 +58,15 @@ EmbedDetailsView.prototype._emitChange = function( property, value ) {
 
 EmbedDetailsView.prototype._setupEventListeners = function() {
 
+	// Should listen for table upload success
+	ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', this._onTableUpload.bind( this ) );
+};
+
+EmbedDetailsView.prototype._setupInteractionListeners = function() {
+
+	// Should listen to clicks on the embed button
+	$('.columns-header-nav-embed').on( 'click', this._onEmbedButtonClick.bind( this ) );
+
 	// Should listen to clicks on the hide button
 	this.$embed.find( CLOSE_BUTTON_SELECTOR ).on( 'click', this._onCloseButtonClick.bind( this ) );
 
@@ -68,6 +78,15 @@ EmbedDetailsView.prototype._setupEventListeners = function() {
 
 	// Should listen to blur events on input fields
 	this.$embed.find('input').on( 'blur', this._onInputBlur.bind( this ) );
+};
+
+EmbedDetailsView.prototype._onTableUpload = function( event, data ) {
+	this.table = data.table;
+	this.render();
+};
+
+EmbedDetailsView.prototype._onEmbedButtonClick = function( event) {
+	this.show();
 };
 
 EmbedDetailsView.prototype._onCloseButtonClick = function( event ) {

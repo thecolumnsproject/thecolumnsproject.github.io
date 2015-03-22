@@ -322,6 +322,20 @@ describe('Table', function () {
 			expect( this.table._uploadFile ).toHaveBeenCalledWith( file );
 		});
 
+		it('should listen to layout updates', function() {
+			spyOn( this.table, '_update' );
+			spyOn( this.table, '_updateTable' );
+				
+			var layout = new Layout();
+
+			ColumnsEvent.send('Columns.Layout.DidChange', {
+				layout: 	layout
+			});
+
+			expect( this.table._update ).toHaveBeenCalledWith({ layout: layout });
+			expect( this.table._updateTable ).toHaveBeenCalled();
+		});
+
 		it('should listen for updates to table meta-data', function() {
 			spyOn( this.table, '_update' );
 			spyOn( this.table, '_updateTable' );
@@ -453,6 +467,33 @@ describe('Table', function () {
 
 			expect( this.table._emitUpdateFail ).toHaveBeenCalled();
 			expect( this.table._emitUpdateSuccess ).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('Get Item for column name', function() {
+
+		beforeEach(function() {
+			this.table = new Table({
+      			columns: [ "First Name", "Last Name", "Hometown" ],
+      		});
+		});
+
+		it('should return the correct item given an unformatted name', function() {
+			expect( this.table.getItemForData( 'first_name' ) ).toEqual( this.table.columns[ 0 ] );
+			expect( this.table.getItemForData( 'hometown' ) ).toEqual( this.table.columns[ 2 ] );
+		});
+
+		it('should return undefined if there is no item match', function() {
+			expect( this.table.getItemForData( 'hello' ) ).toBeUndefined();
+		});
+
+		it('should return undefined if there are no items', function() {
+			this.table.columns = undefined;
+			expect( this.table.getItemForData( 'first_name' ) ).toBeUndefined();
+		});
+
+		it('should return undefined if there is no data passed in', function() {
+			expect( this.table.getItemForData() ).toBeUndefined();
 		});
 	});
 

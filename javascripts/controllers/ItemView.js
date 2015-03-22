@@ -9,13 +9,15 @@ ItemView = function( item ) {
 
 	this.item = item || new Item();
 	this.template = Columns.Templates['templates/layout/column.hbs'];
+	this.selected = false;
 	this.$item;
 };
 
 ItemView.prototype.render = function() {
 	var $item = $( this.template({
 		title: this.item.formattedTitle(),
-		active: this.item.active
+		active: this.item.active,
+		selected: this.selected
 	}) );
 	$item.data('style', this.item.style.styles);
 	this.$item = $item;
@@ -114,7 +116,7 @@ ItemView.prototype.setupEvents = function() {
 
 	this.$item.on( 'click', $.proxy(function( event ) {;
 
-		this.$item.addClass('selected');
+		this._setSelected( true );
 
 		ColumnsEvent.send( 'Columns.ItemView.ItemDidSelect', {
 			itemView: 	this,
@@ -122,6 +124,17 @@ ItemView.prototype.setupEvents = function() {
 		} );
 
 	}, this ) );
+};
+
+ItemView.prototype._setSelected = function( selected ) {
+
+	if ( selected === true ) {
+		this.selected = true;
+		this.$item.addClass( SELECTED_CLASS );
+	} else if ( selected === false ) {
+		this.selected = false;
+		this.$item.removeClass( SELECTED_CLASS );
+	}
 };
 
 ItemView.prototype._setupEventListeners = function() {
@@ -137,9 +150,9 @@ ItemView.prototype._onValueViewSelection = function( event, data ) {
 	var item = data.item;
 
 	if ( this.item.is( item ) ) {
-		this.$item.addClass('selected');
+		this._setSelected( true );
 	} else {
-		this.$item.removeClass('selected');
+		this._setSelected( false );
 	}
 };
 
@@ -147,6 +160,6 @@ ItemView.prototype._onItemSelection = function( event, data ) {
 	var item = data.item;
 
 	if ( !this.item.is( item ) ) {
-		this.$item.removeClass('selected');
+		this._setSelected( false );
 	}
 };

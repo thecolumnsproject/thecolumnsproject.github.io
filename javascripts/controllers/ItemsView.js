@@ -2,6 +2,7 @@
 ItemsView = function( items ) {
 
 	this.items 		= items || [];
+	this.views 		= [];
 	this.template 	= Columns.Templates['templates/layout/columns.hbs'];
 	this.$items;
 
@@ -10,19 +11,25 @@ ItemsView = function( items ) {
 };
 
 ItemsView.prototype.render = function() {
+	var itemView,
+		$columns = $( this.template() );
 
 	// Remove any existing columns
 	$('.layout-columns').remove();
 
-	var $columns = $( this.template() );
-
 	if ( this.items ) {
 		this.items.forEach(function( item, i ) {
 
-			var itemView = new ItemView( item );
+			itemView = this.itemViewForItem( item );
+			
+			if ( !itemView ) {
+				itemView = new ItemView( item );
+				this.views.push( itemView );
+			}
+
 			$columns.append( itemView.render() );
 
-		});
+		}.bind( this ));
 	}
 
 	$("#columns").append( $columns );
@@ -34,13 +41,25 @@ ItemsView.prototype.render = function() {
 	return this.$items;
 };
 
+ItemsView.prototype.itemViewForItem = function( item ) {
+	var itemView;
+
+	if ( item instanceof Item && this.views.length ) {
+		itemView = this.views.filter(function( view, i ) {
+			return view.item.title === item.title;
+		}.bind( this ) )[ 0 ];
+	}
+
+	return itemView;
+};
+
 ItemsView.prototype.updateItem = function( item ) {
 
 	// Re-render the item
 	this.items.forEach(function( oldItem, i ) {
 
 		if ( oldItem.is( item ) ) {
-			var itemView = new ItemView( item );
+			var itemView = this.itemViewForItem( item );
 			this.$items.find('.layout-column').eq( i ).replaceWith( itemView.render() );
 		}
 

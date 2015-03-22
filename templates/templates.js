@@ -125,8 +125,17 @@ function program1(depth0,data) {
   return "inactive";
   }
 
+function program3(depth0,data) {
+  
+  
+  return "selected";
+  }
+
   buffer += "<div class=\"layout-column ";
   stack1 = helpers.unless.call(depth0, (depth0 && depth0.active), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.selected), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\">\n	<i class=\"icon-text layout-column-icon\"></i>\n	";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }

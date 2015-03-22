@@ -194,7 +194,7 @@ TemplateView.prototype._renderRowComponent = function( component ) {
 		return $component;
 
 	} else if ( component.type === 'single' ) {
-		var item = new Item({ title: component.data, style: component.style });
+		var item = this.table.getItemForData( component.data );
 		componentView = new TemplateValueView( item );
 		return componentView.render();
 	}
@@ -342,9 +342,17 @@ TemplateView.prototype._setupTemplateEvents = function() {
 	ColumnsEvent.on('ColumnsTableDidExpand', this._onTableDidExpand.bind( this ) );
 	ColumnsEvent.on('ColumnsTableDidCollapse', this._onTableDidCollapse.bind( this ) );
 
+	// Listen for updates to values and groups
+	ColumnsEvent.on( 'Columns.TemplateValueView.DidChange', this._onTemplateViewDidChange.bind( this ));
+	ColumnsEvent.on( 'Columns.TemplateGroupView.DidChange', this._onTemplateViewDidChange.bind( this ));
+};
+
+TemplateView.prototype._onTemplateViewDidChange = function( event, data ) {
+	this._emitChange();
 };
 
 TemplateView.prototype._onTemplateUpload = function( event, data ) {
+	this.table = data.table;
 	this.layout = data.table.layout;
 	this._renderTemplate();
 };

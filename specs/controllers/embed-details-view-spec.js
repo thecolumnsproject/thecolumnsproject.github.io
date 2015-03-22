@@ -76,8 +76,15 @@ describe('Embed Details View', function() {
 	describe('Listening to User Events', function() {
 
 		beforeEach(function() {
+			loadFixtures('header.html');
 			this.embed = new EmbedDetailsView( new Table({ id: 4 }));
 			this.embed.render();
+		});
+
+		it('should show when the embed button is clicked', function() {			
+			spyOn( this.embed, 'show' );
+			$('.columns-header-nav-embed').trigger('click');
+			expect( this.embed.show ).toHaveBeenCalled();
 		});
 
 		it('should hide when the close button is clicked', function() {
@@ -90,10 +97,6 @@ describe('Embed Details View', function() {
 			spyOn( this.embed, 'hide' );
 			$('.columns-panel-blocker').trigger('click');
 			expect( this.embed.hide ).toHaveBeenCalled();
-		});
-
-		it('should show when the Embed button is clicked', function() {
-
 		});
 
 		it('should respond to keyup events on the title input', function() {
@@ -152,6 +155,25 @@ describe('Embed Details View', function() {
 
 		xit('should copy the embed url when the copy link is clicked', function() {
 
+		});
+
+	});
+
+	describe('Listening to Table Events', function() {
+
+		beforeEach(function() {
+			this.embed = new EmbedDetailsView();
+			spyOn( this.embed, 'render' );
+		});
+
+		it('should render upon table upload', function() {
+			var table = new Table({ id: 6 });
+			ColumnsEvent.send('Columns.Table.DidUploadWithSuccess', {
+				table: 	table
+			});
+
+			expect( this.embed.table ).toEqual( table );
+			expect( this.embed.render ).toHaveBeenCalled();
 		});
 
 	});

@@ -10,6 +10,9 @@ var template = new TemplateView();
 // Set up the Style View
 var style = new StyleView();
 
+// Set up the Embed Panel
+var embed = new EmbedDetailsView();
+
 // Set up the Upload View
 var upload = new UploadView();
 upload.render();

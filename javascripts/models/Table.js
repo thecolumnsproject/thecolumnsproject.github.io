@@ -92,6 +92,21 @@ Table.prototype._emitUpdateFail = function() {
 	});
 };
 
+// Return an item given a data column name
+// @param {string} data -- the unformatted column title to search against ('first_name')
+// @return {Item} -- the matching item
+Table.prototype.getItemForData = function( data ) {
+	var item;
+
+	if ( data && this.columns && this.columns.length ) {
+		item = this.columns.filter(function( column ) {
+			return data === column.unformattedTitle();
+		}.bind( this ))[ 0 ];
+	}
+
+	return item;
+};
+
 Table.prototype.itemsFromColumnNames = function( columnNames ) {
 
 	if ( typeof columnNames === 'string' ) {
@@ -174,6 +189,9 @@ Table.prototype._setupEventListeners = function() {
 	// Listen for updates from the details panel
 	ColumnsEvent.on( 'Columns.EmbedDetailsView.DidUpdatePropertyWithValue', this._onTableUpdate.bind( this ) );
 
+	// Listen for layout updates
+	ColumnsEvent.on( 'Columns.Layout.DidChange', this._onLayoutUpdate.bind( this ) );
+
 };
 
 Table.prototype._onColumnNamesParsed = function( event, data ) {
@@ -235,6 +253,13 @@ Table.prototype._onTableUpdate = function( event, data ) {
 	props[ data.property ] = data.value;
 
 	this._update( props );
+	this._updateTable();
+};
+
+Table.prototype._onLayoutUpdate = function( event, data ) {
+	this._update({
+		layout: data.layout
+	});
 	this._updateTable();
 };
 

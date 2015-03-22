@@ -26,6 +26,10 @@ describe('Template View', function() {
 				}])
 			})
 		]);
+
+		this.table = new Table({
+			columns: [ "First Name", "Hometown", "Age" ]
+		});
 		
 		// this.defaultLayout = {
 		// 	type: 'group',
@@ -126,6 +130,7 @@ describe('Template View', function() {
 		beforeEach(function() {
 			loadFixtures('layout.html');
 			this.templateView = new TemplateView( this.defaultLayout );
+			this.templateView.table = this.table;
 		});
 
 		describe('Preview Rendering', function() {
@@ -762,6 +767,7 @@ describe('Template View', function() {
 
 		beforeEach(function() {
 			this.templateView = new TemplateView( this.defaultLayout );
+			this.templateView.table = this.table;
 			this.templateView.render();
 		});
 
@@ -874,6 +880,7 @@ describe('Template View', function() {
 		});
 
 		it('should render the template when the table is initially uploaded', function() {
+			var table = new Table({ layout: new Layout() });
 			spyOn( this.templateView, '_renderTemplate' );
 
 			// var columnsEvent = document.createEvent('CustomEvent');
@@ -882,10 +889,11 @@ describe('Template View', function() {
 			// });
 			// document.dispatchEvent(columnsEvent);
 			ColumnsEvent.send('Columns.Table.DidUploadWithSuccess', {
-				table: 	new Table({ layout: new Layout() })
+				table: 	table
 			});
 
 			expect( this.templateView.layout ).toEqual( new Layout() );
+			expect( this.templateView.table ).toEqual( table );
 			expect( this.templateView._renderTemplate ).toHaveBeenCalled();
 		});
 	});
@@ -976,6 +984,7 @@ describe('Template View', function() {
 
 		beforeEach(function() {
 			this.templateView = new TemplateView( this.defaultLayout );
+			this.templateView.table = this.table;
 			this.templateView.render();
 		});
 
@@ -1153,6 +1162,7 @@ describe('Template View', function() {
 
 		beforeEach(function() {
 			this.templateView = new TemplateView( this.defaultLayout );
+			this.templateView.table = this.table;
 			this.templateView.render();
 			this.newItem = new Item({ title: "My Item" });
 			this.valueView = new TemplateValueView( this.newItem );
@@ -1350,10 +1360,37 @@ describe('Template View', function() {
 
 	});
 
+	describe('Respond to Value and Group Updates', function() {
+
+		beforeEach(function() {
+			this.templateView = new TemplateView( this.defaultLayout );
+			this.templateView.table = this.table;
+			this.templateView.render();
+			spyOn( this.templateView, '_emitChange' );
+		});
+
+		it('should emit a change event when a value view is updated', function() {
+			ColumnsEvent.send('Columns.TemplateValueView.DidChange', {
+				valueView: 	new TemplateValueView()
+			});
+
+			expect( this.templateView._emitChange ).toHaveBeenCalled();
+		});
+
+		it('should emit a change event when a group view is updated', function() {
+			ColumnsEvent.send('Columns.TemplateGroupView.DidChange', {
+				groupView: 	new TemplateGroupView()
+			});
+
+			expect( this.templateView._emitChange ).toHaveBeenCalled();
+		});
+	});
+
 	describe('Respond to Embeddable Table Events', function() {
 
 		beforeEach(function() {
 			this.templateView 	= new TemplateView( this.defaultLayout );
+			this.templateView.table = this.table;
 			this.$template 		= this.templateView.render();
 		});
 

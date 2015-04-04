@@ -98,10 +98,15 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 	var scriptTags = document.getElementsByTagName('script');
 	for (var i = 0; i < scriptTags.length ; i++) {
 		var scriptTag = scriptTags[i];
-		if (scriptTag.src.search( Config.embed_path ) > -1 && scripts.indexOf( scriptTag ) < 0) {
+		if (scriptTag.src.search( Config.embed_path ) > -1
+			&& scripts.indexOf( scriptTag ) < 0
+			&& scriptTag.type === 'text/javascript' /* To eliminate accidental use of cached script */ ) {
+
 			scripts.push(scriptTag);
 
 			// Create a new table
+			console.log('Table ' + i);
+			console.log(scriptTag);
 			var table = new ColumnsTable(scriptTag);
 			// table.preview = $$(scriptTag).data('preview');
 			tables.push(table);

@@ -1,3 +1,9 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var Layout 				= require('../../javascripts/models/Layout.js');
+var Table 				= require('../../javascripts/models/Table.js');
+var TemplateView 		= require('../../javascripts/controllers/TemplateView.js');
+var ItemView 			= require('../../javascripts/controllers/ItemView.js');
+
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Template View', function() {

@@ -1,3 +1,5 @@
+var ColumnsEvent = require('../models/ColumnsEvent.js');
+
 var MAX_ROWS = 20,
 	UPLOAD_BUTTON_SELECTOR = '.columns-upload-button';
 
@@ -232,3 +234,5 @@ UploadView.prototype._onParseComplete = function( results, file ) {
 		file: 			file
 	});
 };
+
+module.exports = UploadView;

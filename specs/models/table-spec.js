@@ -1,3 +1,11 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var Item 				= require('../../javascripts/models/Item.js');
+var Table 				= require('../../javascripts/models/Table.js');
+var Layout 				= require('../../javascripts/models/Layout.js');
+var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
+var UploadView 			= require('../../javascripts/controllers/UploadView.js');
+var DEFAULTS			= require('../../javascripts/styling/defaults.js');
+
 describe('Table', function () {
 
 	afterEach(function() {

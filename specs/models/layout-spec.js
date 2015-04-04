@@ -1,39 +1,45 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var Layout 				= require('../../javascripts/models/Layout.js');
+var TemplateView		= require('../../javascripts/controllers/TemplateView.js');
+var TemplateGroupView	= require('../../javascripts/controllers/TemplateGroupView.js');
+var DEFAULTS			= require('../../javascripts/styling/defaults.js');
+
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
-var DEFAULTS = {
-	styles: [
-		[{
-			property: 'color',
-			value: '#3a3a3a'
-		}],
-		[{
-			property: 'color',
-			value: '#888'
-		},{
-			property: 'font-size',
-			value: '14px'
-		}, {
-			property: 'margin-top',
-			value: '4px'
-		}],
-		[{
-			property: 'color',
-			value: '#3a3a3a'
-		},{
-			property: 'font-size',
-			value: '24px'
-		}]	
-	],
-	layouts: [
-		[{
-			property: 'flex-direction',
-			value: 'column'
-		}, {
-			property: 'align-items',
-			value: 'flex-start'
-		}]
-	]
-};
+// var DEFAULTS = {
+// 	styles: [
+// 		[{
+// 			property: 'color',
+// 			value: '#3a3a3a'
+// 		}],
+// 		[{
+// 			property: 'color',
+// 			value: '#888'
+// 		},{
+// 			property: 'font-size',
+// 			value: '14px'
+// 		}, {
+// 			property: 'margin-top',
+// 			value: '4px'
+// 		}],
+// 		[{
+// 			property: 'color',
+// 			value: '#3a3a3a'
+// 		},{
+// 			property: 'font-size',
+// 			value: '24px'
+// 		}]	
+// 	],
+// 	layouts: [
+// 		[{
+// 			property: 'flex-direction',
+// 			value: 'column'
+// 		}, {
+// 			property: 'align-items',
+// 			value: 'flex-start'
+// 		}]
+// 	]
+// };
 
 describe('Layout', function() {
 

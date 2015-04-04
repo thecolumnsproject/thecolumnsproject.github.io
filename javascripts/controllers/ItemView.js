@@ -1,3 +1,5 @@
+var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+
 var DRAGGING_CLASS = 'dragging',
 	INACTIVE_CLASS = 'inactive',
 	SELECTED_CLASS = 'selected',
@@ -163,3 +165,5 @@ ItemView.prototype._onItemSelection = function( event, data ) {
 		this._setSelected( false );
 	}
 };
+
+module.exports = ItemView;

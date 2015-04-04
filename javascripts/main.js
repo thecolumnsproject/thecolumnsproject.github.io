@@ -1,3 +1,10 @@
+var Table 				= require('./models/Table.js');
+var ItemView 			= require('./controllers/ItemsView.js');
+var TemplateView 		= require('./controllers/TemplateView.js');
+var StyleView 			= require('./controllers/StyleView.js');
+var EmbedDetailsView 	= require('./controllers/EmbedDetailsView.js');
+var UploadView 			= require('./controllers/UploadView.js');
+
 // Create the Table object
 var table = new Table();
 

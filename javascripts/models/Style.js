@@ -1,3 +1,5 @@
+var ColumnsEvent = require('./ColumnsEvent.js');
+
 // Style Object
 // -------------
 // Use this model to handle styling information.
@@ -116,4 +118,6 @@ Style.prototype._mergeCSS = function( css ) {
 
 	// Add all remaining new styles to the styles array
 	this.styles = this.styles.concat( newStyles );
-}
+};
+
+module.exports = Style;

@@ -6,6 +6,9 @@
 // 1) Traverse the template and construct a new object
 // 2) Update the object when styles are adjusted
 
+var ColumnsEvent 	= require('./ColumnsEvent.js');
+var DEFAULTS		= require('../styling/defaults.js');
+
 // Columns.Layout = new function() {
 function Layout( items ) {
 
@@ -165,3 +168,5 @@ Layout.prototype.defaultLayout = function( items ) {
 	}
 	return layout;
 };
+
+module.exports = Layout;

@@ -1,3 +1,6 @@
+var ColumnsEvent 				= require('../../javascripts/models/ColumnsEvent.js');
+var StyleSegmentedButtonView 	= require('../../javascripts/controllers/StyleSegmentedButtonView.js');
+
 describe('Style Segmented Button View', function() {
 
 	afterEach(function() {

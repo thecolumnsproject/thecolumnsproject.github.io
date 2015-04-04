@@ -1,3 +1,8 @@
+var ColumnsEvent 	= require('./ColumnsEvent.js');
+var Layout 			= require('./Layout.js');
+var Item 			= require('./Item.js');
+var DEFAULTS		= require('../styling/defaults.js');
+
 function Table( props )  {
 
 	this.data = [];
@@ -269,3 +274,5 @@ Table.prototype.stringFromColumns = function( columns ) {
 		return column.title;
 	}).join();
 };
+
+module.exports = Table;

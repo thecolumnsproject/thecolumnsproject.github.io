@@ -3993,11 +3993,34 @@ var ColumnsTable = columns_require('../javascripts/models/ColumnsTable.js');
 
 
 })();
-},{"../javascripts/models/ColumnsTable.js":5,"./embed-config.js":2,"./embed-handlebars.js":3}],5:[function(columns_require,module,exports){
+},{"../javascripts/models/ColumnsTable.js":6,"./embed-config.js":2,"./embed-handlebars.js":3}],5:[function(columns_require,module,exports){
+function ColumnsEvent () {
+
+}
+
+ColumnsEvent.send = function( type, data ) {
+	$(document).trigger( type, data );
+};
+
+ColumnsEvent.on = function( type, callback ) {
+	$(document).on( type, callback );
+};
+
+ColumnsEvent.off = function( type, callback ) {
+	$(document).off( type, callback );
+};
+
+ColumnsEvent.offAll = function() {
+	$(document).off();
+};
+
+module.exports = ColumnsEvent;
+},{}],6:[function(columns_require,module,exports){
 var Config = columns_require('../embed-config.js'),
 	Velocity = columns_require('../../bower_components/velocity/velocity.js'),
 	Hammer = columns_require('../../vendor/hammer.js'),
-	PreventGhostClick = columns_require('../../vendor/prevent-ghost-click.js');
+	PreventGhostClick = columns_require('../../vendor/prevent-ghost-click.js'),
+	ColumnsEvent = columns_require('./ColumnsEvent.js');
 
 // Make sure our version of jquery isn't polluting the namespace
 $$ = window.jQuery.noConflict(true);
@@ -5022,7 +5045,7 @@ ColumnsTable.prototype._onTableDidChange = function( event, data ) {
 };
 
 module.exports = ColumnsTable;
-},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":6,"../../vendor/prevent-ghost-click.js":7,"../embed-config.js":2}],6:[function(columns_require,module,exports){
+},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":7,"../../vendor/prevent-ghost-click.js":8,"../embed-config.js":2,"./ColumnsEvent.js":5}],7:[function(columns_require,module,exports){
 /*! Hammer.JS - v2.0.4 - 2014-09-28
  * http://hammerjs.github.io/
  *
@@ -7488,7 +7511,7 @@ if (typeof module != 'undefined' && module.exports) {
 
 })(window, document, 'Hammer');
 
-},{}],7:[function(columns_require,module,exports){
+},{}],8:[function(columns_require,module,exports){
 /**
  * Prevent click events after a touchend.
  * 

@@ -1,3 +1,7 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var Table 				= require('../../javascripts/models/Table.js');
+var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
+
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Embed Details View', function() {

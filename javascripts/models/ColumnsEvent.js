@@ -17,3 +17,5 @@ ColumnsEvent.off = function( type, callback ) {
 ColumnsEvent.offAll = function() {
 	$(document).off();
 };
+
+module.exports = ColumnsEvent;

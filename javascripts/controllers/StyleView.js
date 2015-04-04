@@ -1,3 +1,9 @@
+var ColumnsEvent 					= require('../models/ColumnsEvent.js');
+var Columns 						= require('../../compiled-javascripts/styling/compiled-data.js');
+var StyleComponentView 				= require('./StyleComponentView.js');
+var TemplateGroupView 				= require('./TemplateGroupView.js');
+var TemplateValueView 				= require('./TemplateValueView.js');
+
 function StyleView() {
 	this.$style = $('#styling');
 	this._setupEventListeners();
@@ -114,3 +120,4 @@ StyleView.prototype._emitChange = function( item, property, value ) {
 	}
 };
 
+module.exports = StyleView;

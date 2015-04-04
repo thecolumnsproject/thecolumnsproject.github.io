@@ -1,3 +1,6 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var TemplateValueView 	= require('../../javascripts/controllers/TemplateValueView.js');
+
 describe('Item View', function() {
 
 	afterEach(function() {

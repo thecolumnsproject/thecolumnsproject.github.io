@@ -1,3 +1,5 @@
+var ColumnsEvent 					= require('../models/ColumnsEvent.js');
+
 Handlebars.registerHelper('ifIsCurrentValue', function(value, currentValue, options) {
 	return value == currentValue ? options.fn(this) : options.inverse(this);
 });
@@ -74,3 +76,5 @@ StyleSegmentedButtonView.prototype._onClick = function( event ) {
 
 	this.update( $button.data('value') );
 };
+
+module.exports = StyleSegmentedButtonView;

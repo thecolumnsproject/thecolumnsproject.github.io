@@ -1,3 +1,6 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var StyleView 			= require('../../javascripts/controllers/StyleView.js');
+
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Style View', function() {

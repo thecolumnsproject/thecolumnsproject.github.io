@@ -1,6 +1,6 @@
 // We need to treat layout properties slightly differently than regular css properties
 // to account for browser-specific prefixes
-DEFAULTS = {
+module.exports = {
 	styles: [
 		[{
 			property: 'color',

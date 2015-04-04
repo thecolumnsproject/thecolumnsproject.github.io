@@ -1,3 +1,7 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var Table 				= require('../../javascripts/models/Table.js');
+var ItemsView 			= require('../../javascripts/controllers/ItemsView.js');
+
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Items View', function() {
@@ -265,9 +269,17 @@ describe('Items View', function() {
 				spyOn( this.itemsView, 'updateItem' );
 			});
 
-			it('should update the given item', function() {
+			it('should update the given item on change events', function() {
 				// document.dispatchEvent( this.event );
 				ColumnsEvent.send( 'Columns.Item.DidChange', {
+					item: 	this.item
+				});
+				expect( this.itemsView.updateItem ).toHaveBeenCalledWith( this.item );
+			});
+
+			it('should update the given item on active state change events', function() {
+				// document.dispatchEvent( this.event );
+				ColumnsEvent.send( 'Columns.Item.ActiveStateDidChange', {
 					item: 	this.item
 				});
 				expect( this.itemsView.updateItem ).toHaveBeenCalledWith( this.item );

@@ -1,3 +1,5 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+
 describe('Template Value View', function() {
 
 	afterEach(function() {

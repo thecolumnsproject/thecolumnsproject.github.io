@@ -1,3 +1,5 @@
+var ColumnsEvent 			= require('../models/ColumnsEvent.js');
+
 var PANEL_TEMPLATE 			= Columns.Templates['templates/panels/panel.hbs'],
 	BODY_TEMPLATE 			= Columns.Templates['templates/embed-details-panel/body.hbs'],
 	SELECTOR 				= '#embed-details-panel',
@@ -112,4 +114,6 @@ EmbedDetailsView.prototype._onInputBlur = function( event ) {
 
 	this._emitChange( property, value ); 
 };
+
+module.exports = EmbedDetailsView;
 

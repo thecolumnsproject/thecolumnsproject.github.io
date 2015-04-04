@@ -1,3 +1,5 @@
+var ColumnsEvent = require('../models/ColumnsEvent.js');
+
 function StyleInputView( options ) {
 	
 	this.type = 'tel';
@@ -164,3 +166,5 @@ StyleInputView.prototype.formatValue = function( value ) {
 
 	return number + unit;
 }
+
+module.exports = StyleInputView;

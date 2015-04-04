@@ -1,3 +1,8 @@
+var ColumnsEvent 							= require('../models/ColumnsEvent.js');
+var StyleInputView 							= require('./StyleInputView.js');
+var StyleSegmentedButtonView 				= require('./StyleSegmentedButtonView.js');
+var StyleMultipleSegmentedButtonView 		= require('./StyleMultipleSegmentedButtonView.js');
+
 var COMPONENT_TEMPLATE 	= Columns.Templates['templates/styling/component.hbs'],
 	SECTION_TEMPLATE	= Columns.Templates['templates/styling/component-section.hbs'],
 	ROW_TEMPLATE		= Columns.Templates['templates/styling/component-section-row.hbs'];
@@ -184,3 +189,5 @@ StyleComponentView.prototype.updateAlignmentButtons = function( direction ) {
 	}
 
 };
+
+module.exports = StyleComponentView;

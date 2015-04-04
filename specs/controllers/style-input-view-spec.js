@@ -1,3 +1,6 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var StyleInputView 		= require('../../javascripts/controllers/StyleInputView.js');
+
 describe('Style Input View', function() {
 
 	afterEach(function() {

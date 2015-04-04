@@ -1,7 +1,8 @@
 var Config = require('../embed-config.js'),
 	Velocity = require('../../bower_components/velocity/velocity.js'),
 	Hammer = require('../../vendor/hammer.js'),
-	PreventGhostClick = require('../../vendor/prevent-ghost-click.js');
+	PreventGhostClick = require('../../vendor/prevent-ghost-click.js'),
+	ColumnsEvent = require('./ColumnsEvent.js');
 
 // Make sure our version of jquery isn't polluting the namespace
 $$ = window.jQuery.noConflict(true);

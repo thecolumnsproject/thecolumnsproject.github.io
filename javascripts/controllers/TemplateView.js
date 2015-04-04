@@ -1,3 +1,7 @@
+var ColumnsEvent 				= require('../models/ColumnsEvent.js');
+var TemplateGroupView 			= require('./TemplateGroupView.js');
+var TemplateValueView 			= require('./TemplateValueView.js');
+
 // Object to manage properties of and interaction
 // with the template itself.
 
@@ -530,12 +534,23 @@ TemplateView.prototype.wrapValueWithGroup = function( $value, placeholder ) {
 
 	var $group = group.render();
 
+	// First add the group to the DOM before the value
+	// and then move the value into the group.
+	// We do this instead of jquery's wrap because wrap inserts a clone
+	// and we need the previously rendered object itself in the DOM.
+	$group.insertBefore( $value );
+	$group.append( $value );
+
+	// Wrap the value with the new group
+	// $value.wrap( $group );
+	// $group.append( $value );
+
 	if ( !placeholder ) {
 		TemplateView.groups.push( group );
 	}
 
-	// Wrap the value with the new group
-	return $value.wrap( $group );
+	
+	// return $value.wrap( $group );
 };
 
 TemplateView.prototype.insertDropBeforeElementInParentWithPlaceholder = function( item, $previous, $parent, placeholder ) {
@@ -595,7 +610,8 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 
 				// Wrap the two items in a group
 				// and make the new group the new parent
-				$parent = this.wrapValueWithGroup( $child, placeholder ).parent();
+				this.wrapValueWithGroup( $child, placeholder );
+				$parent = $child.parent();
 
 				// Determine whether the new value goes first or second in the new group
 				// using new dimensions as a result of the new group
@@ -620,3 +636,5 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 		this.insertDropBeforeElementInParentWithPlaceholder( this.draggingItem, $previousChild, $parent, placeholder );
 		
 };
+
+module.exports = TemplateView;

@@ -1,3 +1,5 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Template Group View', function() {

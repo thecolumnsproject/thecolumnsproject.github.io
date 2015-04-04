@@ -1,3 +1,6 @@
+var ColumnsEvent = require('./ColumnsEvent.js');
+var Style 		 = require('./Style.js');
+
 // Item Object
 // -------------
 // Use this model to store a column Item
@@ -99,7 +102,7 @@ Item.prototype._setActive = function( active ) {
 
 	if ( this.active !== active ) {
 		this.active = active;
-		this._emitChange();		
+		this._emitActiveStateChange();		
 	}
 	
 };
@@ -150,3 +153,12 @@ Item.prototype._emitChange = function() {
 		item: 	this
 	});
 };
+
+Item.prototype._emitActiveStateChange = function() {
+
+	ColumnsEvent.send('Columns.Item.ActiveStateDidChange', {
+		item: this
+	});
+};
+
+module.exports = Item;

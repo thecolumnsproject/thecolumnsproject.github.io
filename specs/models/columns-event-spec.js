@@ -1,3 +1,5 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+
 describe('Columns Events', function() {
 
 	describe('Sending Events', function() {

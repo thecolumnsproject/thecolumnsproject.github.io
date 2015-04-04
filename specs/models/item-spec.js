@@ -1,3 +1,5 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+
 describe('Item Model', function() {
 
 	afterEach(function() {
@@ -201,7 +203,7 @@ describe('Item Model', function() {
 
 		beforeEach(function() {
 			this.item = new Item({ title: "My Item" });
-			spyOn( this.item, '_emitChange' );
+			spyOn( this.item, '_emitActiveStateChange' );
 		});
 
 		it('should set active attribute to true', function() {
@@ -216,25 +218,37 @@ describe('Item Model', function() {
 
 		it('should emit a change event if the active state was changed', function() {
 			this.item._setActive( false );
-			expect( this.item._emitChange ).toHaveBeenCalled();
+			expect( this.item._emitActiveStateChange ).toHaveBeenCalled();
 		});
 
 		it('should not emit a change event if the active state was not changed', function() {
 			this.item._setActive( true );
-			expect( this.item._emitChange ).not.toHaveBeenCalled();
+			expect( this.item._emitActiveStateChange ).not.toHaveBeenCalled();
 		});
 
 	});
 
 	describe('Emitting Change Events', function() {
 
-		it('should alert the app that it has been updated', function() {
-			var item = new Item({ title: "My Item" });
+		var item;
+		beforeEach(function() {
+			item = new Item({ title: "My Item" });
 			spyOn( ColumnsEvent, 'send' );
+		})
+
+		it('should alert the app that it has been updated', function() {
 			item._emitChange();
 
 			expect( ColumnsEvent.send ).toHaveBeenCalled();
 			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Item.DidChange');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( item );
+		});
+
+		it('should alert the app that it has changed in active state', function() {
+			item._emitActiveStateChange();
+
+			expect( ColumnsEvent.send ).toHaveBeenCalled();
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Item.ActiveStateDidChange');
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( item );
 		});
 	});

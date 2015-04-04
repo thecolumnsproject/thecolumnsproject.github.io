@@ -1,3 +1,5 @@
+var ColumnsEvent = require('../models/ColumnsEvent.js');
+
 // Object to manage properties of and interaction
 // with template value zones.
 // Value zones are populated with items and
@@ -179,3 +181,5 @@ TemplateValueView.prototype._onItemDidChange = function( event, data ) {
 		this.update();
 	}
 };
+
+module.exports = TemplateValueView;

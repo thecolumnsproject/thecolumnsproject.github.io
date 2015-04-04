@@ -105,6 +105,10 @@ module.exports = function(grunt) {
 				src: ['javascripts/embed-table.js'],
 				dest: 'compiled-javascripts/embed-table.js'
 			},
+			app: {
+				src: ['javascripts/main.js'],
+				dest: 'compiled-javascripts/app.js'
+			},
 			specs: {
 				src: ['specs/**/*.js', '!specs/compiled-specs.js'],
 				dest: 'specs/compiled-specs.js'
@@ -132,9 +136,11 @@ module.exports = function(grunt) {
 			},
 			styling: {
 				src: [
+					'javascripts/styling/intro.js',
 					'javascripts/styling/components/*.js',
 					'javascripts/styling/types.js',
-					'javascripts/styling/defaults.js'
+					'javascripts/styling/outro.js'
+					// 'javascripts/styling/defaults.js'
 				],
 				dest: 'compiled-javascripts/styling/compiled-data.js'
 			}
@@ -142,10 +148,11 @@ module.exports = function(grunt) {
 		jasmine: {
 			app: {
 				src: [
-					'javascripts/models/*.js',
-					'javascripts/controllers/*.js',
-					'javascripts/styling/**/*.js',
-					'!javascripts/models/ColumnsTable.js'
+					'compiled-javascripts/app.js'
+					// 'javascripts/models/*.js',
+					// 'javascripts/controllers/*.js',
+					// 'javascripts/styling/**/*.js',
+					// '!javascripts/models/ColumnsTable.js'
 				],
 				options: {
 					specs: 'specs/compiled-specs.js',

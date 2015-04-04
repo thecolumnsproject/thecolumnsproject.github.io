@@ -1,3 +1,6 @@
+var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+var ItemView 		= require('./ItemView.js');
+
 // Manage the display of a list of items
 ItemsView = function( items ) {
 
@@ -88,6 +91,7 @@ ItemsView.prototype._setupEventListeners = function() {
 
 	// Listen for item updates
 	ColumnsEvent.on( 'Columns.Item.DidChange', this._onItemChange.bind( this ) );
+	ColumnsEvent.on( 'Columns.Item.ActiveStateDidChange', this._onItemChange.bind( this ) );
 };
 
 ItemsView.prototype._onTableChange = function( event, data ) {
@@ -131,3 +135,5 @@ ItemsView.prototype._updateWithItem = function( item ) {
 		}
 	}
 };
+
+module.exports = ItemsView;

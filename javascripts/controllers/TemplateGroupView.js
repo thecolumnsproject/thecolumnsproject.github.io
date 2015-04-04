@@ -1,3 +1,5 @@
+var ColumnsEvent = require('../models/ColumnsEvent.js');
+
 // Object to manage properties of and interaction
 // with template group zones.
 // Group zones are populated with value zones and
@@ -266,3 +268,5 @@ TemplateGroupView.prototype._onGroupDidChange = function( event, data ) {
 		this.update();
 	}
 };
+
+module.exports = TemplateGroupView;

@@ -1,3 +1,7 @@
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var Table 				= require('../../javascripts/models/Table.js');
+var UploadView 			= require('../../javascripts/controllers/UploadView.js');
+
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Upload View', function() {

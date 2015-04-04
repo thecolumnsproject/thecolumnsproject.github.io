@@ -1,5 +1,3 @@
-config 				= require('../compiled-javascripts/config.js');
-
 var Table 				= require('./models/Table.js');
 var ItemView 			= require('./controllers/ItemsView.js');
 var TemplateView 		= require('./controllers/TemplateView.js');

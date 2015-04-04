@@ -107,7 +107,12 @@ module.exports = function(grunt) {
 			},
 			app: {
 				src: ['javascripts/main.js'],
-				dest: 'compiled-javascripts/app.js'
+				dest: 'compiled-javascripts/app.js',
+				options: {
+					browserifyOptions: {
+						debug: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test' ? false : true
+					},
+				}
 			},
 			specs: {
 				src: ['specs/**/*.js', '!specs/compiled-specs.js'],
@@ -207,7 +212,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-text-replace');
 	grunt.loadNpmTasks('grunt-contrib-jasmine');
+	grunt.loadNpmTasks('grunt-minifyify');
 
-	grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'replace', 'concat']);
+	// grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
+	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'replace', 'concat' ]);
+	grunt.registerTask('default', ['build', 'watch'] );
 }

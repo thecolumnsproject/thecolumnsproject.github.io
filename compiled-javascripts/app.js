@@ -1,4 +1,32 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var env = 'development';
+module.exports = {
+	development: {
+		api: {
+			host: 'http://127.0.0.1:8080'
+		},
+		web: {
+			host: 'http://127.0.0.1'
+		},
+		embed: {
+			host: 'http://127.0.0.1',
+			path: '/public/embed-table.js'
+		}
+	}, 
+	production: {
+		api: {
+			host: 'http://api.thecolumnsproject.com'
+		},
+		web: {
+			host: 'http://app.thecolumnsproject.com'
+		},
+		embed: {
+			host: 'http://colum.nz',
+			path: '/public/embed-table.js'
+		}
+	}
+}[env];
+},{}],2:[function(require,module,exports){
 Columns['styleData'] = {
 	components: {},
 	types: {}
@@ -167,7 +195,7 @@ Columns.styleData.types = {
 	]
 };
 module.exports = Columns;
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var ColumnsEvent 			= require('../models/ColumnsEvent.js');
 
 var PANEL_TEMPLATE 			= Columns.Templates['templates/panels/panel.hbs'],
@@ -288,7 +316,7 @@ EmbedDetailsView.prototype._onInputBlur = function( event ) {
 module.exports = EmbedDetailsView;
 
 
-},{"../models/ColumnsEvent.js":15}],3:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],4:[function(require,module,exports){
 var ColumnsEvent 	= require('../models/ColumnsEvent.js');
 
 var DRAGGING_CLASS = 'dragging',
@@ -458,7 +486,7 @@ ItemView.prototype._onItemSelection = function( event, data ) {
 };
 
 module.exports = ItemView;
-},{"../models/ColumnsEvent.js":15}],4:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],5:[function(require,module,exports){
 var ColumnsEvent 	= require('../models/ColumnsEvent.js');
 var ItemView 		= require('./ItemView.js');
 
@@ -598,7 +626,7 @@ ItemsView.prototype._updateWithItem = function( item ) {
 };
 
 module.exports = ItemsView;
-},{"../models/ColumnsEvent.js":15,"./ItemView.js":3}],5:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16,"./ItemView.js":4}],6:[function(require,module,exports){
 var ColumnsEvent 							= require('../models/ColumnsEvent.js');
 var StyleInputView 							= require('./StyleInputView.js');
 var StyleSegmentedButtonView 				= require('./StyleSegmentedButtonView.js');
@@ -792,7 +820,7 @@ StyleComponentView.prototype.updateAlignmentButtons = function( direction ) {
 };
 
 module.exports = StyleComponentView;
-},{"../models/ColumnsEvent.js":15,"./StyleInputView.js":6,"./StyleMultipleSegmentedButtonView.js":7,"./StyleSegmentedButtonView.js":8}],6:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16,"./StyleInputView.js":7,"./StyleMultipleSegmentedButtonView.js":8,"./StyleSegmentedButtonView.js":9}],7:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 function StyleInputView( options ) {
@@ -963,7 +991,7 @@ StyleInputView.prototype.formatValue = function( value ) {
 }
 
 module.exports = StyleInputView;
-},{"../models/ColumnsEvent.js":15}],7:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],8:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 Handlebars.registerHelper('ifIsCurrentValue', function(value, currentValue, options) {
@@ -1050,7 +1078,7 @@ StyleMultipleSegmentedButtonView.prototype._onClick = function( event ) {
 };
 
 module.exports = StyleMultipleSegmentedButtonView;
-},{"../models/ColumnsEvent.js":15}],8:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],9:[function(require,module,exports){
 var ColumnsEvent 					= require('../models/ColumnsEvent.js');
 
 Handlebars.registerHelper('ifIsCurrentValue', function(value, currentValue, options) {
@@ -1131,7 +1159,7 @@ StyleSegmentedButtonView.prototype._onClick = function( event ) {
 };
 
 module.exports = StyleSegmentedButtonView;
-},{"../models/ColumnsEvent.js":15}],9:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],10:[function(require,module,exports){
 var ColumnsEvent 					= require('../models/ColumnsEvent.js');
 var Columns 						= require('../../compiled-javascripts/styling/compiled-data.js');
 var StyleComponentView 				= require('./StyleComponentView.js');
@@ -1256,7 +1284,7 @@ StyleView.prototype._emitChange = function( item, property, value ) {
 
 module.exports = StyleView;
 
-},{"../../compiled-javascripts/styling/compiled-data.js":1,"../models/ColumnsEvent.js":15,"./StyleComponentView.js":5,"./TemplateGroupView.js":10,"./TemplateValueView.js":11}],10:[function(require,module,exports){
+},{"../../compiled-javascripts/styling/compiled-data.js":2,"../models/ColumnsEvent.js":16,"./StyleComponentView.js":6,"./TemplateGroupView.js":11,"./TemplateValueView.js":12}],11:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 // Object to manage properties of and interaction
@@ -1529,7 +1557,7 @@ TemplateGroupView.prototype._onGroupDidChange = function( event, data ) {
 };
 
 module.exports = TemplateGroupView;
-},{"../models/ColumnsEvent.js":15}],11:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],12:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 // Object to manage properties of and interaction
@@ -1715,7 +1743,7 @@ TemplateValueView.prototype._onItemDidChange = function( event, data ) {
 };
 
 module.exports = TemplateValueView;
-},{"../models/ColumnsEvent.js":15}],12:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],13:[function(require,module,exports){
 var ColumnsEvent 				= require('../models/ColumnsEvent.js');
 var TemplateGroupView 			= require('./TemplateGroupView.js');
 var TemplateValueView 			= require('./TemplateValueView.js');
@@ -2356,7 +2384,7 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 };
 
 module.exports = TemplateView;
-},{"../models/ColumnsEvent.js":15,"./TemplateGroupView.js":10,"./TemplateValueView.js":11}],13:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16,"./TemplateGroupView.js":11,"./TemplateValueView.js":12}],14:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 var MAX_ROWS = 20,
@@ -2596,7 +2624,9 @@ UploadView.prototype._onParseComplete = function( results, file ) {
 
 module.exports = UploadView;
 
-},{"../models/ColumnsEvent.js":15}],14:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":16}],15:[function(require,module,exports){
+config 				= require('../compiled-javascripts/config.js');
+
 var Table 				= require('./models/Table.js');
 var ItemView 			= require('./controllers/ItemsView.js');
 var TemplateView 		= require('./controllers/TemplateView.js');
@@ -2626,7 +2656,7 @@ upload.render();
 
 
 
-},{"./controllers/EmbedDetailsView.js":2,"./controllers/ItemsView.js":4,"./controllers/StyleView.js":9,"./controllers/TemplateView.js":12,"./controllers/UploadView.js":13,"./models/Table.js":19}],15:[function(require,module,exports){
+},{"../compiled-javascripts/config.js":1,"./controllers/EmbedDetailsView.js":3,"./controllers/ItemsView.js":5,"./controllers/StyleView.js":10,"./controllers/TemplateView.js":13,"./controllers/UploadView.js":14,"./models/Table.js":20}],16:[function(require,module,exports){
 function ColumnsEvent () {
 
 }
@@ -2648,7 +2678,7 @@ ColumnsEvent.offAll = function() {
 };
 
 module.exports = ColumnsEvent;
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var ColumnsEvent = require('./ColumnsEvent.js');
 var Style 		 = require('./Style.js');
 
@@ -2813,7 +2843,7 @@ Item.prototype._emitActiveStateChange = function() {
 };
 
 module.exports = Item;
-},{"./ColumnsEvent.js":15,"./Style.js":18}],17:[function(require,module,exports){
+},{"./ColumnsEvent.js":16,"./Style.js":19}],18:[function(require,module,exports){
 // Layout Object Methods
 // ----------------------
 // This is the layout object that controls
@@ -2986,7 +3016,7 @@ Layout.prototype.defaultLayout = function( items ) {
 };
 
 module.exports = Layout;
-},{"../styling/defaults.js":20,"./ColumnsEvent.js":15}],18:[function(require,module,exports){
+},{"../styling/defaults.js":21,"./ColumnsEvent.js":16}],19:[function(require,module,exports){
 var ColumnsEvent = require('./ColumnsEvent.js');
 
 // Style Object
@@ -3110,7 +3140,7 @@ Style.prototype._mergeCSS = function( css ) {
 };
 
 module.exports = Style;
-},{"./ColumnsEvent.js":15}],19:[function(require,module,exports){
+},{"./ColumnsEvent.js":16}],20:[function(require,module,exports){
 var ColumnsEvent 	= require('./ColumnsEvent.js');
 var Layout 			= require('./Layout.js');
 var Item 			= require('./Item.js');
@@ -3389,7 +3419,7 @@ Table.prototype.stringFromColumns = function( columns ) {
 };
 
 module.exports = Table;
-},{"../styling/defaults.js":20,"./ColumnsEvent.js":15,"./Item.js":16,"./Layout.js":17}],20:[function(require,module,exports){
+},{"../styling/defaults.js":21,"./ColumnsEvent.js":16,"./Item.js":17,"./Layout.js":18}],21:[function(require,module,exports){
 // We need to treat layout properties slightly differently than regular css properties
 // to account for browser-specific prefixes
 module.exports = {
@@ -3426,4 +3456,4 @@ module.exports = {
 		}]
 	]
 };
-},{}]},{},[14]);
+},{}]},{},[15]);

@@ -12,7 +12,19 @@ module.exports = {
 			host: 'http://127.0.0.1',
 			path: '/public/embed-table.js'
 		}
-	}, 
+	},
+	staging: {
+		api: {
+			host: 'http://apistg.thecolumnsproject.com'
+		},
+		web: {
+			host: 'http://appstg.thecolumnsproject.com'
+		},
+		embed: {
+			host: 'http://stg.colum.nz',
+			path: '/public/embed-table.js'
+		}
+	},
 	production: {
 		api: {
 			host: 'http://api.thecolumnsproject.com'
@@ -26,6 +38,7 @@ module.exports = {
 		}
 	}
 }[env];
+
 },{}],2:[function(require,module,exports){
 Columns['styleData'] = {
 	components: {},

@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-var ENV = 'development';
-var config = {
-=======
 var env = 'development';
 module.exports = {
->>>>>>> test_and_objectify
 	development: {
 		api: {
 			host: 'http://127.0.0.1:8080'
@@ -16,7 +11,19 @@ module.exports = {
 			host: 'http://127.0.0.1',
 			path: '/public/embed-table.js'
 		}
-	}, 
+	},
+	staging: {
+		api: {
+			host: 'http://apistg.thecolumnsproject.com'
+		},
+		web: {
+			host: 'http://appstg.thecolumnsproject.com'
+		},
+		embed: {
+			host: 'http://stg.colum.nz',
+			path: '/public/embed-table.js'
+		}
+	},
 	production: {
 		api: {
 			host: 'http://api.thecolumnsproject.com'
@@ -29,4 +36,4 @@ module.exports = {
 			path: '/public/embed-table.js'
 		}
 	}
-}[ENV];
+}[env];

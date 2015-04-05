@@ -36,4 +36,4 @@ module.exports = {
 			path: '/public/embed-table.js'
 		}
 	}
-}[ENV];
+}[env];

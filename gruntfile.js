@@ -173,7 +173,7 @@ module.exports = function(grunt) {
 					helpers: [
 						'templates/embeddable-templates.js',
 						'templates/templates.js',
-						'compiled-javascripts/config.js',
+						// 'compiled-javascripts/config.js',
 						// 'compiled-javascripts/embed-table.js'
 					]
 				}

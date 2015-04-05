@@ -83,6 +83,11 @@ module.exports = function(grunt) {
 							return 'http://127.0.0.1'
 						}
 					}
+				}, {
+					from: '{{environment}}',
+					to: function(matchedWord) {
+							return process.env.NODE_ENV || 'development';
+					}
 				}]
 			},
 			app: {

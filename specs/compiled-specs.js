@@ -168,7 +168,7 @@ Columns.styleData.types = {
 };
 module.exports = Columns;
 },{}],2:[function(require,module,exports){
-var env = '{{environment}}';
+var env = 'development';
 module.exports = {
 	development: {
 		api: {

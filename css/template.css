@@ -102,7 +102,7 @@
   justify-content: center;
   -ms-flex-pack: center;
   position: absolute;
-  top: 78px;
+  top: 186px;
   z-index: 2; }
 
 .layout-template-row {
@@ -137,7 +137,7 @@
   padding: 12px;
   background-color: #fff; }
 
-.layout-template-row.empty > .layout-template-row-group:after {
+.layout-template-row > .layout-template-row-group:empty:after {
   content: 'Drag columns here';
   font-style: italic;
   font-size: 20px;

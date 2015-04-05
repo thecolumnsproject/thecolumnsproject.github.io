@@ -1,4 +1,4 @@
-<div class="layout-column active">
+<div class="layout-column {{#unless active}}inactive{{/unless}} {{#if selected}}selected{{/if}}">
 	<i class="icon-text layout-column-icon"></i>
-	{{parseData this}}
+	{{title}}
 </div>

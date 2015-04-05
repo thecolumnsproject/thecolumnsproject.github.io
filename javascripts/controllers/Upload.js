@@ -95,6 +95,9 @@ Columns.Upload = new function() {
 					Columns.data.columns = row.data[0].map(function( column ) {
 						return column ? column : '_';
 					});
+					Columns.data.items = row.data[0].map(function( column ) {
+						return new Item({title: column});
+					});
 				} else {
 					row.data[0].forEach(function(value, index) {
 						obj[Columns.data.columns[index].toLowerCase().replace(/ /g, '_')] = value;
@@ -175,7 +178,7 @@ Columns.Upload = new function() {
 	        success: function(data) {
 	        	if (data.status == 'success') {
 	        		_this.table_id = data.data.table_id;
-	        		Columns.Items.render(Columns.data.columns);
+	        		Columns.Items.init(Columns.data.items);
 					Columns.Items.updateItemStylesFromTemplate(Columns.Template);
 					Columns.Styling.initWithItem($(Columns.Template.$template).first());
 					Columns.EmbedDetailsPanel.init(data.data.table_id);

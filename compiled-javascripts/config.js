@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 var ENV = 'development';
 var config = {
+=======
+var env = 'development';
+module.exports = {
+>>>>>>> test_and_objectify
 	development: {
 		api: {
 			host: 'http://127.0.0.1:8080'

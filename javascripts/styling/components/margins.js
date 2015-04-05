@@ -8,9 +8,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-top',
 			appendControls: true,
 			label: 'Top',
-			property: {
-				name:'margin-top'
-			}
+			property: 'margin-top',
+			default: '0px'
 		}, {
 			kind: 'input',
 			type: 'tel',
@@ -18,9 +17,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-bottom',
 			appendControls: true,
 			label: 'Bottom',
-			property: {
-				name:'margin-bottom'
-			}
+			property: 'margin-bottom',
+			default: '0px'
 		}]
 	}, {
 		items: [{
@@ -30,9 +28,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-left',
 			appendControls: true,
 			label: 'Left',
-			property: {
-				name:'margin-left'
-			}
+			property: 'margin-left',
+			default: '0px'
 		}, {
 			kind: 'input',
 			type: 'tel',
@@ -40,9 +37,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-right',
 			appendControls: true,
 			label: 'Right',
-			property: {
-				name:'margin-right'
-			}
+			property: 'margin-right',
+			default: '0px'
 		}]
 	}]
 };

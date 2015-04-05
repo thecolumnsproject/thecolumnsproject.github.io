@@ -3042,7 +3042,7 @@ function program1(depth0,data) {
   buffer += "'";
   return buffer;
   });
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof columns_require=="function"&&columns_require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof columns_require=="function"&&columns_require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(columns_require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof columns_columns_require=="function"&&columns_columns_require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof columns_columns_require=="function"&&columns_columns_require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(columns_columns_require,module,exports){
 /*! VelocityJS.org (1.0.0). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
 
 /*************************
@@ -3602,7 +3602,7 @@ return function (global, window, document, undefined) {
     }
 
     if (IE <= 8 && !isJQuery) {
-        throw new Error("Velocity: IE8 and below columns_require jQuery to be loaded before Velocity.");
+        throw new Error("Velocity: IE8 and below columns_columns_require jQuery to be loaded before Velocity.");
     } else if (IE <= 7) {
         /* Revert to jQuery's $.animate(), and lose Velocity's extra features. */
         jQuery.fn.velocity = jQuery.fn.animate;
@@ -4526,7 +4526,7 @@ return function (global, window, document, undefined) {
             SVGAttribute: function (property) {
                 var SVGAttributes = "width|height|x|y|cx|cy|r|rx|ry|x1|x2|y1|y2";
 
-                /* Certain browsers columns_require an SVG transform to be applied as an attribute. (Otherwise, application via CSS is preferable due to 3D support.) */
+                /* Certain browsers columns_columns_require an SVG transform to be applied as an attribute. (Otherwise, application via CSS is preferable due to 3D support.) */
                 if (IE || (Velocity.State.isAndroid && !Velocity.State.isChrome)) {
                     SVGAttributes += "|transform";
                 }
@@ -4786,7 +4786,7 @@ return function (global, window, document, undefined) {
             /* If this is a normalized property (e.g. "opacity" becomes "filter" in <=IE8) or "translateX" becomes "transform"),
                normalize the property's name and value, and handle the special case of transforms. */
             /* Note: Normalizing a property is mutually exclusive from hooking a property since hook-extracted values are strictly
-               numerical and therefore do not columns_require normalization extraction. */
+               numerical and therefore do not columns_columns_require normalization extraction. */
             } else if (CSS.Normalizations.registered[property]) {
                 var normalizedPropertyName,
                     normalizedPropertyValue;
@@ -4916,7 +4916,7 @@ return function (global, window, document, undefined) {
         flushTransformCache: function(element) {
             var transformString = "";
 
-            /* Certain browsers columns_require that SVG transforms be applied as an attribute. However, the SVG transform attribute takes a modified version of CSS's transform string
+            /* Certain browsers columns_columns_require that SVG transforms be applied as an attribute. However, the SVG transform attribute takes a modified version of CSS's transform string
                (units are dropped and, except for skewX/Y, subproperties are merged into their master property -- e.g. scaleX and scaleY are merged into scale(X Y). */
             if ((IE || (Velocity.State.isAndroid && !Velocity.State.isChrome)) && Data(element).isSVG) {
                 /* Since transform values are stored in their parentheses-wrapped form, we use a helper function to strip out their numeric values.
@@ -6874,1000 +6874,83 @@ return function (global, window, document, undefined) {
 /* The CSS spec mandates that the translateX/Y/Z transforms are %-relative to the element itself -- not its parent.
 Velocity, however, doesn't make this distinction. Thus, converting to or from the % unit with these subproperties
 will produce an inaccurate conversion value. The same issue exists with the cx/cy attributes of SVG circles and ellipses. */
-},{}],2:[function(columns_require,module,exports){
-// columns_require('../bower_components/jquery/dist/jquery.js');
+},{}],2:[function(columns_columns_require,module,exports){
+var API_HOST = 'http://127.0.0.1:8080',
+	ROOT_PATH = 'http://127.0.0.1',
+	EMBED_PATH = ROOT_PATH + '/public/embed-table.js',
+	CSS_PATH = ROOT_PATH + '/css/embed-table.css',
+	IMG_PATH = ROOT_PATH + '/images/';
+
+module.exports = {
+	api_host: API_HOST,
+	root_path: ROOT_PATH,
+	embed_path: EMBED_PATH,
+	css_path: CSS_PATH,
+	img_path: IMG_PATH
+};
+},{}],3:[function(columns_columns_require,module,exports){
+// Setup necessary handlebars templates and helpers
+// Handlebars.registerPartial('row', Columns.EmbeddableTemplates['templates/embed-table/row.hbs']);
+Handlebars.registerHelper('partial', function(name, ctx, hash) {
+    var ps = Handlebars.partials;
+    if(typeof ps[name] !== 'function')
+        ps[name] = Handlebars.compile(ps[name]);
+    return ps[name](ctx, hash);
+});
+Handlebars.registerPartial('group', Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']);
+Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
+Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
+Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
+Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
+
+Handlebars.registerHelper('ifIsGroup', function(type, options) {
+	return type == 'group' ? options.fn(this) : options.inverse(this);
+});
+
+Handlebars.registerHelper('ifIsSingle', function(type, options) {
+	return type == 'single' ? options.fn(this) : options.inverse(this);
+});
+
+module.exports = Handlebars;
+},{}],4:[function(columns_columns_require,module,exports){
+// columns_columns_require('../bower_components/jquery/dist/jquery.js');
 
 // Load Velocity, where it will attach to jquery
-// columns_require('../bower_components/velocity/velocity.js');
+// columns_columns_require('../bower_components/velocity/velocity.js');
+var Config = columns_columns_require('./embed-config.js'),
+	Columnsbars = columns_columns_require('./embed-handlebars.js');
+	// $$ = columns_columns_require('jquery-browserify');
 
-var Velocity = columns_require('../bower_components/velocity/velocity.js');
-var Hammer = columns_require('../vendor/hammer.js');
-var PreventGhostClick = columns_require('../vendor/prevent-ghost-click.js');
 // Require Handlebars and our handlebars templates
-// var Handlebars = columns_require('../bower_components/handlebars/handlebars.js');
-// columns_require('../templates/embeddable-templates.js');
+// var Handlebars = columns_columns_require('../bower_components/handlebars/handlebars.js');
+// columns_columns_require('../templates/embeddable-templates.js');
 
-// Make sure our version of jquery isn't polluting the namespace
-$$ = window.jQuery.noConflict(true);
+var ColumnsTable = columns_columns_require('../javascripts/models/ColumnsTable.js');
+
+// File System Constants
+// var API_HOST = 'http://127.0.0.1:8080';
+// var ROOT_PATH = 'http://127.0.0.1';
+// var API_HOST = 'http://127.0.0.1:8080/api';
+// var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
+// var ROOT_PATH = 'http://127.0.0.1/';
+// var ROOT_PATH = 'https://thecolumnsproject.github.io/';
+// if (env) {
+// 	switch (env) {
+// 		case 'local':
+// 			ROOT_PATH = 'http://localhost/'
+// 			break;
+// 		default:
+// 			ROOT_PATH = 'https://thecolumnsproject.github.io/';
+// 	}
+// }
+// var EMBED_PATH = ROOT_PATH + '/public/embed-table.js';
+// var CSS_PATH = ROOT_PATH + '/css/embed-table.css';
+// var IMG_PATH = ROOT_PATH + '/images/';
 
 // document.addEventListener("DOMContentLoaded", function(event) { 
   //do work
 // });
-$$(function() {
-
-	// Table Expansion
-	// -------------------
-
-	// Table should respond to the user's drag
-	// and progressively open as it is pulled away
-	// from its original location on the page
-
-	// Animation Constants
-	var ANIMATION_DURATION = 350;
-
-	// UI Constants
-	var ROW_OFFSET = 5,
-		ROW_DELAY = ANIMATION_DURATION * 0.01;
-
-	// UI Management Classes
-	var TABLE_SELECTOR = '.columns-table-widget',
-		TABLE_BODY_SELECTOR = '.columns-table',
-		TABLE_ROW_SELECTOR = '.columns-table-row',
-		TABLE_HEADER_SELECTOR = '.columns-table-header',
-		TABLE_FOOTER_SELECTOR = '.columns-table-footer',
-		PLACEHOLDER_CLASS = 'columns-table-placeholder',
-		EXPANDED_CLASS = 'expanded',
-		EXPANDING_CLASS = 'expanding',
-		RELOCATED_CLASS = 'relocated',
-		LOADING_CLASS = 'loading',
-		ERROR_CLASS = 'error',
-		ANIMATING_CLASS = 'velocity-animating',
-		$TABLE,
-		$$CONTAINER = $$(window);
-
-	var MAX_SMARTPHONE_SCREEN_WIDTH = 568;
-
-	// File System Constants
-	var API_HOST = 'http://127.0.0.1:8080';
-	var ROOT_PATH = 'http://127.0.0.1';
-	// var API_HOST = 'http://127.0.0.1:8080/api';
-	// var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
-	// var ROOT_PATH = 'http://127.0.0.1/';
-	// var ROOT_PATH = 'https://thecolumnsproject.github.io/';
-	// if (env) {
-	// 	switch (env) {
-	// 		case 'local':
-	// 			ROOT_PATH = 'http://localhost/'
-	// 			break;
-	// 		default:
-	// 			ROOT_PATH = 'https://thecolumnsproject.github.io/';
-	// 	}
-	// }
-	var EMBED_PATH = ROOT_PATH + '/public/embed-table.js';
-	var CSS_PATH = ROOT_PATH + '/css/embed-table.css';
-	var IMG_PATH = ROOT_PATH + '/images/';
-
-	// Utility methods
-	// ------------------------------
-
-	function highestZIndex(elem)
-	{
-		var elems = document.getElementsByTagName(elem);
-		var highest = 0;
-		for (var i = 0; i < elems.length; i++)
-		{
-			var zindex=document.defaultView.getComputedStyle(elems[i],null).getPropertyValue("z-index");
-			zindex = parseInt(zindex);
-			if ((zindex > highest) && !isNaN(zindex))
-			{
-				highest = zindex;
-			}
-		}
-		return highest;
-	}
-
-	// Create a class for the table object
-	// that will allow us to easily manange multiple instances
-	// and control their display.
-	// Methods herein should allow the table to:
-	// 1) Render initially
-	// 2) Populate with data
-	// 3) Expand
-	// 4) Contract
-	function Table(script) {
-
-		// The placement of each table is dependent on the script that
-		// was used to create it, so we need this to begin
-		this.script = script;
-		this.id = $$(script).data('table-id');
-
-		// Remember the table instance once it's been inserted into the DOM
-		// as well as its jquery counterpart
-		this.table;
-		this.$$table;
-
-		// Get a reference to the table's container.
-		// On a smartphone, we'll use the window.
-		// On larger form factors, we'll use the table's container.
-		this.$$container = $$(window);
-
-		// Save a reference to the layout we create specifically for rows of this table
-		this.row_layout;
-
-		// Storage variables for resetting positions
-		this.originalBackground = {};
-		this.originalRows = [];
-		this.$$originalSibling;
-
-		// Save a copy of the data so we can re-render the layout without going back to the server
-		this.data;
-		this.layout;
-	};
-
-	// Render the initial table to the screen and position it correctly
-	Table.prototype.render = function() {
-
-		var _this = this;
-
-		// Generate table skeleton
-		// and insert it befor the script
-		var skeleton = Columns.EmbeddableTemplates['templates/embed-table/skeleton.hbs'];
-		var tmpDiv = document.createElement('div'); tmpDiv.innerHTML = skeleton();
-		this.table = this.script.parentNode.insertBefore(tmpDiv.firstChild, this.script);
-		this.$$table = $$(this.table);
-
-		// Generate table structure
-		// var loading = createLoading();
-		// var body = createBody();
-		var loading = Columns.EmbeddableTemplates['templates/embed-table/loading.hbs'];
-		var error = Columns.EmbeddableTemplates['templates/embed-table/error.hbs'];
-		var body = Columns.EmbeddableTemplates['templates/embed-table/body.hbs'];
-		this.$$table.append(loading({img_path: IMG_PATH}));
-		this.$$table.append(error());
-		this.$$table.append(body());
-
-		// // Make the table bounce on scroll
-		// // $TABLE.find('.columns-table-container').fancy_scroll({
-		// // 	animation: "bounce"
-		// // });
-
-		// Determine whether we're on a small or large form factor
-		// and use this to determine how to expand and contract
-		// as well as initially place the table
-		if (this.isLargeFormFactor()) {
-			this.$$container = this.$$table.parent();
-			this.$$table.addClass('large-form-factor');
-		} else {
-			this.$$container = $$(window);
-			this.$$table.addClass('small-form-factor');
-		}
-
-		// Position table correctly given the size of the screen
-		// and reposition on resize events
-		$$(window).resize(function() {
-			_this.position();
-		});
-		this.position();
-
-		// // Prevent ghost clicks while the table is open
-		PreventGhostClick(document, function() {
-			return _this.$$table.hasClass(EXPANDING_CLASS) || _this.$$table.hasClass(EXPANDED_CLASS)
-		});
-
-		// Track the table render
-		if ( !_this.preview ) {
-			gaColumnz('send', 'event', 'table', 'render', '', +_this.id);
-		}
-	};
-
-	Table.prototype.isLargeFormFactor = function() {
-		return $$(window).width() > MAX_SMARTPHONE_SCREEN_WIDTH;
-	};
-
-	Table.prototype.getOffsetTop = function() {
-		if (this.isLargeFormFactor()) {
-			return this.$$table.position().top; 
-		} else {
-			return this.$$table.offset().top;
-		}
-	};
-
-	Table.prototype.getOffsetLeft = function() {
-		if (this.isLargeFormFactor()) {
-			return this.$$table.position().left; 
-		} else {
-			return this.$$table.offset().left;
-		}
-	};
-
-	// Ensure that the table is positioned correctly on the screen
-	// Smartphones: it should be the full width of the screen and left-aligned
-	Table.prototype.position = function() {
-		var properties = {
-			'width': this.$$container.innerWidth()
-		}
-
-		// Only move the table if it's not aligned with the left side of the screen
-		var offset = this.getOffsetLeft();
-		if (offset != 0) {
-			properties['margin-left'] = -offset 
-		}
-
-		// Make the table the width of the window
-		// and left align it with the window 
-		this.$$table.css(properties);
-	};
-
-	// Download the appropriate data from the api
-	Table.prototype.fetchData = function() {
-		var _this = this;
-
-		// First turn on loading
-		this.setLoading(true);
-
-		$$.get(API_HOST + '/columns/table/' + this.id + '?page=0', function(data) {
-			if (data.status == 'success') {
-				_this.generateLayout($$.parseJSON(data.data.layout));
-				_this.renderData(data.data);
-				_this.setError(false);
-
-				// Track the table population
-				if ( !_this.preview ) {
-					gaColumnz('send', 'event', 'table', 'populate', '', +_this.id);
-				}
-			} else {
-				_this.setLoading(false);
-				_this.setError(true);
-			}
-		});
-
-		// var _this = this;
-		// setTimeout(function() {
-		// 	_this.generateLayout(DUMMY_DATA.layout);
-		// 	_this.renderData(DUMMY_DATA);
-		// }, 100);
-	};
-
-	Table.prototype.templateName = function() {
-		return 'row_layout_' + scripts.indexOf(this.script); 
-	};
-
-	Table.prototype.generateLayout = function(layout, reload) {
-		// Set up the row layout as a handlebars partial
-		// dynamically based on the row layout object
-		this.layout = layout;
-		var row_layout = Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']({layout: layout});
-		var row_template = Handlebars.compile(row_layout);
-		var templateName = this.templateName();
-		Handlebars.registerPartial(templateName, row_template);
-
-		if (reload) {
-			this.renderData();
-		}
-	};
-
-	Table.prototype.renderData = function(data) {
-		var _this = this;
-
-		// If no data was passed in, re-render with the old data
-		if (!data) {
-			if (!this.data) {
-				return;
-			} else {
-				data = this.data;
-			}
-		} else {
-			this.data = data;
-		}
-
-		var numRows = data.data.length;
-
-		// Generate table layouts with data
-		var header = Columns.EmbeddableTemplates['templates/embed-table/header.hbs'];
-		var rowsTemplate = Columns.EmbeddableTemplates['templates/embed-table/rows.hbs'];
-		var footer = Columns.EmbeddableTemplates['templates/embed-table/footer.hbs'];
-
-		// Render table components with data
-		var $$tableBody = this.$$table.find(TABLE_BODY_SELECTOR);
-		var $$header = this.$$table.find(TABLE_HEADER_SELECTOR);
-		var $$footer = this.$$table.find(TABLE_FOOTER_SELECTOR);
-		var $$rows = this.$$table.find(TABLE_ROW_SELECTOR);
-
-		if ($$header.length > 0) {
-			this.updateComponent($$header, {
-				title: data.title,
-				sort_by_column: data.sort_by_column
-			}, header);
-		} else {
-			this.$$table.prepend(header({
-				title: data.title,
-				sort_by_column: data.sort_by_column
-			}));
-		}
-
-		if ($$footer.length > 0) {
-			this.updateComponent($$footer, {
-				source: data.source,
-				item_count: data.num_rows || data.data.length
-			}, footer);
-		} else {
-			$$tableBody.after(footer({
-				source: data.source,
-				item_count: data.num_rows || data.data.length
-			}));
-		}
-
-		var shouldRunRowIntroAnimation = false;
-		if ($$rows.length == 0) {
-			shouldRunRowIntroAnimation = true;
-		}
-
-		// For now, only render the first 20 rows
-		$$rows.remove();
-		$$tableBody.prepend(rowsTemplate({
-			row_layout: this.templateName(),
-			rows: data.data.slice(0, 20)
-		}));	
-
-		// If we're in preview and the table is expanded,
-		// refresh the amount of padding we add to the top
-		// to account for the template
-		if (this.preview && this.$$table.hasClass(EXPANDED_CLASS)) {
-			$$tableBody.css({
-				paddingTop: this.tallestRowHeight()
-			});
-		}
-
-		// Reset rows to equal the new rows we just added
-		$$rows = this.$$table.find(TABLE_ROW_SELECTOR);
-		$$rows.css({height: this.tallestRowHeight()});
-
-		// Set any dynamic sizing or positioning values
-		// and animate the various components in
-		var introSequence = [];
-		var tableHeight = this.backgroundHeight();
-		var duration = 0;
-		if (shouldRunRowIntroAnimation) {
-			duration = ANIMATION_DURATION;
-			var delay = ANIMATION_DURATION / 3;
-			// Velocity($$tableBody.get(0), {
-			$$tableBody.velocity({
-				height: tableHeight
-			}, {
-				duration: duration
-			});
-			$$.each($$rows, function(index, row) {
-
-				// Only animate the two drooping rows
-				if (index > 0 && index <= 2) {
-					var $$row = $$(row);
-					// Velocity($$rows.get(0), {
-					$$rows.velocity({
-						translateY: 5
-					}, {duration: ANIMATION_DURATION / 6,
-						delay: delay * index
-					});
-					// Velocity($$rows.get(0), {
-					$$rows.velocity({
-						translateY: 0
-					}, {
-						duration: ANIMATION_DURATION / 6
-					});
-				}
-			});
-		} else {
-			// Velocity($$tableBody.get(0), {
-			$$tableBody.velocity({
-				height: tableHeight
-			}, {
-				duration: duration
-			});
-		}
-
-		// Set up DOM events on the table
-		this.setupEvents();
-
-		// Announce that the table has rendered data
-		if (this.preview) {
-			$(document).trigger('ColumnsTableDidRenderData', {table: this});
-		}
-
-		// Remove the loading class after the screen repaints
-		setTimeout(function() {
-			_this.setLoading(false);
-		}, 100);
-	};
-
-	Table.prototype.tallestRowHeight = function() {
-		return Math.max.apply(null, this.$$table.find(TABLE_ROW_SELECTOR).map(function () {
-			return $$(this).height();
-		}).get());
-	};
-
-	Table.prototype.backgroundHeight = function() {
-		var numRows = this.$$table.find(TABLE_ROW_SELECTOR).length;
-		var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
-		return offsetHeight + this.tallestRowHeight();
-	};
-
-	Table.prototype.updateComponent = function($$component, data, template) {
-		// If there is alread a component, just update it with the new data
-		var oldStyle = $$component.attr('style');
-		var oldClasses = $$component.attr('class');
-		var $$template = $(template(data)).attr('style', oldStyle).attr('class', oldClasses);
-		$$component.replaceWith($$template);
-	};
-
-	Table.prototype.setupEvents = function() {
-		var _this = this;
-
-		var tableMc = new Hammer(this.$$table.find(".columns-table").get(0));
-		tableMc.on('tap', function(e) {
-			var $$table = $$(this);
-			if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
-				_this.expand();
-
-				// Track this tap
-				if ( _this.preview ) {
-					ga('send', 'event', 'table', 'expand', 'body');
-				} else {
-					gaColumnz('send', 'event', 'table', 'expand', 'body', +_this.id);
-				}
-			}
-		});
-		// this.$$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-		// 	var $$table = $$(this);
-		// 	if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
-		// 		_this.expand();
-		// 	}
-		// });
-	
-		var expandMc = new Hammer(this.$$table.find(".columns-table-expand-button").get(0));
-		expandMc.on('tap', function(e) {
-			var $$table = $$(this);
-			if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
-				_this.expand();
-
-				// Track this tap
-				if ( _this.preview ) {
-					ga('send', 'event', 'table', 'expand', 'expand button');
-				} else {
-					gaColumnz('send', 'event', 'table', 'expand', 'expand button', +_this.id);
-				}
-			}
-		});
-		// this.$$table.find(".columns-table-expand-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-		// 	var $$table = $$(this);
-		// 	if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
-		// 		_this.expand();
-		// 	}
-		// });
-	
-		var errorMc = new Hammer(this.$$table.find(".columns-table-error").get(0));
-		errorMc.on('tap', function(e) {
-			var $$table = $$(this);
-			if (_this.$$table.hasClass(ERROR_CLASS)) {
-				_this.fetchData();
-
-				// Track this tap
-				if ( _this.preview ) {
-					ga('send', 'event', 'table', 'retry', 'error message');
-				} else {
-					gaColumnz('send', 'event', 'table', 'retry', 'error message', +_this.id);
-				}
-			}
-		});
-		// this.$$table.find(".columns-table-error").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-		// 	var $$table = $$(this);
-		// 	if (_this.$$table.hasClass(ERROR_CLASS)) {
-		// 		_this.fetchData();
-		// 	}
-		// });
-
-		// $(".columns-table").click(function(e) {
-		// 	$table = $(this);
-		// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-		// 		expandTable($table);
-		// 	}
-		// });
-
-		var closeMc = new Hammer(this.$$table.find(".columns-table-close-button").get(0));
-		closeMc.on('tap', function(e) {
-			var $$table = _this.$$table.find('.columns-table');
-			if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
-				_this.collapse();
-
-				// Track this tap
-				if ( _this.preview ) {
-					ga('send', 'event', 'table', 'collapse', 'close button');
-				} else {
-					gaColumnz('send', 'event', 'table', 'collapse', 'close button', +_this.id);
-				}
-
-				// Prevent the dom from doing any other conflicting stuff
-				// e.stopPropagation();
-				// e.preventDefault();
-			}
-		});
-		// this.$$table.find(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
-		// 	var $$table = _this.$$table.find('.columns-table');
-		// 	if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
-		// 		_this.collapse();
-
-		// 		// Prevent the dom from doing any other conflicting stuff
-		// 		e.stopPropagation();
-		// 		e.preventDefault();
-		// 	}
-		// });
-
-		// $(".columns-table-close-button").click(function(e) {
-		// 	var $parent = $(this).parents('.columns-table-widget');
-		// 	var $table = $parent.find('.columns-table');
-		// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
-		// 		collapseTable($table);
-		// 	}
-		// });
-
-		// Notify the preview template when the table scrolls
-		if (this.preview) {
-			this.$$table.find('.columns-table-container').on('scroll', function(e) {
-				$(document).trigger('ColumnsTableDidScroll', {table: _this, originalEvent: e});
-			})
-		}
-
-		// Listen to scroll events on the table
-		// this.$$table.find('.columns-table-container').on('scroll', function(e) {
-
-			// Have we scrolled to the bottom and met all other conditions for rendering more rows?
-
-			// Check whether we already have the data to render more rows
-
-			// If not, download more rows first
-			
-		// });
-	};
-
-	Table.prototype.setLoading = function(loading) {
-		if (loading) {
-			this.$$table.addClass(LOADING_CLASS);
-		} else {
-			this.$$table.removeClass(LOADING_CLASS);
-		}
-	};
-
-	Table.prototype.setError = function(error) {
-		if (error) {
-			this.$$table.addClass(ERROR_CLASS);
-		} else {
-			this.$$table.removeClass(ERROR_CLASS);
-		}
-	}
-
-	// Methods to expand a table
-	// from to its original position
-	// to full-screen
-	// ------------------------------
-
-	Table.prototype.expand = function() {
-		
-		var _this = this;
-
-		// Tell everyone we're about to expand
-		// var willExpandEvent = new CustomEvent('ColumnsTableWillExpand', {
-		// 	detail: {
-		// 		table: this.$$table
-		// 	}
-		// });
-		if (this.preview) {
-			$(document).trigger('ColumnsTableWillExpand', {table: this});
-		}
-
-		var $$table = this.$$table;
-		$$bg = $$table.find('.columns-table-container'),
-		$$body = $$table.find(TABLE_BODY_SELECTOR);
-		$$rows = $$table.find('.columns-table-row'),
-		$$header = $$table.find('.columns-table-header');
-		$$footer = $$table.find('.columns-table-footer');
-
-		// First move the table to the outermost part of the DOM
-		// while maintaining its visual position
-		// add a placeholder
-		// and make sure we're the highest z-index in the land
-		var offsetTop;
-		if (this.preview) {
-			offsetTop = this.getOffsetTop();
-		} else {
-			offsetTop = parseInt($$.Velocity.hook($$table, "translateY"));
-		}
-		var offsets = {
-			top: this.getOffsetTop(),
-			'margin-left': 0,
-			position: 'absolute',
-			'z-index': (highestZIndex('*') + 1)
-		};
-		
-		// Replace the table with a same-height placeholder
-		var placeholder = document.createElement('div');
-		placeholder.className = PLACEHOLDER_CLASS;
-		placeholder.style.height = $$table.height();
-		placeholder.style.width = $$table.width();
-		this.$$originalSibling = $$table.siblings('script').first();
-		if (this.isLargeFormFactor()) {
-			$$table.appendTo(this.$$container);	
-		} else {
-			$$table.appendTo('body');
-		}
-		$$table.addClass(RELOCATED_CLASS);
-		$$table.css(offsets);
-		this.$$originalSibling.before(placeholder);
-
-		this.expandBackground($$bg, $$rows, $$header, $$footer);
-		this.expandRows($$rows);
-		this.expandBody($$body);
-		this.expandHeader($$header);
-
-		var props;
-		if (this.preview) {
-			props = {
-				translateY: -this.getOffsetTop()
-			}
-		} else {
-			props = {
-				opacity: 1
-			}
-		}
-
-		// Velocity($$table.get(0), props, { 
-		$$table.velocity(props, {
-
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$$table.addClass(EXPANDING_CLASS);
-			},
-			complete: function(elements) {
-				$$table.addClass(EXPANDED_CLASS);
-				$$table.removeClass(EXPANDING_CLASS);
-				$$('html').addClass('table-expanded');
-
-				if (_this.preview) {
-					$(document).trigger('ColumnsTableDidExpand', {table: _this});
-				}
-			}
-		});
-
-		this.position();
-	};
-
-	Table.prototype.expandHeader = function($$header) {
-
-		// Bring the header into view
-		// Velocity($$header.get(0), {
-		$$header.velocity({
-			opacity: 1 /* Fade the header into view */
-		}, {
-			duration: ANIMATION_DURATION,
-			delay: ANIMATION_DURATION,
-			complete: function(elements) {
-				// $$header.addClass(EXPANDED_CLASS);
-			}
-		});
-	};
-
-	Table.prototype.expandBackground = function($$bg, $$rows, $$header, $$footer) {
-
-		// Save values to be used upon reset
-		this.originalBackground['height'] = $$bg.height();
-		var bgOffsetTop;
-		if (this.isLargeFormFactor()) {
-			this.originalBackground['positionY'] = $$bg.position().top;
-			bgOffsetTop = -$$bg.position().top;
-		} else {
-			this.originalBackground['positionY'] = $$bg.offset().top;
-			bgOffsetTop = -$$bg.offset().top;
-		}
-
-		// Calculate new background position
-		bgOffsetTop += this.$$container.scrollTop();
-		var bgWidth = this.$$container.width();
-
-		// The background should be as tall as necessary to fit all the rows
-		// but the screen height at minimum
-		// Update: the background should be the height of the container
-		// var bgHeight = $$bg.outerHeight() + $$header.outerHeight() + $$footer.outerHeight() + ( $$rows.outerHeight() * ($$rows.length - 1) );
-		// var bgHeight = bgHeight < this.$$container.height ? this.$$container.height : bgHeight;
-		var bgHeight = this.$$container.height();
-
-		// Velocity($$bg.get(0), {
-		$$bg.velocity({
-			height: bgHeight, 			/* Fill the entire screen */
-			translateY: bgOffsetTop 	/* Move to the top of the screen */
-		},{
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$$bg.addClass(EXPANDING_CLASS);
-				$$bg.removeClass('translateY-reset');
-			},
-			complete: function(elements) {
-				$$bg.removeClass(EXPANDING_CLASS);
-				// $$bg.addClass(EXPANDED_CLASS);
-				$$bg.addClass('translateY-reset');
-				// $$TABLE.removeClass(RELOCATED_CLASS);
-			}
-		});
-	};
-
-	Table.prototype.expandBody = function($$body) {
-
-		var _this = this;
-		// Calculate the new table size and position
-		var tableOffsetTop = 60;
-
-		// Move the table down a few extra pixels to account for the template if we're in preview mode
-		var paddingTop = 0;
-		if (this.preview) {
-			paddingTop = this.tallestRowHeight();
-		}
-		// var tableHeight = rowHeight * $$rows.length - 40;
-
-		// Velocity($$body.get(0), {
-		$$body.velocity({
-			// height: tableHeight, /* Grow to encompass all of the rows */
-			translateY: tableOffsetTop + paddingTop, /* Move down a few pixels to account for the header */
-			'padding-top': paddingTop /* Move down a few more pixels to account for the template row in preview mode */
-		}, {
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				// _this.$$table.addClass(EXPANDING_CLASS);
-				$$body.removeClass('translateY-reset');
-			},
-			complete: function(elements) {
-				// _this.$$table.addClass(EXPANDED_CLASS);
-				// _this.$$table.removeClass(EXPANDING_CLASS);
-				// $$('html').addClass('table-expanded');
-				// $$body.addClass(EXPANDED_CLASS);
-				$$body.addClass('translateY-reset');
-			}
-		});
-	}
-
-	Table.prototype.expandRows = function($$rows) {
-
-		var _this = this;
-
-		// Calculate the new position for each row
-		var duration = ANIMATION_DURATION - ( ($$rows.length - 1) * ROW_DELAY );
-		$$rows.each(function(index, row) {
-			var $$row = $$(row);
-
-			// Save original row data
-			_this.originalRows[index] = {
-				positionY: $$row.offset().top
-			}
-
-			// Animate the rows
-			_this.expandRowAtIndex($$row, index, duration);
-		});
-	}
-
-	Table.prototype.expandRowAtIndex = function($$row, index, duration) {
-
-		var rowHeight = $$row.outerHeight();
-		var offsetY = (index * rowHeight);
-		switch (index) {
-			case 0:
-			break;
-			case 1:
-			offsetY -= ROW_OFFSET;
-			break;
-			case 2:
-			offsetY -= ROW_OFFSET * 2;
-			break;
-			default:
-			offsetY -= ROW_OFFSET * 2;
-		}
-
-		// Velocity($$row.get(0), {
-		$$row.velocity({
-			translateY: offsetY /* Move each row down into its natural position */
-		}, {
-			duration: duration,
-			delay: ROW_DELAY,
-			begin: function(elements) {
-				$$row.removeClass('translateY-reset');
-			},
-			complete: function(elements) {
-				// $$row.addClass(EXPANDED_CLASS);
-				$$row.addClass('translateY-reset');
-			}
-		});
-	}
-
-	// Define table animation sequences
-	// var expandTableSequence = [
-	// 	{
-	// 		// Background
-	// 		elements: $$parent.find('.columns-table-container'),
-	// 		properties: {
-	// 			height: bgHeight, 			/* Fill the entire screen */
-	// 			translateY: bgOffsetTop 	/* Move to the top of the screen */
-	// 		}
-	// 	}
-	// ]
-
-	// Methods to collapse a table
-	// back to its original position
-	// ------------------------------
-
-	Table.prototype.collapse = function() {
-		var _this = this;
-		var $$table = this.$$table;
-		$$body = $$table.find(TABLE_BODY_SELECTOR);
-		$$bg = $$table.find('.columns-table-container'),
-		$$rows = $$table.find('.columns-table-row'),
-		$$header = $$table.find('.columns-table-header');
-
-		// and remove the placeholder
-
-		// $$parent.addClass(RELOCATED_CLASS);
-		$$table.insertBefore(this.$$originalSibling);
-
-		// setTimeout(function() {
-			this.collapseHeader($$header);
-			this.collapseBackground($$bg);
-			this.collapseBody($$body);
-			this.collapseRows($$rows);
-		// }, 0);
-
-		var props;
-		if (this.preview) {
-			props = {
-				translateY: 0
-			}
-		} else {
-			props = {
-				opacity: 1
-			}
-		}
-
-		// Velocity($$table.get(0), props, {
-		$$table.velocity(props, {
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$$table.addClass(EXPANDING_CLASS);
-				$$table.removeClass(EXPANDED_CLASS);
-			},
-			complete: function(elements) {
-				$$table.removeClass(RELOCATED_CLASS);
-				$$table.removeClass(EXPANDING_CLASS);
-				// Move the table back to its original DOM position
-				$$table.css({
-					top: 0,
-					position: 'relative',
-					'z-index': 0
-				});
-				_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
-				$$('html').removeClass('table-expanded');
-
-				if (_this.preview) {
-					$(document).trigger('ColumnsTableDidCollapse', {table: _this});
-				}
-			}
-		});
-
-		this.position();
-	}
-
-	Table.prototype.collapseHeader = function($$header) {
-
-		// Remove header from view
-		// Velocity($$header.get(0), {
-		$$header.velocity({
-			opacity: 0 /* Fade the header out of view */
-		}, {
-			duration: ANIMATION_DURATION * 0.2,
-			complete: function(elements) {
-				$$header.removeClass(EXPANDED_CLASS);
-			}
-		});
-	}
-
-	Table.prototype.collapseBackground = function($$bg) {
-
-		var _this = this;
-
-		// Calculate new background position
-		// Velocity($$bg.get(0), {
-		$$bg.velocity({
-
-			// Return to small state
-			// height: _this.originalBackground.height,
-			height: _this.backgroundHeight() + 69,
-			// height: 'auto',
-
-			// Move back to original position
-			translateY: 0
-
-		},{
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$$bg.addClass(EXPANDING_CLASS);
-				$$bg.removeClass('translateY-reset');
-				$$bg.removeClass(EXPANDED_CLASS);
-			},
-			complete: function(elements) {
-				$$bg.removeClass(EXPANDING_CLASS);
-				$$bg.addClass('translateY-reset');
-			}
-		});
-	}
-
-	Table.prototype.collapseBody = function($$body) {
-
-		var _this = this;
-		// Calculate the old table size and position
-		// Velocity($$body.get(0), {
-		$$body.velocity({
-
-			// Move to top of container
-			translateY: 0,
-			// Remove any padding we added for the template row in preview mode
-			'padding-top': 0,
-			// Adjust height in case any rows have changed
-			height: _this.backgroundHeight()
-
-		}, {
-			duration: ANIMATION_DURATION,
-			begin: function(elements) {
-				$$body.removeClass('translateY-reset');
-				$$body.removeClass(EXPANDED_CLASS);
-				// _this.$$table.removeClass(EXPANDED_CLASS);
-				// _this.$$table.addClass(EXPANDING_CLASS);
-			},
-			complete: function(elements) {
-				// $$table.removeClass(EXPANDED_CLASS);
-				$$body.addClass('translateY-reset');
-				// _this.$$table.removeClass(RELOCATED_CLASS);
-				// _this.$$table.removeClass(EXPANDING_CLASS);
-				// _this.$$table.css({
-				// 	top: 0,
-				// 	position: 'relative',
-				// 	'z-index': 0
-				// });
-			}
-		});
-	}
-
-	Table.prototype.collapseRows = function($$rows) {
-
-		var _this = this;
-		var duration = ANIMATION_DURATION - ( ($$rows.length - 1) * ROW_DELAY );
-		$$rows.each(function(index, row) {
-			_this.collapseRowAtIndex($$(row), index, duration);
-		});
-	}
-
-	Table.prototype.collapseRowAtIndex = function($$row, index, duration) {
-
-		// Calculate the old position for each row
-		var newPosition = this.originalRows[index].positionY - $$row.offset().top;
-		// Velocity($$row.get(0), {
-		$$row.velocity({
-
-			// Move each row to its collapsed position
-			translateY: 0
-
-		}, {
-			duration: duration,
-			delay: ROW_DELAY,
-			begin: function(elements) {
-				$$row.removeClass('translateY-reset');
-				$$row.removeClass(EXPANDED_CLASS);
-			},
-			complete: function(elements) {
-				$$row.addClass('translateY-reset');
-			}
-		});
-	}
+(function() {
 
 	// Basic setup operations before we start creating tables
 	// ------------------------------------------------------
@@ -7880,31 +6963,31 @@ $$(function() {
 		var style = document.createElement('link');
 		style.rel = 'stylesheet';
 		style.type = 'text/css';
-		style.href = CSS_PATH;
+		style.href = Config.css_path;
 		style.media = 'all';
 		document.head.appendChild(style);
 
-		// Setup necessary handlebars templates and helpers
-		// Handlebars.registerPartial('row', Columns.EmbeddableTemplates['templates/embed-table/row.hbs']);
-		Handlebars.registerHelper('partial', function(name, ctx, hash) {
-		    var ps = Handlebars.partials;
-		    if(typeof ps[name] !== 'function')
-		        ps[name] = Handlebars.compile(ps[name]);
-		    return ps[name](ctx, hash);
-		});
-		Handlebars.registerPartial('group', Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']);
-		Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
-		Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
-		Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
-		Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
+		// // Setup necessary handlebars templates and helpers
+		// // Handlebars.registerPartial('row', Columns.EmbeddableTemplates['templates/embed-table/row.hbs']);
+		// Handlebars.registerHelper('partial', function(name, ctx, hash) {
+		//     var ps = Handlebars.partials;
+		//     if(typeof ps[name] !== 'function')
+		//         ps[name] = Handlebars.compile(ps[name]);
+		//     return ps[name](ctx, hash);
+		// });
+		// Handlebars.registerPartial('group', Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']);
+		// Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
+		// Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
+		// Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
+		// Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
 
-		Handlebars.registerHelper('ifIsGroup', function(type, options) {
-			return type == 'group' ? options.fn(this) : options.inverse(this);
-		});
+		// Handlebars.registerHelper('ifIsGroup', function(type, options) {
+		// 	return type == 'group' ? options.fn(this) : options.inverse(this);
+		// });
 
-		Handlebars.registerHelper('ifIsSingle', function(type, options) {
-			return type == 'single' ? options.fn(this) : options.inverse(this);
-		});
+		// Handlebars.registerHelper('ifIsSingle', function(type, options) {
+		// 	return type == 'single' ? options.fn(this) : options.inverse(this);
+		// });
 
 		// Create global variables to store our tables and manage the load process
 		if(!Columns.scripts) { Columns.scripts = []; };
@@ -7912,7 +6995,7 @@ $$(function() {
 
 		// Add Google Analytics to the site if we're not in preview mode
 		var scripts = $$('script').filter(function(i, script) {
-			return $$(script).data('preview') === true;
+			return $$(script).data('preview') === true; 
 		});
 		if ( !scripts.length ) {
 			$$('head').append(Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']());
@@ -7930,27 +7013,1083 @@ $$(function() {
 	var scriptTags = document.getElementsByTagName('script');
 	for (var i = 0; i < scriptTags.length ; i++) {
 		var scriptTag = scriptTags[i];
-		if (scriptTag.src.search(EMBED_PATH) > -1 && scripts.indexOf(scriptTag) < 0) {
+		if (scriptTag.src.search( Config.embed_path ) > -1
+			&& scripts.indexOf( scriptTag ) < 0
+			&& scriptTag.type === 'text/javascript' /* To eliminate accidental use of cached script */ ) {
+
 			scripts.push(scriptTag);
 
 			// Create a new table
-			var table = new Table(scriptTag);
-			table.preview = $$(scriptTag).data('preview');
+			console.log('Table ' + i);
+			console.log(scriptTag);
+			var table = new ColumnsTable(scriptTag);
+			// table.preview = $$(scriptTag).data('preview');
 			tables.push(table);
 			table.render();
 
-			// If we're in preview mode, make sure the template is listening to expand and collapse events
-			if (table.preview) {
-				Columns.Template.setupTableEventListeners(table.$$table);
-			} else {
-				table.fetchData();
+			// If we're in preview mode, make sure we listen for data update events
+			if ( !table.preview ) {
+				// Columns.Template.setupTableEventListeners(table.$$table);
+				table.fetchData();	
 			}
 		}
 	}
 
 
-});
-},{"../bower_components/velocity/velocity.js":1,"../vendor/hammer.js":3,"../vendor/prevent-ghost-click.js":4}],3:[function(columns_require,module,exports){
+})();
+},{"../javascripts/models/ColumnsTable.js":6,"./embed-config.js":2,"./embed-handlebars.js":3}],5:[function(columns_columns_require,module,exports){
+function ColumnsEvent () {
+
+}
+
+ColumnsEvent.send = function( type, data ) {
+	$(document).trigger( type, data );
+};
+
+ColumnsEvent.on = function( type, callback ) {
+	$(document).on( type, callback );
+};
+
+ColumnsEvent.off = function( type, callback ) {
+	$(document).off( type, callback );
+};
+
+ColumnsEvent.offAll = function() {
+	$(document).off();
+};
+
+module.exports = ColumnsEvent;
+},{}],6:[function(columns_columns_require,module,exports){
+var Config = columns_columns_require('../embed-config.js'),
+	Velocity = columns_columns_require('../../bower_components/velocity/velocity.js'),
+	Hammer = columns_columns_require('../../vendor/hammer.js'),
+	PreventGhostClick = columns_columns_require('../../vendor/prevent-ghost-click.js'),
+	ColumnsEvent = columns_columns_require('./ColumnsEvent.js');
+
+// Make sure our version of jquery isn't polluting the namespace
+$$ = window.jQuery.noConflict(true);
+
+// Table Expansion
+// -------------------
+
+// Table should respond to the user's drag
+// and progressively open as it is pulled away
+// from its original location on the page
+
+// Animation Constants
+var ANIMATION_DURATION = 350;
+
+// UI Constants
+var ROW_OFFSET = 5,
+	ROW_DELAY = ANIMATION_DURATION * 0.01;
+
+// UI Management Classes
+var TABLE_SELECTOR = '.columns-table-widget',
+	TABLE_BODY_SELECTOR = '.columns-table',
+	TABLE_ROW_SELECTOR = '.columns-table-row',
+	TABLE_HEADER_SELECTOR = '.columns-table-header',
+	TABLE_FOOTER_SELECTOR = '.columns-table-footer',
+	PLACEHOLDER_CLASS = 'columns-table-placeholder',
+	EXPANDED_CLASS = 'expanded',
+	EXPANDING_CLASS = 'expanding',
+	RELOCATED_CLASS = 'relocated',
+	LOADING_CLASS = 'loading',
+	ERROR_CLASS = 'error',
+	ANIMATING_CLASS = 'velocity-animating',
+	$TABLE;
+	// $$CONTAINER = $$(window);
+
+var MAX_SMARTPHONE_SCREEN_WIDTH = 568;
+
+// File System Constants
+// var API_HOST = 'http://127.0.0.1:8080';
+// var ROOT_PATH = 'http://127.0.0.1';
+// var API_HOST = 'http://127.0.0.1:8080/api';
+// var API_HOST = 'http://api-env-qdfe3rbbmw.elasticbeanstalk.com/api';
+// var ROOT_PATH = 'http://127.0.0.1/';
+// var ROOT_PATH = 'https://thecolumnsproject.github.io/';
+// if (env) {
+// 	switch (env) {
+// 		case 'local':
+// 			ROOT_PATH = 'http://localhost/'
+// 			break;
+// 		default:
+// 			ROOT_PATH = 'https://thecolumnsproject.github.io/';
+// 	}
+// }
+// var EMBED_PATH = ROOT_PATH + '/public/embed-table.js';
+// var CSS_PATH = ROOT_PATH + '/css/embed-table.css';
+// var IMG_PATH = ROOT_PATH + '/images/';
+
+// Utility methods
+// ------------------------------
+
+function highestZIndex(elem)
+{
+	var elems = document.getElementsByTagName(elem);
+	var highest = 0;
+	for (var i = 0; i < elems.length; i++)
+	{
+		var zindex=document.defaultView.getComputedStyle(elems[i],null).getPropertyValue("z-index");
+		zindex = parseInt(zindex);
+		if ((zindex > highest) && !isNaN(zindex))
+		{
+			highest = zindex;
+		}
+	}
+	return highest;
+}
+
+// Create a class for the table object
+// that will allow us to easily manange multiple instances
+// and control their display.
+// Methods herein should allow the table to:
+// 1) Render initially
+// 2) Populate with data
+// 3) Expand
+// 4) Contract
+function ColumnsTable(script) {
+
+	// The placement of each table is dependent on the script that
+	// was used to create it, so we need this to begin
+	this.script = script;
+	this.id = $$(script).data('table-id');
+
+	// Determine whether or not we're in preview mode
+	this.preview = $$(script).data('preview');
+
+	// Remember the table instance once it's been inserted into the DOM
+	// as well as its jquery counterpart
+	this.table;
+	this.$$table;
+
+	// Get a reference to the table's container.
+	// On a smartphone, we'll use the window.
+	// On larger form factors, we'll use the table's container.
+	this.$$container = $$(window);
+
+	// Save a reference to the layout we create specifically for rows of this table
+	this.row_layout;
+
+	// Storage variables for resetting positions
+	this.originalBackground = {};
+	this.originalRows = [];
+	this.$$originalSibling;
+
+	// Save a copy of the data so we can re-render the layout without going back to the server
+	this.data;
+	this.layout;
+
+	if ( this.preview ) {
+		this._setupEventListeners();
+	}
+};
+
+// Render the initial table to the screen and position it correctly
+ColumnsTable.prototype.render = function() {
+
+	var _this = this;
+
+	// Generate table skeleton
+	// and insert it befor the script
+	var skeleton = Columns.EmbeddableTemplates['templates/embed-table/skeleton.hbs'];
+	var tmpDiv = document.createElement('div'); tmpDiv.innerHTML = skeleton();
+	this.table = this.script.parentNode.insertBefore(tmpDiv.firstChild, this.script);
+	this.$$table = $$(this.table);
+
+	// Generate table structure
+	// var loading = createLoading();
+	// var body = createBody();
+	var loading = Columns.EmbeddableTemplates['templates/embed-table/loading.hbs'];
+	var error = Columns.EmbeddableTemplates['templates/embed-table/error.hbs'];
+	var body = Columns.EmbeddableTemplates['templates/embed-table/body.hbs'];
+	this.$$table.append(loading({img_path: Config.img_path}));
+	this.$$table.append(error());
+	this.$$table.append(body());
+
+	// // Make the table bounce on scroll
+	// // $TABLE.find('.columns-table-container').fancy_scroll({
+	// // 	animation: "bounce"
+	// // });
+
+	// Determine whether we're on a small or large form factor
+	// and use this to determine how to expand and contract
+	// as well as initially place the table
+	if (this.isLargeFormFactor()) {
+		this.$$container = this.$$table.parent();
+		this.$$table.addClass('large-form-factor');
+	} else {
+		this.$$container = $$(window);
+		this.$$table.addClass('small-form-factor');
+	}
+
+	// Position table correctly given the size of the screen
+	// and reposition on resize events
+	$$(window).resize(function() {
+		_this.position();
+	});
+	this.position();
+
+	// // Prevent ghost clicks while the table is open
+	PreventGhostClick(document, function() {
+		return _this.$$table.hasClass(EXPANDING_CLASS) || _this.$$table.hasClass(EXPANDED_CLASS)
+	});
+
+	// Track the table render
+	if ( !_this.preview ) {
+		gaColumnz('send', 'event', 'table', 'render', '', +_this.id);
+	}
+};
+
+ColumnsTable.prototype.isLargeFormFactor = function() {
+	return $$(window).width() > MAX_SMARTPHONE_SCREEN_WIDTH;
+};
+
+ColumnsTable.prototype.getOffsetTop = function() {
+	if (this.isLargeFormFactor()) {
+		return this.$$table.position().top; 
+	} else {
+		return this.$$table.offset().top;
+	}
+};
+
+ColumnsTable.prototype.getOffsetLeft = function() {
+	if (this.isLargeFormFactor()) {
+		return this.$$table.position().left; 
+	} else {
+		return this.$$table.offset().left;
+	}
+};
+
+// Ensure that the table is positioned correctly on the screen
+// Smartphones: it should be the full width of the screen and left-aligned
+ColumnsTable.prototype.position = function() {
+	var properties = {
+		'width': this.$$container.innerWidth()
+	}
+
+	// Only move the table if it's not aligned with the left side of the screen
+	var offset = this.getOffsetLeft();
+	if (offset != 0) {
+		properties['margin-left'] = -offset 
+	}
+
+	// Make the table the width of the window
+	// and left align it with the window 
+	this.$$table.css(properties);
+};
+
+// Download the appropriate data from the api
+ColumnsTable.prototype.fetchData = function() {
+	var _this = this;
+
+	// First turn on loading
+	this.setLoading(true);
+
+	$$.get(Config.api_host + '/columns/table/' + this.id + '?page=0', function(data) {
+		if (data.status == 'success') {
+			_this.generateLayout($$.parseJSON(data.data.layout));
+			_this.renderData(data.data);
+			_this.setError(false);
+
+			// Track the table population
+			if ( !_this.preview ) {
+				gaColumnz('send', 'event', 'table', 'populate', '', +_this.id);
+			}
+		} else {
+			_this.setLoading(false);
+			_this.setError(true);
+		}
+	});
+
+	// var _this = this;
+	// setTimeout(function() {
+	// 	_this.generateLayout(DUMMY_DATA.layout);
+	// 	_this.renderData(DUMMY_DATA);
+	// }, 100);
+};
+
+ColumnsTable.prototype.templateName = function() {
+	return 'row_layout_' + Columns.scripts.indexOf(this.script); 
+};
+
+ColumnsTable.prototype.generateLayout = function(layout, reload) {
+	// Set up the row layout as a handlebars partial
+	// dynamically based on the row layout object
+	this.layout = layout;
+	var row_layout = Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']({layout: layout});
+	var row_template = Handlebars.compile(row_layout);
+	var templateName = this.templateName();
+	Handlebars.registerPartial(templateName, row_template);
+
+	if (reload) {
+		this.renderData();
+	}
+};
+
+ColumnsTable.prototype.renderData = function(data) {
+	var _this = this;
+
+	// If no data was passed in, re-render with the old data
+	if (!data) {
+		if (!this.data) {
+			return;
+		} else {
+			data = this.data;
+		}
+	} else {
+		this.data = data;
+	}
+
+	// var numRows = data.data.length;
+
+	// Generate table layouts with data
+	var header = Columns.EmbeddableTemplates['templates/embed-table/header.hbs'];
+	var rowsTemplate = Columns.EmbeddableTemplates['templates/embed-table/rows.hbs'];
+	var footer = Columns.EmbeddableTemplates['templates/embed-table/footer.hbs'];
+
+	// Render table components with data
+	var $$tableBody = this.$$table.find(TABLE_BODY_SELECTOR);
+	var $$header = this.$$table.find(TABLE_HEADER_SELECTOR);
+	var $$footer = this.$$table.find(TABLE_FOOTER_SELECTOR);
+	var $$rows = this.$$table.find(TABLE_ROW_SELECTOR);
+
+	if ($$header.length > 0) {
+		this.updateComponent($$header, {
+			title: data.title,
+			sort_by_column: data.sort_by_column
+		}, header);
+	} else {
+		this.$$table.prepend(header({
+			title: data.title,
+			sort_by_column: data.sort_by_column
+		}));
+	}
+
+	if ($$footer.length > 0) {
+		this.updateComponent($$footer, {
+			source: data.source,
+			item_count: data.num_rows || data.data.length
+		}, footer);
+	} else {
+		$$tableBody.after(footer({
+			source: data.source,
+			item_count: data.num_rows || data.data.length
+		}));
+	}
+
+	var shouldRunRowIntroAnimation = false;
+	if ($$rows.length == 0 && !this.preview ) {
+		shouldRunRowIntroAnimation = true;
+	}
+
+	// For now, only render the first 20 rows
+	$$rows.remove();
+	$$tableBody.prepend(rowsTemplate({
+		row_layout: this.templateName(),
+		rows: data.data.slice(0, 20)
+	}));	
+
+	// If we're in preview and the table is expanded,
+	// refresh the amount of padding we add to the top
+	// to account for the template
+	if (this.preview && this.$$table.hasClass(EXPANDED_CLASS)) {
+		$$tableBody.css({
+			paddingTop: this.tallestRowHeight()
+		});
+	}
+
+	// Reset rows to equal the new rows we just added
+	$$rows = this.$$table.find(TABLE_ROW_SELECTOR);
+	$$rows.css({height: this.tallestRowHeight()});
+
+	// Set any dynamic sizing or positioning values
+	// and animate the various components in
+	var introSequence = [];
+	var tableHeight = this.backgroundHeight();
+	var duration = 0;
+	if (shouldRunRowIntroAnimation) {
+		duration = ANIMATION_DURATION;
+		var delay = ANIMATION_DURATION / 3;
+		// Velocity($$tableBody.get(0), {
+		$$tableBody.velocity({
+			height: tableHeight
+		}, {
+			duration: duration
+		});
+		$$.each($$rows, function(index, row) {
+
+			// Only animate the two drooping rows
+			if (index > 0 && index <= 2) {
+				var $$row = $$(row);
+				// Velocity($$rows.get(0), {
+				$$row.velocity({
+					translateY: 5
+				}, {duration: ANIMATION_DURATION / 6,
+					delay: delay * index
+				});
+				// Velocity($$rows.get(0), {
+				$$row.velocity({
+					translateY: 0
+				}, {
+					duration: ANIMATION_DURATION / 6
+				});
+			}
+		});
+	} else {
+		// Velocity($$tableBody.get(0), {
+		$$tableBody.velocity({
+			height: tableHeight
+		}, {
+			duration: duration
+		});
+	}
+
+	// Set up DOM events on the table
+	this.setupEvents();
+
+	// Announce that the table has rendered data
+	if (this.preview) {
+		$(document).trigger('ColumnsTableDidRenderData', {table: this});
+	}
+
+	// Remove the loading class after the screen repaints
+	setTimeout(function() {
+		_this.setLoading(false);
+	}, 100);
+};
+
+ColumnsTable.prototype.tallestRowHeight = function() {
+	return Math.max.apply(null, this.$$table.find(TABLE_ROW_SELECTOR).map(function () {
+		return $$(this).height();
+	}).get());
+};
+
+ColumnsTable.prototype.backgroundHeight = function() {
+	var numRows = this.$$table.find(TABLE_ROW_SELECTOR).length;
+	var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
+	return offsetHeight + this.tallestRowHeight();
+};
+
+ColumnsTable.prototype.updateComponent = function($$component, data, template) {
+	// If there is alread a component, just update it with the new data
+	var oldStyle = $$component.attr('style');
+	var oldClasses = $$component.attr('class');
+	var $$template = $(template(data)).attr('style', oldStyle).attr('class', oldClasses);
+	$$component.replaceWith($$template);
+};
+
+ColumnsTable.prototype.setupEvents = function() {
+	var _this = this;
+
+	var tableMc = new Hammer(this.$$table.find(".columns-table").get(0));
+	tableMc.on('tap', function(e) {
+		var $$table = $$(this);
+		if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+			_this.expand();
+
+			// Track this tap
+			if ( _this.preview ) {
+				ga('send', 'event', 'table', 'expand', 'body');
+			} else {
+				gaColumnz('send', 'event', 'table', 'expand', 'body', +_this.id);
+			}
+		}
+	});
+	// this.$$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+	// 	var $$table = $$(this);
+	// 	if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+	// 		_this.expand();
+	// 	}
+	// });
+
+	var expandMc = new Hammer(this.$$table.find(".columns-table-expand-button").get(0));
+	expandMc.on('tap', function(e) {
+		var $$table = $$(this);
+		if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+			_this.expand();
+
+			// Track this tap
+			if ( _this.preview ) {
+				ga('send', 'event', 'table', 'expand', 'expand button');
+			} else {
+				gaColumnz('send', 'event', 'table', 'expand', 'expand button', +_this.id);
+			}
+		}
+	});
+	// this.$$table.find(".columns-table-expand-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+	// 	var $$table = $$(this);
+	// 	if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+	// 		_this.expand();
+	// 	}
+	// });
+
+	var errorMc = new Hammer(this.$$table.find(".columns-table-error").get(0));
+	errorMc.on('tap', function(e) {
+		var $$table = $$(this);
+		if (_this.$$table.hasClass(ERROR_CLASS)) {
+			_this.fetchData();
+
+			// Track this tap
+			if ( _this.preview ) {
+				ga('send', 'event', 'table', 'retry', 'error message');
+			} else {
+				gaColumnz('send', 'event', 'table', 'retry', 'error message', +_this.id);
+			}
+		}
+	});
+	// this.$$table.find(".columns-table-error").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+	// 	var $$table = $$(this);
+	// 	if (_this.$$table.hasClass(ERROR_CLASS)) {
+	// 		_this.fetchData();
+	// 	}
+	// });
+
+	// $(".columns-table").click(function(e) {
+	// 	$table = $(this);
+	// 	if (!$table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+	// 		expandTable($table);
+	// 	}
+	// });
+
+	var closeMc = new Hammer(this.$$table.find(".columns-table-close-button").get(0));
+	closeMc.on('tap', function(e) {
+		var $$table = _this.$$table.find('.columns-table');
+		if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+			_this.collapse();
+
+			// Track this tap
+			if ( _this.preview ) {
+				ga('send', 'event', 'table', 'collapse', 'close button');
+			} else {
+				gaColumnz('send', 'event', 'table', 'collapse', 'close button', +_this.id);
+			}
+
+			// Prevent the dom from doing any other conflicting stuff
+			// e.stopPropagation();
+			// e.preventDefault();
+		}
+	});
+	// this.$$table.find(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
+	// 	var $$table = _this.$$table.find('.columns-table');
+	// 	if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
+	// 		_this.collapse();
+
+	// 		// Prevent the dom from doing any other conflicting stuff
+	// 		e.stopPropagation();
+	// 		e.preventDefault();
+	// 	}
+	// });
+
+	// $(".columns-table-close-button").click(function(e) {
+	// 	var $parent = $(this).parents('.columns-table-widget');
+	// 	var $table = $parent.find('.columns-table');
+	// 	if ($table.hasClass(EXPANDED_CLASS) && !$table.hasClass(ANIMATING_CLASS)) {
+	// 		collapseTable($table);
+	// 	}
+	// });
+
+	// Notify the preview template when the table scrolls
+	if (this.preview) {
+		this.$$table.find('.columns-table-container').on('scroll', function(e) {
+			$(document).trigger('ColumnsTableDidScroll', {table: _this, originalEvent: e});
+		})
+	}
+
+	// Listen to scroll events on the table
+	// this.$$table.find('.columns-table-container').on('scroll', function(e) {
+
+		// Have we scrolled to the bottom and met all other conditions for rendering more rows?
+
+		// Check whether we already have the data to render more rows
+
+		// If not, download more rows first
+		
+	// });
+};
+
+ColumnsTable.prototype.setLoading = function(loading) {
+	if (loading) {
+		this.$$table.addClass(LOADING_CLASS);
+	} else {
+		this.$$table.removeClass(LOADING_CLASS);
+	}
+};
+
+ColumnsTable.prototype.setError = function(error) {
+	if (error) {
+		this.$$table.addClass(ERROR_CLASS);
+	} else {
+		this.$$table.removeClass(ERROR_CLASS);
+	}
+}
+
+// Methods to expand a table
+// from to its original position
+// to full-screen
+// ------------------------------
+
+ColumnsTable.prototype.expand = function() {
+	
+	var _this = this;
+
+	// Tell everyone we're about to expand
+	// var willExpandEvent = new CustomEvent('ColumnsTableWillExpand', {
+	// 	detail: {
+	// 		table: this.$$table
+	// 	}
+	// });
+	if (this.preview) {
+		$(document).trigger('ColumnsTableWillExpand', {table: this});
+	}
+
+	var $$table = this.$$table;
+	$$bg = $$table.find('.columns-table-container'),
+	$$body = $$table.find(TABLE_BODY_SELECTOR);
+	$$rows = $$table.find('.columns-table-row'),
+	$$header = $$table.find('.columns-table-header');
+	$$footer = $$table.find('.columns-table-footer');
+
+	// First move the table to the outermost part of the DOM
+	// while maintaining its visual position
+	// add a placeholder
+	// and make sure we're the highest z-index in the land
+	var offsetTop;
+	if (this.preview) {
+		offsetTop = this.getOffsetTop();
+	} else {
+		offsetTop = parseInt($$.Velocity.hook($$table, "translateY"));
+	}
+	var offsets = {
+		top: this.getOffsetTop(),
+		'margin-left': 0,
+		position: 'absolute',
+		'z-index': (highestZIndex('*') + 1)
+	};
+	
+	// Replace the table with a same-height placeholder
+	var placeholder = document.createElement('div');
+	placeholder.className = PLACEHOLDER_CLASS;
+	placeholder.style.height = $$table.height();
+	placeholder.style.width = $$table.width();
+	this.$$originalSibling = $$table.siblings('script').first();
+	if (this.isLargeFormFactor()) {
+		$$table.appendTo(this.$$container);	
+	} else {
+		$$table.appendTo('body');
+	}
+	$$table.addClass(RELOCATED_CLASS);
+	$$table.css(offsets);
+	this.$$originalSibling.before(placeholder);
+
+	this.expandBackground($$bg, $$rows, $$header, $$footer);
+	this.expandRows($$rows);
+	this.expandBody($$body);
+	this.expandHeader($$header);
+
+	var props;
+	if (this.preview) {
+		props = {
+			translateY: -this.getOffsetTop()
+		}
+	} else {
+		props = {
+			opacity: 1
+		}
+	}
+
+	// Velocity($$table.get(0), props, { 
+	$$table.velocity(props, {
+
+		duration: ANIMATION_DURATION,
+		begin: function(elements) {
+			$$table.addClass(EXPANDING_CLASS);
+		},
+		complete: function(elements) {
+			$$table.addClass(EXPANDED_CLASS);
+			$$table.removeClass(EXPANDING_CLASS);
+			$$('html').addClass('table-expanded');
+
+			if (_this.preview) {
+				$(document).trigger('ColumnsTableDidExpand', {table: _this});
+			}
+		}
+	});
+
+	this.position();
+};
+
+ColumnsTable.prototype.expandHeader = function($$header) {
+
+	// Bring the header into view
+	// Velocity($$header.get(0), {
+	$$header.velocity({
+		opacity: 1 /* Fade the header into view */
+	}, {
+		duration: ANIMATION_DURATION,
+		delay: ANIMATION_DURATION,
+		complete: function(elements) {
+			// $$header.addClass(EXPANDED_CLASS);
+		}
+	});
+};
+
+ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$footer) {
+
+	// Save values to be used upon reset
+	this.originalBackground['height'] = $$bg.height();
+	var bgOffsetTop;
+	if (this.isLargeFormFactor()) {
+		this.originalBackground['positionY'] = $$bg.position().top;
+		bgOffsetTop = -$$bg.position().top;
+	} else {
+		this.originalBackground['positionY'] = $$bg.offset().top;
+		bgOffsetTop = -$$bg.offset().top;
+	}
+
+	// Calculate new background position
+	bgOffsetTop += this.$$container.scrollTop();
+	var bgWidth = this.$$container.width();
+
+	// The background should be as tall as necessary to fit all the rows
+	// but the screen height at minimum
+	// Update: the background should be the height of the container
+	// var bgHeight = $$bg.outerHeight() + $$header.outerHeight() + $$footer.outerHeight() + ( $$rows.outerHeight() * ($$rows.length - 1) );
+	// var bgHeight = bgHeight < this.$$container.height ? this.$$container.height : bgHeight;
+	var bgHeight = this.$$container.height();
+
+	// Velocity($$bg.get(0), {
+	$$bg.velocity({
+		height: bgHeight, 			/* Fill the entire screen */
+		translateY: bgOffsetTop 	/* Move to the top of the screen */
+	},{
+		duration: ANIMATION_DURATION,
+		begin: function(elements) {
+			$$bg.addClass(EXPANDING_CLASS);
+			$$bg.removeClass('translateY-reset');
+		},
+		complete: function(elements) {
+			$$bg.removeClass(EXPANDING_CLASS);
+			// $$bg.addClass(EXPANDED_CLASS);
+			$$bg.addClass('translateY-reset');
+			// $$TABLE.removeClass(RELOCATED_CLASS);
+		}
+	});
+};
+
+ColumnsTable.prototype.expandBody = function($$body) {
+
+	var _this = this;
+	// Calculate the new table size and position
+	var tableOffsetTop = 60;
+
+	// Move the table down a few extra pixels to account for the template if we're in preview mode
+	var paddingTop = 0;
+	if (this.preview) {
+		paddingTop = this.tallestRowHeight();
+	}
+	// var tableHeight = rowHeight * $$rows.length - 40;
+
+	// Velocity($$body.get(0), {
+	$$body.velocity({
+		// height: tableHeight, /* Grow to encompass all of the rows */
+		translateY: tableOffsetTop + paddingTop, /* Move down a few pixels to account for the header */
+		'padding-top': paddingTop /* Move down a few more pixels to account for the template row in preview mode */
+	}, {
+		duration: ANIMATION_DURATION,
+		begin: function(elements) {
+			// _this.$$table.addClass(EXPANDING_CLASS);
+			$$body.removeClass('translateY-reset');
+		},
+		complete: function(elements) {
+			// _this.$$table.addClass(EXPANDED_CLASS);
+			// _this.$$table.removeClass(EXPANDING_CLASS);
+			// $$('html').addClass('table-expanded');
+			// $$body.addClass(EXPANDED_CLASS);
+			$$body.addClass('translateY-reset');
+		}
+	});
+}
+
+ColumnsTable.prototype.expandRows = function($$rows) {
+
+	var _this = this;
+
+	// Calculate the new position for each row
+	var duration = ANIMATION_DURATION - ( ($$rows.length - 1) * ROW_DELAY );
+	$$rows.each(function(index, row) {
+		var $$row = $$(row);
+
+		// Save original row data
+		_this.originalRows[index] = {
+			positionY: $$row.offset().top
+		}
+
+		// Animate the rows
+		_this.expandRowAtIndex($$row, index, duration);
+	});
+}
+
+ColumnsTable.prototype.expandRowAtIndex = function($$row, index, duration) {
+
+	var rowHeight = $$row.outerHeight();
+	var offsetY = (index * rowHeight);
+	switch (index) {
+		case 0:
+		break;
+		case 1:
+		offsetY -= ROW_OFFSET;
+		break;
+		case 2:
+		offsetY -= ROW_OFFSET * 2;
+		break;
+		default:
+		offsetY -= ROW_OFFSET * 2;
+	}
+
+	// Velocity($$row.get(0), {
+	$$row.velocity({
+		translateY: offsetY /* Move each row down into its natural position */
+	}, {
+		duration: duration,
+		delay: ROW_DELAY,
+		begin: function(elements) {
+			$$row.removeClass('translateY-reset');
+		},
+		complete: function(elements) {
+			// $$row.addClass(EXPANDED_CLASS);
+			$$row.addClass('translateY-reset');
+		}
+	});
+}
+
+// Define table animation sequences
+// var expandTableSequence = [
+// 	{
+// 		// Background
+// 		elements: $$parent.find('.columns-table-container'),
+// 		properties: {
+// 			height: bgHeight, 			/* Fill the entire screen */
+// 			translateY: bgOffsetTop 	/* Move to the top of the screen */
+// 		}
+// 	}
+// ]
+
+// Methods to collapse a table
+// back to its original position
+// ------------------------------
+
+ColumnsTable.prototype.collapse = function() {
+	var _this = this;
+	var $$table = this.$$table;
+	$$body = $$table.find(TABLE_BODY_SELECTOR);
+	$$bg = $$table.find('.columns-table-container'),
+	$$rows = $$table.find('.columns-table-row'),
+	$$header = $$table.find('.columns-table-header');
+
+	// and remove the placeholder
+
+	// $$parent.addClass(RELOCATED_CLASS);
+	$$table.insertBefore(this.$$originalSibling);
+
+	// setTimeout(function() {
+		this.collapseHeader($$header);
+		this.collapseBackground($$bg);
+		this.collapseBody($$body);
+		this.collapseRows($$rows);
+	// }, 0);
+
+	var props;
+	if (this.preview) {
+		props = {
+			translateY: 0
+		}
+	} else {
+		props = {
+			opacity: 1
+		}
+	}
+
+	// Velocity($$table.get(0), props, {
+	$$table.velocity(props, {
+		duration: ANIMATION_DURATION,
+		begin: function(elements) {
+			$$table.addClass(EXPANDING_CLASS);
+			$$table.removeClass(EXPANDED_CLASS);
+		},
+		complete: function(elements) {
+			$$table.removeClass(RELOCATED_CLASS);
+			$$table.removeClass(EXPANDING_CLASS);
+			// Move the table back to its original DOM position
+			$$table.css({
+				top: 0,
+				position: 'relative',
+				'z-index': 0
+			});
+			_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
+			$$('html').removeClass('table-expanded');
+
+			if (_this.preview) {
+				$(document).trigger('ColumnsTableDidCollapse', {table: _this});
+			}
+		}
+	});
+
+	this.position();
+}
+
+ColumnsTable.prototype.collapseHeader = function($$header) {
+
+	// Remove header from view
+	// Velocity($$header.get(0), {
+	$$header.velocity({
+		opacity: 0 /* Fade the header out of view */
+	}, {
+		duration: ANIMATION_DURATION * 0.2,
+		complete: function(elements) {
+			$$header.removeClass(EXPANDED_CLASS);
+		}
+	});
+}
+
+ColumnsTable.prototype.collapseBackground = function($$bg) {
+
+	var _this = this;
+
+	// Calculate new background position
+	// Velocity($$bg.get(0), {
+	$$bg.velocity({
+
+		// Return to small state
+		// height: _this.originalBackground.height,
+		height: _this.backgroundHeight() + 69,
+		// height: 'auto',
+
+		// Move back to original position
+		translateY: 0
+
+	},{
+		duration: ANIMATION_DURATION,
+		begin: function(elements) {
+			$$bg.addClass(EXPANDING_CLASS);
+			$$bg.removeClass('translateY-reset');
+			$$bg.removeClass(EXPANDED_CLASS);
+		},
+		complete: function(elements) {
+			$$bg.removeClass(EXPANDING_CLASS);
+			$$bg.addClass('translateY-reset');
+		}
+	});
+}
+
+ColumnsTable.prototype.collapseBody = function($$body) {
+
+	var _this = this;
+	// Calculate the old table size and position
+	// Velocity($$body.get(0), {
+	$$body.velocity({
+
+		// Move to top of container
+		translateY: 0,
+		// Remove any padding we added for the template row in preview mode
+		'padding-top': 0,
+		// Adjust height in case any rows have changed
+		height: _this.backgroundHeight()
+
+	}, {
+		duration: ANIMATION_DURATION,
+		begin: function(elements) {
+			$$body.removeClass('translateY-reset');
+			$$body.removeClass(EXPANDED_CLASS);
+			// _this.$$table.removeClass(EXPANDED_CLASS);
+			// _this.$$table.addClass(EXPANDING_CLASS);
+		},
+		complete: function(elements) {
+			// $$table.removeClass(EXPANDED_CLASS);
+			$$body.addClass('translateY-reset');
+			// _this.$$table.removeClass(RELOCATED_CLASS);
+			// _this.$$table.removeClass(EXPANDING_CLASS);
+			// _this.$$table.css({
+			// 	top: 0,
+			// 	position: 'relative',
+			// 	'z-index': 0
+			// });
+		}
+	});
+}
+
+ColumnsTable.prototype.collapseRows = function($$rows) {
+
+	var _this = this;
+	var duration = ANIMATION_DURATION - ( ($$rows.length - 1) * ROW_DELAY );
+	$$rows.each(function(index, row) {
+		_this.collapseRowAtIndex($$(row), index, duration);
+	});
+}
+
+ColumnsTable.prototype.collapseRowAtIndex = function($$row, index, duration) {
+
+	// Calculate the old position for each row
+	var newPosition = this.originalRows[index].positionY - $$row.offset().top;
+	// Velocity($$row.get(0), {
+	$$row.velocity({
+
+		// Move each row to its collapsed position
+		translateY: 0
+
+	}, {
+		duration: duration,
+		delay: ROW_DELAY,
+		begin: function(elements) {
+			$$row.removeClass('translateY-reset');
+			$$row.removeClass(EXPANDED_CLASS);
+		},
+		complete: function(elements) {
+			$$row.addClass('translateY-reset');
+		}
+	});
+}
+
+ColumnsTable.prototype._setupEventListeners = function() {
+	ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', this._onTableDidUpload.bind( this ) );
+	// ColumnsEvent.on( 'Columns.Layout.DidChange', table._onLayoutDidChange.bind( table ) );
+	// ColumnsEvent.on( 'Columns.EmbedDetailsView.DidUpdatePropertyWithValue', table._onDetailsDidChange.bind( table ) );
+	ColumnsEvent.on( 'Columns.Table.DidChange', this._onTableDidChange.bind( this ) );
+};
+
+ColumnsTable.prototype._onTableDidUpload = function( event, data ) {
+	var table = data.table;
+
+	// Generate a layout
+	this.generateLayout( table.layout.model, false );
+
+	// Render Data
+	this.renderData( table );
+
+	// Expand yourself
+	this.expand();
+};
+
+// ColumnsTable.prototype._onTableDidChange = function( event, data ) {
+
+// 	// Generate a new layout and reload
+// 	this.generateLayout( data.layout.model, true );
+
+// };
+
+ColumnsTable.prototype._onTableDidChange = function( event, data ) {
+	var table = data.table;
+
+	// Generate a layout
+	this.generateLayout( table.layout.model, false );
+
+	// Render Data
+	this.renderData( table );
+
+};
+
+module.exports = ColumnsTable;
+},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":7,"../../vendor/prevent-ghost-click.js":8,"../embed-config.js":2,"./ColumnsEvent.js":5}],7:[function(columns_columns_require,module,exports){
 /*! Hammer.JS - v2.0.4 - 2014-09-28
  * http://hammerjs.github.io/
  *
@@ -9315,7 +9454,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * has columns_require failures boolean
+     * has columns_columns_require failures boolean
      * @returns {boolean}
      */
     hasRequireFailures: function() {
@@ -9358,7 +9497,7 @@ Recognizer.prototype = {
     },
 
     /**
-     * Check that all the columns_require failure recognizers has failed,
+     * Check that all the columns_columns_require failure recognizers has failed,
      * if true, it emits a gesture event,
      * otherwise, setup the state to FAILED.
      * @param {Object} input
@@ -10416,7 +10555,7 @@ if (typeof module != 'undefined' && module.exports) {
 
 })(window, document, 'Hammer');
 
-},{}],4:[function(columns_require,module,exports){
+},{}],8:[function(columns_columns_require,module,exports){
 /**
  * Prevent click events after a touchend.
  * 
@@ -10457,7 +10596,8 @@ if (typeof module != 'undefined' && module.exports) {
             var y = coordinates[i][1];
  
             // within the range, so prevent the click
-            if (Math.abs(ev.clientX - x) < threshold && Math.abs(ev.clientY - y) < threshold) {
+            // if (Math.abs(ev.clientX - x) < threshold && Math.abs(ev.clientY - y) < threshold) {
+            if ( document.elementFromPoint(x,y) === ev.target ) {
                 ev.stopPropagation();
                 ev.preventDefault();
                 break;
@@ -10512,6 +10652,6 @@ if (typeof module != 'undefined' && module.exports) {
     };
 
 })(window, document, 'PreventGhostClick');
-},{}]},{},[2]);
+},{}]},{},[4]);
 
 }());

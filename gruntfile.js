@@ -54,6 +54,29 @@ module.exports = function(grunt) {
 					}
 				}]
 			},
+			specs: {
+				src: ['specs/compiled-specs.js'],
+				dest: 'specs/compiled-specs.js',
+				replacements: [{
+					from: '{{api_host}}',
+					to: function(matchedWord) {
+						if (process.env.NODE_ENV == 'production') {
+							return 'http://api.thecolumnsproject.com';
+						} else {
+							return 'http://127.0.0.1:8080'
+						}
+					}
+				}, {
+					from: '{{root_path}}',
+					to: function(matchedWord) {
+						if (process.env.NODE_ENV == 'production') {
+							return 'http://colum.nz';
+						} else {
+							return 'http://127.0.0.1'
+						}
+					}
+				}]
+			},
 			app: {
 				src: ['javascripts/config.js'],
 				dest: 'compiled-javascripts/config.js',
@@ -81,6 +104,19 @@ module.exports = function(grunt) {
 			embed: {
 				src: ['javascripts/embed-table.js'],
 				dest: 'compiled-javascripts/embed-table.js'
+			},
+			app: {
+				src: ['javascripts/main.js'],
+				dest: 'compiled-javascripts/app.js',
+				options: {
+					browserifyOptions: {
+						debug: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test' ? false : true
+					},
+				}
+			},
+			specs: {
+				src: ['specs/**/*.js', '!specs/compiled-specs.js'],
+				dest: 'specs/compiled-specs.js'
 			}
 		},
 		concat: {
@@ -105,10 +141,42 @@ module.exports = function(grunt) {
 			},
 			styling: {
 				src: [
+					'javascripts/styling/intro.js',
 					'javascripts/styling/components/*.js',
-					'javascripts/styling/types.js'
+					'javascripts/styling/types.js',
+					'javascripts/styling/outro.js'
+					// 'javascripts/styling/defaults.js'
 				],
 				dest: 'compiled-javascripts/styling/compiled-data.js'
+			}
+		},
+		jasmine: {
+			app: {
+				src: [
+					'compiled-javascripts/app.js'
+					// 'javascripts/models/*.js',
+					// 'javascripts/controllers/*.js',
+					// 'javascripts/styling/**/*.js',
+					// '!javascripts/models/ColumnsTable.js'
+				],
+				options: {
+					specs: 'specs/compiled-specs.js',
+					vendor: [
+						'bower_components/jquery/dist/jquery.js',
+						'bower_components/handlebars/handlebars.js',
+						'bower_components/velocity/velocity.js',
+						'vendor/jquery-ui.min.js',
+						'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+						'bower_components/jasmine-ajax/lib/mock-ajax.js',
+						'bower_components/Papa-Parse/papaparse.js'
+					],
+					helpers: [
+						'templates/embeddable-templates.js',
+						'templates/templates.js',
+						// 'compiled-javascripts/config.js',
+						// 'compiled-javascripts/embed-table.js'
+					]
+				}
 			}
 		},
 		watch: {
@@ -129,6 +197,10 @@ module.exports = function(grunt) {
 			javascript: {
 				files: 'javascripts/**/*.js',
 				tasks: ['replace', 'browserify', 'replace', 'concat']
+			},
+			specs: {
+				files: ['specs/**/*.js', 'specs/**/*.html', '!specs/compiled-specs.js'],
+				tasks: ['browserify', 'replace']
 			}
 		}
 	});
@@ -139,7 +211,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-text-replace');
+	grunt.loadNpmTasks('grunt-contrib-jasmine');
+	grunt.loadNpmTasks('grunt-minifyify');
 
-	grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'replace', 'concat']);
+	// grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
+	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'replace', 'concat' ]);
+	grunt.registerTask('default', ['build', 'watch'] );
 }

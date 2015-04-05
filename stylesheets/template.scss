@@ -50,7 +50,7 @@
 	@include display(flex);
 	@include justify-content(center);
 	position: absolute;
-	top: 78px;
+	top: 186px;
 	z-index: $layout-index;
 }
 
@@ -72,15 +72,13 @@
 	background-color: #fff;
 }
 
-.layout-template-row.empty {
-	> .layout-template-row-group:after {
-		content: 'Drag columns here';
-		font-style: italic;
-		font-size: 20px;
-		color: $gray-40;
-		width: 100%;
-		text-align: center;
-	}
+.layout-template-row > .layout-template-row-group:empty:after {
+	content: 'Drag columns here';
+	font-style: italic;
+	font-size: 20px;
+	color: $gray-40;
+	width: 100%;
+	text-align: center;
 }
 
 .layout-template-row-group {

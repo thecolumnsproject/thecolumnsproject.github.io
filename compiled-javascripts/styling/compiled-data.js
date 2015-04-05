@@ -6,7 +6,7 @@ Columns.styleData.components['items'] = {
 	title: 'Items',
 	rows: [{
 		items: [{
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Layout',
 			property: {
 				name:'flex-direction'
@@ -19,7 +19,7 @@ Columns.styleData.components['items'] = {
 				icon: 'layout-vertical'
 			}]
 		}, {
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Alignment',
 			property: {
 				name:'align-items'
@@ -47,9 +47,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-top',
 			appendControls: true,
 			label: 'Top',
-			property: {
-				name:'margin-top'
-			}
+			property: 'margin-top',
+			default: '0px'
 		}, {
 			kind: 'input',
 			type: 'tel',
@@ -57,9 +56,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-bottom',
 			appendControls: true,
 			label: 'Bottom',
-			property: {
-				name:'margin-bottom'
-			}
+			property: 'margin-bottom',
+			default: '0px'
 		}]
 	}, {
 		items: [{
@@ -69,9 +67,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-left',
 			appendControls: true,
 			label: 'Left',
-			property: {
-				name:'margin-left'
-			}
+			property: 'margin-left',
+			default: '0px'
 		}, {
 			kind: 'input',
 			type: 'tel',
@@ -79,9 +76,8 @@ Columns.styleData.components['margins'] = {
 			prependIcon: 'margin-right',
 			appendControls: true,
 			label: 'Right',
-			property: {
-				name:'margin-right'
-			}
+			property: 'margin-right',
+			default: '0px'
 		}]
 	}]
 };
@@ -94,9 +90,8 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: true,
 			label: 'Size',
-			property: {
-				name: 'font-size'
-			}
+			property: 'font-size',
+			default: '14px'
 		}, {
 			kind: 'multiple-segmented-button',
 			label: 'Style',
@@ -106,7 +101,8 @@ Columns.styleData.components['text'] = {
 				},
 				values: {
 					active: 'bold',
-					inactive: 'normal'
+					inactive: 'normal',
+					default: 'normal'
 				},
 				icon: 'bold'
 			}, {
@@ -115,7 +111,8 @@ Columns.styleData.components['text'] = {
 				},
 				values: {
 					active: 'italic',
-					inactive: 'normal'
+					inactive: 'normal',
+					default: 'normal'
 				},
 				icon: 'italic'
 			}, {
@@ -124,7 +121,8 @@ Columns.styleData.components['text'] = {
 				},
 				values: {
 					active: 'underline',
-					inactive: 'none'
+					inactive: 'none',
+					default: 'none'
 				},
 				icon: 'underline'
 			}]
@@ -136,14 +134,14 @@ Columns.styleData.components['text'] = {
 			prependIcon: false,
 			appendControls: false,
 			label: 'Color',
-			property: {
-				name:'color'
-			}
+			property: 'color',
+			default: '#3a3a3a'
 		}, {
-			kind: 'single-segmented-button',
+			kind: 'segmented-button',
 			label: 'Alignment',
 			property: {
-				name: 'text-align'
+				name: 'text-align',
+				default: 'left'
 			},
 			buttons: [{
 				value: 'left',
@@ -167,3 +165,4 @@ Columns.styleData.types = {
 		Columns.styleData.components['items'],
 	]
 };
+module.exports = Columns;

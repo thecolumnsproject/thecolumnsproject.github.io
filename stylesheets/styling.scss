@@ -283,7 +283,8 @@ $style-component-row-item-input-prepend-width: 24px;
 	}
 }
 
-.style-component-section-row-segmentedButton {
+.style-component-section-row-segmented-button,
+.style-component-section-row-multiple-segmented-button {
 	height: $style-component-row-item-height;
 	background-color: #fff;
 	box-shadow: inset 0px 0px 2px 0px $gray-20;

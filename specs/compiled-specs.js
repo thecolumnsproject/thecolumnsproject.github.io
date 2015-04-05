@@ -1,44 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var env = 'development';
-module.exports = {
-	development: {
-		api: {
-			host: 'http://127.0.0.1:8080'
-		},
-		web: {
-			host: 'http://127.0.0.1'
-		},
-		embed: {
-			host: 'http://127.0.0.1',
-			path: '/public/embed-table.js'
-		}
-	},
-	staging: {
-		api: {
-			host: 'http://apistg.thecolumnsproject.com'
-		},
-		web: {
-			host: 'http://appstg.thecolumnsproject.com'
-		},
-		embed: {
-			host: 'http://stg.colum.nz',
-			path: '/public/embed-table.js'
-		}
-	},
-	production: {
-		api: {
-			host: 'http://api.thecolumnsproject.com'
-		},
-		web: {
-			host: 'http://app.thecolumnsproject.com'
-		},
-		embed: {
-			host: 'http://colum.nz',
-			path: '/public/embed-table.js'
-		}
-	}
-}[env];
-},{}],2:[function(require,module,exports){
 Columns['styleData'] = {
 	components: {},
 	types: {}
@@ -207,9 +167,49 @@ Columns.styleData.types = {
 	]
 };
 module.exports = Columns;
+},{}],2:[function(require,module,exports){
+var env = '{{environment}}';
+module.exports = {
+	development: {
+		api: {
+			host: 'http://127.0.0.1:8080'
+		},
+		web: {
+			host: 'http://127.0.0.1'
+		},
+		embed: {
+			host: 'http://127.0.0.1',
+			path: '/public/embed-table.js'
+		}
+	},
+	staging: {
+		api: {
+			host: 'http://apistg.thecolumnsproject.com'
+		},
+		web: {
+			host: 'http://appstg.thecolumnsproject.com'
+		},
+		embed: {
+			host: 'http://stg.colum.nz',
+			path: '/public/embed-table.js'
+		}
+	},
+	production: {
+		api: {
+			host: 'http://api.thecolumnsproject.com'
+		},
+		web: {
+			host: 'http://app.thecolumnsproject.com'
+		},
+		embed: {
+			host: 'http://colum.nz',
+			path: '/public/embed-table.js'
+		}
+	}
+}[env];
 },{}],3:[function(require,module,exports){
 var ColumnsEvent 			= require('../models/ColumnsEvent.js');
-var config 					= require('../../compiled-javascripts/config.js');
+var config 					= require('../config.js');
 
 var PANEL_TEMPLATE 			= Columns.Templates['templates/panels/panel.hbs'],
 	BODY_TEMPLATE 			= Columns.Templates['templates/embed-details-panel/body.hbs'],
@@ -329,7 +329,7 @@ EmbedDetailsView.prototype._onInputBlur = function( event ) {
 module.exports = EmbedDetailsView;
 
 
-},{"../../compiled-javascripts/config.js":1,"../models/ColumnsEvent.js":15}],4:[function(require,module,exports){
+},{"../config.js":2,"../models/ColumnsEvent.js":15}],4:[function(require,module,exports){
 var ColumnsEvent 	= require('../models/ColumnsEvent.js');
 
 var DRAGGING_CLASS = 'dragging',
@@ -1297,7 +1297,7 @@ StyleView.prototype._emitChange = function( item, property, value ) {
 
 module.exports = StyleView;
 
-},{"../../compiled-javascripts/styling/compiled-data.js":2,"../models/ColumnsEvent.js":15,"./StyleComponentView.js":6,"./TemplateGroupView.js":11,"./TemplateValueView.js":12}],11:[function(require,module,exports){
+},{"../../compiled-javascripts/styling/compiled-data.js":1,"../models/ColumnsEvent.js":15,"./StyleComponentView.js":6,"./TemplateGroupView.js":11,"./TemplateValueView.js":12}],11:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 // Object to manage properties of and interaction
@@ -1772,7 +1772,7 @@ module.exports = TemplateValueView;
 var ColumnsEvent 				= require('../models/ColumnsEvent.js');
 var TemplateGroupView 			= require('./TemplateGroupView.js');
 var TemplateValueView 			= require('./TemplateValueView.js');
-var config 						= require('../../compiled-javascripts/config.js');
+var config 						= require('../config.js');
 
 // Object to manage properties of and interaction
 // with the template itself.
@@ -2410,7 +2410,7 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 };
 
 module.exports = TemplateView;
-},{"../../compiled-javascripts/config.js":1,"../models/ColumnsEvent.js":15,"./TemplateGroupView.js":11,"./TemplateValueView.js":12}],14:[function(require,module,exports){
+},{"../config.js":2,"../models/ColumnsEvent.js":15,"./TemplateGroupView.js":11,"./TemplateValueView.js":12}],14:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 var MAX_ROWS = 20,
@@ -3138,7 +3138,7 @@ module.exports = Style;
 var ColumnsEvent 	= require('./ColumnsEvent.js');
 var Layout 			= require('./Layout.js');
 var Item 			= require('./Item.js');
-var config 			= require('../../compiled-javascripts/config.js');
+var config 			= require('../config.js');
 var DEFAULTS		= require('../styling/defaults.js');
 
 function Table( props )  {
@@ -3414,7 +3414,7 @@ Table.prototype.stringFromColumns = function( columns ) {
 };
 
 module.exports = Table;
-},{"../../compiled-javascripts/config.js":1,"../styling/defaults.js":20,"./ColumnsEvent.js":15,"./Item.js":16,"./Layout.js":17}],20:[function(require,module,exports){
+},{"../config.js":2,"../styling/defaults.js":20,"./ColumnsEvent.js":15,"./Item.js":16,"./Layout.js":17}],20:[function(require,module,exports){
 // We need to treat layout properties slightly differently than regular css properties
 // to account for browser-specific prefixes
 module.exports = {
@@ -3455,7 +3455,7 @@ module.exports = {
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
-var config 				= require('../../compiled-javascripts/config.js');
+var config 				= require('../../javascripts/config.js');
 
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
@@ -3656,7 +3656,7 @@ describe('Embed Details View', function() {
 	});
 
 });
-},{"../../compiled-javascripts/config.js":1,"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Table.js":19}],22:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Table.js":19}],22:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var TemplateValueView 	= require('../../javascripts/controllers/TemplateValueView.js');
 
@@ -9127,7 +9127,7 @@ var Table 				= require('../../javascripts/models/Table.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
 var UploadView 			= require('../../javascripts/controllers/UploadView.js');
-var config 				= require('../../compiled-javascripts/config.js');
+var config 				= require('../../javascripts/config.js');
 var DEFAULTS			= require('../../javascripts/styling/defaults.js');
 
 describe('Table', function () {
@@ -9643,7 +9643,7 @@ describe('Table', function () {
 		});
 	});
 });
-},{"../../compiled-javascripts/config.js":1,"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/controllers/UploadView.js":14,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Item.js":16,"../../javascripts/models/Layout.js":17,"../../javascripts/models/Table.js":19,"../../javascripts/styling/defaults.js":20}],39:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/controllers/UploadView.js":14,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Item.js":16,"../../javascripts/models/Layout.js":17,"../../javascripts/models/Table.js":19,"../../javascripts/styling/defaults.js":20}],39:[function(require,module,exports){
 xdescribe('Group Model', function() {
 
 	describe('Initialization', function() {

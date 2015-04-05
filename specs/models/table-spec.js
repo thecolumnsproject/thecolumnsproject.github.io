@@ -4,7 +4,7 @@ var Table 				= require('../../javascripts/models/Table.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
 var UploadView 			= require('../../javascripts/controllers/UploadView.js');
-var config 				= require('../../compiled-javascripts/config.js');
+var config 				= require('../../javascripts/config.js');
 var DEFAULTS			= require('../../javascripts/styling/defaults.js');
 
 describe('Table', function () {

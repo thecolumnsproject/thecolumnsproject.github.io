@@ -1,5 +1,5 @@
 var ColumnsEvent 			= require('../models/ColumnsEvent.js');
-var config 					= require('../../compiled-javascripts/config.js');
+var config 					= require('../config.js');
 
 var PANEL_TEMPLATE 			= Columns.Templates['templates/panels/panel.hbs'],
 	BODY_TEMPLATE 			= Columns.Templates['templates/embed-details-panel/body.hbs'],

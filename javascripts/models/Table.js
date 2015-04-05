@@ -1,7 +1,7 @@
 var ColumnsEvent 	= require('./ColumnsEvent.js');
 var Layout 			= require('./Layout.js');
 var Item 			= require('./Item.js');
-var config 			= require('../../compiled-javascripts/config.js');
+var config 			= require('../config.js');
 var DEFAULTS		= require('../styling/defaults.js');
 
 function Table( props )  {

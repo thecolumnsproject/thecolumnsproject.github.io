@@ -1,7 +1,7 @@
 var ColumnsEvent 				= require('../models/ColumnsEvent.js');
 var TemplateGroupView 			= require('./TemplateGroupView.js');
 var TemplateValueView 			= require('./TemplateValueView.js');
-var config 						= require('../../compiled-javascripts/config.js');
+var config 						= require('../config.js');
 
 // Object to manage properties of and interaction
 // with the template itself.

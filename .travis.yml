@@ -18,13 +18,25 @@ before_deploy:
   - rm -R node_modules
   - rm -R fonts/vectors
 deploy:
-  provider: s3
-  access_key_id: AKIAJ7BART2KY7QI45GA
-  secret_access_key:
-    secure: AarATxkp5lXPeVtZTbsihCyxtWcbmGs4U5aMqKNZpq1nQCKrCj6bJm/iOe+2kzhrAcI0TdUqc58m1mv3+H/Mw2yVfXgmEF+dfZwvvCerDKIincq1QAb/rb7k36Y+OQVDYKz+oyW90PNoUQ+4X7OROLAlSC1IbDVzMmhmu2niIww=
-  bucket: app.thecolumnsproject.com
-  acl: public_read
-  skip_cleanup: true
-  region: us-west-2
-  on:
-    repo: thecolumnsproject/thecolumnsproject.github.io
+  - provider: s3
+    access_key_id: AKIAJ7BART2KY7QI45GA
+    secret_access_key:
+      secure: AarATxkp5lXPeVtZTbsihCyxtWcbmGs4U5aMqKNZpq1nQCKrCj6bJm/iOe+2kzhrAcI0TdUqc58m1mv3+H/Mw2yVfXgmEF+dfZwvvCerDKIincq1QAb/rb7k36Y+OQVDYKz+oyW90PNoUQ+4X7OROLAlSC1IbDVzMmhmu2niIww=
+    bucket: appstg.thecolumnsproject.com
+    acl: public_read
+    skip_cleanup: true
+    region: us-west-2
+    on:
+      repo: thecolumnsproject/thecolumnsproject.github.io
+      branch: master
+  - provider: s3
+    access_key_id: AKIAJ7BART2KY7QI45GA
+    secret_access_key:
+      secure: AarATxkp5lXPeVtZTbsihCyxtWcbmGs4U5aMqKNZpq1nQCKrCj6bJm/iOe+2kzhrAcI0TdUqc58m1mv3+H/Mw2yVfXgmEF+dfZwvvCerDKIincq1QAb/rb7k36Y+OQVDYKz+oyW90PNoUQ+4X7OROLAlSC1IbDVzMmhmu2niIww=
+    bucket: app.thecolumnsproject.com
+    acl: public_read
+    skip_cleanup: true
+    region: us-west-2
+    on:
+      repo: thecolumnsproject/thecolumnsproject.github.io
+      branch: production

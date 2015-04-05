@@ -38,7 +38,6 @@ module.exports = {
 		}
 	}
 }[env];
-
 },{}],2:[function(require,module,exports){
 Columns['styleData'] = {
 	components: {},

@@ -86,8 +86,8 @@ module.exports = function(grunt) {
 				}]
 			},
 			app: {
-				src: ['javascripts/config.js'],
-				dest: 'compiled-javascripts/config.js',
+				src: ['compiled-javascripts/app.js'],
+				dest: 'compiled-javascripts/app.js',
 				replacements: [{
 					from: '{{environment}}',
 					to: function(matchedWord) {
@@ -95,18 +95,18 @@ module.exports = function(grunt) {
 					}
 				}]
 			},
-			require: {
-				src: ['compiled-javascripts/embed-table.js'],
-				dest: 'compiled-javascripts/embed-table.js',
-				replacements: [{
-					from: /[^a-zA-Z](require)[^a-zA-Z]/g,
-					to: function(matchedWord) {
-						return matchedWord.substring(0,1) + 
-							   'columns_require' + 
-							   matchedWord.substring(matchedWord.length - 1,matchedWord.length);
-					}
-				}]
-			}
+			// require: {
+			// 	src: ['compiled-javascripts/embed-table.js'],
+			// 	dest: 'compiled-javascripts/embed-table.js',
+			// 	replacements: [{
+			// 		from: /[^a-zA-Z](require)[^a-zA-Z]/g,
+			// 		to: function(matchedWord) {
+			// 			return matchedWord.substring(0,1) + 
+			// 				   'columns_require' + 
+			// 				   matchedWord.substring(matchedWord.length - 1,matchedWord.length);
+			// 		}
+			// 	}]
+			// }
 		},
 		browserify: {
 			embed: {

@@ -31,9 +31,11 @@ TemplateValueView.prototype.render = function() {
 	}));
 	this.$value = $template;
 
-	this._setupEvents();
-	this._setupDrag();
-	this._setupClick();
+	if ( !this.placeholder ) {
+		this._setupEvents();
+		this._setupDrag();
+		this._setupClick();
+	}
 
 	return this.$value;
 };
@@ -76,6 +78,9 @@ TemplateValueView.prototype._setupDrag = function() {
 	this.$value.on( 'dragstart', $.proxy(function( event, ui ) {
 
 		$( event.target ).addClass('inactive');
+
+		// Make sure this object no longer receives event updates
+		this._teardownEvents();
 
 		// Alert any listeners that the item has started drag
 		// var event = new CustomEvent( 'Columns.ItemView.ItemDidBeginDrag', {
@@ -169,9 +174,16 @@ TemplateValueView.prototype._setupClick = function() {
 
 TemplateValueView.prototype._setupEvents = function() {
 
+	this.onItemDidChange = this._onItemDidChange.bind( this );
+
 	// Listen to updates for this item
 	// and update if there's a match
-	ColumnsEvent.on( 'Columns.Item.DidChange', this._onItemDidChange.bind( this ) );
+	ColumnsEvent.on( 'Columns.Item.DidChange', this.onItemDidChange );
+};
+
+TemplateValueView.prototype._teardownEvents = function() {
+
+	ColumnsEvent.off( 'Columns.Item.DidChange', this.onItemDidChange );
 };
 
 TemplateValueView.prototype._onItemDidChange = function( event, data ) {

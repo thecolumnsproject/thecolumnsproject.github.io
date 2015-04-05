@@ -1592,9 +1592,11 @@ TemplateValueView.prototype.render = function() {
 	}));
 	this.$value = $template;
 
-	this._setupEvents();
-	this._setupDrag();
-	this._setupClick();
+	if ( !this.placeholder ) {
+		this._setupEvents();
+		this._setupDrag();
+		this._setupClick();
+	}
 
 	return this.$value;
 };
@@ -1637,6 +1639,9 @@ TemplateValueView.prototype._setupDrag = function() {
 	this.$value.on( 'dragstart', $.proxy(function( event, ui ) {
 
 		$( event.target ).addClass('inactive');
+
+		// Make sure this object no longer receives event updates
+		this._teardownEvents();
 
 		// Alert any listeners that the item has started drag
 		// var event = new CustomEvent( 'Columns.ItemView.ItemDidBeginDrag', {
@@ -1730,9 +1735,16 @@ TemplateValueView.prototype._setupClick = function() {
 
 TemplateValueView.prototype._setupEvents = function() {
 
+	this.onItemDidChange = this._onItemDidChange.bind( this );
+
 	// Listen to updates for this item
 	// and update if there's a match
-	ColumnsEvent.on( 'Columns.Item.DidChange', this._onItemDidChange.bind( this ) );
+	ColumnsEvent.on( 'Columns.Item.DidChange', this.onItemDidChange );
+};
+
+TemplateValueView.prototype._teardownEvents = function() {
+
+	ColumnsEvent.off( 'Columns.Item.DidChange', this.onItemDidChange );
 };
 
 TemplateValueView.prototype._onItemDidChange = function( event, data ) {
@@ -3146,7 +3158,7 @@ Table.prototype._update = function( props ) {
 
 		if ( props.layout ) {
 			this.layout = props.layout;
-		} else {
+		} else if ( !this.layout ) {
 			this.layout = new Layout( this.columns );
 		}
 
@@ -3431,6 +3443,7 @@ module.exports = {
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
+var config 				= require('../../compiled-javascripts/config.js');
 
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
@@ -3631,7 +3644,7 @@ describe('Embed Details View', function() {
 	});
 
 });
-},{"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Table.js":19}],22:[function(require,module,exports){
+},{"../../compiled-javascripts/config.js":1,"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Table.js":19}],22:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var TemplateValueView 	= require('../../javascripts/controllers/TemplateValueView.js');
 
@@ -6067,6 +6080,38 @@ describe('Template Value View', function() {
 			expect( this.spy ).not.toHaveBeenCalled();
 			expect( this.valueView.item ).toEqual( this.item );
 		});
+
+		it('should ignore item change events if it is a placeholder', function() {
+			var item = new Item({
+				title: 'My Item',
+				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
+			});
+			var valueView = new TemplateValueView( item, true );
+			valueView.render();
+			spyOn( valueView, 'update' );
+
+			ColumnsEvent.send( 'Columns.Item.DidChange', { item: item } );
+
+			expect( valueView.update ).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('Removing event listeners', function() {
+
+		it('should no longer respond to item change events', function() {
+			var item = new Item({
+				title: 'My Item',
+				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
+			});
+			var valueView = new TemplateValueView( item );
+			valueView.render();
+			spyOn( valueView, 'update' );
+
+			valueView._teardownEvents();
+			ColumnsEvent.send( 'Columns.Item.DidChange', { item: item } );
+
+			expect( valueView.update ).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('Dragging', function() {
@@ -6097,17 +6142,9 @@ describe('Template Value View', function() {
 				this.$value.trigger('dragstart', this.fakeUI);
 				expect( this.valueView.$value ).toHaveClass('inactive');
 			});
-		});
+		});		
 
-		it('should emit an event on drag stop', function() {
-			this.$value.trigger('dragstop', this.fakeUI);
-			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidEndDragWithItem');
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
-		});
-
-		describe('Drag Stop', function() {
+		describe('Drag', function() {
 
 			it('should emit an event on drag', function() {
 				this.$value.trigger('drag', this.fakeUI);
@@ -6116,8 +6153,25 @@ describe('Template Value View', function() {
 				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
 				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 			});
+		});
 
-			xit('should remove itself from the template', function() {
+		describe('Drag Stop', function() {
+
+			it('should emit an event on drag stop', function() {
+				this.$value.trigger('dragstop', this.fakeUI);
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidEndDragWithItem');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+			});
+
+			xit('should no longer respond to events', function() {
+				spyOn( this.valueView, '_teardownEvents' );
+				this.$value.trigger('dragstop', this.fakeUI);
+				expect( this.valueView._teardownEvents ).toHaveBeenCalled();
+			});
+
+			it('should remove itself from the template', function() {
 				this.$value.trigger('drag', this.fakeUI);
 				expect( this.valueView.$value ).not.toBeInDOM();
 			});
@@ -9061,6 +9115,7 @@ var Table 				= require('../../javascripts/models/Table.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
 var UploadView 			= require('../../javascripts/controllers/UploadView.js');
+var config 				= require('../../compiled-javascripts/config.js');
 var DEFAULTS			= require('../../javascripts/styling/defaults.js');
 
 describe('Table', function () {
@@ -9576,7 +9631,7 @@ describe('Table', function () {
 		});
 	});
 });
-},{"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/controllers/UploadView.js":14,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Item.js":16,"../../javascripts/models/Layout.js":17,"../../javascripts/models/Table.js":19,"../../javascripts/styling/defaults.js":20}],39:[function(require,module,exports){
+},{"../../compiled-javascripts/config.js":1,"../../javascripts/controllers/EmbedDetailsView.js":3,"../../javascripts/controllers/UploadView.js":14,"../../javascripts/models/ColumnsEvent.js":15,"../../javascripts/models/Item.js":16,"../../javascripts/models/Layout.js":17,"../../javascripts/models/Table.js":19,"../../javascripts/styling/defaults.js":20}],39:[function(require,module,exports){
 xdescribe('Group Model', function() {
 
 	describe('Initialization', function() {

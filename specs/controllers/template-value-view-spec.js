@@ -166,6 +166,38 @@ describe('Template Value View', function() {
 			expect( this.spy ).not.toHaveBeenCalled();
 			expect( this.valueView.item ).toEqual( this.item );
 		});
+
+		it('should ignore item change events if it is a placeholder', function() {
+			var item = new Item({
+				title: 'My Item',
+				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
+			});
+			var valueView = new TemplateValueView( item, true );
+			valueView.render();
+			spyOn( valueView, 'update' );
+
+			ColumnsEvent.send( 'Columns.Item.DidChange', { item: item } );
+
+			expect( valueView.update ).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('Removing event listeners', function() {
+
+		it('should no longer respond to item change events', function() {
+			var item = new Item({
+				title: 'My Item',
+				style: 'font-size:14px;color:#3a3a3a;margin-left:12px;'
+			});
+			var valueView = new TemplateValueView( item );
+			valueView.render();
+			spyOn( valueView, 'update' );
+
+			valueView._teardownEvents();
+			ColumnsEvent.send( 'Columns.Item.DidChange', { item: item } );
+
+			expect( valueView.update ).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('Dragging', function() {
@@ -196,17 +228,9 @@ describe('Template Value View', function() {
 				this.$value.trigger('dragstart', this.fakeUI);
 				expect( this.valueView.$value ).toHaveClass('inactive');
 			});
-		});
+		});		
 
-		it('should emit an event on drag stop', function() {
-			this.$value.trigger('dragstop', this.fakeUI);
-			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidEndDragWithItem');
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
-			expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
-		});
-
-		describe('Drag Stop', function() {
+		describe('Drag', function() {
 
 			it('should emit an event on drag', function() {
 				this.$value.trigger('drag', this.fakeUI);
@@ -215,8 +239,25 @@ describe('Template Value View', function() {
 				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
 				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
 			});
+		});
 
-			xit('should remove itself from the template', function() {
+		describe('Drag Stop', function() {
+
+			it('should emit an event on drag stop', function() {
+				this.$value.trigger('dragstop', this.fakeUI);
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateValueView.ValueDidEndDragWithItem');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].valueView ).toEqual( this.valueView );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].item ).toEqual( this.valueView.item );
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].ui ).toEqual( this.fakeUI );
+			});
+
+			xit('should no longer respond to events', function() {
+				spyOn( this.valueView, '_teardownEvents' );
+				this.$value.trigger('dragstop', this.fakeUI);
+				expect( this.valueView._teardownEvents ).toHaveBeenCalled();
+			});
+
+			it('should remove itself from the template', function() {
 				this.$value.trigger('drag', this.fakeUI);
 				expect( this.valueView.$value ).not.toBeInDOM();
 			});

@@ -33,7 +33,7 @@ Table.prototype._update = function( props ) {
 
 		if ( props.layout ) {
 			this.layout = props.layout;
-		} else {
+		} else if ( !this.layout ) {
 			this.layout = new Layout( this.columns );
 		}
 

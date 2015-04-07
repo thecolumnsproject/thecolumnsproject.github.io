@@ -1,4 +1,5 @@
 var ColumnsEvent 			= require('../models/ColumnsEvent.js');
+var ColumnsAnalytics		= require('../models/ColumnsAnalytics.js');
 var config 					= require('../config.js');
 
 var PANEL_TEMPLATE 			= Columns.Templates['templates/panels/panel.hbs'],
@@ -81,6 +82,8 @@ EmbedDetailsView.prototype._setupInteractionListeners = function() {
 
 	// Should listen to blur events on input fields
 	this.$embed.find('input').on( 'blur', this._onInputBlur.bind( this ) );
+
+	this.$embed.find('.columns-copy-embed-url').on( 'click', this._onCopyClick.bind( this ) );
 };
 
 EmbedDetailsView.prototype._onTableUpload = function( event, data ) {
@@ -90,6 +93,12 @@ EmbedDetailsView.prototype._onTableUpload = function( event, data ) {
 
 EmbedDetailsView.prototype._onEmbedButtonClick = function( event) {
 	this.show();
+
+	ColumnsAnalytics.send({
+		category: 'button',
+		action: 'click',
+		label: 'embed'
+	});
 };
 
 EmbedDetailsView.prototype._onCloseButtonClick = function( event ) {
@@ -114,6 +123,22 @@ EmbedDetailsView.prototype._onInputBlur = function( event ) {
 		value		= $field.val();
 
 	this._emitChange( property, value ); 
+
+	ColumnsAnalytics.send({
+		category: 'field',
+		action: 'edit',
+		label: property,
+		table_id: this.table.id
+	});
+};
+
+EmbedDetailsView.prototype._onCopyClick = function( event ) {
+	ColumnsAnalytics.send({
+		category: 'button',
+		action: 'click',
+		label: 'copy embed code',
+		table_id: this.table.id
+	});
 };
 
 module.exports = EmbedDetailsView;

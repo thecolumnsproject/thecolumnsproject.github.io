@@ -1,5 +1,6 @@
 var env = '{{environment}}';
 module.exports = {
+	env: env,
 	development: {
 		api: {
 			host: 'http://127.0.0.1:8080'

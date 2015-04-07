@@ -1,4 +1,5 @@
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var UploadView 			= require('../../javascripts/controllers/UploadView.js');
 
@@ -13,6 +14,7 @@ describe('Upload View', function() {
 	beforeEach(function() {
 		loadFixtures('upload.html');
 		this.upload = new UploadView();
+		spyOn( ColumnsAnalytics, 'send' );
 	});
 
 	describe('Initialization', function() {
@@ -378,6 +380,38 @@ describe('Upload View', function() {
 			this.upload._setLoading( false );
 			expect( this.upload.$upload ).not.toHaveClass( 'loading' );
 			expect( this.$button ).toHaveProp( 'disabled', false );
+		});
+	});
+
+	describe('Sending Analytics Events', function() {
+
+		beforeEach(function() {
+			this.upload.render();
+		});
+
+		it('should send an event when the upload button is clicked', function() {
+			$('.columns-upload-button').trigger('click');
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'button',
+				action: 'click',
+				label: 'upload'
+			});
+		});
+
+		it('should send an event when a file is chosen', function() {
+			var file = {};
+			$('input[type="file"]').triggerHandler({
+				type: 'change',
+				target: {
+					files: [ file ]
+				}
+			});
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'file',
+				action: 'chosen',
+			});
 		});
 	});
 });

@@ -4,6 +4,8 @@ var TemplateView 		= require('./controllers/TemplateView.js');
 var StyleView 			= require('./controllers/StyleView.js');
 var EmbedDetailsView 	= require('./controllers/EmbedDetailsView.js');
 var UploadView 			= require('./controllers/UploadView.js');
+var ColumnsAnalytics 	= require('./models/ColumnsAnalytics.js');
+var Config 				= require('./config.js');
 
 // Create the Table object
 var table = new Table();
@@ -23,6 +25,24 @@ var embed = new EmbedDetailsView();
 // Set up the Upload View
 var upload = new UploadView();
 upload.render();
+
+// Set up analytics
+if ( Config.env === 'production' ) {
+	$('head').append( Columns.Templates['templates/analytics.hbs']() );
+	ColumnsAnalytics.send({
+		category: 'navigation',
+		action: 'arrived',
+		label: 'app'
+	});
+
+	$('.columns-header-nav-home').click(function() {
+		ColumnsAnalytics.send({
+			category: 'button',
+			action: 'click',
+			label: 'home'
+		});
+	});
+}
 
 
 

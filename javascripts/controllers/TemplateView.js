@@ -1,4 +1,5 @@
 var ColumnsEvent 				= require('../models/ColumnsEvent.js');
+var ColumnsAnalytics			= require('../models/ColumnsAnalytics.js');
 var TemplateGroupView 			= require('./TemplateGroupView.js');
 var TemplateValueView 			= require('./TemplateValueView.js');
 var config 						= require('../config.js');
@@ -428,6 +429,12 @@ TemplateView.prototype._onValueDidEndDrag = function( event, data ) {
 	// if ( !this.droppableItems.length ) {
 	if ( !TemplateView.getValueForItem( data.valueView.item ) ) {
 		this.removeDraggingValue();
+
+		ColumnsAnalytics.send({
+			category: 'template',
+			action: 'remove',
+			table_id: this.table.id
+		});
 		// this._emitChange();
 	}
 }
@@ -473,6 +480,12 @@ TemplateView.prototype._onGroupDidDrop = function( event, data ) {
 
 	// Empty the droppable items array
 	this.droppableItems = [];
+
+	ColumnsAnalytics.send({
+		category: 'template',
+		action: 'add',
+		table_id: this.table.id
+	});
 
 };
 

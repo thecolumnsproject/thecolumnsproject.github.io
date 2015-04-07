@@ -1,4 +1,5 @@
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var TemplateView 		= require('../../javascripts/controllers/TemplateView.js');
@@ -9,6 +10,7 @@ jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 describe('Template View', function() {
 
 	beforeEach(function() {
+		spyOn( ColumnsAnalytics, 'send' );
 		this.defaultLayout = new Layout([
 			new Item({
 				title: 'First Name',
@@ -1492,5 +1494,50 @@ describe('Template View', function() {
 			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.TemplateView.DidRender');
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].templateView ).toEqual( templateView );
 		});
+	});
+
+	describe('Sending Analytics Events', function() {
+		var templateView;
+
+		beforeEach(function() {
+			// spyOn( ColumnsAnalytics, 'send' );
+			templateView = new TemplateView( this.defaultLayout );
+			templateView._setupTemplateEvents();
+			templateView.table = new Table({ id: 4 });
+		});
+
+		it('should send an event when an item is removed from the template', function() {
+			var valueView = new TemplateValueView( new Item({ title: "My Item" }) );
+			spyOn( TemplateView, 'getValueForItem' ).and.returnValue( undefined );
+			spyOn( templateView, 'removeDraggingValue' );
+			ColumnsEvent.send('Columns.TemplateValueView.ValueDidEndDragWithItem', {
+				valueView: valueView
+			});
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'template',
+				action: 'remove',
+				table_id: 4
+			});
+		});
+
+		it('should send an event when an item is added to the template', function() {
+			var groupView = new TemplateGroupView();
+			groupView.render();
+			spyOn( templateView, 'positionDropForDragEventInParentWithPlaceholder' );
+			templateView.droppableItems.push( groupView );
+
+			ColumnsEvent.send('Columns.TemplateGroupView.GroupDidDropWithValueView', {
+				event: {},
+				groupView: groupView
+			});
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'template',
+				action: 'add',
+				table_id: 4
+			});
+		});
+
 	});
 });

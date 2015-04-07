@@ -1,4 +1,5 @@
-var ColumnsEvent = require('../models/ColumnsEvent.js');
+var ColumnsEvent 		= require('../models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
 
 var MAX_ROWS = 20,
 	UPLOAD_BUTTON_SELECTOR = '.columns-upload-button';
@@ -92,6 +93,12 @@ UploadView.prototype._onUploadClick = function( event ) {
 
 	// Track this click
 	// ga('send', 'event', 'button', 'click', 'upload');
+
+	ColumnsAnalytics.send({
+		category: 'button',
+		action: 'click',
+		label: 'upload'
+	});
 };
 
 UploadView.prototype._onFileChoice = function( event ) {
@@ -119,6 +126,11 @@ UploadView.prototype._onFileChoice = function( event ) {
 	ColumnsEvent.send('Columns.UploadView.DidChooseFile', {
 		uploadView: 	this,
 		file: 			file
+	});
+
+	ColumnsAnalytics.send({
+		category: 'file',
+		action: 'chosen'
 	});
 };
 

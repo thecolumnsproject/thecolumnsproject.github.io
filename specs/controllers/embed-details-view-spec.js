@@ -1,4 +1,5 @@
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
 var config 				= require('../../javascripts/config.js');
@@ -6,6 +7,10 @@ var config 				= require('../../javascripts/config.js');
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Embed Details View', function() {
+
+	beforeEach(function() {
+		spyOn( ColumnsAnalytics, 'send' );
+	});
 
 	afterEach(function() {
 		ColumnsEvent.offAll();
@@ -131,35 +136,86 @@ describe('Embed Details View', function() {
 			expect( this.embed._emitChange ).toHaveBeenCalledWith( 'source_url', 'hola' );
 		});
 
-		it('should respond to blur events on the title input', function() {
-			var $title = $('input[data-property="title"]');
-			$title.val('hola');
-			spyOn( this.embed, '_emitChange' );
-
-			$title.trigger('blur');
-			expect( this.embed._emitChange ).toHaveBeenCalledWith( 'title', 'hola' );
-		});
-
-		it('should respond to blur events on the source input', function() {
-			var $source = $('input[data-property="source"]');
-			$source.val('hola');
-			spyOn( this.embed, '_emitChange' );
-
-			$source.trigger('blur');
-			expect( this.embed._emitChange ).toHaveBeenCalledWith( 'source', 'hola' );
-		});
-
-		it('should respond to blur events on the source_url input', function() {
-			var $sourceUrl = $('input[data-property="source_url"]');
-			$sourceUrl.val('hola');
-			spyOn( this.embed, '_emitChange' );
-
-			$sourceUrl.trigger('blur');
-			expect( this.embed._emitChange ).toHaveBeenCalledWith( 'source_url', 'hola' );
-		});
-
 		xit('should copy the embed url when the copy link is clicked', function() {
 
+		});
+
+	});
+
+	describe('Sending Analytics Events', function() {
+		window.ga;
+		window.mixpanel;
+
+		beforeEach(function() {
+			loadFixtures('header.html');
+			this.embed = new EmbedDetailsView( new Table({ id: 4 }));
+			this.embed.render();
+		});
+
+		it('should send an analytics event on title blur', function() {
+			// spyOn( ColumnsAnalytics, 'send' );
+			var $title = $('input[data-property="title"]');
+			$title.val('hola');
+			$title.trigger('blur');
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'field',
+				action: 'edit',
+				label: 'title',
+				table_id: 4
+			});
+		});
+
+		it('should send an analytics event on source blur', function() {
+			// spyOn( ColumnsAnalytics, 'send' );
+			var $source = $('input[data-property="source"]');
+			$source.val('hola');
+			$source.trigger('blur');
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'field',
+				action: 'edit',
+				label: 'source',
+				table_id: 4
+			});
+		});
+
+		it('should send an analytics event on title blur', function() {
+			// spyOn( ColumnsAnalytics, 'send' );
+			var $sourceUrl = $('input[data-property="source_url"]');
+			$sourceUrl.val('hola');
+			$sourceUrl.trigger('blur');
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'field',
+				action: 'edit',
+				label: 'source_url',
+				table_id: 4
+			});
+		});
+
+		it('should send an analytics event on copy button click', function() {
+			// spyOn( ColumnsAnalytics, 'send' );
+			var $copy = this.embed.$embed.find('.columns-copy-embed-url');
+			$copy.trigger('click');
+
+			expect( ColumnsAnalytics.send.calls.argsFor(0)[0] ).toEqual({
+				category: 'button',
+				action: 'click',
+				label: 'copy embed code',
+				table_id: 4
+			});
+		});
+
+		it('should track clicks on the embed button', function() {
+			// spyOn( ColumnsAnalytics, 'send' );
+			$('.columns-header-nav-embed').trigger('click');
+
+			expect( ColumnsAnalytics.send.calls.argsFor(0)[0] ).toEqual({
+				category: 'button',
+				action: 'click',
+				label: 'embed'
+			});
 		});
 
 	});
@@ -199,6 +255,7 @@ describe('Embed Details View', function() {
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].property ).toBe( 'property' );
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].value ).toBe( 'value' );
 		});
+
 	});
 
 });

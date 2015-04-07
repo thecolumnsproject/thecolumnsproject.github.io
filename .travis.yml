@@ -13,6 +13,7 @@ install:
   - bower install
 script:
   - echo $NODE_ENV
+  - echo $TRAVIS_BRANCH
   - grunt build
   - npm test
 before_deploy:

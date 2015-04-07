@@ -12,6 +12,7 @@ install:
   - npm install
   - bower install
 script:
+  - echo NODE_ENV
   - grunt build
   - npm test
 before_deploy:

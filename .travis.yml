@@ -4,7 +4,7 @@ language:
 node_js:
   - '0.10'
 env:
-  - NODE_ENV='$TRAVIS_BRANCH'
+  - NODE_ENV=$TRAVIS_BRANCH
 install:
   - npm install -g grunt-cli
   - npm install -g bower
@@ -13,7 +13,6 @@ install:
   - bower install
 script:
   - echo $NODE_ENV
-  - echo $TRAVIS_BRANCH
   - grunt build
   - npm test
 before_deploy:

@@ -10,6 +10,7 @@ describe('Embed Details View', function() {
 
 	beforeEach(function() {
 		spyOn( ColumnsAnalytics, 'send' );
+		loadFixtures('app.html');
 	});
 
 	afterEach(function() {
@@ -34,7 +35,7 @@ describe('Embed Details View', function() {
 		});
 
 		it('should attached to the correct part of the DOM', function() {
-			expect( this.$embed.parent() ).toEqual('body');
+			expect( this.$embed.parent() ).toEqual('#app');
 		});
 
 		it('should contain an input field for title', function() {
@@ -86,7 +87,7 @@ describe('Embed Details View', function() {
 	describe('Listening to User Events', function() {
 
 		beforeEach(function() {
-			loadFixtures('header.html');
+			appendLoadFixtures('header.html');
 			this.embed = new EmbedDetailsView( new Table({ id: 4 }));
 			this.embed.render();
 		});
@@ -147,7 +148,7 @@ describe('Embed Details View', function() {
 		window.mixpanel;
 
 		beforeEach(function() {
-			loadFixtures('header.html');
+			appendLoadFixtures('header.html');
 			this.embed = new EmbedDetailsView( new Table({ id: 4 }));
 			this.embed.render();
 		});

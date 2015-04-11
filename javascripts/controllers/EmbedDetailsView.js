@@ -33,7 +33,7 @@ EmbedDetailsView.prototype.render = function() {
 	this.$embed = $embed;
 	this._setupInteractionListeners();
 
-	$('body').append( this.$embed );
+	$('#app').append( this.$embed );
 	return this.$embed;
 };
 

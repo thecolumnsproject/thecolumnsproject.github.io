@@ -13,10 +13,11 @@ describe('Style View', function() {
 		loadFixtures('style-bare.html');
 	});
 
-	describe('Initalization', function() {
+	describe('Rendering', function() {
 
 		it('should attach to the #style element already on the page', function() {
 			var styleView = new StyleView();
+			styleView.render();
 			expect( styleView.$style ).toEqual('#styling');
 		});
 
@@ -32,6 +33,7 @@ describe('Style View', function() {
 
 		beforeEach(function() {
 			this.styleView = new StyleView();
+			this.styleView.render();
 		});
 
 		it('should replace existing components with item components', function() {
@@ -40,7 +42,7 @@ describe('Style View', function() {
 			expect( $('.style-component').length ).toBe( 1 );
 		});
 
-		it('should append group compoents to existing components ', function() {
+		it('should append group components to existing components ', function() {
 			var selection = new TemplateGroupView();
 			selection.render();
 			this.styleView.updateWithSelection( selection );
@@ -122,6 +124,23 @@ describe('Style View', function() {
 			expect( this.styleView.updateWithSelection ).toHaveBeenCalledWith( groupView );
 		});
 
+	});
+
+	describe('Responding to Desktop App Events', function() {
+
+		beforeEach(function() {
+			this.styleView = new StyleView();
+		});
+
+		it('should render the preview', function() {
+			spyOn( this.styleView, 'render' );
+			
+			ColumnsEvent.send('Columns.DesktopView.DidRender', {
+				desktopView: {}
+			});
+
+			expect( this.styleView.render ).toHaveBeenCalled();
+		});
 	});
 
 	describe('Listening to Items Events', function() {

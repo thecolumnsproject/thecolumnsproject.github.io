@@ -12,6 +12,9 @@ body {
   color: #3a3a3a;
   font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif; }
 
+#app {
+  height: 100%; }
+
 h2 {
   color: #3e97bd;
   font-size: 32px;

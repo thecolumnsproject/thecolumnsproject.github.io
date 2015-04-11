@@ -22,7 +22,6 @@ TemplateView = function( layout )  {
 	this.draggingItem;
 	this.droppableItems = [];
 
-	this._renderPreview();
 	this._setupEventListeners();
 
 	TemplateView.groups = [];
@@ -320,6 +319,9 @@ TemplateView.prototype._emitRender = function() {
 
 TemplateView.prototype._setupEventListeners = function() {
 
+	// Listen to app render event
+	ColumnsEvent.on( 'Columns.DesktopView.DidRender', this._onDesktopRender.bind( this ) );
+	
 	// Listen to the table upload event
 	ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', this._onTemplateUpload.bind( this ) );
 };
@@ -351,6 +353,10 @@ TemplateView.prototype._setupTemplateEvents = function() {
 	// Listen for updates to values and groups
 	ColumnsEvent.on( 'Columns.TemplateValueView.DidChange', this._onTemplateViewDidChange.bind( this ));
 	ColumnsEvent.on( 'Columns.TemplateGroupView.DidChange', this._onTemplateViewDidChange.bind( this ));
+};
+
+TemplateView.prototype._onDesktopRender = function( event, data ) {
+	this._renderPreview();
 };
 
 TemplateView.prototype._onTemplateViewDidChange = function( event, data ) {

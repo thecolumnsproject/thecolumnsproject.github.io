@@ -5,9 +5,12 @@ var TemplateGroupView 				= require('./TemplateGroupView.js');
 var TemplateValueView 				= require('./TemplateValueView.js');
 
 function StyleView() {
-	this.$style = $('#styling');
 	this._setupEventListeners();
 }
+
+StyleView.prototype.render = function() {
+	this.$style = $('#styling');
+};
 
 StyleView.prototype.updateWithSelection = function( selection ) {
 	var componentView,
@@ -44,6 +47,9 @@ StyleView.prototype.getItemForSelection = function( selection ) {
 
 StyleView.prototype._setupEventListeners = function() {
 
+	// Listen to app render event
+	ColumnsEvent.on( 'Columns.DesktopView.DidRender', this._onDesktopRender.bind( this ) );
+
 	// Listen to udpates from styling controls
 	ColumnsEvent.on( 'Columns.StyleInputView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
 	ColumnsEvent.on( 'Columns.StyleSegmentedButtonView.ValueDidUpdateForPropertyAndItem', this._onStyleUpdate.bind( this ));
@@ -58,6 +64,10 @@ StyleView.prototype._setupEventListeners = function() {
 	// Listen for the template to finish rendering
 	ColumnsEvent.on( 'Columns.TemplateView.DidRender', this._onTemplateDidRender.bind( this ));	
 };
+
+StyleView.prototype._onDesktopRender = function( event, data ) {
+	this.render();
+}
 
 StyleView.prototype._onStyleUpdate = function( event, data ) {
 

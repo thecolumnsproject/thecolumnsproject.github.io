@@ -19,6 +19,10 @@ body {
 	font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
 }
 
+#app {
+	height: 100%;
+}
+
 h2 {
 	color: $primary-color;
 	font-size: 32px;

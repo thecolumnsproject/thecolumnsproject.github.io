@@ -121,12 +121,6 @@ describe('Template View', function() {
 			expect( templateView.droppableItems ).toEqual( [] );
 		});
 
-		it('should render the preview', function() {
-			loadFixtures('layout.html');
-			var templateView = new TemplateView( this.defaultLayout );
-			expect( $('#layout .layout-table-preview')[0] ).toBeInDOM();
-		});
-
 		xit('should initialize with an empty groups array', function() {
 			var templateView = new TemplateView();
 			expect( templateView.groups ).toEqual( [] );
@@ -903,6 +897,23 @@ describe('Template View', function() {
 			expect( this.templateView.layout ).toEqual( new Layout() );
 			expect( this.templateView.table ).toEqual( table );
 			expect( this.templateView._renderTemplate ).toHaveBeenCalled();
+		});
+	});
+
+	describe('Responding to Desktop App Events', function() {
+
+		beforeEach(function() {
+			this.templateView = new TemplateView();
+		});
+
+		it('should render the preview', function() {
+			spyOn( this.templateView, '_renderPreview' );
+			
+			ColumnsEvent.send('Columns.DesktopView.DidRender', {
+				desktopView: {}
+			});
+
+			expect( this.templateView._renderPreview ).toHaveBeenCalled();
 		});
 	});
 

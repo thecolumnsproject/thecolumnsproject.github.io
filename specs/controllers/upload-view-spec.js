@@ -338,6 +338,7 @@ describe('Upload View', function() {
 		});
 
 		it('should have full opacity', function( done ) {
+			// console.log( $('body').html() );
 			expect( this.upload.$upload ).toHaveCss({ opacity: '1' });
 			done();
 		});

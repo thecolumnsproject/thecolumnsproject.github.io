@@ -64,6 +64,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
+this["Columns"]["Templates"]["templates/desktop.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<header class='columns-header'>\n	<nav class='columns-header-nav'>\n		<div class=\"columns-header-nav-home\">\n			<i class=\"icon-columns columns-header-nav-icon\"></i>\n			The Columns Project\n		</div>\n		<div class=\"columns-header-nav-embed\">\n			Embed Table\n		</div>\n	</nav>\n</header>\n\n<div id=\"upload\" class='active'>\n	<div class=\"upload-copy\">\n		<div class=\"upload-copy-logo\">\n			<i class=\"icon-columns\"></i>\n			<img src=\"/images/loading-white.gif\" alt=\"\" width='32'>\n		</div>\n		<div class=\"upload-copy-text\">\n			<h2>The Columns Project</h2>\n			<p>\n			Beautiful, embeddable tables.<br />\n			For a more knowledgeable web.\n			</p>\n			<button class=\"columns-button button-large columns-upload-button\">Upload a .csv</button>\n			<input type=\"file\" accept='text/csv' style=\"display:none;\"/>\n		</div>\n	</div>\n</div>\n\n<div id=\"editor\">\n	<section id=\"columns\">\n		<h2>Columns</h2>\n		\n	</section>\n	<section id=\"layout\">\n\n	</section>\n	<section id=\"styling\">\n		<h2>Styling</h2>\n		\n	</section>\n</div>";
+  });
+
 this["Columns"]["Templates"]["templates/embed-details-panel/body.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};

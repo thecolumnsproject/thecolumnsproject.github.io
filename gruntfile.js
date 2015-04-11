@@ -228,6 +228,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-minifyify');
 
 	// grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'browserify', 'replace', 'concat' ]);
+	grunt.registerTask('build', ['sass', 'handlebars', 'concat:styling', 'browserify', 'replace', 'concat:embed' ]);
 	grunt.registerTask('default', ['build', 'watch'] );
 }

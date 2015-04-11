@@ -1,13 +1,13 @@
 {
   "checksum": {
-    "previous": "5956b7104dc43df19c6e0a148cc671a826f513e898044cb00da0016bf60eb692",
-    "current": "5956b7104dc43df19c6e0a148cc671a826f513e898044cb00da0016bf60eb692"
+    "current": "1743a7d232dbbeab8a2dc57fe1e3aa48b153b244e8a5b6fc3942e4606d978523",
+    "previous": "5956b7104dc43df19c6e0a148cc671a826f513e898044cb00da0016bf60eb692"
   },
   "fonts": [
-    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.ttf",
-    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.svg",
-    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.woff",
-    "..//columns-font_5956b7104dc43df19c6e0a148cc671a8.eot"
+    "..//columns-font_1743a7d232dbbeab8a2dc57fe1e3aa48.ttf",
+    "..//columns-font_1743a7d232dbbeab8a2dc57fe1e3aa48.svg",
+    "..//columns-font_1743a7d232dbbeab8a2dc57fe1e3aa48.woff",
+    "..//columns-font_1743a7d232dbbeab8a2dc57fe1e3aa48.eot"
   ],
   "glyphs": {
     "angle-right": {
@@ -232,6 +232,10 @@
     "config": "fontcustom.yml",
     "css_selector": ".icon-{{glyph}}",
     "debug": false,
+    "font_ascent": 448,
+    "font_descent": 64,
+    "font_design_size": 16,
+    "font_em": 512,
     "font_name": "columns-font",
     "force": false,
     "input": {
@@ -252,7 +256,6 @@
     ]
   },
   "templates": [
-    "../../css/columns-font.css",
-    "../../css/columns-font-preview.html"
+
   ]
 }

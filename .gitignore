@@ -48,3 +48,10 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
 bower_components
+
+# Compiled Javascripts and CSS
+public
+compiled-javascripts
+css
+!css/fonts.css
+specs/compiled-specs

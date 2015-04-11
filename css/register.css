@@ -1,0 +1,74 @@
+/* Grays */
+@-webkit-keyframes pop-out {
+  0% {
+    -webkit-transform: scale(1); }
+  50% {
+    -webkit-transform: scale(1.1); }
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pop-in {
+  0% {
+    -webkit-transform: scale(1); }
+  50% {
+    -webkit-transform: scale(0.9); }
+  100% {
+    -webkit-transform: scale(1); } }
+@-webkit-keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; }
+  50% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1.0; }
+  100% {
+    -webkit-transform: scale(0.5, 0.5);
+    opacity: 0.5; } }
+.columns-register-copy {
+  padding: 32px;
+  color: rgba(255, 255, 255, 0.96);
+  background-color: #3E97BD; }
+
+.columns-register-copy i {
+  font-size: 28px; }
+
+.columns-register-copy h2 {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 28px;
+  margin-top: 16px;
+  margin-bottom: 32px; }
+
+.columns-register-copy p {
+  margin-top: 16px;
+  margin-bottom: 0; }
+
+.columns-register-form {
+  padding: 32px;
+  color: #555555; }
+
+.columns-register-embed {
+  min-height: 160px;
+  background-color: #fafafa; }
+
+.columns-register-form .columns-register-email-input {
+  width: 100%; }
+
+.columns-register-form input {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-style: solid none;
+  outline: none;
+  appearance: none;
+  font-size: 1rem;
+  font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+  padding: 20px 0;
+  width: 100%; }
+  .columns-register-form input:focus {
+    outline: none;
+    appearance: none; }
+  .columns-register-form input:active {
+    outline: none;
+    appearance: none; }
+
+.columns-register-button {
+  margin-top: 16px; }
+
+/*# sourceMappingURL=register.css.map */

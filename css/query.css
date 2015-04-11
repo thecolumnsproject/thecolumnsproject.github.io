@@ -2,30 +2,24 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
-
   50% {
     -webkit-transform: scale(1.1); }
-
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
-
   50% {
     -webkit-transform: scale(0.9); }
-
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
-
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
-
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
@@ -96,7 +90,7 @@
       content: '';
       height: 8px;
       width: 8px;
-      background-color: #3e97bd;
+      background-color: #3E97BD;
       position: absolute;
       border-radius: 50%;
       top: 26px;
@@ -122,9 +116,11 @@
     margin: auto;
     font-family: 'Heiti TC';
     line-height: 24px;
-    color: #3a3a3a; }
+    color: #555555; }
     #query-box #query::-webkit-input-placeholder {
       color: #ccc; }
     #query-box #query:active, #query-box #query:focus {
       border: none;
       outline: none; }
+
+/*# sourceMappingURL=query.css.map */

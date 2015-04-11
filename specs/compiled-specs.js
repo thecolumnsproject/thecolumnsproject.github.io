@@ -272,7 +272,7 @@ DesktopView.prototype._setupAnalytics = function() {
 };
 
 module.exports = DesktopView;
-},{"../config.js":2,"../models/ColumnsAnalytics.js":16,"../models/ColumnsEvent.js":17,"../models/Table.js":21,"./EmbedDetailsView.js":4,"./ItemsView.js":6,"./StyleView.js":11,"./TemplateView.js":14,"./UploadView.js":15}],4:[function(require,module,exports){
+},{"../config.js":2,"../models/ColumnsAnalytics.js":19,"../models/ColumnsEvent.js":20,"../models/Table.js":24,"./EmbedDetailsView.js":4,"./ItemsView.js":6,"./StyleView.js":13,"./TemplateView.js":16,"./UploadView.js":18}],4:[function(require,module,exports){
 var ColumnsEvent 			= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics		= require('../models/ColumnsAnalytics.js');
 var config 					= require('../config.js');
@@ -419,7 +419,7 @@ EmbedDetailsView.prototype._onCopyClick = function( event ) {
 module.exports = EmbedDetailsView;
 
 
-},{"../config.js":2,"../models/ColumnsAnalytics.js":16,"../models/ColumnsEvent.js":17}],5:[function(require,module,exports){
+},{"../config.js":2,"../models/ColumnsAnalytics.js":19,"../models/ColumnsEvent.js":20}],5:[function(require,module,exports){
 var ColumnsEvent 	= require('../models/ColumnsEvent.js');
 
 var DRAGGING_CLASS = 'dragging',
@@ -589,7 +589,7 @@ ItemView.prototype._onItemSelection = function( event, data ) {
 };
 
 module.exports = ItemView;
-},{"../models/ColumnsEvent.js":17}],6:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],6:[function(require,module,exports){
 var ColumnsEvent 	= require('../models/ColumnsEvent.js');
 var ItemView 		= require('./ItemView.js');
 
@@ -729,7 +729,44 @@ ItemsView.prototype._updateWithItem = function( item ) {
 };
 
 module.exports = ItemsView;
-},{"../models/ColumnsEvent.js":17,"./ItemView.js":5}],7:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20,"./ItemView.js":5}],7:[function(require,module,exports){
+var RegisterView 	= require('./RegisterView.js');
+var ThanksView 		= require('./ThanksView.js');
+
+function MobileView() {
+	this.register = new RegisterView();
+	this.thanks = new ThanksView();
+}
+
+MobileView.prototype.render = function() {
+
+	$('#app').addClass('mobile');
+	this.$mobile = $("#app.mobile");
+
+	this.$mobile.append( this.register.render() );
+
+	// this._setupAnalytics();
+	// this._emitRender();
+
+	return this.$mobile;
+};
+
+module.exports = MobileView;
+},{"./RegisterView.js":8,"./ThanksView.js":17}],8:[function(require,module,exports){
+var TEMPLATE = Columns.Templates['templates/register.hbs'];
+
+function RegisterView() {
+
+}
+
+RegisterView.prototype.render = function() {
+
+	this.$render = $( TEMPLATE() );
+	return this.$render;
+};
+
+module.exports = RegisterView;
+},{}],9:[function(require,module,exports){
 var ColumnsEvent 							= require('../models/ColumnsEvent.js');
 var StyleInputView 							= require('./StyleInputView.js');
 var StyleSegmentedButtonView 				= require('./StyleSegmentedButtonView.js');
@@ -923,7 +960,7 @@ StyleComponentView.prototype.updateAlignmentButtons = function( direction ) {
 };
 
 module.exports = StyleComponentView;
-},{"../models/ColumnsEvent.js":17,"./StyleInputView.js":8,"./StyleMultipleSegmentedButtonView.js":9,"./StyleSegmentedButtonView.js":10}],8:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20,"./StyleInputView.js":10,"./StyleMultipleSegmentedButtonView.js":11,"./StyleSegmentedButtonView.js":12}],10:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 function StyleInputView( options ) {
@@ -1094,7 +1131,7 @@ StyleInputView.prototype.formatValue = function( value ) {
 }
 
 module.exports = StyleInputView;
-},{"../models/ColumnsEvent.js":17}],9:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],11:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 Handlebars.registerHelper('ifIsCurrentValue', function(value, currentValue, options) {
@@ -1181,7 +1218,7 @@ StyleMultipleSegmentedButtonView.prototype._onClick = function( event ) {
 };
 
 module.exports = StyleMultipleSegmentedButtonView;
-},{"../models/ColumnsEvent.js":17}],10:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],12:[function(require,module,exports){
 var ColumnsEvent 					= require('../models/ColumnsEvent.js');
 
 Handlebars.registerHelper('ifIsCurrentValue', function(value, currentValue, options) {
@@ -1262,7 +1299,7 @@ StyleSegmentedButtonView.prototype._onClick = function( event ) {
 };
 
 module.exports = StyleSegmentedButtonView;
-},{"../models/ColumnsEvent.js":17}],11:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],13:[function(require,module,exports){
 var ColumnsEvent 					= require('../models/ColumnsEvent.js');
 var Columns 						= require('../../compiled-javascripts/styling/compiled-data.js');
 var StyleComponentView 				= require('./StyleComponentView.js');
@@ -1397,7 +1434,7 @@ StyleView.prototype._emitChange = function( item, property, value ) {
 
 module.exports = StyleView;
 
-},{"../../compiled-javascripts/styling/compiled-data.js":1,"../models/ColumnsEvent.js":17,"./StyleComponentView.js":7,"./TemplateGroupView.js":12,"./TemplateValueView.js":13}],12:[function(require,module,exports){
+},{"../../compiled-javascripts/styling/compiled-data.js":1,"../models/ColumnsEvent.js":20,"./StyleComponentView.js":9,"./TemplateGroupView.js":14,"./TemplateValueView.js":15}],14:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 // Object to manage properties of and interaction
@@ -1670,7 +1707,7 @@ TemplateGroupView.prototype._onGroupDidChange = function( event, data ) {
 };
 
 module.exports = TemplateGroupView;
-},{"../models/ColumnsEvent.js":17}],13:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],15:[function(require,module,exports){
 var ColumnsEvent = require('../models/ColumnsEvent.js');
 
 // Object to manage properties of and interaction
@@ -1868,7 +1905,7 @@ TemplateValueView.prototype._onItemDidChange = function( event, data ) {
 };
 
 module.exports = TemplateValueView;
-},{"../models/ColumnsEvent.js":17}],14:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],16:[function(require,module,exports){
 var ColumnsEvent 				= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics			= require('../models/ColumnsAnalytics.js');
 var TemplateGroupView 			= require('./TemplateGroupView.js');
@@ -2529,7 +2566,13 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 };
 
 module.exports = TemplateView;
-},{"../config.js":2,"../models/ColumnsAnalytics.js":16,"../models/ColumnsEvent.js":17,"./TemplateGroupView.js":12,"./TemplateValueView.js":13}],15:[function(require,module,exports){
+},{"../config.js":2,"../models/ColumnsAnalytics.js":19,"../models/ColumnsEvent.js":20,"./TemplateGroupView.js":14,"./TemplateValueView.js":15}],17:[function(require,module,exports){
+function ThanksView() {
+
+}
+
+module.exports = ThanksView;
+},{}],18:[function(require,module,exports){
 var ColumnsEvent 		= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
 
@@ -2781,7 +2824,7 @@ UploadView.prototype._onParseComplete = function( results, file ) {
 
 module.exports = UploadView;
 
-},{"../models/ColumnsAnalytics.js":16,"../models/ColumnsEvent.js":17}],16:[function(require,module,exports){
+},{"../models/ColumnsAnalytics.js":19,"../models/ColumnsEvent.js":20}],19:[function(require,module,exports){
 var Config = require('../config.js');
 
 module.exports = ColumnsAnalytics;
@@ -2813,7 +2856,7 @@ ColumnsAnalytics.send = function( props ) {
 	}
 
 };
-},{"../config.js":2}],17:[function(require,module,exports){
+},{"../config.js":2}],20:[function(require,module,exports){
 function ColumnsEvent () {
 
 }
@@ -2835,7 +2878,7 @@ ColumnsEvent.offAll = function() {
 };
 
 module.exports = ColumnsEvent;
-},{}],18:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var ColumnsEvent = require('./ColumnsEvent.js');
 var Style 		 = require('./Style.js');
 
@@ -3000,7 +3043,7 @@ Item.prototype._emitActiveStateChange = function() {
 };
 
 module.exports = Item;
-},{"./ColumnsEvent.js":17,"./Style.js":20}],19:[function(require,module,exports){
+},{"./ColumnsEvent.js":20,"./Style.js":23}],22:[function(require,module,exports){
 // Layout Object Methods
 // ----------------------
 // This is the layout object that controls
@@ -3173,7 +3216,7 @@ Layout.prototype.defaultLayout = function( items ) {
 };
 
 module.exports = Layout;
-},{"../styling/defaults.js":22,"./ColumnsEvent.js":17}],20:[function(require,module,exports){
+},{"../styling/defaults.js":25,"./ColumnsEvent.js":20}],23:[function(require,module,exports){
 var ColumnsEvent = require('./ColumnsEvent.js');
 
 // Style Object
@@ -3297,7 +3340,7 @@ Style.prototype._mergeCSS = function( css ) {
 };
 
 module.exports = Style;
-},{"./ColumnsEvent.js":17}],21:[function(require,module,exports){
+},{"./ColumnsEvent.js":20}],24:[function(require,module,exports){
 var ColumnsEvent 	= require('./ColumnsEvent.js');
 var Layout 			= require('./Layout.js');
 var Item 			= require('./Item.js');
@@ -3577,7 +3620,7 @@ Table.prototype.stringFromColumns = function( columns ) {
 };
 
 module.exports = Table;
-},{"../config.js":2,"../styling/defaults.js":22,"./ColumnsEvent.js":17,"./Item.js":18,"./Layout.js":19}],22:[function(require,module,exports){
+},{"../config.js":2,"../styling/defaults.js":25,"./ColumnsEvent.js":20,"./Item.js":21,"./Layout.js":22}],25:[function(require,module,exports){
 // We need to treat layout properties slightly differently than regular css properties
 // to account for browser-specific prefixes
 module.exports = {
@@ -3614,7 +3657,7 @@ module.exports = {
 		}]
 	]
 };
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var Desktop 			= require('../../javascripts/controllers/DesktopView.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var ItemView 			= require('../../javascripts/controllers/ItemsView.js');
@@ -3677,7 +3720,7 @@ describe('Desktop View Spec', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/DesktopView.js":3,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/ItemsView.js":6,"../../javascripts/controllers/StyleView.js":11,"../../javascripts/controllers/TemplateView.js":14,"../../javascripts/controllers/UploadView.js":15,"../../javascripts/models/ColumnsEvent.js":17,"../../javascripts/models/Table.js":21}],24:[function(require,module,exports){
+},{"../../javascripts/controllers/DesktopView.js":3,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/ItemsView.js":6,"../../javascripts/controllers/StyleView.js":13,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],27:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var ColumnsAnalytics	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Table 				= require('../../javascripts/models/Table.js');
@@ -3940,7 +3983,7 @@ describe('Embed Details View', function() {
 	});
 
 });
-},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/models/ColumnsAnalytics.js":16,"../../javascripts/models/ColumnsEvent.js":17,"../../javascripts/models/Table.js":21}],25:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],28:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var TemplateValueView 	= require('../../javascripts/controllers/TemplateValueView.js');
 
@@ -4200,7 +4243,7 @@ describe('Item View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/TemplateValueView.js":13,"../../javascripts/models/ColumnsEvent.js":17}],26:[function(require,module,exports){
+},{"../../javascripts/controllers/TemplateValueView.js":15,"../../javascripts/models/ColumnsEvent.js":20}],29:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var ItemsView 			= require('../../javascripts/controllers/ItemsView.js');
@@ -4505,7 +4548,87 @@ describe('Items View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/ItemsView.js":6,"../../javascripts/models/ColumnsEvent.js":17,"../../javascripts/models/Table.js":21}],27:[function(require,module,exports){
+},{"../../javascripts/controllers/ItemsView.js":6,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],30:[function(require,module,exports){
+var MobileView 		= require('../../javascripts/controllers/MobileView.js');
+var RegisterView 	= require('../../javascripts/controllers/RegisterView.js');
+var ThanksView 		= require('../../javascripts/controllers/ThanksView.js');
+
+jasmine.getFixtures().fixturesPath = 'specs/fixtures';
+
+describe('Mobile View', function() {
+	var mobile;
+
+	beforeEach(function() {
+		loadFixtures('app.html');
+		mobile = new MobileView();
+	});
+
+	describe('Initalizing', function() {1
+
+		it('should initialize the correct subviews', function() {
+			expect( mobile.register instanceof RegisterView ).toBeTruthy();
+			expect( mobile.thanks instanceof ThanksView ).toBeTruthy();
+		});
+	});
+
+	describe('Rendering', function() {
+		var $mobile;
+
+		beforeEach(function() {
+			$mobile = mobile.render();
+		});
+
+		it('should return the app element', function() {
+			expect( $mobile ).toEqual('#app');
+		});
+
+		it('should add a mobile class to the app element', function() {
+			expect( $mobile ).toHaveClass('mobile');
+		});
+
+		it('should render the register view', function() {
+			expect( $mobile.find('#register').length ).toBe( 1 );
+		});
+
+	});
+});
+
+
+},{"../../javascripts/controllers/MobileView.js":7,"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/controllers/ThanksView.js":17}],31:[function(require,module,exports){
+var RegisterView = require('../../javascripts/controllers/RegisterView.js');
+
+describe('Register View', function() {
+	var register;
+
+	beforeEach(function() {
+		register = new RegisterView();
+	});
+
+	describe('Rendering', function() {
+		var $register;
+
+		beforeEach(function() {
+			$register = register.render();
+		});
+
+		it('should be active', function() {
+			expect( $register ).toHaveClass('active');
+		});
+
+		it('should render the header', function() {
+			expect( $register.find('.columns-register-copy').length ).toBe( 1 );
+		});
+
+		it('should render the sample table', function() {
+
+		});
+
+		it('should render the register form', function() {
+
+		});
+	});
+});
+},{"../../javascripts/controllers/RegisterView.js":8}],32:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var StyleComponentView 	= require('../../javascripts/controllers/StyleComponentView.js');
 
@@ -4772,7 +4895,7 @@ describe('Style Component View Spec', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/StyleComponentView.js":7,"../../javascripts/models/ColumnsEvent.js":17}],28:[function(require,module,exports){
+},{"../../javascripts/controllers/StyleComponentView.js":9,"../../javascripts/models/ColumnsEvent.js":20}],33:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var StyleInputView 		= require('../../javascripts/controllers/StyleInputView.js');
 
@@ -5078,7 +5201,7 @@ describe('Style Input View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/StyleInputView.js":8,"../../javascripts/models/ColumnsEvent.js":17}],29:[function(require,module,exports){
+},{"../../javascripts/controllers/StyleInputView.js":10,"../../javascripts/models/ColumnsEvent.js":20}],34:[function(require,module,exports){
 var ColumnsEvent 						= require('../../javascripts/models/ColumnsEvent.js');
 var StyleMultipleSegmentedButtonView 	= require('../../javascripts/controllers/StyleMultipleSegmentedButtonView.js');
 
@@ -5341,7 +5464,7 @@ describe('Style Multiple Segmented Button View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/StyleMultipleSegmentedButtonView.js":9,"../../javascripts/models/ColumnsEvent.js":17}],30:[function(require,module,exports){
+},{"../../javascripts/controllers/StyleMultipleSegmentedButtonView.js":11,"../../javascripts/models/ColumnsEvent.js":20}],35:[function(require,module,exports){
 var ColumnsEvent 				= require('../../javascripts/models/ColumnsEvent.js');
 var StyleSegmentedButtonView 	= require('../../javascripts/controllers/StyleSegmentedButtonView.js');
 
@@ -5520,7 +5643,7 @@ describe('Style Segmented Button View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/StyleSegmentedButtonView.js":10,"../../javascripts/models/ColumnsEvent.js":17}],31:[function(require,module,exports){
+},{"../../javascripts/controllers/StyleSegmentedButtonView.js":12,"../../javascripts/models/ColumnsEvent.js":20}],36:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var StyleView 			= require('../../javascripts/controllers/StyleView.js');
 
@@ -5789,7 +5912,7 @@ describe('Style View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/StyleView.js":11,"../../javascripts/models/ColumnsEvent.js":17}],32:[function(require,module,exports){
+},{"../../javascripts/controllers/StyleView.js":13,"../../javascripts/models/ColumnsEvent.js":20}],37:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
@@ -6226,7 +6349,7 @@ describe('Template Group View', function() {
 		});
 	});
 });
-},{"../../javascripts/models/ColumnsEvent.js":17}],33:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],38:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Template Value View', function() {
@@ -6519,7 +6642,7 @@ describe('Template Value View', function() {
 	// 	document.removeEventListener( 'Columns.Item.DidChange', TemplateValueView._onItemDidChange.bind, false);
 	// });
 });
-},{"../../javascripts/models/ColumnsEvent.js":17}],34:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],39:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
@@ -8074,7 +8197,7 @@ describe('Template View', function() {
 
 	});
 });
-},{"../../javascripts/controllers/ItemView.js":5,"../../javascripts/controllers/TemplateView.js":14,"../../javascripts/models/ColumnsAnalytics.js":16,"../../javascripts/models/ColumnsEvent.js":17,"../../javascripts/models/Layout.js":19,"../../javascripts/models/Table.js":21}],35:[function(require,module,exports){
+},{"../../javascripts/controllers/ItemView.js":5,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Layout.js":22,"../../javascripts/models/Table.js":24}],40:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Table 				= require('../../javascripts/models/Table.js');
@@ -8493,7 +8616,7 @@ describe('Upload View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/UploadView.js":15,"../../javascripts/models/ColumnsAnalytics.js":16,"../../javascripts/models/ColumnsEvent.js":17,"../../javascripts/models/Table.js":21}],36:[function(require,module,exports){
+},{"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],41:[function(require,module,exports){
 
 // var API_HOST = 'http://127.0.0.1:8080';
 // var ROOT_PATH = 'http://127.0.0.1';
@@ -8553,7 +8676,7 @@ xdescribe('Embeddable Table', function() {
 		});
 	});
 });
-},{}],37:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 xdescribe('Main Spec', function() {
 	var isMobile;
 
@@ -8567,7 +8690,7 @@ xdescribe('Main Spec', function() {
 		expect()
 	});
 });
-},{}],38:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 var ColumnsAnalytics = require('../../javascripts/models/ColumnsAnalytics.js');
 
 describe('Columns Analyitics Framework', function() {
@@ -8661,7 +8784,7 @@ describe('Columns Analyitics Framework', function() {
 		});
 	});
 });
-},{"../../javascripts/models/ColumnsAnalytics.js":16}],39:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsAnalytics.js":19}],44:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Columns Events', function() {
@@ -8736,7 +8859,7 @@ describe('Columns Events', function() {
 		});
 	});
 });
-},{"../../javascripts/models/ColumnsEvent.js":17}],40:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],45:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Item Model', function() {
@@ -8992,7 +9115,7 @@ describe('Item Model', function() {
 		});
 	});
 });
-},{"../../javascripts/models/ColumnsEvent.js":17}],41:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],46:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
 var TemplateView		= require('../../javascripts/controllers/TemplateView.js');
@@ -9378,7 +9501,7 @@ describe('Layout', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/TemplateGroupView.js":12,"../../javascripts/controllers/TemplateView.js":14,"../../javascripts/models/ColumnsEvent.js":17,"../../javascripts/models/Layout.js":19,"../../javascripts/styling/defaults.js":22}],42:[function(require,module,exports){
+},{"../../javascripts/controllers/TemplateGroupView.js":14,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Layout.js":22,"../../javascripts/styling/defaults.js":25}],47:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Style Model', function() {
@@ -9624,7 +9747,7 @@ describe('Style Model', function() {
 		})
 	});
 });
-},{"../../javascripts/models/ColumnsEvent.js":17}],43:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],48:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var Item 				= require('../../javascripts/models/Item.js');
 var Table 				= require('../../javascripts/models/Table.js');
@@ -10147,7 +10270,7 @@ describe('Table', function () {
 		});
 	});
 });
-},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/UploadView.js":15,"../../javascripts/models/ColumnsEvent.js":17,"../../javascripts/models/Item.js":18,"../../javascripts/models/Layout.js":19,"../../javascripts/models/Table.js":21,"../../javascripts/styling/defaults.js":22}],44:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Item.js":21,"../../javascripts/models/Layout.js":22,"../../javascripts/models/Table.js":24,"../../javascripts/styling/defaults.js":25}],49:[function(require,module,exports){
 xdescribe('Group Model', function() {
 
 	describe('Initialization', function() {
@@ -10184,4 +10307,4 @@ xdescribe('Group Model', function() {
 		});
 	});
 });
-},{}]},{},[23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44]);
+},{}]},{},[26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49]);

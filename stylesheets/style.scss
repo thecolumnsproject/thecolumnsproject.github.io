@@ -38,10 +38,15 @@ h2 {
 	font-size: 12px;
 	font-weight: 500;
 	text-transform: uppercase;
+	text-align: center;
+	letter-spacing: 0.5px;
 	color: #fff;
 	background-color: $primary-color;
 	margin-left: auto;
 	cursor: pointer;
+
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
 
 	&:active {
 		background-color: #fff;

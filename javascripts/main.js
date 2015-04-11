@@ -1,12 +1,13 @@
 var isMobile			= require('ismobilejs');
 var Desktop 			= require('./controllers/DesktopView.js');
+var Mobile 				= require('./controllers/MobileView.js');
 
 var app;
 
 // First, check to see if we're on mobile.
 // If we are, load the mobile site instead
 if ( isMobile.any ) {
-
+	app = new Mobile();
 } else {
 	app = new Desktop();
 }

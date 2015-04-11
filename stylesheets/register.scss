@@ -1,0 +1,71 @@
+@import 'variables';
+@import 'keyframes';
+@import 'z-index';
+@import 'bower_components/bourbon/dist/bourbon';
+
+.columns-register-copy {
+	padding: 32px;
+	color: $primary-white;
+	background-color: $primary-color;
+}
+
+.columns-register-copy i {
+	// color: $primary-white;
+	font-size: 28px;
+	// margin-bottom: 16px;
+}
+
+.columns-register-copy h2 {
+	color: $primary-white;
+	font-size: 28px;
+	margin-top: 16px;
+	margin-bottom: 32px;
+}
+
+.columns-register-copy p {
+	margin-top: 16px;
+	margin-bottom: 0;
+}
+
+.columns-register-form {
+	padding: 32px;
+	color: $text-color;
+}
+
+.columns-register-embed {
+	min-height: 160px;
+	background-color: $gray-lightest;
+}
+
+$input-padding: 20px;
+.columns-register-form .columns-register-email-input {
+	width: 100%;
+}
+
+.columns-register-form input {
+	border: 1px solid $border-color;
+	border-style: solid none;
+	outline: none;
+	appearance: none;
+
+	font-size: 1rem;
+	font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+
+	padding: $input-padding 0;
+	width: 100%;
+
+	&:focus {
+		// border-bottom-color: $primary-color;
+		outline: none;
+		appearance: none;
+	}
+
+	&:active {
+		outline: none;
+		appearance: none;
+	}
+}
+
+.columns-register-button {
+	margin-top: 16px;
+}

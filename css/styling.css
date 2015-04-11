@@ -2,30 +2,24 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
-
   50% {
     -webkit-transform: scale(1.1); }
-
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
-
   50% {
     -webkit-transform: scale(0.9); }
-
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
-
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
-
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
@@ -335,7 +329,7 @@
     -ms-flex-pack: center; }
     .style-component-section-row-input-append .increment:active i,
     .style-component-section-row-input-append .decrement:active i {
-      color: #3e97bd; }
+      color: #3E97BD; }
     .style-component-section-row-input-append .increment i,
     .style-component-section-row-input-append .decrement i {
       font-size: 24px;
@@ -408,7 +402,7 @@
       background-color: transparent; }
       .style-component-section-row-segmented-button button.active i,
       .style-component-section-row-multiple-segmented-button button.active i {
-        color: #3e97bd; }
+        color: #3E97BD; }
     .style-component-section-row-segmented-button button:active,
     .style-component-section-row-multiple-segmented-button button:active {
       background-color: transparent; }
@@ -434,3 +428,5 @@
   -ms-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg); }
+
+/*# sourceMappingURL=styling.css.map */

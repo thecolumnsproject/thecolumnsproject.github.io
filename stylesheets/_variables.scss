@@ -19,8 +19,10 @@ $gray-20:		rgba(0,0,0,.2);
 $gray-10:		rgba(0,0,0,.1);
 $gray-0:		rgba(0,0,0,0);
 
+$border-color: 	rgba(0,0,0,0.08);
+
 $primary-color: #3E97BD;
 $secondary-color: lighten($primary-color, 20%);
 $primary-white: fade-out(#fff, 0.04);
 
-$text-color: $gray-darkest;
+$text-color: $gray-darker;

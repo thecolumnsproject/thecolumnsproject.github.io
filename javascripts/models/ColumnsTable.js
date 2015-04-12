@@ -696,7 +696,7 @@ ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$foo
 	// var bgHeight = bgHeight < this.$$container.height ? this.$$container.height : bgHeight;
 	// var bgHeight = this.$$container.height();
 	// Use javascript height method because of a bug with jQuery and the iOS safari toolbar
-	var bgHeight = this.$$container.get(0).innerHeight;
+	var bgHeight = this.$$container.get(0).innerHeight || this.$$container.height();
 
 	// Velocity($$bg.get(0), {
 	$$bg.velocity({

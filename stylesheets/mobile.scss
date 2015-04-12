@@ -11,9 +11,11 @@
 	width: 100%;
 	background: #fff;
 	pointer-events: none;
+	opacity: 0;
 
 	&.active {
 		pointer-events: auto;
+		opacity: 1;
 	}
 }
 

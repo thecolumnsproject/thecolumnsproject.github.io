@@ -743,7 +743,8 @@ MobileView.prototype.render = function() {
 	$('#app').addClass('mobile');
 	this.$mobile = $("#app.mobile");
 
-	this.$mobile.append( this.register.render() );
+	// this.$mobile.append( this.register.render() );
+	this.$mobile.append( this.thanks.render() );
 
 	// this._setupAnalytics();
 	// this._emitRender();
@@ -2567,9 +2568,17 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 
 module.exports = TemplateView;
 },{"../config.js":2,"../models/ColumnsAnalytics.js":19,"../models/ColumnsEvent.js":20,"./TemplateGroupView.js":14,"./TemplateValueView.js":15}],17:[function(require,module,exports){
+var TEMPLATE = Columns.Templates['templates/thanks.hbs'];
+
 function ThanksView() {
 
 }
+
+ThanksView.prototype.render = function() {
+
+	this.$thanks = $( TEMPLATE() );
+	return this.$thanks;
+};
 
 module.exports = ThanksView;
 },{}],18:[function(require,module,exports){
@@ -8198,6 +8207,36 @@ describe('Template View', function() {
 	});
 });
 },{"../../javascripts/controllers/ItemView.js":5,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Layout.js":22,"../../javascripts/models/Table.js":24}],40:[function(require,module,exports){
+var ThanksView = require('../../javascripts/controllers/ThanksView.js');
+
+describe('Thanks View', function() {
+	var thanks;
+
+	beforeEach(function() {
+		thanks = new ThanksView();
+	});
+
+	describe('Rendering', function() {
+		var $thanks;
+
+		beforeEach(function() {
+			$thanks = thanks.render();
+		});
+
+		it('should have the correct id', function() {
+			expect( $thanks ).toHaveId('thanks');
+		});
+
+		it('should not be active', function() {
+			expect( $thanks ).not.toHaveClass('active');
+		});
+	});
+
+	describe('Showing and Hiding', function() {
+
+	});
+});
+},{"../../javascripts/controllers/ThanksView.js":17}],41:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Table 				= require('../../javascripts/models/Table.js');
@@ -8616,7 +8655,7 @@ describe('Upload View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],41:[function(require,module,exports){
+},{"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],42:[function(require,module,exports){
 
 // var API_HOST = 'http://127.0.0.1:8080';
 // var ROOT_PATH = 'http://127.0.0.1';
@@ -8676,7 +8715,7 @@ xdescribe('Embeddable Table', function() {
 		});
 	});
 });
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 xdescribe('Main Spec', function() {
 	var isMobile;
 
@@ -8690,7 +8729,7 @@ xdescribe('Main Spec', function() {
 		expect()
 	});
 });
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 var ColumnsAnalytics = require('../../javascripts/models/ColumnsAnalytics.js');
 
 describe('Columns Analyitics Framework', function() {
@@ -8784,7 +8823,7 @@ describe('Columns Analyitics Framework', function() {
 		});
 	});
 });
-},{"../../javascripts/models/ColumnsAnalytics.js":19}],44:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsAnalytics.js":19}],45:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Columns Events', function() {
@@ -8859,7 +8898,7 @@ describe('Columns Events', function() {
 		});
 	});
 });
-},{"../../javascripts/models/ColumnsEvent.js":20}],45:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],46:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Item Model', function() {
@@ -9115,7 +9154,7 @@ describe('Item Model', function() {
 		});
 	});
 });
-},{"../../javascripts/models/ColumnsEvent.js":20}],46:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],47:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
 var TemplateView		= require('../../javascripts/controllers/TemplateView.js');
@@ -9501,7 +9540,7 @@ describe('Layout', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/TemplateGroupView.js":14,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Layout.js":22,"../../javascripts/styling/defaults.js":25}],47:[function(require,module,exports){
+},{"../../javascripts/controllers/TemplateGroupView.js":14,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Layout.js":22,"../../javascripts/styling/defaults.js":25}],48:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Style Model', function() {
@@ -9747,7 +9786,7 @@ describe('Style Model', function() {
 		})
 	});
 });
-},{"../../javascripts/models/ColumnsEvent.js":20}],48:[function(require,module,exports){
+},{"../../javascripts/models/ColumnsEvent.js":20}],49:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var Item 				= require('../../javascripts/models/Item.js');
 var Table 				= require('../../javascripts/models/Table.js');
@@ -10270,7 +10309,7 @@ describe('Table', function () {
 		});
 	});
 });
-},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Item.js":21,"../../javascripts/models/Layout.js":22,"../../javascripts/models/Table.js":24,"../../javascripts/styling/defaults.js":25}],49:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Item.js":21,"../../javascripts/models/Layout.js":22,"../../javascripts/models/Table.js":24,"../../javascripts/styling/defaults.js":25}],50:[function(require,module,exports){
 xdescribe('Group Model', function() {
 
 	describe('Initialization', function() {
@@ -10307,4 +10346,4 @@ xdescribe('Group Model', function() {
 		});
 	});
 });
-},{}]},{},[26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49]);
+},{}]},{},[26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]);

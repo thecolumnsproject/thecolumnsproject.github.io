@@ -192,6 +192,17 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		webfont: {
+			'columns-font': {
+				src: 'fonts/vectors/*.svg',
+				dest: 'fonts',
+				destCss: 'css/',
+				options: {
+					font: 'columns-font',
+					syntax: 'bootstrap'
+				}
+			}
+		},
 		watch: {
 			options: {
 				livereload: true,
@@ -211,6 +222,10 @@ module.exports = function(grunt) {
 				files: 'javascripts/**/*.js',
 				tasks: ['replace', 'browserify', 'replace', 'concat']
 			},
+			icons: {
+				files: 'fonts/ventors/*.svg',
+				tasks: ['webfont']
+			},
 			specs: {
 				files: ['specs/**/*.js', 'specs/**/*.html', '!specs/compiled-specs.js'],
 				tasks: ['browserify', 'replace']
@@ -226,8 +241,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-text-replace');
 	grunt.loadNpmTasks('grunt-contrib-jasmine');
 	grunt.loadNpmTasks('grunt-minifyify');
+	grunt.loadNpmTasks('grunt-webfont');
 
 	// grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'concat:styling', 'browserify', 'replace', 'concat:embed' ]);
+	grunt.registerTask('build', ['sass', 'handlebars', 'concat:styling', 'browserify', 'replace', 'concat:embed', 'webfont' ]);
 	grunt.registerTask('default', ['build', 'watch'] );
 }

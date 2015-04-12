@@ -30,6 +30,7 @@
     "grunt-contrib-watch": "~0.6.1",
     "grunt-minifyify": "^3.2.1",
     "grunt-text-replace": "^0.4.0",
+    "grunt-webfont": "^0.5.2",
     "ismobilejs": "^0.3.5",
     "jquery": "^2.1.3",
     "jquery-browserify": "^1.8.1",

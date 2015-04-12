@@ -11,7 +11,8 @@ MobileView.prototype.render = function() {
 	$('#app').addClass('mobile');
 	this.$mobile = $("#app.mobile");
 
-	this.$mobile.append( this.register.render() );
+	// this.$mobile.append( this.register.render() );
+	this.$mobile.append( this.thanks.render() );
 
 	// this._setupAnalytics();
 	// this._emitRender();

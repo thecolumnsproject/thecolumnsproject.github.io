@@ -5,7 +5,9 @@ node_js:
   - '0.10'
 env:
   - NODE_ENV=$TRAVIS_BRANCH
+sudo: required
 install:
+  - sudo apt-get install fontforge ttfautohint
   - npm install -g grunt-cli
   - npm install -g bower
   - gem install sass

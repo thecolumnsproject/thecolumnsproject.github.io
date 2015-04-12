@@ -661,3 +661,12 @@ function program1(depth0,data) {
   buffer += "'>\n	<thead>\n		<tr></tr>\n	</thead>\n	<tbody></tbody>\n</table>";
   return buffer;
   });
+
+this["Columns"]["Templates"]["templates/thanks.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"thanks\">\n\n	<div class=\"columns-thanks-header\">\n		<i class=\"icon-columns\"></i>\n		<h2>Thanks!</h2>\n		<p>\n		Right now it's only possible to<br />\n		embed tables from a desktop.\n		</p>\n		<img src=\"/images/designer_desktops.png\">\n	</div>\n\n	<div class=\"columns-thanks-message\">\n		We've emailed a friendly reminder<br />\n		to launch The Columns Project<br />\n		when you're back at your desk.\n	</div>\n\n</div>";
+  });

@@ -33,7 +33,7 @@
 
 .columns-register-copy h2 {
   color: rgba(255, 255, 255, 0.96);
-  font-size: 28px;
+  font-size: 26px;
   margin-top: 16px;
   margin-bottom: 32px; }
 
@@ -46,7 +46,7 @@
   color: #555555; }
 
 .columns-register-embed {
-  min-height: 160px;
+  min-height: 120px;
   background-color: #fafafa; }
 
 .columns-register-form .columns-register-email-input {

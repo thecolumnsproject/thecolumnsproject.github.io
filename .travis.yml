@@ -3,6 +3,10 @@ language:
   - ruby
 node_js:
   - '0.10'
+branches:
+  only:
+    - staging
+    - production
 env:
   - NODE_ENV=$TRAVIS_BRANCH
 install:

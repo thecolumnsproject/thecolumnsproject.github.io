@@ -53,5 +53,5 @@ bower_components
 public
 compiled-javascripts
 css
-!css/fonts.css
 specs/compiled-specs
+.sass-cache

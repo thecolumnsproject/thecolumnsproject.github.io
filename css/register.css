@@ -2,31 +2,37 @@
 @-webkit-keyframes pop-out {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(1.1); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pop-in {
   0% {
     -webkit-transform: scale(1); }
+
   50% {
     -webkit-transform: scale(0.9); }
+
   100% {
     -webkit-transform: scale(1); } }
 @-webkit-keyframes pulsate {
   0% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; }
+
   50% {
     -webkit-transform: scale(1, 1);
     opacity: 1.0; }
+
   100% {
     -webkit-transform: scale(0.5, 0.5);
     opacity: 0.5; } }
 .columns-register-copy {
   padding: 32px;
   color: rgba(255, 255, 255, 0.96);
-  background-color: #3E97BD; }
+  background-color: #3e97bd; }
 
 .columns-register-copy i {
   font-size: 26px; }
@@ -73,5 +79,3 @@
 
 .columns-register-button {
   margin-top: 16px; }
-
-/*# sourceMappingURL=register.css.map */

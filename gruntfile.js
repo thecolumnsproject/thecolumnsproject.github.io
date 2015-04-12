@@ -196,8 +196,9 @@ module.exports = function(grunt) {
 			'columns-font': {
 				src: 'fonts/vectors/*.svg',
 				dest: 'fonts',
-				destCss: 'css/',
+				destCss: 'stylesheets/',
 				options: {
+					stylesheet: 'scss',
 					font: 'columns-font',
 					syntax: 'bootstrap'
 				}
@@ -244,6 +245,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-webfont');
 
 	// grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'concat:styling', 'browserify', 'replace', 'concat:embed', 'webfont' ]);
-	grunt.registerTask('default', ['build', 'watch'] );
+	grunt.registerTask('build', ['sass', 'handlebars', 'concat:styling', 'browserify', 'replace', 'concat:embed' ]);
+	grunt.registerTask('default', ['webfont', 'build', 'watch'] );
 }

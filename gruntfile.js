@@ -217,11 +217,11 @@ module.exports = function(grunt) {
 			},
 			handlebars: {
 				files: '**/*.hbs',
-				tasks: ['handlebars', 'concat']
+				tasks: ['handlebars', 'concat:embed']
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',
-				tasks: ['replace', 'browserify', 'replace', 'concat']
+				tasks: ['concat:styling', 'browserify', 'replace', 'concat:embed']
 			},
 			icons: {
 				files: 'fonts/ventors/*.svg',

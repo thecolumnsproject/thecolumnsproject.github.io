@@ -347,10 +347,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["Columns"]["Templates"]["templates/register.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  return "<div id=\"register\" class='active'>\n\n	<div class=\"columns-register-copy\">\n		<i class=\"icon-columns\"></i>\n		<h2>The Columns Project</h2>\n		<p>\n		Beautiful, embeddable tables.<br />\n		For a more knowledgeable web.\n		</p>\n	</div>\n\n	<div class=\"columns-register-embed\">\n		<script type=\"text/javascript\" src=\"http://colum.nz/public/embed-table.js\" data-table-id=\"2\" async></script>\n	</div>\n\n	<div class=\"columns-register-form\">\n		<div class=\"columns-register-email-input\">\n			<input type='email' name='email' placeholder='Email Address' />\n		</div>\n		<div class=\"columns-register-button columns-button button-large button-secondary\">\n			I'm Ready to Embed\n		</div>\n	</div>\n\n</div>";
+  buffer += "<div id=\"register\" class='active'>\n\n	<div class=\"columns-register-copy\">\n		<i class=\"icon-columns\"></i>\n		<h2>The Columns Project</h2>\n		<p>\n		Beautiful, embeddable tables.<br />\n		For a more knowledgeable web.\n		</p>\n	</div>\n\n	<div class=\"columns-register-embed\">\n		<script type=\"text/javascript\" src=\"";
+  if (helper = helpers.source) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.source); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-table-id=\"2\" async></script>\n	</div>\n\n	<div class=\"columns-register-form\">\n		<div class=\"columns-register-email-input\">\n			<input type='email' name='email' placeholder='Email Address' />\n		</div>\n		<div class=\"columns-register-button columns-button button-large button-secondary\">\n			I'm Ready to Embed\n		</div>\n	</div>\n\n</div>";
+  return buffer;
   });
 
 this["Columns"]["Templates"]["templates/row.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

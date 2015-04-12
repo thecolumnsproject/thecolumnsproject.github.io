@@ -755,6 +755,7 @@ MobileView.prototype.render = function() {
 module.exports = MobileView;
 },{"./RegisterView.js":8,"./ThanksView.js":17}],8:[function(require,module,exports){
 var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+var Config 			= require('../config.js');
 var TEMPLATE 		= Columns.Templates['templates/register.hbs'],
 	ERROR_CLASS 	= 'error';
 
@@ -764,7 +765,9 @@ function RegisterView() {
 
 RegisterView.prototype.render = function() {
 
-	this.$register = $( TEMPLATE() );
+	this.$register = $( TEMPLATE({
+		source: Config.embed.host + Config.embed.path
+	}) );
 
 	this._setupInteractionEvents();
 	return this.$register;
@@ -849,7 +852,7 @@ RegisterView.prototype._onRegistrationSuccess = function() {
 };
 
 module.exports = RegisterView;
-},{"../models/ColumnsEvent.js":20}],9:[function(require,module,exports){
+},{"../config.js":2,"../models/ColumnsEvent.js":20}],9:[function(require,module,exports){
 var ColumnsEvent 							= require('../models/ColumnsEvent.js');
 var StyleInputView 							= require('./StyleInputView.js');
 var StyleSegmentedButtonView 				= require('./StyleSegmentedButtonView.js');

@@ -1,4 +1,5 @@
 var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+var Config 			= require('../config.js');
 var TEMPLATE 		= Columns.Templates['templates/register.hbs'],
 	ERROR_CLASS 	= 'error';
 
@@ -8,7 +9,9 @@ function RegisterView() {
 
 RegisterView.prototype.render = function() {
 
-	this.$register = $( TEMPLATE() );
+	this.$register = $( TEMPLATE({
+		source: Config.embed.host + Config.embed.path
+	}) );
 
 	this._setupInteractionEvents();
 	return this.$register;

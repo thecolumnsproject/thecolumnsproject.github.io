@@ -42,6 +42,10 @@ $input-padding: 20px;
 	width: 100%;
 }
 
+.columns-register-email-input.error {
+	@include animation(shake 0.5s linear);
+}
+
 .columns-register-form input {
 	border: 1px solid $border-color;
 	border-style: solid none;

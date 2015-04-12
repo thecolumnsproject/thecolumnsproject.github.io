@@ -1,1 +1,14 @@
 /* Grays */
+#thanks,
+#register {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  pointer-events: none; }
+  #thanks.active,
+  #register.active {
+    pointer-events: auto; }
+
+#register {
+  z-index: 1; }

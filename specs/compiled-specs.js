@@ -743,7 +743,7 @@ MobileView.prototype.render = function() {
 	$('#app').addClass('mobile');
 	this.$mobile = $("#app.mobile");
 
-	// this.$mobile.append( this.register.render() );
+	this.$mobile.append( this.register.render() );
 	this.$mobile.append( this.thanks.render() );
 
 	// this._setupAnalytics();
@@ -754,7 +754,9 @@ MobileView.prototype.render = function() {
 
 module.exports = MobileView;
 },{"./RegisterView.js":8,"./ThanksView.js":17}],8:[function(require,module,exports){
-var TEMPLATE = Columns.Templates['templates/register.hbs'];
+var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+var TEMPLATE 		= Columns.Templates['templates/register.hbs'],
+	ERROR_CLASS 	= 'error';
 
 function RegisterView() {
 
@@ -762,12 +764,92 @@ function RegisterView() {
 
 RegisterView.prototype.render = function() {
 
-	this.$render = $( TEMPLATE() );
-	return this.$render;
+	this.$register = $( TEMPLATE() );
+
+	this._setupInteractionEvents();
+	return this.$register;
+};
+
+RegisterView.prototype.show = function() {
+	this.$register.velocity({
+		opacity: 1
+	}, {
+		duration: 200,
+		easing: 'ease-out',
+		begin: function() {
+			this.$register.addClass('animating');
+		}.bind( this ),
+		complete: function() {
+			this.$register.removeClass('animating');
+			this.$register.addClass('active');
+		}.bind( this )
+	});
+};
+
+RegisterView.prototype.hide = function() {
+	this.$register.velocity({
+		opacity: 0
+	}, {
+		duration: 200,
+		easing: 'ease-in',
+		begin: function() {
+			this.$register.addClass('animating');
+		}.bind( this ),
+		complete: function() {
+			this.$register.removeClass('animating');
+			this.$register.removeClass('active');
+		}.bind( this )
+	});
+};
+
+RegisterView.prototype.isEmailValid = function() {
+	var value = this.$register.find('.columns-register-email-input input').val(),
+		re = /\S+@\S+\.\S+/;
+
+	return re.test( value );
+};
+
+RegisterView.prototype.setEmailError = function( error ) {
+	var $field = this.$register.find('.columns-register-email-input');
+
+	$field.removeClass( ERROR_CLASS );
+
+	setTimeout(function() {
+		if ( error ) {
+			// Remove and add again so we
+			// ensure a shake occurs
+			$field.addClass( ERROR_CLASS );
+		}
+	}, 0);
+}
+
+RegisterView.prototype._setupInteractionEvents = function() {
+
+	// Listen to taps on the register button
+	this.$register.find('.columns-register-button').on( 'click', this._onRegistrationTap.bind( this ) );
+};
+
+RegisterView.prototype._onRegistrationTap = function( event ) {
+
+	if ( this.isEmailValid() ) {
+		this.setEmailError( false );
+		this._onRegistrationSuccess();
+	} else {
+		this.setEmailError( true );
+	}
+};
+
+RegisterView.prototype._onRegistrationSuccess = function() {
+
+	this.hide();
+
+	ColumnsEvent.send( 'Columns.RegisterView.DidRegisterWithSuccess', {
+		registerView: this
+	});
 };
 
 module.exports = RegisterView;
-},{}],9:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],9:[function(require,module,exports){
 var ColumnsEvent 							= require('../models/ColumnsEvent.js');
 var StyleInputView 							= require('./StyleInputView.js');
 var StyleSegmentedButtonView 				= require('./StyleSegmentedButtonView.js');
@@ -2568,7 +2650,8 @@ TemplateView.prototype.positionDropForDragEventInParentWithPlaceholder = functio
 
 module.exports = TemplateView;
 },{"../config.js":2,"../models/ColumnsAnalytics.js":19,"../models/ColumnsEvent.js":20,"./TemplateGroupView.js":14,"./TemplateValueView.js":15}],17:[function(require,module,exports){
-var TEMPLATE = Columns.Templates['templates/thanks.hbs'];
+var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+var TEMPLATE 		= Columns.Templates['templates/thanks.hbs'];
 
 function ThanksView() {
 
@@ -2577,11 +2660,57 @@ function ThanksView() {
 ThanksView.prototype.render = function() {
 
 	this.$thanks = $( TEMPLATE() );
+
+	this._setupEventListeners();
+
 	return this.$thanks;
 };
 
+ThanksView.prototype.show = function() {
+	this.$thanks.velocity({
+		opacity: 1
+	}, {
+		duration: 200,
+		easing: 'ease-out',
+		begin: function() {
+			this.$thanks.addClass('animating');
+		}.bind( this ),
+		complete: function() {
+			this.$thanks.removeClass('animating');
+			this.$thanks.addClass('active');
+		}.bind( this )
+	});
+};
+
+ThanksView.prototype.hide = function() {
+	this.$thanks.velocity({
+		opacity: 0
+	}, {
+		duration: 200,
+		easing: 'ease-in',
+		begin: function() {
+			this.$thanks.addClass('animating');
+		}.bind( this ),
+		complete: function() {
+			this.$thanks.removeClass('animating');
+			this.$thanks.removeClass('active');
+		}.bind( this )
+	});
+};
+
+ThanksView.prototype._setupEventListeners = function() {
+
+	// Listen to successful registrations
+	ColumnsEvent.on( 'Columns.RegisterView.DidRegisterWithSuccess', this._onRegistrationSuccess.bind( this ) );
+};
+
+ThanksView.prototype._onRegistrationSuccess = function( event, data ) {
+
+	this.show();
+};
+
 module.exports = ThanksView;
-},{}],18:[function(require,module,exports){
+},{"../models/ColumnsEvent.js":20}],18:[function(require,module,exports){
 var ColumnsEvent 		= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
 
@@ -4605,6 +4734,7 @@ describe('Mobile View', function() {
 
 },{"../../javascripts/controllers/MobileView.js":7,"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/controllers/ThanksView.js":17}],31:[function(require,module,exports){
 var RegisterView = require('../../javascripts/controllers/RegisterView.js');
+var ColumnsEvent = require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Register View', function() {
 	var register;
@@ -4636,8 +4766,145 @@ describe('Register View', function() {
 
 		});
 	});
+
+	describe('Registering', function() {
+
+		describe('Success', function() {
+
+			beforeEach(function() {
+				spyOn( register, 'hide' );
+				spyOn( ColumnsEvent, 'send' );
+				register._onRegistrationSuccess();
+			});
+
+			it('should hide itself', function() {
+				expect( register.hide ).toHaveBeenCalled();
+			});
+
+			it('should emit an event', function() {
+				expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.RegisterView.DidRegisterWithSuccess');
+				expect( ColumnsEvent.send.calls.argsFor(0)[1].registerView ).toEqual( register );
+			});
+		});
+	});
+
+	describe('Showing and Hiding', function() {
+		var $register;
+
+		describe('Showing', function() {
+
+			beforeEach(function( done ) {
+				$register = register.render();
+
+				$register.css({ opacity: 0 });
+				$register.removeClass('active');
+
+				register.show();
+
+				setTimeout(function() {
+					done();
+				}, 300);
+			});
+
+			it('should have full opacity', function( done ) {
+				expect( $register ).toHaveCss({ opacity: '1' });
+				done();
+			});
+
+			it('should have the active class', function( done ) {
+				expect( $register ).toHaveClass('active');
+				done();
+			});
+		});
+
+		describe('Hiding', function() {
+
+			beforeEach(function( done ) {
+				$register = register.render();
+
+				$register.css({ opacity: 1 });
+				$register.addClass('active');
+
+				register.hide();
+
+				setTimeout(function() {
+					done();
+				}, 300);
+			});
+
+			it('should have zero opacity', function( done ) {
+				expect( $register ).toHaveCss({ opacity: '0' });
+				done();
+			});
+
+			it('should not have the active class', function( done ) {
+				expect( $register ).not.toHaveClass('active');
+				done();
+			});
+		});
+	});
+
+	describe('Listening to User Events', function() {
+
+		describe('Register Button', function() {
+			var $register;
+
+			beforeEach(function() {
+				$register = register.render();
+				spyOn( register, 'setEmailError' );
+				spyOn( register, '_onRegistrationSuccess' );
+			});
+
+			it('should set an error if the email is invalid', function() {
+				spyOn( register, 'isEmailValid').and.returnValue( false );
+				$register.find('.columns-register-button').trigger('click');
+
+				expect( register.setEmailError ).toHaveBeenCalledWith( true );
+				expect( register._onRegistrationSuccess ).not.toHaveBeenCalled();
+			});
+
+			it('should call the registration success function if the email is valid', function() {
+				spyOn( register, 'isEmailValid').and.returnValue( true );
+				$register.find('.columns-register-button').trigger('click');
+
+				expect( register.setEmailError ).toHaveBeenCalledWith( false );
+				expect( register._onRegistrationSuccess ).toHaveBeenCalled();
+			});
+		});
+
+	});
+
+	describe('Setting Email Field Errors', function() {
+		var $register, $field;
+
+		beforeEach(function( done ) {
+			$register = register.render();
+			$field = $register.find('.columns-register-email-input');
+			done();
+		});
+
+		it('should add an error class if passed true', function( done ) {
+			$field.removeClass('error');
+			register.setEmailError( true );
+
+			setTimeout(function() {
+				expect( $register.find('.columns-register-email-input') ).toHaveClass('error');
+				done();
+			}, 10);
+		});
+
+
+		it('should add an error class if passed false', function( done ) {
+			$field.addClass('error');
+			register.setEmailError( false );
+			setTimeout(function() {
+				expect( $register.find('.columns-register-email-input') ).not.toHaveClass('error');
+				done();
+			}, 10);
+		});
+	});
 });
-},{"../../javascripts/controllers/RegisterView.js":8}],32:[function(require,module,exports){
+},{"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/models/ColumnsEvent.js":20}],32:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var StyleComponentView 	= require('../../javascripts/controllers/StyleComponentView.js');
 
@@ -8208,6 +8475,7 @@ describe('Template View', function() {
 });
 },{"../../javascripts/controllers/ItemView.js":5,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Layout.js":22,"../../javascripts/models/Table.js":24}],40:[function(require,module,exports){
 var ThanksView = require('../../javascripts/controllers/ThanksView.js');
+var ColumnsEvent = require('../../javascripts/models/ColumnsEvent.js');
 
 describe('Thanks View', function() {
 	var thanks;
@@ -8233,10 +8501,79 @@ describe('Thanks View', function() {
 	});
 
 	describe('Showing and Hiding', function() {
+		var $thanks;
 
+		describe('Showing', function() {
+
+			beforeEach(function( done ) {
+				$thanks = thanks.render();
+
+				$thanks.css({ opacity: 0 });
+				$thanks.removeClass('active');
+
+				thanks.show();
+
+				setTimeout(function() {
+					done();
+				}, 300);
+			});
+
+			it('should have full opacity', function( done ) {
+				expect( $thanks ).toHaveCss({ opacity: '1' });
+				done();
+			});
+
+			it('should have the active class', function( done ) {
+				expect( $thanks ).toHaveClass('active');
+				done();
+			});
+		});
+
+		describe('Hiding', function() {
+
+			beforeEach(function( done ) {
+				$thanks = thanks.render();
+
+				$thanks.css({ opacity: 1 });
+				$thanks.addClass('active');
+
+				thanks.hide();
+
+				setTimeout(function() {
+					done();
+				}, 300);
+			});
+
+			it('should have zero opacity', function( done ) {
+				expect( $thanks ).toHaveCss({ opacity: '0' });
+				done();
+			});
+
+			it('should not have the active class', function( done ) {
+				expect( $thanks ).not.toHaveClass('active');
+				done();
+			});
+		});
+	});
+
+	describe('Listening to Events', function() {
+
+		beforeEach(function() {
+			thanks._setupEventListeners();
+		});
+
+		it('should show on successful registration', function() {
+			spyOn( thanks, 'show' );
+
+			ColumnsEvent.send( 'Columns.RegisterView.DidRegisterWithSuccess', {
+				registerView: {}
+			});
+
+			expect( thanks.show ).toHaveBeenCalled();
+		});
 	});
 });
-},{"../../javascripts/controllers/ThanksView.js":17}],41:[function(require,module,exports){
+},{"../../javascripts/controllers/ThanksView.js":17,"../../javascripts/models/ColumnsEvent.js":20}],41:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Table 				= require('../../javascripts/models/Table.js');

@@ -677,5 +677,5 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"thanks\">\n\n	<div class=\"columns-thanks-header\">\n		<i class=\"icon-columns\"></i>\n		<h2>Thanks!</h2>\n		<p>\n		Right now it's only possible to<br />\n		embed tables from a desktop.\n		</p>\n		<img src=\"/images/designer_desktops.png\">\n	</div>\n\n	<div class=\"columns-thanks-message\">\n		We've emailed a friendly reminder<br />\n		to launch The Columns Project<br />\n		when you're back at your desk.\n	</div>\n\n</div>";
+  return "<div id=\"thanks\">\n\n	<div class=\"columns-thanks-header\">\n		<i class=\"icon-columns\"></i>\n		<h2>Thanks!</h2>\n		<p>\n		Right now it's only possible to<br />\n		embed tables from a desktop.\n		</p>\n		<img src=\"/images/designer_desktops@2x.png\" width='288'>\n	</div>\n\n	<div class=\"columns-thanks-message\">\n		We've emailed a friendly reminder<br />\n		to launch The Columns Project<br />\n		when you're back at your desk.\n	</div>\n\n</div>";
   });

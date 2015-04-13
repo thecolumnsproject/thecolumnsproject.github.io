@@ -29,6 +29,11 @@ h2 {
 	font-weight: 300;
 }
 
+/* Fix bug with grunt-webfont plugin */
+[class^="icon-"]:before, [class*=" icon-"]:before {
+	vertical-align: baseline !important;
+}
+
 .columns-button {
 	height: 42px;
 	line-height: 42px;

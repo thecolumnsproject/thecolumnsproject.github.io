@@ -35,23 +35,23 @@ describe('Register View', function() {
 
 	describe('Registering', function() {
 
-		describe('Performing a Registration', function() {
+		// describe('Performing a Registration', function() {
 
-			beforeEach(function() {
-	      		spyOn( $, 'post' );
-	      		register._performRegistration('lubin.jeremy@gmail.com');
-	    	});
+		// 	beforeEach(function() {
+	 //      		spyOn( $, 'post' );
+	 //      		register._performRegistration('lubin.jeremy@gmail.com');
+	 //    	});
 
-			it('should post to the correct api', function() {
-				expect( $.post.calls.mostRecent().args[0] ).toEqual( Config.api.host + '/columns/register' );
-			});
+		// 	it('should post to the correct api', function() {
+		// 		expect( $.post.calls.mostRecent().args[0] ).toEqual( Config.api.host + '/columns/register' );
+		// 	});
 
-			it('should post the correct data', function() {
-				expect( $.post.calls.mostRecent().args[1] ).toEqual({
-	      			user: "lubin.jeremy@gmail.com",
-	      		});
-			});
-		});
+		// 	it('should post the correct data', function() {
+		// 		expect( $.post.calls.mostRecent().args[1] ).toEqual({
+	 //      			user: "lubin.jeremy@gmail.com",
+	 //      		});
+		// 	});
+		// });
 
 		describe('Success', function() {
 
@@ -136,7 +136,7 @@ describe('Register View', function() {
 			beforeEach(function() {
 				$register = register.render();
 				spyOn( register, 'setEmailError' );
-				spyOn( register, '_onRegistrationSuccess' );
+				spyOn( register, '_performRegistration' );
 			});
 
 			it('should set an error if the email is invalid', function() {
@@ -144,7 +144,7 @@ describe('Register View', function() {
 				$register.find('.columns-register-button').trigger('click');
 
 				expect( register.setEmailError ).toHaveBeenCalledWith( true );
-				expect( register._onRegistrationSuccess ).not.toHaveBeenCalled();
+				expect( register._performRegistration ).not.toHaveBeenCalled();
 			});
 
 			it('should call the registration success function if the email is valid', function() {
@@ -152,7 +152,7 @@ describe('Register View', function() {
 				$register.find('.columns-register-button').trigger('click');
 
 				expect( register.setEmailError ).toHaveBeenCalledWith( false );
-				expect( register._onRegistrationSuccess ).toHaveBeenCalled();
+				expect( register._performRegistration ).toHaveBeenCalled();
 			});
 		});
 

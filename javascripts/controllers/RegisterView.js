@@ -10,7 +10,8 @@ function RegisterView() {
 RegisterView.prototype.render = function() {
 
 	this.$register = $( TEMPLATE({
-		source: Config.embed.host + Config.embed.path
+		source: Config.embed.host + Config.embed.path,
+		table: Config.embed['feature-table']
 	}) );
 
 	this._setupInteractionEvents();
@@ -80,10 +81,24 @@ RegisterView.prototype._onRegistrationTap = function( event ) {
 
 	if ( this.isEmailValid() ) {
 		this.setEmailError( false );
-		this._onRegistrationSuccess();
+		this._performRegistration( this.$register.find('.columns-register-email-input input').val() );
 	} else {
 		this.setEmailError( true );
 	}
+};
+
+RegisterView.prototype._performRegistration = function( email ) {
+
+	$.post( Config.api.host + '/columns/register', { user: email }, function( data ) {
+		console.log( data );
+		if ( data.status === 'success' ) {
+			this._onRegistrationSuccess();
+		} else {
+			this._onRegistrationFail();
+		}
+	}.bind( this )).fail(function() {
+		this._onRegistrationFail();
+	}.bind( this ));
 };
 
 RegisterView.prototype._onRegistrationSuccess = function() {
@@ -93,6 +108,10 @@ RegisterView.prototype._onRegistrationSuccess = function() {
 	ColumnsEvent.send( 'Columns.RegisterView.DidRegisterWithSuccess', {
 		registerView: this
 	});
+};
+
+RegisterView.prototype._onRegistrationFail = function() {
+	
 };
 
 module.exports = RegisterView;

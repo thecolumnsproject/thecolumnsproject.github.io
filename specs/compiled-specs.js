@@ -180,7 +180,8 @@ module.exports = {
 		},
 		embed: {
 			host: 'http://127.0.0.1',
-			path: '/public/embed-table.js'
+			path: '/public/embed-table.js',
+			'feature-table': 129
 		}
 	},
 	staging: {
@@ -192,7 +193,8 @@ module.exports = {
 		},
 		embed: {
 			host: 'http://stg.colum.nz',
-			path: '/public/embed-table.js'
+			path: '/public/embed-table.js',
+			'feature-table': 5
 		}
 	},
 	production: {
@@ -204,7 +206,8 @@ module.exports = {
 		},
 		embed: {
 			host: 'http://colum.nz',
-			path: '/public/embed-table.js'
+			path: '/public/embed-table.js',
+			'feature-table': 168
 		}
 	}
 }[env];
@@ -766,7 +769,8 @@ function RegisterView() {
 RegisterView.prototype.render = function() {
 
 	this.$register = $( TEMPLATE({
-		source: Config.embed.host + Config.embed.path
+		source: Config.embed.host + Config.embed.path,
+		table: Config.embed['feature-table']
 	}) );
 
 	this._setupInteractionEvents();
@@ -836,10 +840,24 @@ RegisterView.prototype._onRegistrationTap = function( event ) {
 
 	if ( this.isEmailValid() ) {
 		this.setEmailError( false );
-		this._onRegistrationSuccess();
+		this._performRegistration( this.$register.find('.columns-register-email-input input').val() );
 	} else {
 		this.setEmailError( true );
 	}
+};
+
+RegisterView.prototype._performRegistration = function( email ) {
+
+	$.post( Config.api.host + '/columns/register', { user: email }, function( data ) {
+		console.log( data );
+		if ( data.status === 'success' ) {
+			this._onRegistrationSuccess();
+		} else {
+			this._onRegistrationFail();
+		}
+	}.bind( this )).fail(function() {
+		this._onRegistrationFail();
+	}.bind( this ));
 };
 
 RegisterView.prototype._onRegistrationSuccess = function() {
@@ -849,6 +867,10 @@ RegisterView.prototype._onRegistrationSuccess = function() {
 	ColumnsEvent.send( 'Columns.RegisterView.DidRegisterWithSuccess', {
 		registerView: this
 	});
+};
+
+RegisterView.prototype._onRegistrationFail = function() {
+	
 };
 
 module.exports = RegisterView;
@@ -4736,8 +4758,9 @@ describe('Mobile View', function() {
 
 
 },{"../../javascripts/controllers/MobileView.js":7,"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/controllers/ThanksView.js":17}],31:[function(require,module,exports){
-var RegisterView = require('../../javascripts/controllers/RegisterView.js');
-var ColumnsEvent = require('../../javascripts/models/ColumnsEvent.js');
+var RegisterView 	= require('../../javascripts/controllers/RegisterView.js');
+var ColumnsEvent 	= require('../../javascripts/models/ColumnsEvent.js');
+var Config 			= require('../../javascripts/config.js');
 
 describe('Register View', function() {
 	var register;
@@ -4771,6 +4794,24 @@ describe('Register View', function() {
 	});
 
 	describe('Registering', function() {
+
+		describe('Performing a Registration', function() {
+
+			beforeEach(function() {
+	      		spyOn( $, 'post' );
+	      		register._performRegistration('lubin.jeremy@gmail.com');
+	    	});
+
+			it('should post to the correct api', function() {
+				expect( $.post.calls.mostRecent().args[0] ).toEqual( Config.api.host + '/columns/register' );
+			});
+
+			it('should post the correct data', function() {
+				expect( $.post.calls.mostRecent().args[1] ).toEqual({
+	      			user: "lubin.jeremy@gmail.com",
+	      		});
+			});
+		});
 
 		describe('Success', function() {
 
@@ -4907,7 +4948,7 @@ describe('Register View', function() {
 		});
 	});
 });
-},{"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/models/ColumnsEvent.js":20}],32:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/models/ColumnsEvent.js":20}],32:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var StyleComponentView 	= require('../../javascripts/controllers/StyleComponentView.js');
 

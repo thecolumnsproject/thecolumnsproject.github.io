@@ -1,5 +1,6 @@
-var RegisterView = require('../../javascripts/controllers/RegisterView.js');
-var ColumnsEvent = require('../../javascripts/models/ColumnsEvent.js');
+var RegisterView 	= require('../../javascripts/controllers/RegisterView.js');
+var ColumnsEvent 	= require('../../javascripts/models/ColumnsEvent.js');
+var Config 			= require('../../javascripts/config.js');
 
 describe('Register View', function() {
 	var register;
@@ -33,6 +34,24 @@ describe('Register View', function() {
 	});
 
 	describe('Registering', function() {
+
+		describe('Performing a Registration', function() {
+
+			beforeEach(function() {
+	      		spyOn( $, 'post' );
+	      		register._performRegistration('lubin.jeremy@gmail.com');
+	    	});
+
+			it('should post to the correct api', function() {
+				expect( $.post.calls.mostRecent().args[0] ).toEqual( Config.api.host + '/columns/register' );
+			});
+
+			it('should post the correct data', function() {
+				expect( $.post.calls.mostRecent().args[1] ).toEqual({
+	      			user: "lubin.jeremy@gmail.com",
+	      		});
+			});
+		});
 
 		describe('Success', function() {
 

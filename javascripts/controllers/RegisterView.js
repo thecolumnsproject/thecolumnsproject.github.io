@@ -11,7 +11,7 @@ RegisterView.prototype.render = function() {
 
 	this.$register = $( TEMPLATE({
 		source: Config.embed.host + Config.embed.path,
-		table: Config.embed['feature-table']
+		table: Config.embed.mobile['feature-table']
 	}) );
 
 	this._setupInteractionEvents();

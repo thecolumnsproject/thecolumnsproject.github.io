@@ -181,7 +181,12 @@ module.exports = {
 		embed: {
 			host: 'http://127.0.0.1',
 			path: '/public/embed-table.js',
-			'feature-table': 129
+			desktop: {
+				'feature-table': 129
+			},
+			mobile: {
+				'feature-table': 129
+			}
 		}
 	},
 	staging: {
@@ -194,7 +199,12 @@ module.exports = {
 		embed: {
 			host: 'http://stg.colum.nz',
 			path: '/public/embed-table.js',
-			'feature-table': 5
+			desktop: {
+				'feature-table': 8
+			},
+			mobile: {
+				'feature-table': 5
+			}
 		}
 	},
 	production: {
@@ -207,7 +217,12 @@ module.exports = {
 		embed: {
 			host: 'http://colum.nz',
 			path: '/public/embed-table.js',
-			'feature-table': 168
+			desktop: {
+				'feature-table': 1
+			},
+			mobile: {
+				'feature-table': 1
+			}
 		}
 	}
 }[env];
@@ -236,7 +251,10 @@ function DesktopView() {
 
 DesktopView.prototype.render = function() {
 
-	this.$desktop = $( TEMPLATE() );
+	this.$desktop = $( TEMPLATE({
+		source: Config.embed.host + Config.embed.path,
+		table: Config.embed.desktop['feature-table']
+	}));
 
 	$('#app').append( this.$desktop );
 	this.upload.render();
@@ -770,7 +788,7 @@ RegisterView.prototype.render = function() {
 
 	this.$register = $( TEMPLATE({
 		source: Config.embed.host + Config.embed.path,
-		table: Config.embed['feature-table']
+		table: Config.embed.mobile['feature-table']
 	}) );
 
 	this._setupInteractionEvents();

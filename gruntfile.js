@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 		handlebars: {
 			embed: {
 				options: {
-					namespace: "Columns.EmbeddableTemplates"
+					namespace: "Columns.EmbeddableTemplates",
 				},
 				files: {
 					"templates/embeddable-templates.js": "templates/embed-table/*.hbs"
@@ -116,7 +116,12 @@ module.exports = function(grunt) {
 		browserify: {
 			embed: {
 				src: ['javascripts/embed-table.js'],
-				dest: 'compiled-javascripts/embed-table.js'
+				dest: 'compiled-javascripts/embed-table.js',
+				// options: {
+				// 	browserifyOptions: {
+				// 		debug: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? false : true
+				// 	},
+				// }
 			},
 			app: {
 				src: ['javascripts/main.js'],

@@ -11,7 +11,12 @@ module.exports = {
 		embed: {
 			host: 'http://127.0.0.1',
 			path: '/public/embed-table.js',
-			'feature-table': 129
+			desktop: {
+				'feature-table': 129
+			},
+			mobile: {
+				'feature-table': 129
+			}
 		}
 	},
 	staging: {
@@ -24,7 +29,12 @@ module.exports = {
 		embed: {
 			host: 'http://stg.colum.nz',
 			path: '/public/embed-table.js',
-			'feature-table': 5
+			desktop: {
+				'feature-table': 8
+			},
+			mobile: {
+				'feature-table': 5
+			}
 		}
 	},
 	production: {
@@ -37,7 +47,12 @@ module.exports = {
 		embed: {
 			host: 'http://colum.nz',
 			path: '/public/embed-table.js',
-			'feature-table': 168
+			desktop: {
+				'feature-table': 1
+			},
+			mobile: {
+				'feature-table': 1
+			}
 		}
 	}
 }[env];

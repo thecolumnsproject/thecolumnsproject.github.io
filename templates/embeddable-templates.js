@@ -245,7 +245,7 @@ function program1(depth0,data,depth1) {
   buffer += "\n	\n	";
   stack1 = (helper = helpers.partial || (depth1 && depth1.partial),options={hash:{},data:data},helper ? helper.call(depth0, (depth1 && depth1.row_layout), depth0, options) : helperMissing.call(depth0, "partial", (depth1 && depth1.row_layout), depth0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n";
+  buffer += "\n	\n";
   return buffer;
   }
 

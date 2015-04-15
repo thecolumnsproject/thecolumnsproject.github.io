@@ -2,8 +2,8 @@
 
 // Load Velocity, where it will attach to jquery
 // require('../bower_components/velocity/velocity.js');
-var Config = require('./embed-config.js'),
-	Columnsbars = require('./embed-handlebars.js');
+var Config = require('./embed-config.js');
+	// Columnsbars = require('./embed-handlebars.js');
 	// $$ = require('jquery-browserify');
 
 // Require Handlebars and our handlebars templates
@@ -83,7 +83,7 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 			return $$(script).data('preview') === true; 
 		});
 		if ( !scripts.length ) {
-			$$('head').append(Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']());
+			$$('head').append( Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']() );
 		}
 
 		// Make sure we don't do this setup again
@@ -105,8 +105,6 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 			scripts.push(scriptTag);
 
 			// Create a new table
-			console.log('Table ' + i);
-			console.log(scriptTag);
 			var table = new ColumnsTable(scriptTag);
 			// table.preview = $$(scriptTag).data('preview');
 			tables.push(table);

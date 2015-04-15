@@ -22,7 +22,10 @@ function DesktopView() {
 
 DesktopView.prototype.render = function() {
 
-	this.$desktop = $( TEMPLATE() );
+	this.$desktop = $( TEMPLATE({
+		source: Config.embed.host + Config.embed.path,
+		table: Config.embed.desktop['feature-table']
+	}));
 
 	$('#app').append( this.$desktop );
 	this.upload.render();

@@ -1,6 +1,8 @@
 // Setup necessary handlebars templates and helpers
 // Handlebars.registerPartial('row', Columns.EmbeddableTemplates['templates/embed-table/row.hbs']);
 Handlebars.registerHelper('partial', function(name, ctx, hash) {
+    console.log(name);
+    console.log(Handlebars.partials);
     var ps = Handlebars.partials;
     if(typeof ps[name] !== 'function')
         ps[name] = Handlebars.compile(ps[name]);

@@ -9,11 +9,12 @@
 	width: 100%;
 	top: 0;
 	left: 0;
+	overflow:hidden;
 	background-color: $primary-color;
 	z-index: $upload-index;
-	background-image: url("/images/upload_devices.png");
-	background-repeat: no-repeat;
-	background-position: right bottom;
+	// background-image: url("/images/upload_devices.png");
+	// background-repeat: no-repeat;
+	// background-position: right bottom;
 	pointer-events: none;
 }
 
@@ -22,6 +23,107 @@
 }
 
 $upload-copy-spacing: 120px;
+
+.upload-preview {
+	position: absolute;
+	right: $upload-copy-spacing;
+	top: $upload-copy-spacing;
+	height: 879px;
+	width: 432px;
+	background-image: url("/images/iphone_6_frame@2x.png");
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-size: contain;
+}
+
+$upload-preview-screen-spacing: 24px;
+$upload-preview-screen-gutter: 16px;
+$upload-preview-table-height: 149px;
+
+.upload-preview-screen {
+	width: 373px - 2 * $upload-preview-screen-gutter;
+	height: 664px - (64px + $upload-preview-screen-spacing);
+	background: white;
+	position: relative;
+	overflow: scroll;
+	top: 107px;
+	left: 29px;
+	padding: 64px + $upload-preview-screen-spacing $upload-preview-screen-gutter 0 $upload-preview-screen-gutter;
+
+	// .upload-preview-table {
+	// 	position: absolute;
+ //  		top: 307px;
+ //  		width: 100%;
+	// }
+
+	> img {
+		@include transition(opacity 0.2s);
+	}
+
+	&.newspaper {
+		.upload-preview-screen-newspaper { opacity: 1 }
+		.upload-preview-screen-journal { opacity: 0 }
+		.upload-preview-screen-blog { opacity: 0 }
+	}
+
+	&.journal {
+		.upload-preview-screen-newspaper { opacity: 0 }
+		.upload-preview-screen-journal { opacity: 1 }
+		.upload-preview-screen-blog { opacity: 0 }
+	}
+
+	&.blog {
+		.upload-preview-screen-newspaper { opacity: 0 }
+		.upload-preview-screen-journal { opacity: 0 }
+		.upload-preview-screen-blog { opacity: 1 }
+	}
+}
+
+.upload-preview-screen > * {
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.upload-preview-screen-header {
+	height: 64px;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-bottom: $upload-preview-screen-spacing;
+}
+
+.newspaper .upload-preview-screen-header { background-image: url("/images/newspaper_header@2x.png"); }
+.journal .upload-preview-screen-header { background-image: url("/images/journal_header@2x.png"); }
+.blog .upload-preview-screen-header { background-image: url("/images/blog_header@2x.png"); }
+
+.upload-preview-screen-title {
+	height: 27px;
+	margin-bottom: $upload-preview-screen-spacing;
+}
+
+.newspaper .upload-preview-screen-title { background-image: url("/images/newspaper_title@2x.png"); }
+.journal .upload-preview-screen-title { background-image: url("/images/journal_title@2x.png"); }
+.blog .upload-preview-screen-title { background-image: url("/images/blog_title@2x.png"); }
+
+.upload-preview-screen-data-tagline {
+	height: 16px;
+	margin-bottom: $upload-preview-screen-spacing / 3;
+}
+
+.newspaper .upload-preview-screen-data-tagline { background-image: url("/images/newspaper_data_tagline@2x.png"); }
+.journal .upload-preview-screen-data-tagline { background-image: url("/images/journal_data_tagline@2x.png"); }
+.blog .upload-preview-screen-data-tagline { background-image: url("/images/blog_data_tagline@2x.png"); }
+
+.upload-preview-screen-paragraph {
+	height: 116px;
+	background-image: url("/images/article_paragraph@2x.png");
+	margin-bottom: $upload-preview-screen-spacing;
+}
+
+.columns-table-widget {
+	margin-bottom: $upload-preview-screen-spacing;
+}
 
 .upload-copy {
 	@include display(flex);

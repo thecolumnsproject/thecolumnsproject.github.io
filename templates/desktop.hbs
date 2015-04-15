@@ -26,6 +26,64 @@
 			<input type="file" accept='text/csv' style="display:none;"/>
 		</div>
 	</div>
+	<div class="upload-preview">
+		<div class="upload-preview-screen newspaper">
+			{{!-- <img class="upload-preview-screen-newspaper" src="images/newspaper_screen@2x.png" alt="" width="373">
+			<img class="upload-preview-screen-journal" src="images/journal_screen@2x.png" alt="" width="373">
+			<img class="upload-preview-screen-blog" src="images/blog_screen@2x.png" alt="" width="373"> --}}
+
+			<div class="upload-preview-screen-header animate"></div>
+			<div class="upload-preview-screen-title animate"></div>
+			<div class="upload-preview-screen-paragraph animate"></div>
+			<div class="upload-preview-screen-data-tagline animate"></div>
+				<script type="text/javascript" src="{{source}}" data-table-id="{{table}}" data-force-mobile='true' async></script>
+			<div class="upload-preview-screen-paragraph animate"></div>
+			<div class="upload-preview-screen-paragraph animate"></div>
+		</div>
+
+		<script type="text/javascript">
+
+			var screens = ['newspaper', 'journal', 'blog'],
+				currentScreenIndex = 0,
+				$screen = $('.upload-preview-screen .animate');
+
+			setInterval(function() {
+				switchScreen();
+			}, 6000);
+
+			function switchScreen( screen ) {
+
+				$screen.velocity({
+					opacity: 0
+				}, {
+					complete: function( elements ) {
+						$screen.parent().removeClass( currentScreen() );
+						$screen.parent().addClass( nextScreen() );
+						currentScreenIndex = nextScreenIndex();
+					}
+				}).velocity({
+					opacity: 1
+				});
+			}
+
+			function currentScreen() {
+				return screens[ currentScreenIndex ];
+			}
+
+			function nextScreen() {
+				return screens[ nextScreenIndex() ];
+			}
+
+			function nextScreenIndex() {
+				if ( currentScreenIndex >= screens.length - 1 ) {
+					return 0;
+				} else {
+					return currentScreenIndex + 1
+				}
+			}
+
+		</script>
+	</div>
 </div>
 
 <div id="editor">

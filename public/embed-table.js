@@ -2999,7 +2999,7 @@ function program1(depth0,data,depth1) {
   buffer += "\n	\n	";
   stack1 = (helper = helpers.partial || (depth1 && depth1.partial),options={hash:{},data:data},helper ? helper.call(depth0, (depth1 && depth1.row_layout), depth0, options) : helperMissing.call(depth0, "partial", (depth1 && depth1.row_layout), depth0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n";
+  buffer += "\n	\n";
   return buffer;
   }
 
@@ -6889,36 +6889,12 @@ module.exports = {
 	img_path: IMG_PATH
 };
 },{}],3:[function(require,module,exports){
-// Setup necessary handlebars templates and helpers
-// Handlebars.registerPartial('row', Columns.EmbeddableTemplates['templates/embed-table/row.hbs']);
-Handlebars.registerHelper('partial', function(name, ctx, hash) {
-    var ps = Handlebars.partials;
-    if(typeof ps[name] !== 'function')
-        ps[name] = Handlebars.compile(ps[name]);
-    return ps[name](ctx, hash);
-});
-Handlebars.registerPartial('group', Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']);
-Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
-Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
-Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
-Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
-
-Handlebars.registerHelper('ifIsGroup', function(type, options) {
-	return type == 'group' ? options.fn(this) : options.inverse(this);
-});
-
-Handlebars.registerHelper('ifIsSingle', function(type, options) {
-	return type == 'single' ? options.fn(this) : options.inverse(this);
-});
-
-module.exports = Handlebars;
-},{}],4:[function(require,module,exports){
 // require('../bower_components/jquery/dist/jquery.js');
 
 // Load Velocity, where it will attach to jquery
 // require('../bower_components/velocity/velocity.js');
-var Config = require('./embed-config.js'),
-	Columnsbars = require('./embed-handlebars.js');
+var Config = require('./embed-config.js');
+	// Columnsbars = require('./embed-handlebars.js');
 	// $$ = require('jquery-browserify');
 
 // Require Handlebars and our handlebars templates
@@ -6998,7 +6974,7 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 			return $$(script).data('preview') === true; 
 		});
 		if ( !scripts.length ) {
-			$$('head').append(Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']());
+			$$('head').append( Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']() );
 		}
 
 		// Make sure we don't do this setup again
@@ -7020,8 +6996,6 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 			scripts.push(scriptTag);
 
 			// Create a new table
-			console.log('Table ' + i);
-			console.log(scriptTag);
 			var table = new ColumnsTable(scriptTag);
 			// table.preview = $$(scriptTag).data('preview');
 			tables.push(table);
@@ -7037,7 +7011,7 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 
 
 })();
-},{"../javascripts/models/ColumnsTable.js":6,"./embed-config.js":2,"./embed-handlebars.js":3}],5:[function(require,module,exports){
+},{"../javascripts/models/ColumnsTable.js":5,"./embed-config.js":2}],4:[function(require,module,exports){
 function ColumnsEvent () {
 
 }
@@ -7059,7 +7033,7 @@ ColumnsEvent.offAll = function() {
 };
 
 module.exports = ColumnsEvent;
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var Config = require('../embed-config.js'),
 	Velocity = require('../../bower_components/velocity/velocity.js'),
 	Hammer = require('../../vendor/hammer.js'),
@@ -7157,6 +7131,7 @@ function ColumnsTable(script) {
 
 	// Determine whether or not we're in preview mode
 	this.preview = $$(script).data('preview');
+	this.forceMobile = $$(script).data('force-mobile');
 
 	// Remember the table instance once it's been inserted into the DOM
 	// as well as its jquery counterpart
@@ -7183,6 +7158,42 @@ function ColumnsTable(script) {
 	if ( this.preview ) {
 		this._setupEventListeners();
 	}
+
+	// Create a unique handlebars environment
+	// this.columnsbars = Handlebars.noConflict();
+	this._setupHandlebars();
+};
+
+ColumnsTable.prototype._setupHandlebars = function() {
+
+	Handlebars.registerHelper('partial', function(name, ctx, hash) {
+	    // var ps = Handlebars.partials;
+	    console.log(this.script);
+	    // console.log(ps);
+	    console.log(name);
+	    // console.log(ps[name]);
+	    // if(typeof ps[name] !== 'function')
+	    //     ps[name] = Handlebars.compile(ps[name]);
+	    // return ps[name](ctx, hash);
+
+	    return Columns['row-templates'][ name ](ctx, hash);
+	}.bind(this));
+	Handlebars.registerPartial({
+		group: Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']
+	});
+	// Handlebars.registerPartial('group', Handlebars.template( Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']) );
+	Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
+	Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
+	Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
+	Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
+
+	Handlebars.registerHelper('ifIsGroup', function(type, options) {
+		return type == 'group' ? options.fn(this) : options.inverse(this);
+	});
+
+	Handlebars.registerHelper('ifIsSingle', function(type, options) {
+		return type == 'single' ? options.fn(this) : options.inverse(this);
+	});
 };
 
 // Render the initial table to the screen and position it correctly
@@ -7310,7 +7321,8 @@ ColumnsTable.prototype.fetchData = function() {
 };
 
 ColumnsTable.prototype.templateName = function() {
-	return 'row_layout_' + Columns.scripts.indexOf(this.script); 
+	// return 'row_layout_' + Columns.scripts.indexOf(this.script); 
+	return 'row_layout';
 };
 
 ColumnsTable.prototype.generateLayout = function(layout, reload) {
@@ -7320,7 +7332,11 @@ ColumnsTable.prototype.generateLayout = function(layout, reload) {
 	var row_layout = Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']({layout: layout});
 	var row_template = Handlebars.compile(row_layout);
 	var templateName = this.templateName();
-	Handlebars.registerPartial(templateName, row_template);
+	// Handlebars.registerPartial('row_layout', row_template);
+
+	if ( !Columns['row-templates'] ) Columns['row-templates'] = [];
+	Columns['row-templates'][ Columns.scripts.indexOf( this.script ) ] = row_template;
+	console.log(Handlebars.partials);
 
 	if (reload) {
 		this.renderData();
@@ -7386,7 +7402,7 @@ ColumnsTable.prototype.renderData = function(data) {
 	// For now, only render the first 20 rows
 	$$rows.remove();
 	$$tableBody.prepend(rowsTemplate({
-		row_layout: this.templateName(),
+		row_layout: Columns.scripts.indexOf( this.script ),
 		rows: data.data.slice(0, 20)
 	}));	
 
@@ -7655,7 +7671,7 @@ ColumnsTable.prototype.expand = function() {
 	// add a placeholder
 	// and make sure we're the highest z-index in the land
 	var offsetTop;
-	if (this.preview) {
+	if (this.preview || this.forceMobile ) {
 		offsetTop = this.getOffsetTop();
 	} else {
 		offsetTop = parseInt($$.Velocity.hook($$table, "translateY"));
@@ -7670,8 +7686,8 @@ ColumnsTable.prototype.expand = function() {
 	// Replace the table with a same-height placeholder
 	var placeholder = document.createElement('div');
 	placeholder.className = PLACEHOLDER_CLASS;
-	placeholder.style.height = $$table.height();
-	placeholder.style.width = $$table.width();
+	placeholder.style.height = $$table.outerHeight() + 'px';
+	placeholder.style.width = $$table.outerWidth() + 'px';
 	this.$$originalSibling = $$table.siblings('script').first();
 	if (this.isLargeFormFactor()) {
 		$$table.appendTo(this.$$container);	
@@ -7688,7 +7704,7 @@ ColumnsTable.prototype.expand = function() {
 	this.expandHeader($$header);
 
 	var props;
-	if (this.preview) {
+	if (this.preview || this.forceMobile ) {
 		props = {
 			translateY: -this.getOffsetTop()
 		}
@@ -7758,7 +7774,7 @@ ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$foo
 	// var bgHeight = bgHeight < this.$$container.height ? this.$$container.height : bgHeight;
 	// var bgHeight = this.$$container.height();
 	// Use javascript height method because of a bug with jQuery and the iOS safari toolbar
-	var bgHeight = this.$$container.get(0).innerHeight || this.$$container.height();
+	var bgHeight = this.$$container.get(0).innerHeight || this.$$container.outerHeight();
 
 	// Velocity($$bg.get(0), {
 	$$bg.velocity({
@@ -7902,7 +7918,7 @@ ColumnsTable.prototype.collapse = function() {
 	// }, 0);
 
 	var props;
-	if (this.preview) {
+	if (this.preview || this.forceMobile ) {
 		props = {
 			translateY: 0
 		}
@@ -8091,7 +8107,7 @@ ColumnsTable.prototype._onTableDidChange = function( event, data ) {
 };
 
 module.exports = ColumnsTable;
-},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":7,"../../vendor/prevent-ghost-click.js":8,"../embed-config.js":2,"./ColumnsEvent.js":5}],7:[function(require,module,exports){
+},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":6,"../../vendor/prevent-ghost-click.js":7,"../embed-config.js":2,"./ColumnsEvent.js":4}],6:[function(require,module,exports){
 /*! Hammer.JS - v2.0.4 - 2014-09-28
  * http://hammerjs.github.io/
  *
@@ -10557,7 +10573,7 @@ if (typeof module != 'undefined' && module.exports) {
 
 })(window, document, 'Hammer');
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /**
  * Prevent click events after a touchend.
  * 
@@ -10654,6 +10670,6 @@ if (typeof module != 'undefined' && module.exports) {
     };
 
 })(window, document, 'PreventGhostClick');
-},{}]},{},[4]);
+},{}]},{},[3]);
 
 }());

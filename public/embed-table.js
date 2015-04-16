@@ -7598,7 +7598,7 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				Column.send({
+				ColumnsAnalytics.send({
 					category: 'table',
 					action: 'expand',
 					label: 'body'
@@ -7627,7 +7627,7 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				Column.send({
+				ColumnsAnalytics.send({
 					category: 'table',
 					action: 'expand',
 					label: 'expand button'
@@ -7656,7 +7656,7 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				Column.send({
+				ColumnsAnalytics.send({
 					category: 'table',
 					action: 'retry',
 					label: 'error message'
@@ -7692,7 +7692,7 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				Column.send({
+				ColumnsAnalytics.send({
 					category: 'table',
 					action: 'collapse',
 					label: 'close button'

@@ -20,7 +20,8 @@
 
 .layout-table-preview {
 	width: 373px;
-	height: 664px;
+	@include calc(height, '100% - 107px');
+	max-height: 664px;
 	position: absolute;
 	top: 107px;
 	left: 114px;
@@ -51,6 +52,7 @@
 	@include justify-content(center);
 	position: absolute;
 	top: 186px;
+	top: 79px;
 	z-index: $layout-index;
 }
 

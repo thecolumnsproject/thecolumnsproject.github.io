@@ -431,7 +431,8 @@ ColumnsTable.prototype.renderData = function(data) {
 
 	// Announce that the table has rendered data
 	if (this.preview || this.sample ) {
-		$(document).trigger('ColumnsTableDidRenderData', {table: this});
+		// $(document).trigger('ColumnsTableDidRenderData', {table: this});
+		ColumnsEvent.send('ColumnsTableDidRenderData', {table: this});
 	}
 
 	// Remove the loading class after the screen repaints
@@ -605,7 +606,8 @@ ColumnsTable.prototype.setupEvents = function() {
 	// Notify the preview template when the table scrolls
 	if (this.preview || this.sample ) {
 		this.$$table.find('.columns-table-container').on('scroll', function(e) {
-			$(document).trigger('ColumnsTableDidScroll', {table: _this, originalEvent: e});
+			// $(document).trigger('ColumnsTableDidScroll', {table: _this, originalEvent: e});
+			ColumnsEvent.send('ColumnsTableDidScroll', {table: _this, originalEvent: e});
 		})
 	}
 
@@ -653,7 +655,8 @@ ColumnsTable.prototype.expand = function() {
 	// 	}
 	// });
 	if (this.preview || this.sample ) {
-		$(document).trigger('ColumnsTableWillExpand', {table: this});
+		// $(document).trigger('ColumnsTableWillExpand', {table: this});
+		ColumnsEvent.send('ColumnsTableWillExpand', {table: this});
 	}
 
 	var $$table = this.$$table;
@@ -726,7 +729,8 @@ ColumnsTable.prototype.expand = function() {
 			this.$$container.addClass('table-expanded');
 
 			if (_this.preview || this.sample ) {
-				$(document).trigger('ColumnsTableDidExpand', {table: _this});
+				// $(document).trigger('ColumnsTableDidExpand', {table: _this});
+				ColumnsEvent.send('ColumnsTableDidExpand', {table: _this});
 			}
 		}.bind( this )
 	});
@@ -904,6 +908,11 @@ ColumnsTable.prototype.collapse = function() {
 	$$rows = $$table.find('.columns-table-row'),
 	$$header = $$table.find('.columns-table-header');
 
+	if (this.preview || this.sample ) {
+		// $(document).trigger('ColumnsTableWillExpand', {table: this});
+		ColumnsEvent.send('ColumnsTableWillCollapse', {table: this});
+	}
+
 	// and remove the placeholder
 
 	// $$parent.addClass(RELOCATED_CLASS);
@@ -948,7 +957,8 @@ ColumnsTable.prototype.collapse = function() {
 			this.$$container.removeClass('table-expanded');
 
 			if (_this.preview || this.sample ) {
-				$(document).trigger('ColumnsTableDidCollapse', {table: _this});
+				// $(document).trigger('ColumnsTableDidCollapse', {table: _this});
+				ColumnsEvent.send('ColumnsTableDidCollapse', {table: _this});
 			}
 		}.bind( this )
 	});

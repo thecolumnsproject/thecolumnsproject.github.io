@@ -2,7 +2,8 @@ var Config = require('../embed-config.js'),
 	Velocity = require('../../bower_components/velocity/velocity.js'),
 	Hammer = require('../../vendor/hammer.js'),
 	PreventGhostClick = require('../../vendor/prevent-ghost-click.js'),
-	ColumnsEvent = require('./ColumnsEvent.js');
+	ColumnsEvent = require('./ColumnsEvent.js'),
+	ColumnsAnalytics = require('./ColumnsAnalytics.js');
 
 // Make sure our version of jquery isn't polluting the namespace
 $$ = window.jQuery.noConflict(true);
@@ -96,6 +97,7 @@ function ColumnsTable(script) {
 	// Determine whether or not we're in preview mode
 	this.preview = $$(script).data('preview');
 	this.forceMobile = $$(script).data('force-mobile');
+	this.noTrack = $(script).data('no-track');
 
 	// Remember the table instance once it's been inserted into the DOM
 	// as well as its jquery counterpart
@@ -211,9 +213,10 @@ ColumnsTable.prototype.render = function() {
 	});
 
 	// Track the table render
-	if ( !_this.preview ) {
-		gaColumnz('send', 'event', 'table', 'render', '', +_this.id);
-	}
+	this.send({
+		category: 'table',
+		action: 'render'
+	});
 };
 
 ColumnsTable.prototype.isLargeFormFactor = function() {
@@ -268,9 +271,11 @@ ColumnsTable.prototype.fetchData = function() {
 			_this.setError(false);
 
 			// Track the table population
-			if ( !_this.preview ) {
-				gaColumnz('send', 'event', 'table', 'populate', '', +_this.id);
-			}
+			this.send({
+				category: 'table',
+				action: 'populate'
+			});
+
 		} else {
 			_this.setLoading(false);
 			_this.setError(true);
@@ -470,9 +475,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'expand', 'body');
+				Column.send({
+					category: 'table',
+					action: 'expand',
+					label: 'body'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'expand', 'body', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'expand',
+					label: 'body'
+				});
 			}
 		}
 	});
@@ -491,9 +504,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'expand', 'expand button');
+				Column.send({
+					category: 'table',
+					action: 'expand',
+					label: 'expand button'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'expand', 'expand button', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'expand',
+					label: 'expand button'
+				});
 			}
 		}
 	});
@@ -512,9 +533,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'retry', 'error message');
+				Column.send({
+					category: 'table',
+					action: 'retry',
+					label: 'error message'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'retry', 'error message', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'retry',
+					label: 'error message'
+				});
 			}
 		}
 	});
@@ -540,9 +569,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'collapse', 'close button');
+				Column.send({
+					category: 'table',
+					action: 'collapse',
+					label: 'close button'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'collapse', 'close button', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'collapse',
+					label: 'close button'
+				});
 			}
 
 			// Prevent the dom from doing any other conflicting stuff
@@ -1067,6 +1104,37 @@ ColumnsTable.prototype._onTableDidChange = function( event, data ) {
 
 	// Render Data
 	this.renderData( table );
+
+};
+
+ColumnsTable.prototype.send = function( props ) {
+	var props = props || {},
+		mixpanelObj = {};
+
+	// Don't send events if this is a preview
+	// or we're explicitly not tracking this table
+	if ( _this.preview || this.noTrack ) {
+		return;
+	}
+
+	// Make sure the properties are santized
+	props.action = props.action || '';
+	props.category = props.category || '';
+	props.label = props.label || '';
+	props.description = props.description || props.category + ' ' + props.action + ' ' + props.label;
+	props.description = props.description == '  ' ? '' : props.description;
+	props.table_id = this.id;
+	mixpanelObj['Table ID'] = props.table_id;
+
+	// Send a Google Analytics event
+	if ( window.gaColumnz ) {
+		gaColumnz( 'send', 'event', props.category, props.action, props.label, props.table_id );
+	}
+
+	// Send a mixpanel event
+	if ( window.mixpanel ) {
+		// mixpanel.track( props.description, mixpanelObj );
+	}
 
 };
 

@@ -79,12 +79,12 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 		if(!Columns.tables) { Columns.tables = []; };
 
 		// Add Google Analytics to the site if we're not in preview mode
-		var scripts = $$('script').filter(function(i, script) {
-			return $$(script).data('preview') === true; 
-		});
-		if ( !scripts.length ) {
+		// var scripts = $$('script').filter(function(i, script) {
+		// 	return $$(script).data('preview') === true; 
+		// });
+		// if ( !scripts.length ) {
 			$$('head').append( Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']() );
-		}
+		// }
 
 		// Make sure we don't do this setup again
 		Columns.hasFinishedSetup = true;

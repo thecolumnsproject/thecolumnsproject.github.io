@@ -6875,6 +6875,65 @@ return function (global, window, document, undefined) {
 Velocity, however, doesn't make this distinction. Thus, converting to or from the % unit with these subproperties
 will produce an inaccurate conversion value. The same issue exists with the cx/cy attributes of SVG circles and ellipses. */
 },{}],2:[function(require,module,exports){
+var env = '{{environment}}';
+module.exports = {
+	env: env,
+	development: {
+		api: {
+			host: 'http://127.0.0.1:8080'
+		},
+		web: {
+			host: 'http://127.0.0.1'
+		},
+		embed: {
+			host: 'http://127.0.0.1',
+			path: '/public/embed-table.js',
+			desktop: {
+				'feature-table': 129
+			},
+			mobile: {
+				'feature-table': 129
+			}
+		}
+	},
+	staging: {
+		api: {
+			host: 'http://apistg.thecolumnsproject.com'
+		},
+		web: {
+			host: 'http://appstg.thecolumnsproject.com'
+		},
+		embed: {
+			host: 'http://stg.colum.nz',
+			path: '/public/embed-table.js',
+			desktop: {
+				'feature-table': 8
+			},
+			mobile: {
+				'feature-table': 5
+			}
+		}
+	},
+	production: {
+		api: {
+			host: 'http://api.thecolumnsproject.com'
+		},
+		web: {
+			host: 'http://app.thecolumnsproject.com'
+		},
+		embed: {
+			host: 'http://colum.nz',
+			path: '/public/embed-table.js',
+			desktop: {
+				'feature-table': 1
+			},
+			mobile: {
+				'feature-table': 1
+			}
+		}
+	}
+}[env];
+},{}],3:[function(require,module,exports){
 var API_HOST = 'http://127.0.0.1:8080',
 	ROOT_PATH = 'http://127.0.0.1',
 	EMBED_PATH = ROOT_PATH + '/public/embed-table.js',
@@ -6888,7 +6947,7 @@ module.exports = {
 	css_path: CSS_PATH,
 	img_path: IMG_PATH
 };
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 // require('../bower_components/jquery/dist/jquery.js');
 
 // Load Velocity, where it will attach to jquery
@@ -6970,12 +7029,12 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 		if(!Columns.tables) { Columns.tables = []; };
 
 		// Add Google Analytics to the site if we're not in preview mode
-		var scripts = $$('script').filter(function(i, script) {
-			return $$(script).data('preview') === true; 
-		});
-		if ( !scripts.length ) {
+		// var scripts = $$('script').filter(function(i, script) {
+		// 	return $$(script).data('preview') === true; 
+		// });
+		// if ( !scripts.length ) {
 			$$('head').append( Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']() );
-		}
+		// }
 
 		// Make sure we don't do this setup again
 		Columns.hasFinishedSetup = true;
@@ -7011,7 +7070,39 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 
 
 })();
-},{"../javascripts/models/ColumnsTable.js":5,"./embed-config.js":2}],4:[function(require,module,exports){
+},{"../javascripts/models/ColumnsTable.js":7,"./embed-config.js":3}],5:[function(require,module,exports){
+var Config = require('../config.js');
+
+module.exports = ColumnsAnalytics;
+
+function ColumnsAnalytics() {}
+
+ColumnsAnalytics.send = function( props ) {
+	var props = props || {},
+		mixpanelObj = {};
+
+	// Make sure the properties are santized
+	props.action = props.action || '';
+	props.category = props.category || '';
+	props.label = props.label || '';
+	props.description = props.description || props.category + ' ' + props.action + ' ' + props.label;
+	props.description = props.description == '  ' ? '' : props.description;
+	if ( props.table_id ) {
+		mixpanelObj['Table ID'] = props.table_id;
+	}
+
+	// Send a Google Analytics event
+	if ( window.ga ) {
+		ga( 'send', 'event', props.category, props.action, props.label, props.table_id );
+	}
+
+	// Send a mixpanel event
+	if ( window.mixpanel ) {
+		mixpanel.track( props.description, mixpanelObj );
+	}
+
+};
+},{"../config.js":2}],6:[function(require,module,exports){
 function ColumnsEvent () {
 
 }
@@ -7033,12 +7124,13 @@ ColumnsEvent.offAll = function() {
 };
 
 module.exports = ColumnsEvent;
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var Config = require('../embed-config.js'),
 	Velocity = require('../../bower_components/velocity/velocity.js'),
 	Hammer = require('../../vendor/hammer.js'),
 	PreventGhostClick = require('../../vendor/prevent-ghost-click.js'),
-	ColumnsEvent = require('./ColumnsEvent.js');
+	ColumnsEvent = require('./ColumnsEvent.js'),
+	ColumnsAnalytics = require('./ColumnsAnalytics.js');
 
 // Make sure our version of jquery isn't polluting the namespace
 $$ = window.jQuery.noConflict(true);
@@ -7132,6 +7224,7 @@ function ColumnsTable(script) {
 	// Determine whether or not we're in preview mode
 	this.preview = $$(script).data('preview');
 	this.forceMobile = $$(script).data('force-mobile');
+	this.noTrack = $(script).data('no-track');
 
 	// Remember the table instance once it's been inserted into the DOM
 	// as well as its jquery counterpart
@@ -7247,9 +7340,10 @@ ColumnsTable.prototype.render = function() {
 	});
 
 	// Track the table render
-	if ( !_this.preview ) {
-		gaColumnz('send', 'event', 'table', 'render', '', +_this.id);
-	}
+	this.send({
+		category: 'table',
+		action: 'render'
+	});
 };
 
 ColumnsTable.prototype.isLargeFormFactor = function() {
@@ -7304,9 +7398,11 @@ ColumnsTable.prototype.fetchData = function() {
 			_this.setError(false);
 
 			// Track the table population
-			if ( !_this.preview ) {
-				gaColumnz('send', 'event', 'table', 'populate', '', +_this.id);
-			}
+			this.send({
+				category: 'table',
+				action: 'populate'
+			});
+
 		} else {
 			_this.setLoading(false);
 			_this.setError(true);
@@ -7506,9 +7602,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'expand', 'body');
+				Column.send({
+					category: 'table',
+					action: 'expand',
+					label: 'body'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'expand', 'body', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'expand',
+					label: 'body'
+				});
 			}
 		}
 	});
@@ -7527,9 +7631,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'expand', 'expand button');
+				Column.send({
+					category: 'table',
+					action: 'expand',
+					label: 'expand button'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'expand', 'expand button', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'expand',
+					label: 'expand button'
+				});
 			}
 		}
 	});
@@ -7548,9 +7660,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'retry', 'error message');
+				Column.send({
+					category: 'table',
+					action: 'retry',
+					label: 'error message'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'retry', 'error message', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'retry',
+					label: 'error message'
+				});
 			}
 		}
 	});
@@ -7576,9 +7696,17 @@ ColumnsTable.prototype.setupEvents = function() {
 
 			// Track this tap
 			if ( _this.preview ) {
-				ga('send', 'event', 'table', 'collapse', 'close button');
+				Column.send({
+					category: 'table',
+					action: 'collapse',
+					label: 'close button'
+				});
 			} else {
-				gaColumnz('send', 'event', 'table', 'collapse', 'close button', +_this.id);
+				this.send({
+					category: 'table',
+					action: 'collapse',
+					label: 'close button'
+				});
 			}
 
 			// Prevent the dom from doing any other conflicting stuff
@@ -8106,8 +8234,39 @@ ColumnsTable.prototype._onTableDidChange = function( event, data ) {
 
 };
 
+ColumnsTable.prototype.send = function( props ) {
+	var props = props || {},
+		mixpanelObj = {};
+
+	// Don't send events if this is a preview
+	// or we're explicitly not tracking this table
+	if ( _this.preview || this.noTrack ) {
+		return;
+	}
+
+	// Make sure the properties are santized
+	props.action = props.action || '';
+	props.category = props.category || '';
+	props.label = props.label || '';
+	props.description = props.description || props.category + ' ' + props.action + ' ' + props.label;
+	props.description = props.description == '  ' ? '' : props.description;
+	props.table_id = this.id;
+	mixpanelObj['Table ID'] = props.table_id;
+
+	// Send a Google Analytics event
+	if ( window.gaColumnz ) {
+		gaColumnz( 'send', 'event', props.category, props.action, props.label, props.table_id );
+	}
+
+	// Send a mixpanel event
+	if ( window.mixpanel ) {
+		// mixpanel.track( props.description, mixpanelObj );
+	}
+
+};
+
 module.exports = ColumnsTable;
-},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":6,"../../vendor/prevent-ghost-click.js":7,"../embed-config.js":2,"./ColumnsEvent.js":4}],6:[function(require,module,exports){
+},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":8,"../../vendor/prevent-ghost-click.js":9,"../embed-config.js":3,"./ColumnsAnalytics.js":5,"./ColumnsEvent.js":6}],8:[function(require,module,exports){
 /*! Hammer.JS - v2.0.4 - 2014-09-28
  * http://hammerjs.github.io/
  *
@@ -10573,7 +10732,7 @@ if (typeof module != 'undefined' && module.exports) {
 
 })(window, document, 'Hammer');
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /**
  * Prevent click events after a touchend.
  * 
@@ -10670,6 +10829,6 @@ if (typeof module != 'undefined' && module.exports) {
     };
 
 })(window, document, 'PreventGhostClick');
-},{}]},{},[3]);
+},{}]},{},[4]);
 
 }());

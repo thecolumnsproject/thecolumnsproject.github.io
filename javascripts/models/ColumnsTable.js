@@ -134,10 +134,6 @@ ColumnsTable.prototype._setupHandlebars = function() {
 
 	Handlebars.registerHelper('partial', function(name, ctx, hash) {
 	    // var ps = Handlebars.partials;
-	    console.log(this.script);
-	    // console.log(ps);
-	    console.log(name);
-	    // console.log(ps[name]);
 	    // if(typeof ps[name] !== 'function')
 	    //     ps[name] = Handlebars.compile(ps[name]);
 	    // return ps[name](ctx, hash);
@@ -305,7 +301,6 @@ ColumnsTable.prototype.generateLayout = function(layout, reload) {
 
 	if ( !Columns['row-templates'] ) Columns['row-templates'] = [];
 	Columns['row-templates'][ Columns.scripts.indexOf( this.script ) ] = row_template;
-	console.log(Handlebars.partials);
 
 	if (reload) {
 		this.renderData();

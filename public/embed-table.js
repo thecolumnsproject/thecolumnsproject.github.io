@@ -7407,7 +7407,7 @@ ColumnsTable.prototype.fetchData = function() {
 			_this.setLoading(false);
 			_this.setError(true);
 		}
-	});
+	}.bind( this ));
 
 	// var _this = this;
 	// setTimeout(function() {
@@ -7615,7 +7615,7 @@ ColumnsTable.prototype.setupEvents = function() {
 				});
 			}
 		}
-	});
+	}.bind( this ));
 	// this.$$table.find(".columns-table").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
 	// 	var $$table = $$(this);
 	// 	if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
@@ -7644,7 +7644,7 @@ ColumnsTable.prototype.setupEvents = function() {
 				});
 			}
 		}
-	});
+	}.bind( this ));
 	// this.$$table.find(".columns-table-expand-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
 	// 	var $$table = $$(this);
 	// 	if (!_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
@@ -7673,7 +7673,7 @@ ColumnsTable.prototype.setupEvents = function() {
 				});
 			}
 		}
-	});
+	}.bind( this ));
 	// this.$$table.find(".columns-table-error").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
 	// 	var $$table = $$(this);
 	// 	if (_this.$$table.hasClass(ERROR_CLASS)) {
@@ -7713,7 +7713,7 @@ ColumnsTable.prototype.setupEvents = function() {
 			// e.stopPropagation();
 			// e.preventDefault();
 		}
-	});
+	}.bind( this ));
 	// this.$$table.find(".columns-table-close-button").hammer(/*{domEvents: true}*/).bind('tap', function(e) {
 	// 	var $$table = _this.$$table.find('.columns-table');
 	// 	if (_this.$$table.hasClass(EXPANDED_CLASS) && !$$table.hasClass(ANIMATING_CLASS)) {
@@ -8240,7 +8240,7 @@ ColumnsTable.prototype.send = function( props ) {
 
 	// Don't send events if this is a preview
 	// or we're explicitly not tracking this table
-	if ( _this.preview || this.noTrack ) {
+	if ( this.preview || this.noTrack ) {
 		return;
 	}
 

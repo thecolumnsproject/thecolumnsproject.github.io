@@ -7811,7 +7811,7 @@ ColumnsTable.prototype.expand = function() {
 	// Replace the table with a same-height placeholder
 	var placeholder = document.createElement('div');
 	placeholder.className = PLACEHOLDER_CLASS;
-	placeholder.style.height = $$table.outerHeight() + 'px';
+	placeholder.style.height = $$table.outerHeight( true ) + 'px';
 	placeholder.style.width = $$table.outerWidth() + 'px';
 	this.$$originalSibling = $$table.siblings('script').first();
 	if (this.isLargeFormFactor()) {

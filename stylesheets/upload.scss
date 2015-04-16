@@ -28,25 +28,29 @@ $upload-copy-spacing: 120px;
 	position: absolute;
 	right: $upload-copy-spacing;
 	top: $upload-copy-spacing;
-	height: 879px;
+	@include calc(height, '100% - #{$upload-copy-spacing}');
+	max-height: 879px;
 	width: 432px;
 	background-image: url("/images/iphone_6_frame@2x.png");
 	background-repeat: no-repeat;
 	background-position: 0 0;
-	background-size: contain;
+	// background-size: contain;
+	@include retina-image(/images/iphone_6_frame, contain, 'png', '@2x');
 }
 
 $upload-preview-screen-spacing: 24px;
 $upload-preview-screen-gutter: 16px;
 $upload-preview-table-height: 149px;
 
+$upload-top-spacing: 107px;
 .upload-preview-screen {
 	width: 373px - 2 * $upload-preview-screen-gutter;
-	height: 664px - (64px + $upload-preview-screen-spacing);
+	@include calc(height, '100% - #{$upload-top-spacing} - 64px - #{$upload-preview-screen-spacing}');
+	max-height: 664px - (64px + $upload-preview-screen-spacing);
 	background: white;
 	position: relative;
 	overflow: scroll;
-	top: 107px;
+	top: $upload-top-spacing;
 	left: 29px;
 	padding: 64px + $upload-preview-screen-spacing $upload-preview-screen-gutter 0 $upload-preview-screen-gutter;
 

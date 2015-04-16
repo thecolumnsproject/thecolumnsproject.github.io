@@ -222,6 +222,7 @@ ColumnsTable.prototype.isLargeFormFactor = function() {
 ColumnsTable.prototype.getOffsetTop = function() {
 	if (this.isLargeFormFactor()) {
 		return this.$$table.position().top; 
+		// return this.$$container.scrollTop();
 	} else {
 		return this.$$table.offset().top;
 	}
@@ -668,12 +669,13 @@ ColumnsTable.prototype.expand = function() {
 	// and make sure we're the highest z-index in the land
 	var offsetTop;
 	if (this.preview || this.forceMobile ) {
-		offsetTop = this.getOffsetTop();
+		offsetTop = this.getOffsetTop() + this.$$container.scrollTop();
 	} else {
-		offsetTop = parseInt($$.Velocity.hook($$table, "translateY"));
+		// offsetTop = parseInt($$.Velocity.hook($$table, "translateY"));
+		offsetTop = this.getOffsetTop();
 	}
 	var offsets = {
-		top: this.getOffsetTop(),
+		top: offsetTop,
 		'margin-left': 0,
 		position: 'absolute',
 		'z-index': (highestZIndex('*') + 1)
@@ -754,14 +756,14 @@ ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$foo
 	var bgOffsetTop;
 	if (this.isLargeFormFactor()) {
 		this.originalBackground['positionY'] = $$bg.position().top;
-		bgOffsetTop = -$$bg.position().top;
+		bgOffsetTop = 0;
 	} else {
 		this.originalBackground['positionY'] = $$bg.offset().top;
-		bgOffsetTop = -$$bg.offset().top;
+		bgOffsetTop = -$$bg.offset().top + this.$$container.scrollTop();
 	}
 
 	// Calculate new background position
-	bgOffsetTop += this.$$container.scrollTop();
+	// bgOffsetTop += this.$$container.scrollTop();
 	var bgWidth = this.$$container.width();
 
 	// The background should be as tall as necessary to fit all the rows

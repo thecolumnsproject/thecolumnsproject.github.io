@@ -1,7 +1,8 @@
-var ColumnsEvent 	= require('../models/ColumnsEvent.js');
-var Config 			= require('../config.js');
-var TEMPLATE 		= Columns.Templates['templates/register.hbs'],
-	ERROR_CLASS 	= 'error';
+var ColumnsEvent 		= require('../models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
+var Config 				= require('../config.js');
+var TEMPLATE 			= Columns.Templates['templates/register.hbs'],
+	ERROR_CLASS 		= 'error';
 
 function RegisterView() {
 
@@ -15,6 +16,7 @@ RegisterView.prototype.render = function() {
 	}) );
 
 	this._setupInteractionEvents();
+	this._setupAnalyticsEvents();
 	return this.$register;
 };
 
@@ -112,6 +114,33 @@ RegisterView.prototype._onRegistrationSuccess = function() {
 
 RegisterView.prototype._onRegistrationFail = function() {
 	
+};
+
+RegisterView.prototype._setupAnalyticsEvents = function() {
+
+	$(document).on('ColumnsTableDidExpand', function( event, data ) {
+		if ( data.table.id === Config.embed.mobile['feature-table'] ) {
+			ColumnsAnalytics.send({
+				category: 'sample table',
+				action: 'expand'
+			});
+		}
+	});
+
+	this.$register.find('.columns-register-email-input input').on( 'blur', function( event ) {
+		ColumnsAnalytics.send({
+			category: 'register form',
+			action: 'filled',
+			label: 'email'
+		});
+	});
+
+	this.$register.find('.columns-register-button').on( 'click', function( event ) {
+		ColumnsAnalytics.send({
+			category: 'register form',
+			action: 'submit',
+		});
+	});
 };
 
 module.exports = RegisterView;

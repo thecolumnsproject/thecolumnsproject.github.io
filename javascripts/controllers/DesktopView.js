@@ -4,7 +4,7 @@ var TemplateView 		= require('./TemplateView.js');
 var StyleView 			= require('./StyleView.js');
 var EmbedDetailsView 	= require('./EmbedDetailsView.js');
 var UploadView 			= require('./UploadView.js');
-var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+var ColumnsEvent 		= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
 var Config 				= require('../config.js');
 
@@ -44,23 +44,22 @@ DesktopView.prototype._emitRender = function() {
 
 DesktopView.prototype._setupAnalytics = function() {
 
-	// Set up analytics
-	if ( Config.env === 'production' ) {
-		$('head').append( Columns.Templates['templates/analytics.hbs']() );
-		ColumnsAnalytics.send({
-			category: 'navigation',
-			action: 'arrived',
-			label: 'app'
-		});
+	// $('.columns-header-nav-home').click(function() {
+	// 	ColumnsAnalytics.send({
+	// 		category: 'button',
+	// 		action: 'click',
+	// 		label: 'home'
+	// 	});
+	// });
 
-		$('.columns-header-nav-home').click(function() {
+	$(document).on('ColumnsTableDidExpand', function( event, data ) {
+		if ( data.table.id === Config.embed.desktop['feature-table'] ) {
 			ColumnsAnalytics.send({
-				category: 'button',
-				action: 'click',
-				label: 'home'
+				category: 'sample table',
+				action: 'expand'
 			});
-		});
-	}
+		}
+	});
 };
 
 module.exports = DesktopView;

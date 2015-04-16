@@ -6,6 +6,8 @@ var StyleView 			= require('../../javascripts/controllers/StyleView.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
 var UploadView 			= require('../../javascripts/controllers/UploadView.js');
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
+var Config 				= require('../../javascripts/config.js');
 
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
@@ -54,9 +56,32 @@ describe('Desktop View Spec', function() {
 			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.DesktopView.DidRender');
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].desktopView ).toEqual( desktop );
 		});
+	});
 
-		xit('should set up analytics', function() {
+	describe('Sending Analytics Events', function() {
 
+		beforeEach(function() {
+			desktop.render();
+			spyOn( ColumnsAnalytics, 'send' );
+		});
+
+		it('should ignore events sent by a table that is not a sample table', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.desktop['feature-table'] + 1 })
+			});
+
+			expect( ColumnsAnalytics.send ).not.toHaveBeenCalled();
+
+		});
+
+		it('should send an event when the preview table is expanded', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.desktop['feature-table'] })
+			});
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'sample table',
+				action: 'expand'
+			});
 		});
 	});
 });

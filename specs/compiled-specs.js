@@ -233,7 +233,7 @@ var TemplateView 		= require('./TemplateView.js');
 var StyleView 			= require('./StyleView.js');
 var EmbedDetailsView 	= require('./EmbedDetailsView.js');
 var UploadView 			= require('./UploadView.js');
-var ColumnsEvent 	= require('../models/ColumnsEvent.js');
+var ColumnsEvent 		= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
 var Config 				= require('../config.js');
 
@@ -273,23 +273,22 @@ DesktopView.prototype._emitRender = function() {
 
 DesktopView.prototype._setupAnalytics = function() {
 
-	// Set up analytics
-	if ( Config.env === 'production' ) {
-		$('head').append( Columns.Templates['templates/analytics.hbs']() );
-		ColumnsAnalytics.send({
-			category: 'navigation',
-			action: 'arrived',
-			label: 'app'
-		});
+	// $('.columns-header-nav-home').click(function() {
+	// 	ColumnsAnalytics.send({
+	// 		category: 'button',
+	// 		action: 'click',
+	// 		label: 'home'
+	// 	});
+	// });
 
-		$('.columns-header-nav-home').click(function() {
+	$(document).on('ColumnsTableDidExpand', function( event, data ) {
+		if ( data.table.id === Config.embed.desktop['feature-table'] ) {
 			ColumnsAnalytics.send({
-				category: 'button',
-				action: 'click',
-				label: 'home'
+				category: 'sample table',
+				action: 'expand'
 			});
-		});
-	}
+		}
+	});
 };
 
 module.exports = DesktopView;
@@ -775,10 +774,11 @@ MobileView.prototype.render = function() {
 
 module.exports = MobileView;
 },{"./RegisterView.js":8,"./ThanksView.js":17}],8:[function(require,module,exports){
-var ColumnsEvent 	= require('../models/ColumnsEvent.js');
-var Config 			= require('../config.js');
-var TEMPLATE 		= Columns.Templates['templates/register.hbs'],
-	ERROR_CLASS 	= 'error';
+var ColumnsEvent 		= require('../models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
+var Config 				= require('../config.js');
+var TEMPLATE 			= Columns.Templates['templates/register.hbs'],
+	ERROR_CLASS 		= 'error';
 
 function RegisterView() {
 
@@ -792,6 +792,7 @@ RegisterView.prototype.render = function() {
 	}) );
 
 	this._setupInteractionEvents();
+	this._setupAnalyticsEvents();
 	return this.$register;
 };
 
@@ -891,8 +892,35 @@ RegisterView.prototype._onRegistrationFail = function() {
 	
 };
 
+RegisterView.prototype._setupAnalyticsEvents = function() {
+
+	$(document).on('ColumnsTableDidExpand', function( event, data ) {
+		if ( data.table.id === Config.embed.mobile['feature-table'] ) {
+			ColumnsAnalytics.send({
+				category: 'sample table',
+				action: 'expand'
+			});
+		}
+	});
+
+	this.$register.find('.columns-register-email-input input').on( 'blur', function( event ) {
+		ColumnsAnalytics.send({
+			category: 'register form',
+			action: 'filled',
+			label: 'email'
+		});
+	});
+
+	this.$register.find('.columns-register-button').on( 'click', function( event ) {
+		ColumnsAnalytics.send({
+			category: 'register form',
+			action: 'submit',
+		});
+	});
+};
+
 module.exports = RegisterView;
-},{"../config.js":2,"../models/ColumnsEvent.js":20}],9:[function(require,module,exports){
+},{"../config.js":2,"../models/ColumnsAnalytics.js":19,"../models/ColumnsEvent.js":20}],9:[function(require,module,exports){
 var ColumnsEvent 							= require('../models/ColumnsEvent.js');
 var StyleInputView 							= require('./StyleInputView.js');
 var StyleSegmentedButtonView 				= require('./StyleSegmentedButtonView.js');
@@ -3847,6 +3875,8 @@ var StyleView 			= require('../../javascripts/controllers/StyleView.js');
 var EmbedDetailsView 	= require('../../javascripts/controllers/EmbedDetailsView.js');
 var UploadView 			= require('../../javascripts/controllers/UploadView.js');
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
+var Config 				= require('../../javascripts/config.js');
 
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
@@ -3895,13 +3925,36 @@ describe('Desktop View Spec', function() {
 			expect( ColumnsEvent.send.calls.argsFor(0)[0]).toBe('Columns.DesktopView.DidRender');
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].desktopView ).toEqual( desktop );
 		});
+	});
 
-		xit('should set up analytics', function() {
+	describe('Sending Analytics Events', function() {
 
+		beforeEach(function() {
+			desktop.render();
+			spyOn( ColumnsAnalytics, 'send' );
+		});
+
+		it('should ignore events sent by a table that is not a sample table', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.desktop['feature-table'] + 1 })
+			});
+
+			expect( ColumnsAnalytics.send ).not.toHaveBeenCalled();
+
+		});
+
+		it('should send an event when the preview table is expanded', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.desktop['feature-table'] })
+			});
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'sample table',
+				action: 'expand'
+			});
 		});
 	});
 });
-},{"../../javascripts/controllers/DesktopView.js":3,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/ItemsView.js":6,"../../javascripts/controllers/StyleView.js":13,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],27:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/DesktopView.js":3,"../../javascripts/controllers/EmbedDetailsView.js":4,"../../javascripts/controllers/ItemsView.js":6,"../../javascripts/controllers/StyleView.js":13,"../../javascripts/controllers/TemplateView.js":16,"../../javascripts/controllers/UploadView.js":18,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],27:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var ColumnsAnalytics	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Table 				= require('../../javascripts/models/Table.js');
@@ -4776,9 +4829,11 @@ describe('Mobile View', function() {
 
 
 },{"../../javascripts/controllers/MobileView.js":7,"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/controllers/ThanksView.js":17}],31:[function(require,module,exports){
-var RegisterView 	= require('../../javascripts/controllers/RegisterView.js');
-var ColumnsEvent 	= require('../../javascripts/models/ColumnsEvent.js');
-var Config 			= require('../../javascripts/config.js');
+var RegisterView 		= require('../../javascripts/controllers/RegisterView.js');
+var Table 				= require('../../javascripts/models/Table.js');
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
+var Config 				= require('../../javascripts/config.js');
 
 describe('Register View', function() {
 	var register;
@@ -4965,8 +5020,52 @@ describe('Register View', function() {
 			}, 10);
 		});
 	});
+
+	describe('Sending Analytics Events', function() {
+
+		beforeEach(function() {
+			register.render();
+			spyOn( ColumnsAnalytics, 'send' );
+		});
+
+		it('should ignore events sent by a table that is not a sample table', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.mobile['feature-table'] + 1 })
+			});
+
+			expect( ColumnsAnalytics.send ).not.toHaveBeenCalled();
+
+		});
+
+		it('should send an event when the preview table is expanded', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.mobile['feature-table'] })
+			});
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'sample table',
+				action: 'expand'
+			});
+		});
+
+		it('should send an event when the user enters an email address', function() {
+			register.$register.find('.columns-register-email-input input').trigger('blur');
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'register form',
+				action: 'filled',
+				label: 'email'
+			});
+		});
+
+		it('should send an event when the user presses the register button', function() {
+			register.$register.find('.columns-register-button').trigger('click');
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'register form',
+				action: 'submit',
+			});
+		});
+	});
 });
-},{"../../javascripts/config.js":2,"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/models/ColumnsEvent.js":20}],32:[function(require,module,exports){
+},{"../../javascripts/config.js":2,"../../javascripts/controllers/RegisterView.js":8,"../../javascripts/models/ColumnsAnalytics.js":19,"../../javascripts/models/ColumnsEvent.js":20,"../../javascripts/models/Table.js":24}],32:[function(require,module,exports){
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
 var StyleComponentView 	= require('../../javascripts/controllers/StyleComponentView.js');
 

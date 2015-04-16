@@ -97,7 +97,7 @@ function ColumnsTable(script) {
 	// Determine whether or not we're in preview mode
 	this.preview = $$(script).data('preview');
 	this.forceMobile = $$(script).data('force-mobile');
-	this.noTrack = $(script).data('no-track');
+	this.sample = $(script).data('sample');
 
 	// Remember the table instance once it's been inserted into the DOM
 	// as well as its jquery counterpart
@@ -434,7 +434,7 @@ ColumnsTable.prototype.renderData = function(data) {
 	this.setupEvents();
 
 	// Announce that the table has rendered data
-	if (this.preview) {
+	if (this.preview || this.sample ) {
 		$(document).trigger('ColumnsTableDidRenderData', {table: this});
 	}
 
@@ -607,7 +607,7 @@ ColumnsTable.prototype.setupEvents = function() {
 	// });
 
 	// Notify the preview template when the table scrolls
-	if (this.preview) {
+	if (this.preview || this.sample ) {
 		this.$$table.find('.columns-table-container').on('scroll', function(e) {
 			$(document).trigger('ColumnsTableDidScroll', {table: _this, originalEvent: e});
 		})
@@ -656,7 +656,7 @@ ColumnsTable.prototype.expand = function() {
 	// 		table: this.$$table
 	// 	}
 	// });
-	if (this.preview) {
+	if (this.preview || this.sample ) {
 		$(document).trigger('ColumnsTableWillExpand', {table: this});
 	}
 
@@ -727,10 +727,10 @@ ColumnsTable.prototype.expand = function() {
 			$$table.removeClass(EXPANDING_CLASS);
 			$$('html').addClass('table-expanded');
 
-			if (_this.preview) {
+			if (_this.preview || this.sample ) {
 				$(document).trigger('ColumnsTableDidExpand', {table: _this});
 			}
-		}
+		}.bind( this )
 	});
 
 	this.position();
@@ -948,10 +948,10 @@ ColumnsTable.prototype.collapse = function() {
 			_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
 			$$('html').removeClass('table-expanded');
 
-			if (_this.preview) {
+			if (_this.preview || this.sample ) {
 				$(document).trigger('ColumnsTableDidCollapse', {table: _this});
 			}
-		}
+		}.bind( this )
 	});
 
 	this.position();
@@ -1112,8 +1112,8 @@ ColumnsTable.prototype.send = function( props ) {
 		mixpanelObj = {};
 
 	// Don't send events if this is a preview
-	// or we're explicitly not tracking this table
-	if ( this.preview || this.noTrack ) {
+	// or a sample table
+	if ( this.preview || this.sample ) {
 		return;
 	}
 

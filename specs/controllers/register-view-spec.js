@@ -1,6 +1,8 @@
-var RegisterView 	= require('../../javascripts/controllers/RegisterView.js');
-var ColumnsEvent 	= require('../../javascripts/models/ColumnsEvent.js');
-var Config 			= require('../../javascripts/config.js');
+var RegisterView 		= require('../../javascripts/controllers/RegisterView.js');
+var Table 				= require('../../javascripts/models/Table.js');
+var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
+var Config 				= require('../../javascripts/config.js');
 
 describe('Register View', function() {
 	var register;
@@ -185,6 +187,50 @@ describe('Register View', function() {
 				expect( $register.find('.columns-register-email-input') ).not.toHaveClass('error');
 				done();
 			}, 10);
+		});
+	});
+
+	describe('Sending Analytics Events', function() {
+
+		beforeEach(function() {
+			register.render();
+			spyOn( ColumnsAnalytics, 'send' );
+		});
+
+		it('should ignore events sent by a table that is not a sample table', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.mobile['feature-table'] + 1 })
+			});
+
+			expect( ColumnsAnalytics.send ).not.toHaveBeenCalled();
+
+		});
+
+		it('should send an event when the preview table is expanded', function() {
+			$(document).trigger('ColumnsTableDidExpand', {
+				table: new Table({ id: Config.embed.mobile['feature-table'] })
+			});
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'sample table',
+				action: 'expand'
+			});
+		});
+
+		it('should send an event when the user enters an email address', function() {
+			register.$register.find('.columns-register-email-input input').trigger('blur');
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'register form',
+				action: 'filled',
+				label: 'email'
+			});
+		});
+
+		it('should send an event when the user presses the register button', function() {
+			register.$register.find('.columns-register-button').trigger('click');
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'register form',
+				action: 'submit',
+			});
 		});
 	});
 });

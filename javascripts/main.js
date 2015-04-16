@@ -1,6 +1,7 @@
 var isMobile			= require('ismobilejs');
 var Desktop 			= require('./controllers/DesktopView.js');
 var Mobile 				= require('./controllers/MobileView.js');
+var Config 				= require('./config.js');
 
 var app;
 
@@ -13,6 +14,16 @@ if ( isMobile.any ) {
 }
 
 app.render();
+
+// Set up analytics
+if ( Config.env === 'production' ) {
+	$('head').append( Columns.Templates['templates/analytics.hbs']() );
+	ColumnsAnalytics.send({
+		category: 'navigation',
+		action: 'arrived',
+		label: 'app'
+	});
+}
 
 // Create the Table object
 // var table = new Table();

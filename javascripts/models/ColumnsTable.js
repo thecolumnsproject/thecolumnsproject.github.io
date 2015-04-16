@@ -721,6 +721,7 @@ ColumnsTable.prototype.expand = function() {
 			$$table.addClass(EXPANDED_CLASS);
 			$$table.removeClass(EXPANDING_CLASS);
 			$$('html').addClass('table-expanded');
+			this.$$container.addClass('table-expanded');
 
 			if (_this.preview || this.sample ) {
 				$(document).trigger('ColumnsTableDidExpand', {table: _this});
@@ -942,6 +943,7 @@ ColumnsTable.prototype.collapse = function() {
 			});
 			_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
 			$$('html').removeClass('table-expanded');
+			this.$$container.removeClass('table-expanded');
 
 			if (_this.preview || this.sample ) {
 				$(document).trigger('ColumnsTableDidCollapse', {table: _this});

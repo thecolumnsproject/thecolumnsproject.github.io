@@ -3,7 +3,7 @@
 // Load Velocity, where it will attach to jquery
 // require('../bower_components/velocity/velocity.js');
 var Config = require('./embed-config.js');
-	// Columnsbars = require('./embed-handlebars.js');
+	Columnsbars = require('./embed-handlebars.js');
 	// $$ = require('jquery-browserify');
 
 // Require Handlebars and our handlebars templates

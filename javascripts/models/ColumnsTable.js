@@ -97,7 +97,7 @@ function ColumnsTable(script) {
 	// Determine whether or not we're in preview mode
 	this.preview = $$(script).data('preview');
 	this.forceMobile = $$(script).data('force-mobile');
-	this.sample = $(script).data('sample');
+	this.sample = $$(script).data('sample');
 
 	// Remember the table instance once it's been inserted into the DOM
 	// as well as its jquery counterpart
@@ -127,7 +127,7 @@ function ColumnsTable(script) {
 
 	// Create a unique handlebars environment
 	// this.columnsbars = Handlebars.noConflict();
-	this._setupHandlebars();
+	// this._setupHandlebars();
 };
 
 ColumnsTable.prototype._setupHandlebars = function() {
@@ -446,12 +446,12 @@ ColumnsTable.prototype.renderData = function(data) {
 };
 
 ColumnsTable.prototype.renderRow = function( data, layout ) {
-	var $rowLayout = $( Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']() );
-	return $rowLayout.append( this.renderRowComponent( data, layout ) );
+	var $$rowLayout = $$( Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']() );
+	return $$rowLayout.append( this.renderRowComponent( data, layout ) );
 };
 
 ColumnsTable.prototype.renderRowComponent = function( data, component ) {
-	var $component,
+	var $$component,
 		groupTemplate = Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs'],
 		valueTemplate = Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs'];
 
@@ -459,23 +459,23 @@ ColumnsTable.prototype.renderRowComponent = function( data, component ) {
 	// as a group if it's a group
 	// or a value if it's a value
 	if ( component.type === 'group' ) {
-		$component = $( groupTemplate({
+		$$component = $$( groupTemplate({
 			style: component.style,
 			layout: component.layout
 		}));
 
 		component.values.forEach(function( value, i) {
-			$component.append( this.renderRowComponent( data, value ) );
+			$$component.append( this.renderRowComponent( data, value ) );
 		}.bind( this ));
 
-		return $component;
+		return $$component;
 	} else if ( component.type === 'single' ) {
-		$component = $( valueTemplate({
+		$$component = $$( valueTemplate({
 			data: data[ component.data ],
 			style: component.style
 		}));
 
-		return $component;
+		return $$component;
 	}
 
 };

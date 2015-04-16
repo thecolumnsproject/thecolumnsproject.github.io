@@ -4695,12 +4695,38 @@ module.exports = {
 	img_path: IMG_PATH
 };
 },{}],4:[function(require,module,exports){
+// Setup necessary handlebars templates and helpers
+// Handlebars.registerPartial('row', Columns.EmbeddableTemplates['templates/embed-table/row.hbs']);
+Handlebars.registerHelper('partial', function(name, ctx, hash) {
+    console.log(name);
+    console.log(Handlebars.partials);
+    var ps = Handlebars.partials;
+    if(typeof ps[name] !== 'function')
+        ps[name] = Handlebars.compile(ps[name]);
+    return ps[name](ctx, hash);
+});
+Handlebars.registerPartial('group', Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']);
+Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
+Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
+Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
+Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
+
+Handlebars.registerHelper('ifIsGroup', function(type, options) {
+	return type == 'group' ? options.fn(this) : options.inverse(this);
+});
+
+Handlebars.registerHelper('ifIsSingle', function(type, options) {
+	return type == 'single' ? options.fn(this) : options.inverse(this);
+});
+
+module.exports = Handlebars;
+},{}],5:[function(require,module,exports){
 // require('../bower_components/jquery/dist/jquery.js');
 
 // Load Velocity, where it will attach to jquery
 // require('../bower_components/velocity/velocity.js');
 var Config = require('./embed-config.js');
-	// Columnsbars = require('./embed-handlebars.js');
+	Columnsbars = require('./embed-handlebars.js');
 	// $$ = require('jquery-browserify');
 
 // Require Handlebars and our handlebars templates
@@ -4817,7 +4843,7 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 
 
 })();
-},{"../javascripts/models/ColumnsTable.js":7,"./embed-config.js":3}],5:[function(require,module,exports){
+},{"../javascripts/models/ColumnsTable.js":8,"./embed-config.js":3,"./embed-handlebars.js":4}],6:[function(require,module,exports){
 var Config = require('../config.js');
 
 module.exports = ColumnsAnalytics;
@@ -4849,7 +4875,7 @@ ColumnsAnalytics.send = function( props ) {
 	}
 
 };
-},{"../config.js":2}],6:[function(require,module,exports){
+},{"../config.js":2}],7:[function(require,module,exports){
 function ColumnsEvent () {
 
 }
@@ -4871,7 +4897,7 @@ ColumnsEvent.offAll = function() {
 };
 
 module.exports = ColumnsEvent;
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var Config = require('../embed-config.js'),
 	Velocity = require('../../bower_components/velocity/velocity.js'),
 	Hammer = require('../../vendor/hammer.js'),
@@ -4971,7 +4997,7 @@ function ColumnsTable(script) {
 	// Determine whether or not we're in preview mode
 	this.preview = $$(script).data('preview');
 	this.forceMobile = $$(script).data('force-mobile');
-	this.sample = $(script).data('sample');
+	this.sample = $$(script).data('sample');
 
 	// Remember the table instance once it's been inserted into the DOM
 	// as well as its jquery counterpart
@@ -5001,7 +5027,7 @@ function ColumnsTable(script) {
 
 	// Create a unique handlebars environment
 	// this.columnsbars = Handlebars.noConflict();
-	this._setupHandlebars();
+	// this._setupHandlebars();
 };
 
 ColumnsTable.prototype._setupHandlebars = function() {
@@ -5320,12 +5346,12 @@ ColumnsTable.prototype.renderData = function(data) {
 };
 
 ColumnsTable.prototype.renderRow = function( data, layout ) {
-	var $rowLayout = $( Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']() );
-	return $rowLayout.append( this.renderRowComponent( data, layout ) );
+	var $$rowLayout = $$( Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']() );
+	return $$rowLayout.append( this.renderRowComponent( data, layout ) );
 };
 
 ColumnsTable.prototype.renderRowComponent = function( data, component ) {
-	var $component,
+	var $$component,
 		groupTemplate = Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs'],
 		valueTemplate = Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs'];
 
@@ -5333,23 +5359,23 @@ ColumnsTable.prototype.renderRowComponent = function( data, component ) {
 	// as a group if it's a group
 	// or a value if it's a value
 	if ( component.type === 'group' ) {
-		$component = $( groupTemplate({
+		$$component = $$( groupTemplate({
 			style: component.style,
 			layout: component.layout
 		}));
 
 		component.values.forEach(function( value, i) {
-			$component.append( this.renderRowComponent( data, value ) );
+			$$component.append( this.renderRowComponent( data, value ) );
 		}.bind( this ));
 
-		return $component;
+		return $$component;
 	} else if ( component.type === 'single' ) {
-		$component = $( valueTemplate({
+		$$component = $$( valueTemplate({
 			data: data[ component.data ],
 			style: component.style
 		}));
 
-		return $component;
+		return $$component;
 	}
 
 };
@@ -6061,7 +6087,7 @@ ColumnsTable.prototype.send = function( props ) {
 };
 
 module.exports = ColumnsTable;
-},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":8,"../../vendor/prevent-ghost-click.js":9,"../embed-config.js":3,"./ColumnsAnalytics.js":5,"./ColumnsEvent.js":6}],8:[function(require,module,exports){
+},{"../../bower_components/velocity/velocity.js":1,"../../vendor/hammer.js":9,"../../vendor/prevent-ghost-click.js":10,"../embed-config.js":3,"./ColumnsAnalytics.js":6,"./ColumnsEvent.js":7}],9:[function(require,module,exports){
 /*! Hammer.JS - v2.0.4 - 2014-09-28
  * http://hammerjs.github.io/
  *
@@ -8527,7 +8553,7 @@ if (typeof module != 'undefined' && module.exports) {
 
 })(window, document, 'Hammer');
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * Prevent click events after a touchend.
  * 
@@ -8624,6 +8650,6 @@ if (typeof module != 'undefined' && module.exports) {
     };
 
 })(window, document, 'PreventGhostClick');
-},{}]},{},[4]);
+},{}]},{},[5]);
 
 }());

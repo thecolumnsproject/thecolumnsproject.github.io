@@ -146,39 +146,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, self=this, helperMissing=helpers.helperMissing;
+  var buffer = "", stack1, self=this;
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n		";
-  stack1 = (helper = helpers.ifIsGroup || (depth0 && depth0.ifIsGroup),options={hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifIsGroup", (depth0 && depth0.type), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		";
-  stack1 = (helper = helpers.ifIsSingle || (depth0 && depth0.ifIsSingle),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifIsSingle", (depth0 && depth0.type), options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	";
-  return buffer;
-  }
-function program2(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n			";
-  stack1 = self.invokePartial(partials.group, 'group', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		";
-  return buffer;
-  }
-
-function program4(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n			";
-  stack1 = self.invokePartial(partials.column, 'column', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n		";
-  return buffer;
-  }
 
   buffer += "<div class='row-group'\n	 ";
   stack1 = self.invokePartial(partials.layout, 'layout', depth0, helpers, partials, data);
@@ -186,23 +155,17 @@ function program4(depth0,data) {
   buffer += " \n	 ";
   stack1 = self.invokePartial(partials.style, 'style', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n	";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.values), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
+  buffer += ">\n	\n</div>";
   return buffer;
   });
 
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row-layout.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, self=this;
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "";
 
 
-  buffer += "<div class=\"columns-table-row\">\n		";
-  stack1 = self.invokePartial(partials.group, 'group', (depth0 && depth0.layout), helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
+  buffer += "<div class=\"columns-table-row\">\n		\n</div>";
   return buffer;
   });
 
@@ -215,11 +178,11 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
   buffer += "<span class=\"row-value\" ";
   stack1 = self.invokePartial(partials.style, 'style', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ">\n{{ this.[";
+  buffer += ">\n\n	";
   if (helper = helpers.data) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.data); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "] }}\n</span>";
+    + "\n</span>";
   return buffer;
   });
 

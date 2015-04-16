@@ -150,7 +150,7 @@ module.exports = function(grunt) {
 					// 'bower_components/velocity/velocity.js',
 					// 'bower_components/velocity/velocity.ui.min.js',
 					// 'bower_components/handlebars/handlebars.min.js',
-					'bower_components/handlebars/handlebars.js',
+					'bower_components/handlebars/handlebars.runtime.js',
 					'templates/embeddable-templates.js',
 					'compiled-javascripts/embed-table.js',
 					'javascripts/embed-table-outro.js'

@@ -132,30 +132,30 @@ function ColumnsTable(script) {
 
 ColumnsTable.prototype._setupHandlebars = function() {
 
-	Handlebars.registerHelper('partial', function(name, ctx, hash) {
-	    // var ps = Handlebars.partials;
-	    // if(typeof ps[name] !== 'function')
-	    //     ps[name] = Handlebars.compile(ps[name]);
-	    // return ps[name](ctx, hash);
+	// Handlebars.registerHelper('partial', function(name, ctx, hash) {
+	//     // var ps = Handlebars.partials;
+	//     // if(typeof ps[name] !== 'function')
+	//     //     ps[name] = Handlebars.compile(ps[name]);
+	//     // return ps[name](ctx, hash);
 
-	    return Columns['row-templates'][ name ](ctx, hash);
-	}.bind(this));
-	Handlebars.registerPartial({
-		group: Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']
-	});
+	//     return Columns['row-templates'][ name ](ctx, hash);
+	// }.bind(this));
+	// Handlebars.registerPartial({
+	// 	group: Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']
+	// });
 	// Handlebars.registerPartial('group', Handlebars.template( Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs']) );
-	Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
-	Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
+	// Handlebars.registerPartial('column', Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs']);
+	// Handlebars.registerPartial('footer', Columns.EmbeddableTemplates['templates/embed-table/footer.hbs']);
 	Handlebars.registerPartial('layout', Columns.EmbeddableTemplates['templates/embed-table/layout.hbs']);
 	Handlebars.registerPartial('style', Columns.EmbeddableTemplates['templates/embed-table/style.hbs']);
 
-	Handlebars.registerHelper('ifIsGroup', function(type, options) {
-		return type == 'group' ? options.fn(this) : options.inverse(this);
-	});
+	// Handlebars.registerHelper('ifIsGroup', function(type, options) {
+	// 	return type == 'group' ? options.fn(this) : options.inverse(this);
+	// });
 
-	Handlebars.registerHelper('ifIsSingle', function(type, options) {
-		return type == 'single' ? options.fn(this) : options.inverse(this);
-	});
+	// Handlebars.registerHelper('ifIsSingle', function(type, options) {
+	// 	return type == 'single' ? options.fn(this) : options.inverse(this);
+	// });
 };
 
 // Render the initial table to the screen and position it correctly
@@ -295,13 +295,13 @@ ColumnsTable.prototype.generateLayout = function(layout, reload) {
 	// Set up the row layout as a handlebars partial
 	// dynamically based on the row layout object
 	this.layout = layout;
-	var row_layout = Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']({layout: layout});
-	var row_template = Handlebars.compile(row_layout);
-	var templateName = this.templateName();
-	// Handlebars.registerPartial('row_layout', row_template);
+	// var row_layout = Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']({layout: layout});
+	// var row_template = Handlebars.compile(row_layout);
+	// var templateName = this.templateName();
+	// // Handlebars.registerPartial('row_layout', row_template);
 
-	if ( !Columns['row-templates'] ) Columns['row-templates'] = [];
-	Columns['row-templates'][ Columns.scripts.indexOf( this.script ) ] = row_template;
+	// if ( !Columns['row-templates'] ) Columns['row-templates'] = [];
+	// Columns['row-templates'][ Columns.scripts.indexOf( this.script ) ] = row_template;
 
 	if (reload) {
 		this.renderData();
@@ -366,10 +366,14 @@ ColumnsTable.prototype.renderData = function(data) {
 
 	// For now, only render the first 20 rows
 	$$rows.remove();
-	$$tableBody.prepend(rowsTemplate({
-		row_layout: Columns.scripts.indexOf( this.script ),
-		rows: data.data.slice(0, 20)
-	}));	
+	// $$tableBody.prepend(rowsTemplate({
+	// 	row_layout: Columns.scripts.indexOf( this.script ),
+	// 	rows: data.data.slice(0, 20)
+	// }));
+	
+	data.data.slice( 0, 20 ).forEach(function( rowData, i) {
+		$$tableBody.append( this.renderRow( rowData, this.layout ) );
+	}.bind( this ));
 
 	// If we're in preview and the table is expanded,
 	// refresh the amount of padding we add to the top
@@ -439,6 +443,41 @@ ColumnsTable.prototype.renderData = function(data) {
 	setTimeout(function() {
 		_this.setLoading(false);
 	}, 100);
+};
+
+ColumnsTable.prototype.renderRow = function( data, layout ) {
+	var $rowLayout = $( Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']() );
+	return $rowLayout.append( this.renderRowComponent( data, layout ) );
+};
+
+ColumnsTable.prototype.renderRowComponent = function( data, component ) {
+	var $component,
+		groupTemplate = Columns.EmbeddableTemplates['templates/embed-table/row-group.hbs'],
+		valueTemplate = Columns.EmbeddableTemplates['templates/embed-table/row-value.hbs'];
+
+	// Render the top level component
+	// as a group if it's a group
+	// or a value if it's a value
+	if ( component.type === 'group' ) {
+		$component = $( groupTemplate({
+			style: component.style,
+			layout: component.layout
+		}));
+
+		component.values.forEach(function( value, i) {
+			$component.append( this.renderRowComponent( data, value ) );
+		}.bind( this ));
+
+		return $component;
+	} else if ( component.type === 'single' ) {
+		$component = $( valueTemplate({
+			data: data[ component.data ],
+			style: component.style
+		}));
+
+		return $component;
+	}
+
 };
 
 ColumnsTable.prototype.tallestRowHeight = function() {

@@ -2,6 +2,7 @@ var isMobile			= require('ismobilejs');
 var Desktop 			= require('./controllers/DesktopView.js');
 var Mobile 				= require('./controllers/MobileView.js');
 var Config 				= require('./config.js');
+var ColumnsAnalytics 	= require('./models/ColumnsAnalytics.js');
 
 var app;
 

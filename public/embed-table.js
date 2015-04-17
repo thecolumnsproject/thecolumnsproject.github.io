@@ -4672,10 +4672,10 @@ module.exports = {
 			host: 'http://colum.nz',
 			path: '/public/embed-table.js',
 			desktop: {
-				'feature-table': 1
+				'feature-table': 180
 			},
 			mobile: {
-				'feature-table': 1
+				'feature-table': 181
 			}
 		}
 	}

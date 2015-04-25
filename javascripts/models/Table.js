@@ -1,8 +1,10 @@
-var ColumnsEvent 	= require('./ColumnsEvent.js');
-var Layout 			= require('./Layout.js');
-var Item 			= require('./Item.js');
-var config 			= require('../config.js');
-var DEFAULTS		= require('../styling/defaults.js');
+var ColumnsEvent 		= require('./ColumnsEvent.js');
+var Layout 				= require('./Layout.js');
+var Item 				= require('./Item.js');
+var config 				= require('../config.js');
+var DEFAULTS			= require('../styling/defaults.js');
+
+var MAX_COLUMN_LENGTH 	= 64;
 
 function Table( props )  {
 
@@ -127,20 +129,53 @@ Table.prototype.itemsFromColumnNames = function( columnNames ) {
 		throw "exception: Column names must be a string or an array of strings";
 	}
 
+	var counts = {};
 	return columnNames.map(function( columnName, i ) {
-		// var item;
 
-		// if ( columnName instanceof Item ) {
-		// 	return columnName;
-		// } else {
-		// 	item = new Item({
-		// 		title: columnName,
-		// 		style: DEFAULTS.styles[ i ];
-		// 	})
-		// }
-		return columnName instanceof Item ? columnName : new Item({ title: columnName, style: DEFAULTS.styles[ i ] });
-	});
+		if ( columnName instanceof Item ) {
+			return columnName;
+		} else {
+			// Clean the column name
+			columnName = this.cleanColumn( columnName );
+
+			// Update the counts object with this column
+			counts[ columnName ] = ( counts[ columnName ] || 0 ) + 1;
+
+			// Update the column with a count if it's a duplicate
+			if ( counts[ columnName ] > 1 ) {
+				columnName = this.appendColumnWithCount( columnName, counts[ columnName ] );
+			}
+
+			return new Item({ title: columnName, style: DEFAULTS.styles[ i ] });
+		}
+
+	}.bind( this ));
+};
+
+Table.prototype.cleanColumn = function( column ) {
+	var cleanColumn = column;
+
+	// Replace any trailing whitespace and periods
+	cleanColumn = cleanColumn.replace(/^[.\s]+|[.\s]+$/g, "");
+
+	// Make sure it's not too long for the DB
+	cleanColumn = cleanColumn.substring( 0, MAX_COLUMN_LENGTH );
+
+	return cleanColumn;
 }
+
+Table.prototype.appendColumnWithCount = function( column, count ) {
+	var separator = ' ',
+		difference = MAX_COLUMN_LENGTH - ( column.length + separator.length + count.toString().length );
+
+	// If the column + count + separator length goes over the limit,
+	// truncate the column as necessary
+	if ( difference < 0 ) {
+		column = column.substring( 0, column.length + difference );
+	}
+
+	return column += separator + count;
+};
 
 Table.prototype._uploadFile = function( file ) {
 	var formData = new FormData();

@@ -190,14 +190,16 @@ describe('Table', function () {
 	});
 
 	describe('Creating Items', function() {
+		var table;
 
 		beforeEach(function() {
-			this.table = new Table();
+			table = new Table();
+			spyOn( table, 'cleanColumn' ).and.callThrough();
 		})
 
 		it('should create items from an array of column names', function() {
 			var names = [ "First Name", "Last Name", "Hometown" ];
-			var columns = this.table.itemsFromColumnNames( names );
+			var columns = table.itemsFromColumnNames( names );
 			expect( columns[ 0 ].title ).toEqual("First Name");
 			expect( columns[ 1 ].title ).toEqual("Last Name");
 			expect( columns[ 2 ].title ).toEqual("Hometown");
@@ -205,13 +207,13 @@ describe('Table', function () {
 
 		it('should create an item from a single column name', function() {
 			var names = "First Name";
-			var columns = this.table.itemsFromColumnNames( names );
+			var columns = table.itemsFromColumnNames( names );
 			expect( columns[ 0 ].title ).toEqual("First Name");
 		});
 
 		it('should attach default styles to the first three items', function() {
 			var names = [ "First Name", "Last Name", "Hometown", "Age" ];
-			var columns = this.table.itemsFromColumnNames( names );
+			var columns = table.itemsFromColumnNames( names );
 			expect( columns[ 0 ].style.styles ).toEqual( DEFAULTS.styles[0] );
 			expect( columns[ 1 ].style.styles ).toEqual( DEFAULTS.styles[1] );
 			expect( columns[ 2 ].style.styles ).toEqual( DEFAULTS.styles[2] );
@@ -220,23 +222,85 @@ describe('Table', function () {
 
 		it('should return items if passed an array of items', function() {
 			var items = [ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' }) ];
-			var columns = this.table.itemsFromColumnNames( items );
+			var columns = table.itemsFromColumnNames( items );
 			expect( columns.length ).toBe( 4 );
 			expect( columns ).toEqual([ new Item({ title: 'First Name' }), new Item({ title: 'Last Name' }), new Item({ title: 'Hometown' }), new Item({ title: 'Age' })] );
 		});
 
+		it('should append a number to any duplicate columns', function() {
+			var items = [ 'First Name', 'First Name', 'First Name', 'First Name' ];
+			expect( table.itemsFromColumnNames( items )[ 0 ].title ).toEqual( 'First Name' );
+			expect( table.itemsFromColumnNames( items )[ 1 ].title ).toEqual( 'First Name 2' );
+			expect( table.itemsFromColumnNames( items )[ 2 ].title ).toEqual( 'First Name 3' );
+			expect( table.itemsFromColumnNames( items )[ 3 ].title ).toEqual( 'First Name 4' );
+		});
+
+		it('should clean all of the columns', function() {
+			var items = [ 'First Name', 'Last Name', 'Hometown', 'Age' ];
+			var columns = table.itemsFromColumnNames( items );
+			expect( table.cleanColumn.calls.count() ).toBe( 4 );
+		});
+
 		it('should return an item if passed a single item', function() {
 			var item = new Item({ title: "My Item" });
-			var columns = this.table.itemsFromColumnNames( item );
+			var columns = table.itemsFromColumnNames( item );
 			expect( columns[ 0 ].title ).toEqual("My Item");
 		});
 
 		it('should throw an error if sent anything other than an array or a string', function() {
 			var names = 5;
 			expect(function() {
-				this.table.itemsFromColumnNames( names );
-			}.bind( this )).toThrow("exception: Column names must be a string or an array of strings");
+				table.itemsFromColumnNames( names );
+			}).toThrow("exception: Column names must be a string or an array of strings");
 		});
+	});
+
+	describe('Appending a number to a column name', function() {
+		var table,
+			column;
+
+		beforeEach(function() {
+			table = new Table();
+		});
+
+		it('should append the count to the column so that the name is longer after than it was before', function() {
+			column = 'This is my column name';
+			expect( table.appendColumnWithCount( column, 10 ).length ).toBe( column.length + 3 );
+			expect( table.appendColumnWithCount( column, 1 ).length ).toBe( column.length + 2 );
+		});
+
+		it('should truncate the column so that the name is the same length before as after if appending the count would put the column over the limit', function() {
+			column = 'aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweud';
+			expect( table.appendColumnWithCount( column, 10 ).length ).toBe( 64 );
+			expect( table.appendColumnWithCount( column, 1 ).length ).toBe( 64 );
+			expect( table.appendColumnWithCount( column + 'haera' , 10 ).length ).toBe( 64 );
+		});
+
+		it('should append the count to the column name, separated by an underscore', function() {
+			expect( table.appendColumnWithCount( "Hi this is a column", 10 ) ).toBe( "Hi this is a column 10" );
+			expect( table.appendColumnWithCount( "aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweudasdf", 10 ) ).toBe( "aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftow 10" );
+		});
+	});
+
+	describe('Cleaning a table column name', function() {
+		var table;
+
+		beforeEach(function() {
+			table = new Table();
+		});
+
+		it('should remove trailing periods and whitespace', function() {
+			expect( table.cleanColumn( 'Github.' ) ).toEqual( 'Github' );
+		});
+
+		it('should truncate anything after the 64th character', function() {
+			expect( table.cleanColumn('hi') ).toBe('hi');
+			expect( table.cleanColumn( 'aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweudci') )
+				.toBe('aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweud');
+			expect( table.cleanColumn( 'aherhaskflqoetickdneglticoelfotied cstufidosqleidcjflawudjftoweudci aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweudci') )
+				.toBe('aherhaskflqoetickdneglticoelfotied cstufidosqleidcjflawudjftoweu');
+		})
+
 	});
 
 	describe('Listening for Table Events', function() {

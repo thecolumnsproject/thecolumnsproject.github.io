@@ -2797,7 +2797,8 @@ var ColumnsEvent 		= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
 
 var MAX_ROWS = 20,
-	UPLOAD_BUTTON_SELECTOR = '.columns-upload-button';
+	UPLOAD_BUTTON_SELECTOR = '.columns-upload-button',
+	UPLOAD_MESSAGE_SELECTOR = '.columns-upload-message';
 
 function UploadView() {
 	this.parsedRows = 0;
@@ -2843,12 +2844,20 @@ UploadView.prototype.hide = function() {
 	});
 };
 
-UploadView.prototype._setLoading = function( loading, message ) {
-	var $button = this.$upload.find( UPLOAD_BUTTON_SELECTOR );
+UploadView.prototype._setLoading = function( loading, action, message ) {
+	var $button = this.$upload.find( UPLOAD_BUTTON_SELECTOR ),
+		$message = this.$upload.find( UPLOAD_MESSAGE_SELECTOR );
 
 	// Set the message
 	if ( message && typeof message === 'string' ) {
-		$button.text( message );
+		$message.text( message );
+	} else {
+		$message.text("");
+	}
+
+	// Set the action
+	if ( action && typeof action === 'string' ) {
+		$button.text( action );
 	} else {
 		$button.text("Upload a .csv");
 	}
@@ -2901,9 +2910,9 @@ UploadView.prototype._onFileChoice = function( event ) {
 	this._parseFile( file );
 
 	if ( file.name ) {
-		this._setLoading( true, 'Uploading ' + file.name + '...' );
+		this._setLoading( true, '', 'Uploading ' + file.name + '...' );
 	} else {
-		this._setLoading( true, 'Uploading file...' );
+		this._setLoading( true, '', 'Uploading file...' );
 	}
 
 	// Announce file upload event
@@ -2941,7 +2950,7 @@ UploadView.prototype._onTableUploadSuccess = function( event ) {
 
 UploadView.prototype._onTableUploadFail = function( event ) {
 
-	this._setLoading( false, "Shoot, something went wrong. Mind trying a different .csv?")
+	this._setLoading( false, "Shoot, something went wrong.", "Try a different .csv");
 };
 
 UploadView.prototype._parseFile = function( file ) {
@@ -8857,7 +8866,7 @@ describe('Upload View', function() {
 					}
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, 'Uploading test.csv...' );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, '', 'Uploading test.csv...' );
 			});
 
 			it('should set the loading message without the file name if one is not available', function() {
@@ -8869,7 +8878,7 @@ describe('Upload View', function() {
 					}
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, 'Uploading file...' );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, '', 'Uploading file...' );
 			});
 
 			it('should parse the file', function() {
@@ -8965,7 +8974,7 @@ describe('Upload View', function() {
 					table: 	new Table()
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong. Mind trying a different .csv?" );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong.", "Try a different .csv" );
 			});
 
 		});
@@ -9137,20 +9146,28 @@ describe('Upload View', function() {
 		beforeEach(function() {
 			this.upload.render();
 			this.$button = $('.columns-upload-button');
+			this.$message = $('.columns-upload-message');
 		});
 
-		it('should update the message text with a user provided string', function() {
+		it('should update the button text with a user provided string', function() {
 			this.upload._setLoading( true, "hi" );
 			expect( this.$button ).toHaveText( "hi" );
 		});
 
+		it('should update the message text with a user provided string', function() {
+			this.upload._setLoading( true, "hi", "there" );
+			expect( this.$message ).toHaveText( "there" );
+		});
+
 		it('should use a default message text if none was provided', function() {
 			this.upload._setLoading( true );
+			expect( this.$message ).toHaveText( "" );
 			expect( this.$button ).toHaveText( "Upload a .csv" );
 		});
 
 		it('should use a default message text if the one provided is not a string', function() {
-			this.upload._setLoading( true, {} );
+			this.upload._setLoading( true, {}, {} );
+			expect( this.$message ).toHaveText( "" );
 			expect( this.$button ).toHaveText( "Upload a .csv" );
 		});
 
@@ -10528,7 +10545,7 @@ describe('Table', function () {
 		beforeEach(function() {
 			table = new Table();
 			spyOn( table, 'cleanColumn' ).and.callThrough();
-		})
+		});
 
 		it('should create items from an array of column names', function() {
 			var names = [ "First Name", "Last Name", "Hometown" ];

@@ -195,7 +195,7 @@ describe('Table', function () {
 		beforeEach(function() {
 			table = new Table();
 			spyOn( table, 'cleanColumn' ).and.callThrough();
-		})
+		});
 
 		it('should create items from an array of column names', function() {
 			var names = [ "First Name", "Last Name", "Hometown" ];

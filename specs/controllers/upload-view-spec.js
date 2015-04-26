@@ -74,7 +74,7 @@ describe('Upload View', function() {
 					}
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, 'Uploading test.csv...' );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, '', 'Uploading test.csv...' );
 			});
 
 			it('should set the loading message without the file name if one is not available', function() {
@@ -86,7 +86,7 @@ describe('Upload View', function() {
 					}
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, 'Uploading file...' );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( true, '', 'Uploading file...' );
 			});
 
 			it('should parse the file', function() {
@@ -182,7 +182,7 @@ describe('Upload View', function() {
 					table: 	new Table()
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong. Mind trying a different .csv?" );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong.", "Try a different .csv" );
 			});
 
 		});
@@ -354,20 +354,28 @@ describe('Upload View', function() {
 		beforeEach(function() {
 			this.upload.render();
 			this.$button = $('.columns-upload-button');
+			this.$message = $('.columns-upload-message');
 		});
 
-		it('should update the message text with a user provided string', function() {
+		it('should update the button text with a user provided string', function() {
 			this.upload._setLoading( true, "hi" );
 			expect( this.$button ).toHaveText( "hi" );
 		});
 
+		it('should update the message text with a user provided string', function() {
+			this.upload._setLoading( true, "hi", "there" );
+			expect( this.$message ).toHaveText( "there" );
+		});
+
 		it('should use a default message text if none was provided', function() {
 			this.upload._setLoading( true );
+			expect( this.$message ).toHaveText( "" );
 			expect( this.$button ).toHaveText( "Upload a .csv" );
 		});
 
 		it('should use a default message text if the one provided is not a string', function() {
-			this.upload._setLoading( true, {} );
+			this.upload._setLoading( true, {}, {} );
+			expect( this.$message ).toHaveText( "" );
 			expect( this.$button ).toHaveText( "Upload a .csv" );
 		});
 

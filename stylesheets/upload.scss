@@ -179,3 +179,10 @@ $upload-top-spacing: 107px;
 		cursor: default;
 	}
 }
+
+p.columns-upload-message {
+	font-size: 16px;
+	word-wrap: break-word;
+	margin-bottom: 40px;
+	max-width: 320px;
+}

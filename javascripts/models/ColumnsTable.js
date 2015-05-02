@@ -1,3 +1,5 @@
+// require('../../bower_components/jquery/dist/jquery.js');
+
 var Config = require('../embed-config.js'),
 	Velocity = require('../../bower_components/velocity/velocity.js'),
 	Hammer = require('../../vendor/hammer.js'),
@@ -6,7 +8,13 @@ var Config = require('../embed-config.js'),
 	ColumnsAnalytics = require('./ColumnsAnalytics.js');
 
 // Make sure our version of jquery isn't polluting the namespace
-$$ = window.jQuery.noConflict(true);
+if ( window.jQuery ) {
+	$$ = window.jQuery.noConflict(true);	
+} else {
+	$$ = $;
+}
+
+console.log( $ );
 
 // Table Expansion
 // -------------------

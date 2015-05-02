@@ -11,11 +11,13 @@
 
 // $$ = $;
 // var Columnsbars = require('../../javascripts/embed-handlebars.js'),
-// 	ColumnsTable = require('../../javascripts/models/ColumnsTable.js');
+var ColumnsEvent = require('../../javascripts/models/ColumnsEvent.js');
+var Table 		 = require('../../javascripts/models/Table.js');
+var ColumnsTable = require('../../javascripts/models/ColumnsTable.js');
 
-// jasmine.getFixtures().fixturesPath = 'specs/fixtures';
+jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
-xdescribe('Embeddable Table', function() {
+describe('Embeddable Table', function() {
 
 	beforeEach(function() {
 		loadFixtures('embed-script.html');

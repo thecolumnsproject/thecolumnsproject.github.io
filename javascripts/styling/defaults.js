@@ -5,6 +5,9 @@ module.exports = {
 		[{
 			property: 'color',
 			value: '#3a3a3a'
+		},{
+			property: 'font-size',
+			value: '16px'
 		}],
 		[{
 			property: 'color',

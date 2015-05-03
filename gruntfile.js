@@ -141,7 +141,7 @@ module.exports = function(grunt) {
 			embed: {
 				src: [
 					'javascripts/embed-table-intro.js',
-					'bower_components/jquery/dist/jquery.min.js',
+					// 'bower_components/jquery/dist/jquery.min.js',
 					// 'bower_components/hammerjs/hammer.min.js',
 					// 'bower_components/hammerjs/hammer.js',
 					// 'bower_components/jquery-hammerjs/jquery.hammer.js',

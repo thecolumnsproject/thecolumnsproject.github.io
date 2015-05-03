@@ -83,7 +83,8 @@ var ColumnsTable = require('../javascripts/models/ColumnsTable.js');
 		// 	return $$(script).data('preview') === true; 
 		// });
 		// if ( !scripts.length ) {
-			$$('head').append( Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']() );
+		document.getElementsByTagName('head')[0].innerHTML += Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']();
+			// $$('head').append( Columns.EmbeddableTemplates['templates/embed-table/analytics.hbs']() );
 		// }
 
 		// Make sure we don't do this setup again

@@ -1,4 +1,4 @@
-// require('../../bower_components/jquery/dist/jquery.js');
+var $$ = require('../../bower_components/jquery/dist/jquery.js');
 
 var Config = require('../embed-config.js'),
 	Velocity = require('../../bower_components/velocity/velocity.js'),
@@ -8,13 +8,11 @@ var Config = require('../embed-config.js'),
 	ColumnsAnalytics = require('./ColumnsAnalytics.js');
 
 // Make sure our version of jquery isn't polluting the namespace
-if ( window.jQuery ) {
-	$$ = window.jQuery.noConflict(true);	
-} else {
-	$$ = $;
-}
-
-console.log( $ );
+// if ( window.jQuery ) {
+// 	$$ = window.jQuery.noConflict(true);	
+// } else {
+// 	$$ = $;
+// }
 
 // Table Expansion
 // -------------------
@@ -268,7 +266,6 @@ ColumnsTable.prototype.fetchData = function() {
 
 	// First turn on loading
 	this.setLoading(true);
-
 	$$.get(Config.api_host + '/columns/table/' + this.id + '?page=0', function(data) {
 		if (data.status == 'success') {
 			_this.generateLayout($$.parseJSON(data.data.layout));
@@ -404,8 +401,8 @@ ColumnsTable.prototype.renderData = function(data) {
 	if (shouldRunRowIntroAnimation) {
 		duration = ANIMATION_DURATION;
 		var delay = ANIMATION_DURATION / 3;
-		// Velocity($$tableBody.get(0), {
-		$$tableBody.velocity({
+		Velocity($$tableBody.get(0), {
+		// $$tableBody.velocity({
 			height: tableHeight
 		}, {
 			duration: duration
@@ -415,14 +412,14 @@ ColumnsTable.prototype.renderData = function(data) {
 			// Only animate the two drooping rows
 			if (index > 0 && index <= 2) {
 				var $$row = $$(row);
-				// Velocity($$rows.get(0), {
-				$$row.velocity({
+				Velocity($$rows.get(0), {
+				// $$row.velocity({
 					translateY: 5
 				}, {duration: ANIMATION_DURATION / 6,
 					delay: delay * index
 				});
-				// Velocity($$rows.get(0), {
-				$$row.velocity({
+				Velocity($$rows.get(0), {
+				// $$row.velocity({
 					translateY: 0
 				}, {
 					duration: ANIMATION_DURATION / 6
@@ -430,8 +427,8 @@ ColumnsTable.prototype.renderData = function(data) {
 			}
 		});
 	} else {
-		// Velocity($$tableBody.get(0), {
-		$$tableBody.velocity({
+		Velocity($$tableBody.get(0), {
+		// $$tableBody.velocity({
 			height: tableHeight
 		}, {
 			duration: duration
@@ -762,8 +759,8 @@ ColumnsTable.prototype.expand = function() {
 		}
 	}
 
-	// Velocity($$table.get(0), props, { 
-	$$table.velocity(props, {
+	Velocity($$table.get(0), props, { 
+	// $$table.velocity(props, {
 
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
@@ -788,8 +785,8 @@ ColumnsTable.prototype.expand = function() {
 ColumnsTable.prototype.expandHeader = function($$header) {
 
 	// Bring the header into view
-	// Velocity($$header.get(0), {
-	$$header.velocity({
+	Velocity($$header.get(0), {
+	// $$header.velocity({
 		opacity: 1 /* Fade the header into view */
 	}, {
 		duration: ANIMATION_DURATION,
@@ -826,8 +823,8 @@ ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$foo
 	// Use javascript height method because of a bug with jQuery and the iOS safari toolbar
 	var bgHeight = this.$$container.get(0).innerHeight || this.$$container.outerHeight();
 
-	// Velocity($$bg.get(0), {
-	$$bg.velocity({
+	Velocity($$bg.get(0), {
+	// $$bg.velocity({
 		height: bgHeight, 			/* Fill the entire screen */
 		translateY: bgOffsetTop 	/* Move to the top of the screen */
 	},{
@@ -858,8 +855,8 @@ ColumnsTable.prototype.expandBody = function($$body) {
 	}
 	// var tableHeight = rowHeight * $$rows.length - 40;
 
-	// Velocity($$body.get(0), {
-	$$body.velocity({
+	Velocity($$body.get(0), {
+	// $$body.velocity({
 		// height: tableHeight, /* Grow to encompass all of the rows */
 		translateY: tableOffsetTop + paddingTop, /* Move down a few pixels to account for the header */
 		'padding-top': paddingTop /* Move down a few more pixels to account for the template row in preview mode */
@@ -915,8 +912,8 @@ ColumnsTable.prototype.expandRowAtIndex = function($$row, index, duration) {
 		offsetY -= ROW_OFFSET * 2;
 	}
 
-	// Velocity($$row.get(0), {
-	$$row.velocity({
+	Velocity($$row.get(0), {
+	// $$row.velocity({
 		translateY: offsetY /* Move each row down into its natural position */
 	}, {
 		duration: duration,
@@ -983,8 +980,8 @@ ColumnsTable.prototype.collapse = function() {
 		}
 	}
 
-	// Velocity($$table.get(0), props, {
-	$$table.velocity(props, {
+	Velocity($$table.get(0), props, {
+	// $$table.velocity(props, {
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
 			$$table.addClass(EXPANDING_CLASS);
@@ -1016,8 +1013,8 @@ ColumnsTable.prototype.collapse = function() {
 ColumnsTable.prototype.collapseHeader = function($$header) {
 
 	// Remove header from view
-	// Velocity($$header.get(0), {
-	$$header.velocity({
+	Velocity($$header.get(0), {
+	// $$header.velocity({
 		opacity: 0 /* Fade the header out of view */
 	}, {
 		duration: ANIMATION_DURATION * 0.2,
@@ -1032,8 +1029,8 @@ ColumnsTable.prototype.collapseBackground = function($$bg) {
 	var _this = this;
 
 	// Calculate new background position
-	// Velocity($$bg.get(0), {
-	$$bg.velocity({
+	Velocity($$bg.get(0), {
+	// $$bg.velocity({
 
 		// Return to small state
 		// height: _this.originalBackground.height,
@@ -1061,8 +1058,8 @@ ColumnsTable.prototype.collapseBody = function($$body) {
 
 	var _this = this;
 	// Calculate the old table size and position
-	// Velocity($$body.get(0), {
-	$$body.velocity({
+	Velocity($$body.get(0), {
+	// $$body.velocity({
 
 		// Move to top of container
 		translateY: 0,
@@ -1106,8 +1103,8 @@ ColumnsTable.prototype.collapseRowAtIndex = function($$row, index, duration) {
 
 	// Calculate the old position for each row
 	var newPosition = this.originalRows[index].positionY - $$row.offset().top;
-	// Velocity($$row.get(0), {
-	$$row.velocity({
+	Velocity($$row.get(0), {
+	// $$row.velocity({
 
 		// Move each row to its collapsed position
 		translateY: 0

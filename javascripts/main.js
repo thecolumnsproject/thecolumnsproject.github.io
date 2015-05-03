@@ -1,3 +1,7 @@
+window.jQuery = window.$ = require('../bower_components/jquery/dist/jquery.js');
+require('../bower_components/velocity/velocity.js');
+require('../vendor/jquery-ui.min.js');
+
 var isMobile			= require('ismobilejs');
 var Desktop 			= require('./controllers/DesktopView.js');
 var Mobile 				= require('./controllers/MobileView.js');

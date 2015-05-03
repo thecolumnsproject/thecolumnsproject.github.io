@@ -18,6 +18,7 @@ var ColumnsTable = require('../../javascripts/models/ColumnsTable.js');
 jasmine.getFixtures().fixturesPath = 'specs/fixtures';
 
 describe('Embeddable Table', function() {
+	var embed;
 
 	beforeEach(function() {
 		loadFixtures('embed-script.html');
@@ -25,37 +26,41 @@ describe('Embeddable Table', function() {
 		var scriptTags = document.getElementsByTagName('script'),
 			script = scriptTags[ scriptTags.length - 1];
 
-		this.embed = new ColumnsTable( script );
+		embed = new ColumnsTable( script );
+	});
+
+	afterEach(function() {
+		ColumnsEvent.offAll();
 	});
 
 	describe('Initialization', function() {
 
 		it('should be in preview mode when in the app', function() {
-			var embed = new ColumnsTable('<script type="text/javascript" src="http://colum.nz/public/embed-table.js" data-preview="true" async></script>');
-			expect( embed.preview ).toBe( true );
+			var newEmbed = new ColumnsTable('<script type="text/javascript" src="http://colum.nz/public/embed-table.js" data-preview="true" async></script>');
+			expect( newEmbed.preview ).toBe( true );
 		});
 
 		it('should not be in preview mode when embedded', function() {
-			var embed = new ColumnsTable('<script type="text/javascript" src="http://colum.nz/public/embed-table.js" async></script>');
-			expect( embed.preview ).toBeUndefined();
+			var newEmbed = new ColumnsTable('<script type="text/javascript" src="http://colum.nz/public/embed-table.js" async></script>');
+			expect( newEmbed.preview ).toBeUndefined();
 		});
 	});
 
 	describe('Listening to Editor Events', function() {
 
 		beforeEach(function() {			
-			this.embed.render();
+			embed.render();
+			embed._setupEventListeners();
 		});
 
 		it('should re-render when table details are udpated', function() {
 			// spyOn( this.embed, 'generateLayout' );
 			// spyOn( this.embed, 'renderData' );
-
 			ColumnsEvent.send( 'Columns.Table.DidChange', {
 				table: new Table({ title: 'My Table' })
 			});
 
-			expect( this.embed.$$table.find('.columns-table-title') ).toHaveText('My Table');
+			expect( embed.$$table.find('.columns-table-title') ).toHaveText('My Table');
 		});
 	});
 });

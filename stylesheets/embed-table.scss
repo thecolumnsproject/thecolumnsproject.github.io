@@ -51,6 +51,12 @@ $columns-table-accent-color: 	#69A368;
 	border-bottom: 1px solid $gray-lighter;
 }
 
+.large-form-factor .columns-table-container {
+	border-left: 1px solid $gray-lighter;
+	border-right: 1px solid $gray-lighter;
+	border-radius: 2px;
+}
+
 .columns-table {
 	position: relative;
 	min-height: $table-container-height - (2 * $table-container-padding);
@@ -280,6 +286,21 @@ $columns-table-accent-color: 	#69A368;
 .loading .columns-table-footer
 .error .columns-table-footer {
 	opacity: 0;
+}
+
+/* Panel styling
+ * ------------------
+ * These styles specify the position and look
+ * of the table when it's rendered as a side panel
+ */
+
+.columns-table-shield {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0,0,0,0.36);
 }
 
 /* Relocated styling

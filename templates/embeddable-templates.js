@@ -143,6 +143,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/panel-skeleton.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"columns-table-panel\">\n	\n</div>";
+  });
+
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
@@ -215,6 +224,15 @@ function program1(depth0,data,depth1) {
   stack1 = helpers.each.call(depth0, (depth0 && depth0.rows), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth0),data:data});
   if(stack1 || stack1 === 0) { return stack1; }
   else { return ''; }
+  });
+
+this["Columns"]["EmbeddableTemplates"]["templates/embed-table/shield.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"columns-table-shield\"></div>";
   });
 
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/skeleton.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

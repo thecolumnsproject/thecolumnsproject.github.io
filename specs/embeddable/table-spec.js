@@ -46,6 +46,28 @@ describe('Embeddable Table', function() {
 		});
 	});
 
+	describe('Rendering', function() {
+
+		it('should render large form factor when appropriate', function() {
+			spyOn( embed, 'isLargeFormFactor' ).and.returnValue( true );
+			spyOn( embed, 'renderLargeFormFactorExpandedTable' );
+			embed.render();
+			expect( embed.renderLargeFormFactorExpandedTable ).toHaveBeenCalled();
+		});
+
+		describe('Large Form Factor', function() {
+
+			beforeEach(function() {
+				embed.renderLargeFormFactorExpandedTable();
+			});
+
+			it('should create the large form factor expanded table structure', function() {
+				expect( $('.columns-table-shield') ).toBeInDOM();
+				expect( $('.columns-table-panel') ).toBeInDOM();
+			});
+		});
+	});
+
 	describe('Listening to Editor Events', function() {
 
 		beforeEach(function() {			

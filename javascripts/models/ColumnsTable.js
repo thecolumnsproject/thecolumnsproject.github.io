@@ -34,6 +34,7 @@ var TABLE_SELECTOR = '.columns-table-widget',
 	TABLE_ROW_SELECTOR = '.columns-table-row',
 	TABLE_HEADER_SELECTOR = '.columns-table-header',
 	TABLE_FOOTER_SELECTOR = '.columns-table-footer',
+	TABLE_SHIELD_SELECTOR = '.columns-table-shield',
 	PLACEHOLDER_CLASS = 'columns-table-placeholder',
 	EXPANDED_CLASS = 'expanded',
 	EXPANDING_CLASS = 'expanding',
@@ -197,6 +198,7 @@ ColumnsTable.prototype.render = function() {
 	if (this.isLargeFormFactor()) {
 		this.$$container = this.$$table.parent();
 		this.$$table.addClass('large-form-factor');
+		this.renderLargeFormFactorExpandedTable();
 	} else {
 		this.$$container = $$(window);
 		this.$$table.addClass('small-form-factor');
@@ -219,6 +221,11 @@ ColumnsTable.prototype.render = function() {
 		category: 'table',
 		action: 'render'
 	});
+};
+
+ColumnsTable.prototype.renderLargeFormFactorExpandedTable = function() {
+	var shield = Columns.EmbeddableTemplates['templates/embed-table/shield.hbs'];
+	$$('body').append( shield() );
 };
 
 ColumnsTable.prototype.isLargeFormFactor = function() {

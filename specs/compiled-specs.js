@@ -13201,6 +13201,7 @@ var TABLE_SELECTOR = '.columns-table-widget',
 	TABLE_ROW_SELECTOR = '.columns-table-row',
 	TABLE_HEADER_SELECTOR = '.columns-table-header',
 	TABLE_FOOTER_SELECTOR = '.columns-table-footer',
+	TABLE_SHIELD_SELECTOR = '.columns-table-shield',
 	PLACEHOLDER_CLASS = 'columns-table-placeholder',
 	EXPANDED_CLASS = 'expanded',
 	EXPANDING_CLASS = 'expanding',
@@ -13364,6 +13365,7 @@ ColumnsTable.prototype.render = function() {
 	if (this.isLargeFormFactor()) {
 		this.$$container = this.$$table.parent();
 		this.$$table.addClass('large-form-factor');
+		this.renderLargeFormFactorExpandedTable();
 	} else {
 		this.$$container = $$(window);
 		this.$$table.addClass('small-form-factor');
@@ -13386,6 +13388,11 @@ ColumnsTable.prototype.render = function() {
 		category: 'table',
 		action: 'render'
 	});
+};
+
+ColumnsTable.prototype.renderLargeFormFactorExpandedTable = function() {
+	var shield = Columns.EmbeddableTemplates['templates/embed-table/shield.hbs'];
+	$$('body').append( shield() );
 };
 
 ColumnsTable.prototype.isLargeFormFactor = function() {
@@ -15222,6 +15229,28 @@ describe('Embeddable Table', function() {
 		it('should not be in preview mode when embedded', function() {
 			var newEmbed = new ColumnsTable('<script type="text/javascript" src="http://colum.nz/public/embed-table.js" async></script>');
 			expect( newEmbed.preview ).toBeUndefined();
+		});
+	});
+
+	describe('Rendering', function() {
+
+		it('should render large form factor when appropriate', function() {
+			spyOn( embed, 'isLargeFormFactor' ).and.returnValue( true );
+			spyOn( embed, 'renderLargeFormFactorExpandedTable' );
+			embed.render();
+			expect( embed.renderLargeFormFactorExpandedTable ).toHaveBeenCalled();
+		});
+
+		describe('Large Form Factor', function() {
+
+			beforeEach(function() {
+				embed.renderLargeFormFactorExpandedTable();
+			});
+
+			it('should create the large form factor expanded table structure', function() {
+				expect( $('.columns-table-shield') ).toBeInDOM();
+				expect( $('.columns-table-panel') ).toBeInDOM();
+			});
 		});
 	});
 

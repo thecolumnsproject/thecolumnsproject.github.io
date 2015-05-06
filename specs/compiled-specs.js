@@ -9169,9 +9169,6 @@ if ( typeof define === "function" && define.amd ) {
 	});
 }
 
-
-
-
 var
 	// Map over jQuery in case of overwrite
 	_jQuery = window.jQuery,
@@ -13365,7 +13362,7 @@ ColumnsTable.prototype.render = function() {
 	if (this.isLargeFormFactor()) {
 		this.$$container = this.$$table.parent();
 		this.$$table.addClass('large-form-factor');
-		this.renderLargeFormFactorExpandedTable();
+		this.$$table.append( this.renderLargeFormFactorExpandedTable() );
 	} else {
 		this.$$container = $$(window);
 		this.$$table.addClass('small-form-factor');
@@ -13391,8 +13388,8 @@ ColumnsTable.prototype.render = function() {
 };
 
 ColumnsTable.prototype.renderLargeFormFactorExpandedTable = function() {
-	var shield = Columns.EmbeddableTemplates['templates/embed-table/shield.hbs'];
-	$$('body').append( shield() );
+	var panel = Columns.EmbeddableTemplates['templates/embed-table/panel-skeleton.hbs'];
+	return panel();
 };
 
 ColumnsTable.prototype.isLargeFormFactor = function() {
@@ -15236,20 +15233,16 @@ describe('Embeddable Table', function() {
 
 		it('should render large form factor when appropriate', function() {
 			spyOn( embed, 'isLargeFormFactor' ).and.returnValue( true );
-			spyOn( embed, 'renderLargeFormFactorExpandedTable' );
 			embed.render();
-			expect( embed.renderLargeFormFactorExpandedTable ).toHaveBeenCalled();
+			expect( embed.$$table.find('.columns-table-panel-container').length ).toBe( 1 );
 		});
 
 		describe('Large Form Factor', function() {
 
-			beforeEach(function() {
-				embed.renderLargeFormFactorExpandedTable();
-			});
-
 			it('should create the large form factor expanded table structure', function() {
-				expect( $('.columns-table-shield') ).toBeInDOM();
-				expect( $('.columns-table-panel') ).toBeInDOM();
+				expect( $( embed.renderLargeFormFactorExpandedTable() ) ).toHaveClass('columns-table-panel-container');
+				expect( $( embed.renderLargeFormFactorExpandedTable() ).find('.columns-table-shield').length ).toBe( 1 );
+				expect( $( embed.renderLargeFormFactorExpandedTable() ).find('.columns-table-panel').length ).toBe( 1 );
 			});
 		});
 	});

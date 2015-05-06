@@ -50,20 +50,16 @@ describe('Embeddable Table', function() {
 
 		it('should render large form factor when appropriate', function() {
 			spyOn( embed, 'isLargeFormFactor' ).and.returnValue( true );
-			spyOn( embed, 'renderLargeFormFactorExpandedTable' );
 			embed.render();
-			expect( embed.renderLargeFormFactorExpandedTable ).toHaveBeenCalled();
+			expect( embed.$$table.find('.columns-table-panel-container').length ).toBe( 1 );
 		});
 
 		describe('Large Form Factor', function() {
 
-			beforeEach(function() {
-				embed.renderLargeFormFactorExpandedTable();
-			});
-
 			it('should create the large form factor expanded table structure', function() {
-				expect( $('.columns-table-shield') ).toBeInDOM();
-				expect( $('.columns-table-panel') ).toBeInDOM();
+				expect( $( embed.renderLargeFormFactorExpandedTable() ) ).toHaveClass('columns-table-panel-container');
+				expect( $( embed.renderLargeFormFactorExpandedTable() ).find('.columns-table-shield').length ).toBe( 1 );
+				expect( $( embed.renderLargeFormFactorExpandedTable() ).find('.columns-table-panel').length ).toBe( 1 );
 			});
 		});
 	});

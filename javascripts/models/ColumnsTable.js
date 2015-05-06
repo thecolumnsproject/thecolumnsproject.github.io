@@ -198,7 +198,7 @@ ColumnsTable.prototype.render = function() {
 	if (this.isLargeFormFactor()) {
 		this.$$container = this.$$table.parent();
 		this.$$table.addClass('large-form-factor');
-		this.renderLargeFormFactorExpandedTable();
+		this.$$table.append( this.renderLargeFormFactorExpandedTable() );
 	} else {
 		this.$$container = $$(window);
 		this.$$table.addClass('small-form-factor');
@@ -224,8 +224,8 @@ ColumnsTable.prototype.render = function() {
 };
 
 ColumnsTable.prototype.renderLargeFormFactorExpandedTable = function() {
-	var shield = Columns.EmbeddableTemplates['templates/embed-table/shield.hbs'];
-	$$('body').append( shield() );
+	var panel = Columns.EmbeddableTemplates['templates/embed-table/panel-skeleton.hbs'];
+	return panel();
 };
 
 ColumnsTable.prototype.isLargeFormFactor = function() {

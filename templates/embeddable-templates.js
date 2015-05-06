@@ -149,7 +149,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"columns-table-panel\">\n	\n</div>";
+  return "<div class=\"columns-table-panel-container\">\n	<div class=\"columns-table-shield\"></div>\n	<div class=\"columns-table-panel\"></div>\n</div>";
   });
 
 this["Columns"]["EmbeddableTemplates"]["templates/embed-table/row-group.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

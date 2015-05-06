@@ -303,6 +303,17 @@ $columns-table-accent-color: 	#69A368;
 	background-color: rgba(0,0,0,0.36);
 }
 
+$columns-panel-width: 320px;
+.columns-table-panel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: $columns-panel-width;
+	height: 100%;
+	box-shadow: -1px 0px 4px rgba(0,0,0,0.2);
+	background-color: $gray-lightest;
+}
+
 /* Relocated styling
  * ------------------
  * These styles specify the position and look

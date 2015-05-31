@@ -158,6 +158,9 @@ Table.prototype.cleanColumn = function( column ) {
 	// Replace any trailing whitespace and periods
 	cleanColumn = cleanColumn.replace(/^[.\s]+|[.\s]+$/g, "");
 
+	// Remove any periods within columns
+	cleanColumn = cleanColumn.replace(/[.]/g, '' );
+
 	// Make sure it's not too long for the DB
 	cleanColumn = cleanColumn.substring( 0, MAX_COLUMN_LENGTH );
 

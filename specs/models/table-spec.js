@@ -293,6 +293,10 @@ describe('Table', function () {
 			expect( table.cleanColumn( 'Github.' ) ).toEqual( 'Github' );
 		});
 
+		it('should remove any periods within column names', function() {
+			expect( table.cleanColumn( 'Studio Filter10F 5&2 A23 A24 Abk. Abr. AD ADC AEF AF Ampl. Anch.' ) ).toBe('Studio Filter10F 5&2 A23 A24 Abk Abr AD ADC AEF AF Ampl Anch');
+		});
+
 		it('should truncate anything after the 64th character', function() {
 			expect( table.cleanColumn('hi') ).toBe('hi');
 			expect( table.cleanColumn( 'aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweudci') )

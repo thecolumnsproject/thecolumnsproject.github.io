@@ -210,27 +210,39 @@ module.exports = function(grunt) {
 			}
 		},
 		watch: {
-			options: {
-				livereload: true,
-			},
 			sass: {
 				files: '**/*.scss',
 				tasks: ['sass'],
+				options: {
+					livereload: true,
+				},
 			},
 			html: {
 				files: '**/*.html',
+				options: {
+					livereload: true,
+				},
 			},
 			handlebars: {
 				files: '**/*.hbs',
-				tasks: ['handlebars', 'concat:embed']
+				tasks: ['handlebars', 'concat:embed'],
+				options: {
+					livereload: true,
+				},
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',
-				tasks: ['concat:styling', 'browserify', 'replace', 'concat:embed']
+				tasks: ['concat:styling', 'browserify', 'replace', 'concat:embed'],
+				options: {
+					livereload: true,
+				},
 			},
 			icons: {
 				files: 'fonts/ventors/*.svg',
-				tasks: ['webfont']
+				tasks: ['webfont'],
+				options: {
+					livereload: true,
+				},
 			},
 			specs: {
 				files: ['specs/**/*.js', 'specs/**/*.html', '!specs/compiled-specs.js'],

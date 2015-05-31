@@ -9,7 +9,10 @@ module.exports = function(grunt) {
 					src: ['*.scss'],
 					dest: 'css',
 					ext: '.css',
-				}]
+				}],
+				options: {
+					loadPath: './'
+				}
 			}
 		},
 		handlebars: {

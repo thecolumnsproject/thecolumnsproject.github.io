@@ -133,7 +133,7 @@ module.exports = function(grunt) {
 				}
 			},
 			specs: {
-				src: ['specs/embeddable/*.js', '!specs/compiled-specs.js'],
+				src: ['specs/**/*.js', '!specs/compiled-specs.js'],
 				dest: 'specs/compiled-specs.js'
 			}
 		},
@@ -171,7 +171,7 @@ module.exports = function(grunt) {
 		jasmine: {
 			app: {
 				src: [
-					'compiled-javascripts/app.js'
+					// 'compiled-javascripts/app.js'
 					// 'javascripts/models/*.js',
 					// 'javascripts/controllers/*.js',
 					// 'javascripts/styling/**/*.js',
@@ -180,13 +180,15 @@ module.exports = function(grunt) {
 				options: {
 					specs: 'specs/compiled-specs.js',
 					vendor: [
-						'bower_components/jquery/dist/jquery.js',
+						// 'bower_components/jquery/dist/jquery.js',
 						'bower_components/handlebars/handlebars.js',
-						'bower_components/velocity/velocity.js',
-						'vendor/jquery-ui.min.js',
+						'templates/templates.js',
+						'bower_components/Papa-Parse/papaparse.js',
+						'compiled-javascripts/app.js',
+						// 'bower_components/velocity/velocity.js',
+						// 'vendor/jquery-ui.min.js',
 						'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
-						'bower_components/jasmine-ajax/lib/mock-ajax.js',
-						'bower_components/Papa-Parse/papaparse.js'
+						'bower_components/jasmine-ajax/lib/mock-ajax.js'
 					],
 					helpers: [
 						'templates/embeddable-templates.js',

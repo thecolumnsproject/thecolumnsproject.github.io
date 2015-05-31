@@ -15986,7 +15986,7 @@ UploadView.prototype._onTableUploadSuccess = function( event ) {
 
 UploadView.prototype._onTableUploadFail = function( event ) {
 
-	this._setLoading( false, "Shoot, something went wrong.", "Try a different .csv");
+	this._setLoading( false, "Try a different .csv", "Shoot, something went wrong.");
 };
 
 UploadView.prototype._parseFile = function( file ) {
@@ -23225,7 +23225,7 @@ describe('Upload View', function() {
 					table: 	new Table()
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong.", "Try a different .csv" );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Try a different .csv", "Shoot, something went wrong." );
 			});
 
 		});

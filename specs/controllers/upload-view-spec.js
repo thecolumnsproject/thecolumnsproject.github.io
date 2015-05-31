@@ -182,7 +182,7 @@ describe('Upload View', function() {
 					table: 	new Table()
 				});
 
-				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Shoot, something went wrong.", "Try a different .csv" );
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Try a different .csv", "Shoot, something went wrong." );
 			});
 
 		});

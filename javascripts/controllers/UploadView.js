@@ -155,7 +155,7 @@ UploadView.prototype._onTableUploadSuccess = function( event ) {
 
 UploadView.prototype._onTableUploadFail = function( event ) {
 
-	this._setLoading( false, "Shoot, something went wrong.", "Try a different .csv");
+	this._setLoading( false, "Try a different .csv", "Shoot, something went wrong.");
 };
 
 UploadView.prototype._parseFile = function( file ) {

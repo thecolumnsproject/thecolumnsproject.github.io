@@ -46,7 +46,7 @@ describe('Embeddable Table', function() {
 		});
 	});
 
-	describe('Rendering', function() {
+	describe('Rendering Skeleton', function() {
 
 		it('should render large form factor when appropriate', function() {
 			spyOn( embed, 'isLargeFormFactor' ).and.returnValue( true );
@@ -62,6 +62,36 @@ describe('Embeddable Table', function() {
 				expect( $( embed.renderLargeFormFactorExpandedTable() ).find('.columns-table-panel').length ).toBe( 1 );
 			});
 		});
+	});
+
+	describe('Expanding Table', function() {
+
+		describe('Large Form Factor', function() {
+
+			it('should slide the panel into view', function() {
+				loadFixtures('embeddable-panel.html');
+				
+			});
+
+			it('should animate the rows into position in the panel', function() {
+
+			});
+		});
+	});
+
+	xdescribe('Rendering Data', function() {
+
+		describe('Large Form Factor', function() {
+
+			beforeEach(function() {
+				spyOn( embed, 'isLargeFormFactor' ).and.returnValue( true );
+				embed.render();
+			});
+
+			it('should add a header to the panel', function() {
+
+			});
+		})
 	});
 
 	describe('Listening to Editor Events', function() {

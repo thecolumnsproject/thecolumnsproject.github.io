@@ -92,7 +92,7 @@ function program5(depth0,data) {
   buffer += "</span>\n		";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.sort_by_column), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	</div>\n	<div class=\"columns-table-header-controls\">\n		<button class=\"columns-table-header-button columns-table-filters-button\">\n			<i class=\"columns-table-header-icon icon-equalizer\"></i>\n		</button>\n		<button class=\"columns-table-header-button columns-table-close-button\">Close</button>\n	</div>\n</div>";
+  buffer += "\n	</div>\n	<div class=\"columns-table-header-controls\">\n		\n		<button class=\"columns-table-header-button columns-table-close-button\">Close</button>\n	</div>\n</div>";
   return buffer;
   });
 

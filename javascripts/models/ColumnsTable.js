@@ -121,7 +121,7 @@ function ColumnsTable(script) {
 	// Storage variables for resetting positions
 	this.originalBackground = {};
 	this.originalRows = [];
-	this.$$originalSibling;
+	// this.$$originalSibling;
 
 	// Save a copy of the data so we can re-render the layout without going back to the server
 	this.data;
@@ -733,7 +733,7 @@ ColumnsTable.prototype.expand = function() {
 	placeholder.className = PLACEHOLDER_CLASS;
 	placeholder.style.height = $$table.outerHeight( true ) + 'px';
 	placeholder.style.width = $$table.outerWidth() + 'px';
-	this.$$originalSibling = $$table.siblings('script').first();
+	// this.$$originalSibling = $$table.siblings('script').first();
 	if (this.isLargeFormFactor()) {
 		$$table.appendTo(this.$$container);	
 	} else {
@@ -741,7 +741,8 @@ ColumnsTable.prototype.expand = function() {
 	}
 	$$table.addClass(RELOCATED_CLASS);
 	$$table.css(offsets);
-	this.$$originalSibling.before(placeholder);
+	// this.$$originalSibling.before(placeholder);
+	$$( this.script ).before(placeholder);
 
 	this.expandBackground($$bg, $$rows, $$header, $$footer);
 	this.expandRows($$rows);
@@ -960,7 +961,7 @@ ColumnsTable.prototype.collapse = function() {
 	// and remove the placeholder
 
 	// $$parent.addClass(RELOCATED_CLASS);
-	$$table.insertBefore(this.$$originalSibling);
+	$$table.insertBefore( $$( this.script ) );
 
 	// setTimeout(function() {
 		this.collapseHeader($$header);
@@ -996,7 +997,7 @@ ColumnsTable.prototype.collapse = function() {
 				position: 'relative',
 				'z-index': 0
 			});
-			_this.$$originalSibling.siblings('.' + PLACEHOLDER_CLASS).remove();
+			$$( this.script ).siblings('.' + PLACEHOLDER_CLASS).remove();
 			$$('html').removeClass('table-expanded');
 			this.$$container.removeClass('table-expanded');
 

@@ -230,7 +230,8 @@ ColumnsTable.prototype.getOffsetTop = function() {
 		return this.$$table.position().top; 
 		// return this.$$container.scrollTop();
 	} else {
-		return this.$$table.offset().top;
+		// return this.$$table.offset().top;
+		return this.$$table.get(0).offsetTop;
 	}
 };
 

@@ -978,7 +978,7 @@ ColumnsTable.prototype.collapse = function() {
 		});
 	} else {
 		setTimeout(function() {
-			allDone();
+			doneCollapsing();
 		}, ANIMATION_DURATION);
 	}
 

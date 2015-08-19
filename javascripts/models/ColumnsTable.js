@@ -411,15 +411,15 @@ ColumnsTable.prototype.renderData = function(data) {
 		$$.each($$rows, function(index, row) {
 
 			// Only animate the two drooping rows
-			if (index > 0 && index <= 2) {
+			if (index >= 0 && index <= 2) {
 				var $$row = $$(row);
-				Velocity($$rows.get(0), {
+				Velocity($$row.get(0), {
 				// $$row.velocity({
 					translateY: 5
 				}, {duration: ANIMATION_DURATION / 6,
 					delay: delay * index
 				});
-				Velocity($$rows.get(0), {
+				Velocity($$row.get(0), {
 				// $$row.velocity({
 					translateY: 0
 				}, {

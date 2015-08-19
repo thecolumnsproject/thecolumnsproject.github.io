@@ -65,7 +65,7 @@ $columns-table-accent-color: 	#69A368;
 	top: $table-row-offset-top * 2;
 	overflow: hidden;
 	@include transition(opacity 0.15s);
-	@include transition(box-shadow 0.15s);
+	@include transition(box-shadow 0.35s);
 }
 
 /* The top three rows should show
@@ -303,6 +303,10 @@ $columns-table-accent-color: 	#69A368;
 
 .expanding .columns-table-footer {
  	opacity: 0;
+}
+
+.expanding .columns-table-row {
+	// box-shadow: none;
 }
 
 /* Expanded styling

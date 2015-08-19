@@ -313,7 +313,7 @@ $columns-table-accent-color: 	#69A368;
 
 .table-expanded {
 	overflow: hidden;
-	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: none;
 }
 
 .expanded .columns-table-container {

@@ -46,6 +46,23 @@ describe('Embeddable Table', function() {
 		});
 	});
 
+	describe('Rendering a Row', function() {
+		var layout = {
+			type: 'group',
+			style: [{
+				property: 'padding',
+				value: '12px'
+			}],
+			values: []
+		};
+
+		it('should be z-indexed relative to position in the table', function() {
+			expect( embed.renderRow( {}, 5, layout ) ).toHaveCss( { "z-index": "-5"} );
+			expect( embed.renderRow( {}, 10, layout ) ).toHaveCss( { "z-index": "-10"} );
+			expect( embed.renderRow( {}, 0, layout ) ).toHaveCss( { "z-index": "0"} );
+		});
+	});
+
 	describe('Listening to Editor Events', function() {
 
 		beforeEach(function() {			

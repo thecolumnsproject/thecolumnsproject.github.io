@@ -378,7 +378,7 @@ ColumnsTable.prototype.renderData = function(data) {
 	// }));
 	
 	data.data.slice( 0, 20 ).forEach(function( rowData, i) {
-		$$tableBody.append( this.renderRow( rowData, this.layout ) );
+		$$tableBody.append( this.renderRow( rowData, i, this.layout ) );
 	}.bind( this ));
 
 	// If we're in preview and the table is expanded,
@@ -451,8 +451,13 @@ ColumnsTable.prototype.renderData = function(data) {
 	}, 100);
 };
 
-ColumnsTable.prototype.renderRow = function( data, layout ) {
+ColumnsTable.prototype.renderRow = function( data, index, layout ) {
 	var $$rowLayout = $$( Columns.EmbeddableTemplates['templates/embed-table/row-layout.hbs']() );
+
+	// Make sure the row is properly z-indexed
+	// Lower rows should be z-indexed below higher rows
+	$$rowLayout.css( { "z-index": -index } );
+
 	return $$rowLayout.append( this.renderRowComponent( data, layout ) );
 };
 

@@ -55,6 +55,10 @@ $columns-table-accent-color: 	#69A368;
 	position: relative;
 	min-height: $table-container-height - (2 * $table-container-padding);
 	margin: 0;
+
+	// Set initial z-index position so rows with negative z-indeces
+	// don't appear underneath the table itself
+	z-index: 0;
 }
 
 .columns-table-row {
@@ -79,19 +83,19 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table-row:nth-child(1) {
 	@include table-row-top;
-	z-index: 3;
+	// z-index: 3;
 	top: $table-row-offset-top * 0;
 }
 
 .columns-table-row:nth-child(2) {
 	@include table-row-top;
-	z-index: 2;
+	// z-index: 2;
 	top: $table-row-offset-top * 1;
 }
 
 .columns-table-row:nth-child(3) {
 	@include table-row-top;
-	z-index: 1;
+	// z-index: 1;
 	// top: $table-row-offset-top * 2;
 }
 

@@ -347,7 +347,7 @@ ColumnsTable.prototype.renderData = function(data) {
 			sort_by_column: data.sort_by_column
 		}, header);
 	} else {
-		this.$$table.prepend(header({
+		$$tableBody.before(header({
 			title: data.title,
 			sort_by_column: data.sort_by_column
 		}));
@@ -502,6 +502,10 @@ ColumnsTable.prototype.backgroundHeight = function() {
 	var offsetHeight = numRows > 3 ? ROW_OFFSET * 2 : ROW_OFFSET * (numRows - 1);
 	return offsetHeight + this.tallestRowHeight();
 };
+
+ColumnsTable.prototype.headerHeight = function() {
+	return this.$$table.find( TABLE_HEADER_SELECTOR ).outerHeight();
+}
 
 ColumnsTable.prototype.updateComponent = function($$component, data, template) {
 	// If there is alread a component, just update it with the new data
@@ -792,16 +796,16 @@ ColumnsTable.prototype.expand = function() {
 ColumnsTable.prototype.expandHeader = function($$header) {
 
 	// Bring the header into view
-	Velocity($$header.get(0), {
-	// $$header.velocity({
-		opacity: 1 /* Fade the header into view */
-	}, {
-		duration: ANIMATION_DURATION,
-		delay: ANIMATION_DURATION,
-		complete: function(elements) {
-			// $$header.addClass(EXPANDED_CLASS);
-		}
-	});
+	// Velocity($$header.get(0), {
+	// // $$header.velocity({
+	// 	opacity: 1 /* Fade the header into view */
+	// }, {
+	// 	duration: ANIMATION_DURATION,
+	// 	delay: ANIMATION_DURATION,
+	// 	complete: function(elements) {
+	// 		// $$header.addClass(EXPANDED_CLASS);
+	// 	}
+	// });
 };
 
 ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$footer) {
@@ -905,7 +909,7 @@ ColumnsTable.prototype.expandRows = function($$rows) {
 ColumnsTable.prototype.expandRowAtIndex = function($$row, index, duration) {
 
 	var rowHeight = $$row.outerHeight();
-	var offsetY = (index * rowHeight);
+	var offsetY = (index * rowHeight) - this.headerHeight();
 	switch (index) {
 		case 0:
 		break;
@@ -1020,15 +1024,15 @@ ColumnsTable.prototype.collapse = function() {
 ColumnsTable.prototype.collapseHeader = function($$header) {
 
 	// Remove header from view
-	Velocity($$header.get(0), {
-	// $$header.velocity({
-		opacity: 0 /* Fade the header out of view */
-	}, {
-		duration: ANIMATION_DURATION * 0.2,
-		complete: function(elements) {
-			$$header.removeClass(EXPANDED_CLASS);
-		}
-	});
+	// Velocity($$header.get(0), {
+	// // $$header.velocity({
+	// 	opacity: 0 /* Fade the header out of view */
+	// }, {
+	// 	duration: ANIMATION_DURATION * 0.2,
+	// 	complete: function(elements) {
+	// 		$$header.removeClass(EXPANDED_CLASS);
+	// 	}
+	// });
 }
 
 ColumnsTable.prototype.collapseBackground = function($$bg) {
@@ -1041,7 +1045,7 @@ ColumnsTable.prototype.collapseBackground = function($$bg) {
 
 		// Return to small state
 		// height: _this.originalBackground.height,
-		height: _this.backgroundHeight() + 69,
+		height: _this.backgroundHeight() + 60 + _this.headerHeight(),
 		// height: 'auto',
 
 		// Move back to original position

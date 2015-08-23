@@ -54,7 +54,7 @@ $columns-table-accent-color: 	#69A368;
 .columns-table {
 	position: relative;
 	min-height: $table-container-height - (2 * $table-container-padding);
-	margin: 0;
+	// margin: 0;
 
 	// Set initial z-index position so rows with negative z-indeces
 	// don't appear underneath the table itself
@@ -305,6 +305,7 @@ $columns-table-accent-color: 	#69A368;
 
 .expanding .columns-table-row {
 	// box-shadow: none;
+	box-shadow: $table-row-box-shadow;
 }
 
 /* Expanded styling
@@ -324,6 +325,8 @@ $columns-table-accent-color: 	#69A368;
 	// @include calc(height, '100% - #{$table-container-padding} * 2' !important);
 	// height: 100% !important; /* Override the height set via animation */
 	overflow: scroll;
+
+	@include transform(translateY(0px) !important);
 }
 
 .expanded.large-form-factor .columns-table-container {
@@ -364,6 +367,8 @@ $columns-table-accent-color: 	#69A368;
 	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
 	height: auto !important; /* Override the custom height given on load */
 	border: 1px solid $gray-lighter;
+
+	@include transform(translateY(0px) !important);
 }
 
 .expanded .columns-table-loading {
@@ -383,6 +388,7 @@ $columns-table-accent-color: 	#69A368;
 
 	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
 	position:relative;
+	@include transform(translateY(0px) !important);
 }
 
 .expanded .columns-table-header {

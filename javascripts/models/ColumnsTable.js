@@ -780,8 +780,11 @@ ColumnsTable.prototype.expand = function() {
 		complete: function(elements) {
 			$$table.addClass(EXPANDED_CLASS);
 			$$table.removeClass(EXPANDING_CLASS);
-			$$('html').addClass('table-expanded');
-			this.$$container.addClass('table-expanded');
+
+			setTimeout(function() {
+				$$('html').addClass('table-expanded');
+				this.$$container.addClass('table-expanded');
+			}.bind( this ), 0);
 
 			if (_this.preview || this.sample ) {
 				// $(document).trigger('ColumnsTableDidExpand', {table: _this});
@@ -842,12 +845,12 @@ ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$foo
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
 			$$bg.addClass(EXPANDING_CLASS);
-			$$bg.removeClass('translateY-reset');
+			// $$bg.removeClass('translateY-reset');
 		},
 		complete: function(elements) {
 			$$bg.removeClass(EXPANDING_CLASS);
 			// $$bg.addClass(EXPANDED_CLASS);
-			$$bg.addClass('translateY-reset');
+			// $$bg.addClass('translateY-reset');
 			// $$TABLE.removeClass(RELOCATED_CLASS);
 		}
 	});
@@ -875,14 +878,15 @@ ColumnsTable.prototype.expandBody = function($$body) {
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
 			// _this.$$table.addClass(EXPANDING_CLASS);
-			$$body.removeClass('translateY-reset');
+			// $$body.removeClass('translateY-reset');
 		},
 		complete: function(elements) {
 			// _this.$$table.addClass(EXPANDED_CLASS);
 			// _this.$$table.removeClass(EXPANDING_CLASS);
 			// $$('html').addClass('table-expanded');
 			// $$body.addClass(EXPANDED_CLASS);
-			$$body.addClass('translateY-reset');
+			// $$body.addClass('translateY-reset');
+			// $$body.css( { "margin-top": "60px" } );
 		}
 	});
 }
@@ -930,11 +934,15 @@ ColumnsTable.prototype.expandRowAtIndex = function($$row, index, duration) {
 		duration: duration,
 		delay: ROW_DELAY,
 		begin: function(elements) {
-			$$row.removeClass('translateY-reset');
+			// $$row.removeClass('translateY-reset');
 		},
 		complete: function(elements) {
 			// $$row.addClass(EXPANDED_CLASS);
-			$$row.addClass('translateY-reset');
+			// setTimeout(function() {
+				// $$row.addClass('translateY-reset');	
+				// $$row.css( { position: 'relative' } );
+			// }, 0);
+			
 		}
 	});
 }
@@ -1055,12 +1063,12 @@ ColumnsTable.prototype.collapseBackground = function($$bg) {
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
 			$$bg.addClass(EXPANDING_CLASS);
-			$$bg.removeClass('translateY-reset');
+			// $$bg.removeClass('translateY-reset');
 			$$bg.removeClass(EXPANDED_CLASS);
 		},
 		complete: function(elements) {
 			$$bg.removeClass(EXPANDING_CLASS);
-			$$bg.addClass('translateY-reset');
+			// $$bg.addClass('translateY-reset');
 		}
 	});
 }
@@ -1082,14 +1090,15 @@ ColumnsTable.prototype.collapseBody = function($$body) {
 	}, {
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
-			$$body.removeClass('translateY-reset');
+			// $$body.removeClass('translateY-reset');
 			$$body.removeClass(EXPANDED_CLASS);
 			// _this.$$table.removeClass(EXPANDED_CLASS);
 			// _this.$$table.addClass(EXPANDING_CLASS);
 		},
 		complete: function(elements) {
 			// $$table.removeClass(EXPANDED_CLASS);
-			$$body.addClass('translateY-reset');
+			// $$body.addClass('translateY-reset');
+			// $$body.css( { "margin-top": "0px" } );
 			// _this.$$table.removeClass(RELOCATED_CLASS);
 			// _this.$$table.removeClass(EXPANDING_CLASS);
 			// _this.$$table.css({
@@ -1124,11 +1133,12 @@ ColumnsTable.prototype.collapseRowAtIndex = function($$row, index, duration) {
 		duration: duration,
 		delay: ROW_DELAY,
 		begin: function(elements) {
-			$$row.removeClass('translateY-reset');
+			// $$row.removeClass('translateY-reset');
 			$$row.removeClass(EXPANDED_CLASS);
+			// $$row.css( { position: 'absolute' } );
 		},
 		complete: function(elements) {
-			$$row.addClass('translateY-reset');
+			// $$row.addClass('translateY-reset');
 		}
 	});
 }

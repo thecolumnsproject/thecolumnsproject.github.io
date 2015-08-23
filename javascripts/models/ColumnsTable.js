@@ -809,6 +809,12 @@ ColumnsTable.prototype.expandHeader = function($$header) {
 	// 		// $$header.addClass(EXPANDED_CLASS);
 	// 	}
 	// });
+
+	// Move header out of the table body
+	// so that it locks atop the screen
+	setTimeout(function() {
+		this.$$table.prepend( $$header );
+	}.bind( this ), ANIMATION_DURATION * 2 );
 };
 
 ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$footer) {
@@ -1041,6 +1047,12 @@ ColumnsTable.prototype.collapseHeader = function($$header) {
 	// 		$$header.removeClass(EXPANDED_CLASS);
 	// 	}
 	// });
+
+	// Move header back into the table body
+	// so that it sits nicely atop the table
+	// setTimeout(function() {
+		this.$$table.find( TABLE_BODY_SELECTOR ).before( $$header );
+	// }.bind( this ), ANIMATION_DURATION );
 }
 
 ColumnsTable.prototype.collapseBackground = function($$bg) {

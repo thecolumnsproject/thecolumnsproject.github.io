@@ -63,13 +63,16 @@ $columns-table-accent-color: 	#69A368;
 
 .columns-table-row {
 	// height: 60px;
+	box-sizing: border-box;
 	width: 100%;
 	background: #fff;
 	position: absolute;
 	top: $table-row-offset-top * 2;
 	overflow: hidden;
+	border: 1px solid transparent;
 	@include transition(opacity 0.15s);
 	@include transition(box-shadow 0.35s);
+	@include transition(border-color 0.35s);
 }
 
 /* The top three rows should show
@@ -78,7 +81,7 @@ $columns-table-accent-color: 	#69A368;
 
 @mixin table-row-top {
 	box-shadow: $table-row-box-shadow;
-	border: $gray-lighter;
+	border-color: $gray-lighter;
 }
 
 .columns-table-row:nth-child(1) {
@@ -304,8 +307,9 @@ $columns-table-accent-color: 	#69A368;
 }
 
 .expanding .columns-table-row {
-	// box-shadow: none;
-	box-shadow: $table-row-box-shadow;
+	box-shadow: none;
+	border-bottom-color: $gray-lighter;
+	// box-shadow: $table-row-box-shadow;
 }
 
 /* Expanded styling
@@ -380,8 +384,8 @@ $columns-table-accent-color: 	#69A368;
 }
 
 .expanded .columns-table-row {
-	border: none; /* Remove the table-row-top borders */
-	border-bottom: 1px solid $gray-lighter;
+	border-color: transparent; /* Remove the table-row-top borders */
+	border-bottom-color: $gray-lighter;
 
 	box-shadow: none; /* Remove the table-row-top box shadow */
 	top: 0px; /* Remove the table-top-row layout spacing */

@@ -54,6 +54,7 @@ $columns-table-accent-color: 	#69A368;
 .columns-table {
 	position: relative;
 	min-height: $table-container-height - (2 * $table-container-padding);
+	border: 1px solid transparent;
 	// margin: 0;
 
 	// Set initial z-index position so rows with negative z-indeces
@@ -70,9 +71,9 @@ $columns-table-accent-color: 	#69A368;
 	top: $table-row-offset-top * 2;
 	overflow: hidden;
 	border: 1px solid transparent;
-	@include transition(opacity 0.15s);
+	// @include transition(opacity 0.15s);
 	@include transition(box-shadow 0.35s);
-	@include transition(border-color 0.35s);
+	// @include transition(border-color 0.35s);
 }
 
 /* The top three rows should show
@@ -308,7 +309,7 @@ $columns-table-accent-color: 	#69A368;
 
 .expanding .columns-table-row {
 	box-shadow: none;
-	border-bottom-color: $gray-lighter;
+	// border-bottom-color: $gray-lighter;
 	// box-shadow: $table-row-box-shadow;
 }
 
@@ -370,7 +371,7 @@ $columns-table-accent-color: 	#69A368;
 	margin-top: 60px;
 	// transform: translateY(0px) !important; /* Remove the expansion animation transform */
 	height: auto !important; /* Override the custom height given on load */
-	border: 1px solid $gray-lighter;
+	border-color: $gray-lighter;
 
 	@include transform(translateY(0px) !important);
 }

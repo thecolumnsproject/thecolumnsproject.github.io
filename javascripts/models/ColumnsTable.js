@@ -860,7 +860,7 @@ ColumnsTable.prototype.expandBody = function($$body) {
 
 	var _this = this;
 	// Calculate the new table size and position
-	var tableOffsetTop = 60;
+	var tableOffsetTop = 40;
 
 	// Move the table down a few extra pixels to account for the template if we're in preview mode
 	var paddingTop = 0;

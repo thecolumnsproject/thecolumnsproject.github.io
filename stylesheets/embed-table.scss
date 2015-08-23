@@ -307,6 +307,11 @@ $columns-table-accent-color: 	#69A368;
  	opacity: 0;
 }
 
+.collapsing .columns-table-footer {
+ 	@include transition(opacity 0.0s);
+ 	opacity: 0;
+}
+
 .expanding .columns-table-row {
 	box-shadow: none;
 	// border-bottom-color: $gray-lighter;
@@ -352,6 +357,13 @@ $columns-table-accent-color: 	#69A368;
 	padding: $table-header-padding-y $table-container-padding;
 	border-bottom-color: $gray-lighter;
 	z-index: 999;
+}
+
+// Add top border to header when it's been moved
+// outside of the table container so that it doesn't jump
+// a pixel when no longer pushed down by the container's top border
+.columns-table-widget > .columns-table-header {
+	border-top: 1px solid transparent;
 }
 
 .expanded .columns-table-header-controls {

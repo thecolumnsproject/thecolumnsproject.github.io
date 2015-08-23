@@ -37,6 +37,7 @@ var TABLE_SELECTOR = '.columns-table-widget',
 	PLACEHOLDER_CLASS = 'columns-table-placeholder',
 	EXPANDED_CLASS = 'expanded',
 	EXPANDING_CLASS = 'expanding',
+	COLLAPSING_CLASS = 'collapsing',
 	RELOCATED_CLASS = 'relocated',
 	LOADING_CLASS = 'loading',
 	ERROR_CLASS = 'error',
@@ -1009,12 +1010,12 @@ ColumnsTable.prototype.collapse = function() {
 	// $$table.velocity(props, {
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
-			$$table.addClass(EXPANDING_CLASS);
+			$$table.addClass(COLLAPSING_CLASS);
 			$$table.removeClass(EXPANDED_CLASS);
 		},
 		complete: function(elements) {
 			$$table.removeClass(RELOCATED_CLASS);
-			$$table.removeClass(EXPANDING_CLASS);
+			$$table.removeClass(COLLAPSING_CLASS);
 			// Move the table back to its original DOM position
 			$$table.css({
 				top: 0,
@@ -1074,12 +1075,12 @@ ColumnsTable.prototype.collapseBackground = function($$bg) {
 	},{
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
-			$$bg.addClass(EXPANDING_CLASS);
+			$$bg.addClass(COLLAPSING_CLASS);
 			// $$bg.removeClass('translateY-reset');
 			$$bg.removeClass(EXPANDED_CLASS);
 		},
 		complete: function(elements) {
-			$$bg.removeClass(EXPANDING_CLASS);
+			$$bg.removeClass(COLLAPSING_CLASS);
 			// $$bg.addClass('translateY-reset');
 		}
 	});

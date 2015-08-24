@@ -30,6 +30,7 @@ $columns-table-accent-color: 	#69A368;
 		line-height: normal;
 		max-width: none !important;
 		border-radius: 0px;
+		letter-spacing: normal !important;
  	}
 }
 
@@ -303,6 +304,14 @@ $columns-table-accent-color: 	#69A368;
  * of elements while animations are occuring
  */
 
+.expanding .columns-table-header {
+	// border-bottom-color: $gray-lighter;
+}
+
+.expanding .columns-table-header-controls {
+	// opacity: 1;
+}
+
 .expanding .columns-table-footer {
  	opacity: 0;
 }
@@ -363,7 +372,8 @@ $columns-table-accent-color: 	#69A368;
 // outside of the table container so that it doesn't jump
 // a pixel when no longer pushed down by the container's top border
 .columns-table-widget > .columns-table-header {
-	border-top: 1px solid transparent;
+	padding-top: $table-header-padding-y + 1;
+	padding-bottom: $table-header-padding-y + 1;
 }
 
 .expanded .columns-table-header-controls {

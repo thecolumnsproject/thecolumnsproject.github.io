@@ -232,7 +232,8 @@ ColumnsTable.prototype.getOffsetTop = function() {
 		// return this.$$container.scrollTop();
 	} else {
 		// return this.$$table.offset().top;
-		return this.$$table.get(0).offsetTop;
+		// return this.$$table.get(0).offsetTop;
+		return this.$$table.get(0).getBoundingClientRect().top + window.pageYOffset;
 	}
 };
 
@@ -851,11 +852,11 @@ ColumnsTable.prototype.expandBackground = function($$bg, $$rows, $$header, $$foo
 	},{
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
-			$$bg.addClass(EXPANDING_CLASS);
+			// $$bg.addClass(EXPANDING_CLASS);
 			// $$bg.removeClass('translateY-reset');
 		},
 		complete: function(elements) {
-			$$bg.removeClass(EXPANDING_CLASS);
+			// $$bg.removeClass(EXPANDING_CLASS);
 			// $$bg.addClass(EXPANDED_CLASS);
 			// $$bg.addClass('translateY-reset');
 			// $$TABLE.removeClass(RELOCATED_CLASS);
@@ -986,7 +987,7 @@ ColumnsTable.prototype.collapse = function() {
 	// and remove the placeholder
 
 	// $$parent.addClass(RELOCATED_CLASS);
-	$$table.insertBefore( $$( this.script ) );
+	// $$table.insertBefore( $$( this.script ) );
 
 	// setTimeout(function() {
 		this.collapseHeader($$header);
@@ -995,45 +996,74 @@ ColumnsTable.prototype.collapse = function() {
 		this.collapseRows($$rows);
 	// }, 0);
 
-	var props;
+	var onCollapsed = function() {
+		$$table.insertBefore( $$( this.script ) );
+		$$table.removeClass(EXPANDED_CLASS);
+		$$table.removeClass(RELOCATED_CLASS);
+		$$table.removeClass(COLLAPSING_CLASS);
+		// Move the table back to its original DOM position
+		$$table.css({
+			top: 0,
+			position: 'relative',
+			'z-index': 0
+		});
+		$$( this.script ).siblings('.' + PLACEHOLDER_CLASS).remove();
+		$$('html').removeClass('table-expanded');
+		this.$$container.removeClass('table-expanded');
+
+		if (_this.preview || this.sample ) {
+			// $(document).trigger('ColumnsTableDidCollapse', {table: _this});
+			ColumnsEvent.send('ColumnsTableDidCollapse', {table: _this});
+		}
+
+		this.position();
+	}.bind( this );
+
+	$$table.addClass(COLLAPSING_CLASS);
+	$$table.removeClass(EXPANDED_CLASS);
+
+	// var props = {};
 	if (this.preview || this.forceMobile ) {
-		props = {
+		// props["translateY"] = 0;
+		Velocity($$table.get(0), {
 			translateY: 0
-		}
+		}, {
+			duration: ANIMATION_DURATION,
+			complete: onCollapsed
+		});
 	} else {
-		props = {
-			opacity: 1
-		}
+		setTimeout( onCollapsed, ANIMATION_DURATION );
+		// props["opacity"] = 1;
 	}
 
-	Velocity($$table.get(0), props, {
-	// $$table.velocity(props, {
-		duration: ANIMATION_DURATION,
-		begin: function(elements) {
-			$$table.addClass(COLLAPSING_CLASS);
-			$$table.removeClass(EXPANDED_CLASS);
-		},
-		complete: function(elements) {
-			$$table.removeClass(RELOCATED_CLASS);
-			$$table.removeClass(COLLAPSING_CLASS);
-			// Move the table back to its original DOM position
-			$$table.css({
-				top: 0,
-				position: 'relative',
-				'z-index': 0
-			});
-			$$( this.script ).siblings('.' + PLACEHOLDER_CLASS).remove();
-			$$('html').removeClass('table-expanded');
-			this.$$container.removeClass('table-expanded');
+	// Velocity($$table.get(0), props, {
+	// // $$table.velocity(props, {
+	// 	duration: ANIMATION_DURATION,
+	// 	begin: function(elements) {
+	// 		$$table.addClass(COLLAPSING_CLASS);
+	// 		$$table.removeClass(EXPANDED_CLASS);
+	// 	},
+	// 	complete: function(elements) {
+	// 		$$table.removeClass(RELOCATED_CLASS);
+	// 		$$table.removeClass(COLLAPSING_CLASS);
+	// 		// Move the table back to its original DOM position
+	// 		$$table.css({
+	// 			top: 0,
+	// 			position: 'relative',
+	// 			'z-index': 0
+	// 		});
+	// 		$$( this.script ).siblings('.' + PLACEHOLDER_CLASS).remove();
+	// 		$$('html').removeClass('table-expanded');
+	// 		this.$$container.removeClass('table-expanded');
 
-			if (_this.preview || this.sample ) {
-				// $(document).trigger('ColumnsTableDidCollapse', {table: _this});
-				ColumnsEvent.send('ColumnsTableDidCollapse', {table: _this});
-			}
-		}.bind( this )
-	});
+	// 		if (_this.preview || this.sample ) {
+	// 			// $(document).trigger('ColumnsTableDidCollapse', {table: _this});
+	// 			ColumnsEvent.send('ColumnsTableDidCollapse', {table: _this});
+	// 		}
+	// 	}.bind( this )
+	// });
 
-	this.position();
+	// this.position();
 }
 
 ColumnsTable.prototype.collapseHeader = function($$header) {
@@ -1104,7 +1134,7 @@ ColumnsTable.prototype.collapseBody = function($$body) {
 		duration: ANIMATION_DURATION,
 		begin: function(elements) {
 			// $$body.removeClass('translateY-reset');
-			$$body.removeClass(EXPANDED_CLASS);
+			// $$body.removeClass(EXPANDED_CLASS);
 			// _this.$$table.removeClass(EXPANDED_CLASS);
 			// _this.$$table.addClass(EXPANDING_CLASS);
 		},

@@ -38,7 +38,7 @@
 }
 
 .layout-table-preview.expanded .layout-template {
-
+	// @include transform(translateY(-60px));
 }
 
 .columns-table-widget {
@@ -51,8 +51,10 @@
 	@include display(flex);
 	@include justify-content(center);
 	position: absolute;
-	top: 186px;
-	top: 79px;
+	// top: 186px;
+	// top: 79px;
+	top: 134px;
+	// @include transition( transform(translateY) 0.25s);
 	z-index: $layout-index;
 }
 

@@ -380,9 +380,9 @@ TemplateView.prototype._onTableWillExpand = function( event, data ) {
 
 	// Move the template down below the header
 	this.$template.velocity({
-		translateY: 0
+		translateY: -60
 	}, {
-		duration: 400
+		duration: 250
 	});
 };
 
@@ -397,7 +397,7 @@ TemplateView.prototype._onTableWillCollapse = function( event, data ) {
 	this.$template.velocity({
 		translateY: 0
 	}, {
-		duration: 400
+		duration: 250
 	});
 };
 
@@ -412,13 +412,17 @@ TemplateView.prototype._onTableDidScroll = function( event, data ) {
 	var minScroll = -24,
 		maxScroll = 0,
 		scroll = -$('#layout .columns-table-container').scrollTop();
+		// currentPosition = parseInt($.Velocity.hook( this.$template, "translateY"));
 
 	// Make sure the scroll is within bounds
 	scroll = scroll < minScroll ? minScroll : scroll;
 	scroll = scroll > maxScroll ? maxScroll : scroll;
 
+	// console.log('Current position: ' + currentPosition);
+	// console.log('Scroll: ' + scroll);
+
 	// Adjust the template
-	$.Velocity.hook( this.$template, "translateY", scroll + "px" );
+	$.Velocity.hook( this.$template, "translateY", -60 + scroll + "px" );
 };
  
 TemplateView.prototype._onItemDidBeginDrag = function( event, data ) {

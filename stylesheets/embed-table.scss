@@ -16,6 +16,8 @@ $table-row-box-shadow:			0px 2px 4px rgba(0,0,0,0.2);
 
 $columns-table-accent-color: 	#69A368;
 
+$animation-duration: 			0.25s;
+
 .columns-table-widget {
 	position: relative;
 	box-sizing: content-box;
@@ -73,8 +75,8 @@ $columns-table-accent-color: 	#69A368;
 	overflow: hidden;
 	border: 1px solid transparent;
 	// @include transition(opacity 0.15s);
-	@include transition(box-shadow 0.35s);
-	// @include transition(border-color 0.35s);
+	@include transition(box-shadow $animation-duration);
+	// @include transition(border-color $animation-duration);
 }
 
 /* The top three rows should show
@@ -114,7 +116,7 @@ $columns-table-accent-color: 	#69A368;
 	border-bottom: 1px solid transparent;
 	background: $gray-lightest;
 
-	@include transition(border-color 0.35s);
+	@include transition(border-color $animation-duration);
 }
 
 .columns-table-header-name {
@@ -140,7 +142,7 @@ $columns-table-accent-color: 	#69A368;
 	@include justify-content(flex-start);
 	@include align-items(center);
 
-	@include transition(opacity 0.35s);
+	@include transition(opacity $animation-duration);
 
 	opacity: 0;
 	pointer-events: none;
@@ -304,12 +306,25 @@ $columns-table-accent-color: 	#69A368;
  * of elements while animations are occuring
  */
 
+.expanding .columns-table-container {
+	border-top: none;
+}
+
 .expanding .columns-table-header {
 	// border-bottom-color: $gray-lighter;
 }
 
+.collapsing .columns-table-header {
+	border-bottom-color: transparent;
+}
+
 .expanding .columns-table-header-controls {
 	// opacity: 1;
+}
+
+.collapsing .columns-table-header-controls {
+	@include transition(opacity 0.0s);
+ 	opacity: 0;
 }
 
 .expanding .columns-table-footer {
@@ -344,6 +359,7 @@ $columns-table-accent-color: 	#69A368;
 	// @include calc(height, '100% - #{$table-container-padding} * 2' !important);
 	// height: 100% !important; /* Override the height set via animation */
 	overflow: scroll;
+	border-top: none;
 
 	@include transform(translateY(0px) !important);
 }
@@ -365,6 +381,7 @@ $columns-table-accent-color: 	#69A368;
 	@include calc(width, '100% - #{$table-container-padding} * 2');
 	padding: $table-header-padding-y $table-container-padding;
 	border-bottom-color: $gray-lighter;
+	// border-width: 1px;
 	z-index: 999;
 }
 
@@ -372,8 +389,9 @@ $columns-table-accent-color: 	#69A368;
 // outside of the table container so that it doesn't jump
 // a pixel when no longer pushed down by the container's top border
 .columns-table-widget > .columns-table-header {
-	padding-top: $table-header-padding-y + 1;
-	padding-bottom: $table-header-padding-y + 1;
+	// padding-top: $table-header-padding-y + 1;
+	// padding-bottom: $table-header-padding-y + 1;
+	// @include transform(translateY(1px));
 }
 
 .expanded .columns-table-header-controls {

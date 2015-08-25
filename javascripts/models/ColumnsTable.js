@@ -22,7 +22,7 @@ var Config = require('../embed-config.js'),
 // from its original location on the page
 
 // Animation Constants
-var ANIMATION_DURATION = 350;
+var ANIMATION_DURATION = 250;
 
 // UI Constants
 var ROW_OFFSET = 5,

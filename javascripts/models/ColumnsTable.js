@@ -495,7 +495,7 @@ ColumnsTable.prototype.renderRowComponent = function( data, component ) {
 
 ColumnsTable.prototype.tallestRowHeight = function() {
 	return Math.max.apply(null, this.$$table.find(TABLE_ROW_SELECTOR).map(function () {
-		return $$(this).height();
+		return $$(this).outerHeight();
 	}).get());
 };
 

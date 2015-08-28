@@ -1,7 +1,7 @@
 var env = '{{environment}}';
 module.exports = {
-	env: env,
 	development: {
+		env: env,
 		api: {
 			host: 'http://127.0.0.1:8080'
 		},
@@ -20,6 +20,7 @@ module.exports = {
 		}
 	},
 	staging: {
+		env: env,
 		api: {
 			host: 'http://apistg.thecolumnsproject.com'
 		},
@@ -38,6 +39,7 @@ module.exports = {
 		}
 	},
 	production: {
+		env: env,
 		api: {
 			host: 'http://api.thecolumnsproject.com'
 		},

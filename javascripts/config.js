@@ -9,7 +9,7 @@ module.exports = {
 			host: 'http://127.0.0.1'
 		},
 		embed: {
-			host: 'http://127.0.0.1',
+			host: 'http://127.0.0.1:8080',
 			path: '/public/embed-table.js',
 			desktop: {
 				'feature-table': 129

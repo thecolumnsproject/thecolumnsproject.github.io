@@ -16,14 +16,14 @@ module.exports = function(grunt) {
 			}
 		},
 		handlebars: {
-			embed: {
-				options: {
-					namespace: "Columns.EmbeddableTemplates",
-				},
-				files: {
-					"templates/embeddable-templates.js": "templates/embed-table/*.hbs"
-				}
-			},
+			// embed: {
+			// 	options: {
+			// 		namespace: "Columns.EmbeddableTemplates",
+			// 	},
+			// 	files: {
+			// 		"templates/embeddable-templates.js": "templates/embed-table/*.hbs"
+			// 	}
+			// },
 			layout: {
 				options: {
 					namespace: "Columns.Templates"
@@ -34,33 +34,33 @@ module.exports = function(grunt) {
 			}
 		},
 		replace: {
-			embed: {
-				src: ['compiled-javascripts/embed-table.js'],
-				dest: 'compiled-javascripts/embed-table.js',
-				replacements: [{
-					from: '{{api_host}}',
-					to: function(matchedWord) {
-						if (process.env.NODE_ENV == 'production') {
-							return 'http://api.thecolumnsproject.com';
-						} else if ( process.env.NODE_ENV == 'staging' ) {
-							return 'http://apistg.thecolumnsproject.com';
-						} else {
-							return 'http://127.0.0.1:8080'
-						}
-					}
-				}, {
-					from: '{{root_path}}',
-					to: function(matchedWord) {
-						if (process.env.NODE_ENV == 'production') {
-							return 'http://colum.nz';
-						} else if ( process.env.NODE_ENV == 'staging' ) {
-							return 'http://stg.colum.nz';
-						} else {
-							return 'http://127.0.0.1'
-						}
-					}
-				}]
-			},
+			// embed: {
+			// 	src: ['compiled-javascripts/embed-table.js'],
+			// 	dest: 'compiled-javascripts/embed-table.js',
+			// 	replacements: [{
+			// 		from: '{{api_host}}',
+			// 		to: function(matchedWord) {
+			// 			if (process.env.NODE_ENV == 'production') {
+			// 				return 'http://api.thecolumnsproject.com';
+			// 			} else if ( process.env.NODE_ENV == 'staging' ) {
+			// 				return 'http://apistg.thecolumnsproject.com';
+			// 			} else {
+			// 				return 'http://127.0.0.1:8080'
+			// 			}
+			// 		}
+			// 	}, {
+			// 		from: '{{root_path}}',
+			// 		to: function(matchedWord) {
+			// 			if (process.env.NODE_ENV == 'production') {
+			// 				return 'http://colum.nz';
+			// 			} else if ( process.env.NODE_ENV == 'staging' ) {
+			// 				return 'http://stg.colum.nz';
+			// 			} else {
+			// 				return 'http://127.0.0.1'
+			// 			}
+			// 		}
+			// 	}]
+			// },
 			specs: {
 				src: ['specs/compiled-specs.js'],
 				dest: 'specs/compiled-specs.js',
@@ -117,15 +117,15 @@ module.exports = function(grunt) {
 			// }
 		},
 		browserify: {
-			embed: {
-				src: ['javascripts/embed-table.js'],
-				dest: 'compiled-javascripts/embed-table.js',
-				// options: {
-				// 	browserifyOptions: {
-				// 		debug: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? false : true
-				// 	},
-				// }
-			},
+			// embed: {
+			// 	src: ['javascripts/embed-table.js'],
+			// 	dest: 'compiled-javascripts/embed-table.js',
+			// 	// options: {
+			// 	// 	browserifyOptions: {
+			// 	// 		debug: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' ? false : true
+			// 	// 	},
+			// 	// }
+			// },
 			app: {
 				src: ['javascripts/main.js'],
 				dest: 'compiled-javascripts/app.js',
@@ -141,25 +141,25 @@ module.exports = function(grunt) {
 			}
 		},
 		concat: {
-			embed: {
-				src: [
-					'javascripts/embed-table-intro.js',
-					// 'bower_components/jquery/dist/jquery.min.js',
-					// 'bower_components/hammerjs/hammer.min.js',
-					// 'bower_components/hammerjs/hammer.js',
-					// 'bower_components/jquery-hammerjs/jquery.hammer.js',
-					// 'vendor/prevent-ghost-click.js',
-					// 'bower_components/velocity/velocity.min.js',
-					// 'bower_components/velocity/velocity.js',
-					// 'bower_components/velocity/velocity.ui.min.js',
-					// 'bower_components/handlebars/handlebars.min.js',
-					'bower_components/handlebars/handlebars.runtime.js',
-					'templates/embeddable-templates.js',
-					'compiled-javascripts/embed-table.js',
-					'javascripts/embed-table-outro.js'
-				],
-				dest: 'public/embed-table.js'
-			},
+			// embed: {
+			// 	src: [
+			// 		'javascripts/embed-table-intro.js',
+			// 		// 'bower_components/jquery/dist/jquery.min.js',
+			// 		// 'bower_components/hammerjs/hammer.min.js',
+			// 		// 'bower_components/hammerjs/hammer.js',
+			// 		// 'bower_components/jquery-hammerjs/jquery.hammer.js',
+			// 		// 'vendor/prevent-ghost-click.js',
+			// 		// 'bower_components/velocity/velocity.min.js',
+			// 		// 'bower_components/velocity/velocity.js',
+			// 		// 'bower_components/velocity/velocity.ui.min.js',
+			// 		// 'bower_components/handlebars/handlebars.min.js',
+			// 		'bower_components/handlebars/handlebars.runtime.js',
+			// 		'templates/embeddable-templates.js',
+			// 		'compiled-javascripts/embed-table.js',
+			// 		'javascripts/embed-table-outro.js'
+			// 	],
+			// 	dest: 'public/embed-table.js'
+			// },
 			styling: {
 				src: [
 					'javascripts/styling/intro.js',
@@ -267,6 +267,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-webfont');
 
 	// grunt.registerTask('default', ['sass', 'handlebars', 'browserify', 'replace', 'concat', 'watch']);
-	grunt.registerTask('build', ['sass', 'handlebars', 'concat:styling', 'browserify', 'replace', 'concat:embed' ]);
+	grunt.registerTask('build', ['sass', 'handlebars', 'concat:styling', 'browserify', 'replace'/*, 'concat:embed'*/ ]);
 	grunt.registerTask('default', ['webfont', 'build', 'watch'] );
 }

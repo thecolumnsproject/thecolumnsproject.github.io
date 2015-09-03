@@ -136,7 +136,7 @@ module.exports = function(grunt) {
 				}
 			},
 			specs: {
-				src: ['specs/**/*.js', '!specs/compiled-specs.js'],
+				src: ['specs/**/*.js', '!specs/compiled-specs.js', '!specs/embeddable/**/*.js'],
 				dest: 'specs/compiled-specs.js'
 			}
 		},

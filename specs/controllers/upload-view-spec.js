@@ -186,6 +186,51 @@ describe('Upload View', function() {
 			});
 
 		});
+
+		describe('Open Success', function() {
+
+			beforeEach(function() {
+				this.upload.render();
+			});
+
+			it('should turn off the loading message', function() {
+				spyOn( this.upload, '_setLoading' );
+
+				ColumnsEvent.send('Columns.Table.DidOpenWithSuccess', {
+					table: 	new Table()
+				});
+
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false );
+			});
+
+			it('should hide', function() {
+				spyOn( this.upload, 'hide' );
+				
+				ColumnsEvent.send('Columns.Table.DidOpenWithSuccess', {
+					table: 	new Table()
+				});
+
+				expect( this.upload.hide ).toHaveBeenCalled();
+			});
+		});
+
+		describe('Open Failure', function() {
+
+			beforeEach(function() {
+				this.upload.render();
+			});
+
+			it('should update the loading message', function() {
+				spyOn( this.upload, '_setLoading' );
+				
+				ColumnsEvent.send('Columns.Table.DidOpenWithFailure', {
+					table: 	new Table()
+				});
+
+				expect( this.upload._setLoading ).toHaveBeenCalledWith( false, "Try a different id", "Shoot, we couldn't find that table." );
+			});
+
+		});
 	});
 
 	describe('Parsing a CSV', function() {

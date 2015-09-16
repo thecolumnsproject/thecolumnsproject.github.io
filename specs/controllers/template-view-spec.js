@@ -11,7 +11,7 @@ describe('Template View', function() {
 
 	beforeEach(function() {
 		spyOn( ColumnsAnalytics, 'send' );
-		this.defaultLayout = new Layout([
+		this.defaultLayout = new Layout({ items: [
 			new Item({
 				title: 'First Name',
 				style: new Style([{
@@ -33,7 +33,7 @@ describe('Template View', function() {
 					value: '#3a3a3a'
 				}])
 			})
-		]);
+		]});
 
 		this.table = new Table({
 			columns: [ "First Name", "Hometown", "Age" ]
@@ -891,6 +891,19 @@ describe('Template View', function() {
 			// });
 			// document.dispatchEvent(columnsEvent);
 			ColumnsEvent.send('Columns.Table.DidUploadWithSuccess', {
+				table: 	table
+			});
+
+			expect( this.templateView.layout ).toEqual( new Layout() );
+			expect( this.templateView.table ).toEqual( table );
+			expect( this.templateView._renderTemplate ).toHaveBeenCalled();
+		});
+
+		it('should render the template when the table is initially opened', function() {
+			var table = new Table({ layout: new Layout() });
+			spyOn( this.templateView, '_renderTemplate' );
+
+			ColumnsEvent.send('Columns.Table.DidOpenWithSuccess', {
 				table: 	table
 			});
 

@@ -10,12 +10,12 @@ var ColumnsEvent 	= require('./ColumnsEvent.js');
 var DEFAULTS		= require('../styling/defaults.js');
 
 // Columns.Layout = new function() {
-function Layout( items ) {
+function Layout( options ) {
 
 	// Make sure all items are of right type
 	this.items = [];
-	if ( items ) {
-		items.forEach(function( item, i ) {
+	if ( options && options.items ) {
+		options.items.forEach(function( item, i ) {
 			if ( item instanceof Item ) {
 				this.items.push( item );
 			} else {
@@ -25,7 +25,12 @@ function Layout( items ) {
 	}
 
 	// Build a default layout with the passed-in items
-	this.model = this.defaultLayout( this.items );
+	// if no layout model is provided
+	if ( options && options.layout ) {
+		this.model = options.layout;
+	} else {
+		this.model = this.defaultLayout( this.items );
+	}
 
 	this._setupEventListeners();
 }
@@ -34,6 +39,34 @@ Layout.prototype.update = function() {
 	var $template = $('.layout-template-row-group').first();
 	this.model = this._generateModelForTemplate( $template );
 	this._emitChange();
+};
+
+Layout.prototype.getStyleForData = function( data ) {
+	var styleOptions = [];
+
+	// Cycle through the layout object until we get to a single value
+	searchLayoutComponent( this.model );
+
+	function searchLayoutComponent( component ) {
+
+		// First make sure this is a value
+		// otherwise keep searching
+		if ( component.type === 'single' ) {
+			if ( component.data === data ) {
+				styleOptions.push( component.style || null );
+			}
+		} else {
+			component.values.forEach(function( value, i) {
+				searchLayoutComponent( value )
+			}.bind( this ));
+		}
+	}
+
+	if ( styleOptions.length ) {
+		return styleOptions[ 0 ];
+	} else {
+		return null;
+	}
 };
 
 Layout.prototype._generateModelForTemplate = function( $template ) {

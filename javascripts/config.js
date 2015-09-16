@@ -1,3 +1,5 @@
+var parseUri 			= require('../vendor/parseUri.js');
+
 var env = '{{environment}}';
 module.exports = {
 	development: {
@@ -17,7 +19,8 @@ module.exports = {
 			mobile: {
 				'feature-table': 129
 			}
-		}
+		},
+		debug: parseUri( window.location ).queryKey["debug"]
 	},
 	staging: {
 		env: env,

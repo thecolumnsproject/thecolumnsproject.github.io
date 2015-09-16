@@ -324,6 +324,9 @@ TemplateView.prototype._setupEventListeners = function() {
 	
 	// Listen to the table upload event
 	ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', this._onTemplateUpload.bind( this ) );
+
+	// Listen to the table open event
+	ColumnsEvent.on( 'Columns.Table.DidOpenWithSuccess', this._onTemplateUpload.bind( this ) );
 };
 
 TemplateView.prototype._setupTemplateEvents = function() {

@@ -63,6 +63,14 @@ DesktopView.prototype._setupAnalytics = function() {
 	// 	});
 	// });
 
+	$('.columns-header-nav-feedback').click(function() {
+		ColumnsAnalytics.send({
+			category: 'button',
+			action: 'click',
+			label: 'feedback'
+		});
+	});
+
 	$(document).on('ColumnsTableDidExpand', function( event, data ) {
 		if ( data.table.id === Config.embed.desktop['feature-table'] ) {
 			ColumnsAnalytics.send({

@@ -24,11 +24,11 @@ UploadView.prototype.show = function() {
 		duration: 200,
 		easing: 'ease-out',
 		begin: function() {
+			this.$upload.addClass('active');
 			this.$upload.addClass('animating');
 		}.bind( this ),
 		complete: function() {
 			this.$upload.removeClass('animating');
-			this.$upload.addClass('active');
 		}.bind( this )
 	});
 };

@@ -7,6 +7,7 @@ var UploadView 			= require('./UploadView.js');
 var ColumnsEvent 		= require('../models/ColumnsEvent.js');
 var ColumnsAnalytics 	= require('../models/ColumnsAnalytics.js');
 var Config 				= require('../config.js');
+var params 				= require('../../vendor/parseUri.js')( window.location ).queryKey;
 
 var TEMPLATE 			= Columns.Templates['templates/desktop.hbs'];
 
@@ -28,10 +29,20 @@ DesktopView.prototype.render = function() {
 	}));
 
 	$('#app').append( this.$desktop );
+	
 	this.upload.render();
 
 	this._setupAnalytics();
 	this._emitRender();
+
+	// Allow for a development mode
+	// where we don't need to upload data
+	// but can play with an existing table
+	if ( Config.env == 'development' && Config.debug == "true" && params["table"] ) {
+		ColumnsEvent.on( 'ColumnsTableDidInitiate', function() {
+			this.table._onExistingTableChosen( null, { table_id: params["table"] } );
+		}.bind( this ));
+	}
 
 	return this.$desktop;
 };
@@ -51,6 +62,14 @@ DesktopView.prototype._setupAnalytics = function() {
 	// 		label: 'home'
 	// 	});
 	// });
+
+	$('.columns-header-nav-feedback').click(function() {
+		ColumnsAnalytics.send({
+			category: 'button',
+			action: 'click',
+			label: 'feedback'
+		});
+	});
 
 	$(document).on('ColumnsTableDidExpand', function( event, data ) {
 		if ( data.table.id === Config.embed.desktop['feature-table'] ) {

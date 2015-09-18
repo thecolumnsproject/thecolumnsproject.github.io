@@ -230,14 +230,14 @@ module.exports = function(grunt) {
 			},
 			handlebars: {
 				files: '**/*.hbs',
-				tasks: ['handlebars', 'concat:embed'],
+				tasks: ['handlebars'],
 				options: {
 					livereload: true,
 				},
 			},
 			javascript: {
 				files: 'javascripts/**/*.js',
-				tasks: ['concat:styling', 'browserify', 'replace', 'concat:embed'],
+				tasks: ['concat:styling', 'browserify', 'replace'],
 				options: {
 					livereload: true,
 				},

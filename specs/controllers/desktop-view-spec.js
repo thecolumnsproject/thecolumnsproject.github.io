@@ -61,6 +61,7 @@ describe('Desktop View Spec', function() {
 	describe('Sending Analytics Events', function() {
 
 		beforeEach(function() {
+			loadFixtures('app.html');
 			desktop.render();
 			spyOn( ColumnsAnalytics, 'send' );
 		});
@@ -81,6 +82,16 @@ describe('Desktop View Spec', function() {
 			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
 				category: 'sample table',
 				action: 'expand'
+			});
+		});
+
+		it('should track clicks on the feedback button', function() {
+			$('.columns-header-nav-feedback').trigger('click');
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'button',
+				action: 'click',
+				label: 'feedback'
 			});
 		});
 	});

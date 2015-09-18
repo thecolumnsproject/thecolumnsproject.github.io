@@ -24,11 +24,11 @@ UploadView.prototype.show = function() {
 		duration: 200,
 		easing: 'ease-out',
 		begin: function() {
+			this.$upload.addClass('active');
 			this.$upload.addClass('animating');
 		}.bind( this ),
 		complete: function() {
 			this.$upload.removeClass('animating');
-			this.$upload.addClass('active');
 		}.bind( this )
 	});
 };
@@ -93,6 +93,12 @@ UploadView.prototype._setupEventListeners = function() {
 
 	// Listen for failed table uploads
 	ColumnsEvent.on( 'Columns.Table.DidUploadWithFailure', this._onTableUploadFail.bind( this ) );
+
+	// Listen for successful table uploads
+	ColumnsEvent.on( 'Columns.Table.DidOpenWithSuccess', this._onTableOpenSuccess.bind( this ) );
+
+	// Listen for failed table opens
+	ColumnsEvent.on( 'Columns.Table.DidOpenWithFailure', this._onTableOpenFail.bind( this ) );
 };
 
 UploadView.prototype._onUploadClick = function( event ) {
@@ -156,6 +162,17 @@ UploadView.prototype._onTableUploadSuccess = function( event ) {
 UploadView.prototype._onTableUploadFail = function( event ) {
 
 	this._setLoading( false, "Try a different .csv", "Shoot, something went wrong.");
+};
+
+UploadView.prototype._onTableOpenSuccess = function( event ) {
+
+	this._setLoading( false );
+	this.hide();
+};
+
+UploadView.prototype._onTableOpenFail = function( event ) {
+
+	this._setLoading( false, "Try a different id", "Shoot, we couldn't find that table." );
 };
 
 UploadView.prototype._parseFile = function( file ) {

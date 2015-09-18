@@ -11,7 +11,7 @@ describe('Template View', function() {
 
 	beforeEach(function() {
 		spyOn( ColumnsAnalytics, 'send' );
-		this.defaultLayout = new Layout([
+		this.defaultLayout = new Layout({ items: [
 			new Item({
 				title: 'First Name',
 				style: new Style([{
@@ -33,7 +33,7 @@ describe('Template View', function() {
 					value: '#3a3a3a'
 				}])
 			})
-		]);
+		]});
 
 		this.table = new Table({
 			columns: [ "First Name", "Hometown", "Age" ]
@@ -898,6 +898,19 @@ describe('Template View', function() {
 			expect( this.templateView.table ).toEqual( table );
 			expect( this.templateView._renderTemplate ).toHaveBeenCalled();
 		});
+
+		it('should render the template when the table is initially opened', function() {
+			var table = new Table({ layout: new Layout() });
+			spyOn( this.templateView, '_renderTemplate' );
+
+			ColumnsEvent.send('Columns.Table.DidOpenWithSuccess', {
+				table: 	table
+			});
+
+			expect( this.templateView.layout ).toEqual( new Layout() );
+			expect( this.templateView.table ).toEqual( table );
+			expect( this.templateView._renderTemplate ).toHaveBeenCalled();
+		});
 	});
 
 	describe('Responding to Desktop App Events', function() {
@@ -1463,7 +1476,7 @@ describe('Template View', function() {
 				$(document).trigger('ColumnsTableDidScroll');
 
 				expect( $.fn.scrollTop ).toHaveBeenCalled();
-				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-72px' );
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-67px' );
 			});
 
 			it('should have a maximum scroll position', function() {
@@ -1471,7 +1484,7 @@ describe('Template View', function() {
 				$(document).trigger('ColumnsTableDidScroll');
 
 				expect( $.fn.scrollTop ).toHaveBeenCalled();
-				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-60px' );
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-55px' );
 			});
 
 			it('should have a minimum scroll position', function() {
@@ -1479,7 +1492,7 @@ describe('Template View', function() {
 				$(document).trigger('ColumnsTableDidScroll');
 
 				expect( $.fn.scrollTop ).toHaveBeenCalled();
-				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-84px' );
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-75px' );
 			});
 		});
 	});

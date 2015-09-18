@@ -49,7 +49,7 @@ describe('Layout', function() {
 
 	describe('Initialization', function() {
 
-		it('should initialize with a default layout given no items', function() {
+		it('should initialize with a default layout given no items and no layout', function() {
 			this.layout = new Layout();
 
 			expect( this.layout.items ).toEqual( [] );
@@ -63,9 +63,9 @@ describe('Layout', function() {
 			});
 		});
 
-		it('should initialize with a default layout given 1 item', function() {
+		it('should initialize with a default layout given 1 item and no layout', function() {
 			var items = [ new Item({ title: "My Item" }) ];
-			this.layout = new Layout( items );
+			this.layout = new Layout({ items: items });
 
 			expect( this.layout.items ).toEqual( items );
 			expect( this.layout.model ).toEqual({
@@ -82,9 +82,9 @@ describe('Layout', function() {
 			});
 		});
 
-		it('should initialize with a default layout given 2 items', function() {
+		it('should initialize with a default layout given 2 items and no layout', function() {
 			var items = [ new Item({ title: "First Item" }), new Item({ title: "Second Item" }) ];
-			this.layout = new Layout( items );
+			this.layout = new Layout({ items: items });
 
 			expect( this.layout.items ).toEqual( items );
 			expect( this.layout.model ).toEqual({
@@ -109,13 +109,13 @@ describe('Layout', function() {
 			});
 		});
 
-		it('should initialize with a default layout given 3 items', function() {
+		it('should initialize with a default layout given 3 items and no layout', function() {
 			var items = [
 				new Item({ title: "First Item" }),
 				new Item({ title: "Second Item" }),
 				new Item({ title: "Third Item" })
 			];
-			this.layout = new Layout( items );
+			this.layout = new Layout({ items: items });
 
 			expect( this.layout.items ).toEqual( items );
 			expect( this.layout.model ).toEqual({
@@ -144,7 +144,7 @@ describe('Layout', function() {
 			})
 		});
 
-		it('should initialize with a default layout given more than 3 items', function() {
+		it('should initialize with a default layout given more than 3 items and no layout', function() {
 			var items = [
 				new Item({ title: "First Item" }),
 				new Item({ title: "Second Item" }),
@@ -152,7 +152,7 @@ describe('Layout', function() {
 				new Item({ title: "Fourth Item" }),
 				new Item({ title: "Fifth Item" }),
 			];
-			this.layout = new Layout( items );
+			this.layout = new Layout({ items: items });
 
 			expect( this.layout.items ).toEqual( items );
 			expect( this.layout.model ).toEqual({
@@ -181,10 +181,53 @@ describe('Layout', function() {
 			})
 		});
 
+		it('should initialize with given items and layout', function() {
+			var items = [
+				new Item({ title: "First Item" }),
+				new Item({ title: "Second Item" }),
+				new Item({ title: "Third Item" }),
+				new Item({ title: "Fourth Item" }),
+				new Item({ title: "Fifth Item" }),
+			];
+			var layout = {
+				type: 'group',
+				style: [{
+					property: 'padding',
+					value: '14px' // Changed from default for testing purposes
+				}],
+				values: [{
+					type: 'group',
+					layout: DEFAULTS.layouts[ 0 ],
+					values: [{
+						type: 'single',
+						style: DEFAULTS.styles[ 0 ],
+						data: items[ 0 ].unformattedTitle()
+					},{
+						type: 'single',
+						data: items[ 1 ].unformattedTitle(),
+						style: DEFAULTS.styles[ 1 ]
+					}]
+				}, {
+					type: 'single',
+					data: items[ 2 ].unformattedTitle(),
+					style: DEFAULTS.styles[2]
+				}]
+			}
+
+			this.layout = new Layout({
+				items: items,
+				layout: layout
+			});
+
+			expect( this.layout.items ).toEqual( items );
+			expect( this.layout.model ).toEqual( layout );
+
+		});
+
 		it('should throw an error if any of the items are not of type Item', function() {
 			var items = [ "hi" ];
 			expect(function() {
-				this.layout = new Layout( items );
+				this.layout = new Layout({ items: items });
 			}.bind( this )).toThrow("exception: all items must of type Item");
 		});
 
@@ -203,6 +246,50 @@ describe('Layout', function() {
 			this.layout.update();
 			expect( this.layout._generateModelForTemplate ).toHaveBeenCalledWith( $('.layout-template-row-group').first() );
 			expect( this.layout._emitChange ).toHaveBeenCalled();
+		});
+	});
+
+	describe('Querying the Layout', function() {
+
+		beforeEach(function() {
+			var items = [
+				new Item({ title: "First Item" }),
+				new Item({ title: "Second Item" }),
+				new Item({ title: "Third Item" })
+			];
+			this.layout = new Layout({
+				items: items,
+				layout: {
+					type: 'group',
+					style: [{
+						property: 'padding',
+						value: '14px' // Changed from default for testing purposes
+					}],
+					values: [{
+						type: 'group',
+						layout: DEFAULTS.layouts[ 0 ],
+						values: [{
+							type: 'single',
+							style: DEFAULTS.styles[ 0 ],
+							data: items[ 0 ].unformattedTitle()
+						},{
+							type: 'single',
+							data: items[ 1 ].unformattedTitle(),
+							style: DEFAULTS.styles[ 1 ]
+						}]
+					}, {
+						type: 'single',
+						data: items[ 2 ].unformattedTitle()
+					}]
+				}
+			});
+		});
+
+		it('should get the correct item styling', function() {
+			expect( this.layout.getStyleForData("first_item") ).toEqual( DEFAULTS.styles[ 0 ] );
+			expect( this.layout.getStyleForData("second_item") ).toEqual( DEFAULTS.styles[ 1 ] );
+			expect( this.layout.getStyleForData("third_item") ).toBeNull();
+			expect( this.layout.getStyleForData("fourth_item") ).toBeNull();
 		});
 	});
 

@@ -29,14 +29,18 @@ Table.prototype._update = function( props ) {
 		this.source_url = props.source_url || this.source_url;
 		this.id = props.id || this.id;
 
+		if ( props.layout && props.layout instanceof Layout ) {
+			this.layout = props.layout;
+		} else if ( props.layout ) {
+			this.layout = new Layout({ layout: props.layout });
+		}
+
 		if ( props.columns ) {	
 			this.columns = this.itemsFromColumnNames( props.columns );
 		}
 
-		if ( props.layout ) {
-			this.layout = props.layout;
-		} else if ( !this.layout ) {
-			this.layout = new Layout( this.columns );
+		if ( !this.layout ) {
+			this.layout = new Layout( { items: this.columns } );
 		}
 
 		// Let everyone know that we've updated the table
@@ -100,6 +104,28 @@ Table.prototype._emitUpdateFail = function() {
 	});
 };
 
+Table.prototype._emitOpenSuccess = function() {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.Table.DidOpenWithSuccess', false, false, {
+	// 	table: 	this
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.Table.DidOpenWithSuccess', {
+		table: 	this
+	});
+};
+
+Table.prototype._emitOpenFail = function() {
+	// var columnsEvent = document.createEvent('CustomEvent');
+	// columnsEvent.initCustomEvent('Columns.Table.DidOpenWithFailure', false, false, {
+	// 	table: 	this
+	// });
+	// document.dispatchEvent(columnsEvent);
+	ColumnsEvent.send('Columns.Table.DidOpenWithFailure', {
+		table: 	this
+	});
+};
+
 // Return an item given a data column name
 // @param {string} data -- the unformatted column title to search against ('first_name')
 // @return {Item} -- the matching item
@@ -146,7 +172,14 @@ Table.prototype.itemsFromColumnNames = function( columnNames ) {
 				columnName = this.appendColumnWithCount( columnName, counts[ columnName ] );
 			}
 
-			return new Item({ title: columnName, style: DEFAULTS.styles[ i ] });
+			// If we have an existing layout model, use it's styles
+			// otherwise go with the default
+			var style = DEFAULTS.styles[ i ];
+			if ( this.layout ) {
+				style = this.layout.getStyleForData( Item.unformattedTitle( columnName ) );
+			}
+
+			return new Item({ title: columnName, style: style });
 		}
 
 	}.bind( this ));
@@ -181,6 +214,18 @@ Table.prototype.appendColumnWithCount = function( column, count ) {
 };
 
 Table.prototype._uploadFile = function( file ) {
+
+	// Skip the actual upload if we're in debug mode
+	// if ( config.env == 'development' && config.debug == "true" ) {
+	// 	this._onUploadSuccess({
+	// 		status: 'success',
+	// 		data: {
+	// 			table_id: 1
+	// 		}
+	// 	});
+	// 	return;
+	// }
+
 	var formData = new FormData();
 
 	// Add any table meta-data to the form
@@ -209,6 +254,15 @@ Table.prototype._uploadFile = function( file ) {
 };
 
 Table.prototype._updateTable = function() {
+
+	// Skip the actual upload if we're in debug mode
+	// if ( config.env == 'development' && config.debug == "true" ) {
+	// 	this._onUpdateSuccess({
+	// 		status: 'success'
+	// 	});
+	// 	return;
+	// }
+
 	var data = {
 		title: this.title,
 		source: this.source,
@@ -217,6 +271,10 @@ Table.prototype._updateTable = function() {
 		columns: this.stringFromColumns( this.columns )
 	};
 	$.post(config.api.host + '/columns/table/' + this.id, data, this._onUpdateSuccess.bind( this ) );
+};
+
+Table.prototype._openTable = function( table_id ) {
+	$.get( config.api.host + '/columns/table/' + table_id, this._onOpenSuccess.bind( this ) );
 };
 
 Table.prototype._setupEventListeners = function() {
@@ -259,6 +317,16 @@ Table.prototype._onParseComplete = function( event, data ) {
 	this._uploadFile( data.file );
 };
 
+Table.prototype._onExistingTableChosen = function( event, data ) {
+
+	// Set the Table ID
+	this._update({
+		id: data.table_id
+	});
+
+	this._openTable( data.table_id );
+};
+
 Table.prototype._onUploadSuccess = function( data, status, request ) {
 
 	// Check for a server-side error
@@ -289,6 +357,29 @@ Table.prototype._onUpdateSuccess = function( data, status, request ) {
 	}
 
 	this._emitUpdateSuccess();
+};
+
+Table.prototype._onOpenSuccess = function( data, status, request ) {
+
+	if ( data.status !== 'success' ) {
+		this._emitOpenFail();
+		return;
+	}
+
+	
+	if ( data.data ) {
+		var table_data = data.data;	
+		this._update({
+			columns: table_data.columns.split(","),
+			data: table_data.data,
+			source: table_data.source,
+			source_url: table_data.source_url,
+			title: table_data.title,
+			layout: JSON.parse( table_data.layout )
+		});
+	}
+
+	this._emitOpenSuccess();
 };
 
 Table.prototype._onTableUpdate = function( event, data ) {

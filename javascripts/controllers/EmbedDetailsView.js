@@ -64,6 +64,9 @@ EmbedDetailsView.prototype._setupEventListeners = function() {
 
 	// Should listen for table upload success
 	ColumnsEvent.on( 'Columns.Table.DidUploadWithSuccess', this._onTableUpload.bind( this ) );
+
+	// Should listen for table open success
+	ColumnsEvent.on( 'Columns.Table.DidOpenWithSuccess', this._onTableUpload.bind( this ) );
 };
 
 EmbedDetailsView.prototype._setupInteractionListeners = function() {

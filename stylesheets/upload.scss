@@ -15,11 +15,12 @@
 	// background-image: url("/images/upload_devices.png");
 	// background-repeat: no-repeat;
 	// background-position: right bottom;
-	pointer-events: none;
+	// pointer-events: none;
+	display: none;
 }
 
 #upload.active {
-	pointer-events: auto;
+	display: block;
 }
 
 $upload-copy-spacing: 120px;

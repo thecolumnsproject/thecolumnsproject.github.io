@@ -238,6 +238,16 @@ describe('Embed Details View', function() {
 			expect( this.embed.render ).toHaveBeenCalled();
 		});
 
+		it('should render upon table open', function() {
+			var table = new Table({ id: 6 });
+			ColumnsEvent.send('Columns.Table.DidOpenWithSuccess', {
+				table: 	table
+			});
+
+			expect( this.embed.table ).toEqual( table );
+			expect( this.embed.render ).toHaveBeenCalled();
+		});
+
 	});
 
 	describe('Emitting Update Events', function() {

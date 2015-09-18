@@ -116,6 +116,15 @@ describe('Table', function () {
       		expect( this.table.layout instanceof Layout ).toBeTruthy();
 		});
 
+		it('should convert simple layout model objects to full Layout objects', function() {
+			var props = {
+				layout: {}
+			}
+
+			this.table._update( props );
+			expect( this.table.layout instanceof Layout ).toBeTruthy();
+		});
+
 		it('should not properties that are not provided', function() {
 			this.table._update();
 			expect( this.table.data ).toEqual( [] );
@@ -187,6 +196,22 @@ describe('Table', function () {
 			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidUpdateWithFailure');
 			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
 		});
+
+		it('should emit an open success event', function() {
+			spyOn( ColumnsEvent, 'send' );
+			this.table._emitOpenSuccess();
+
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidOpenWithSuccess');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
+		});
+
+		it('should emit an open failure event', function() {
+			spyOn( ColumnsEvent, 'send' );
+			this.table._emitOpenFail();
+
+			expect( ColumnsEvent.send.calls.argsFor(0)[0] ).toBe('Columns.Table.DidOpenWithFailure');
+			expect( ColumnsEvent.send.calls.argsFor(0)[1].table ).toEqual( this.table );
+		});
 	});
 
 	describe('Creating Items', function() {
@@ -252,6 +277,23 @@ describe('Table', function () {
 			expect(function() {
 				table.itemsFromColumnNames( names );
 			}).toThrow("exception: Column names must be a string or an array of strings");
+		});
+
+		it('should give the items their specified styling if a layout exists', function() {
+			var layout = new Layout({ layout: {
+				type: 'single',
+				style: DEFAULTS.styles[ 1 ],
+				data: "my_item"
+			}});
+			table.layout = layout;
+			var columns = table.itemsFromColumnNames( "My Item" );
+
+			expect( columns[ 0 ].style.styles ).toEqual( DEFAULTS.styles[ 1 ] );
+		});
+
+		it('should give the items the default styling if a layout does not exist', function() {
+			var columns = table.itemsFromColumnNames( "My Item" );
+			expect( columns[ 0 ].style.styles ).toEqual( DEFAULTS.styles[ 0 ] );
 		});
 	});
 
@@ -434,6 +476,10 @@ describe('Table', function () {
 			expect( this.table._updateTable ).toHaveBeenCalled();
 		});
 
+		// it('should listen to existing table selection', function() {
+
+		// });
+
 	});
 
 	xdescribe('Uploading a File', function() {
@@ -523,7 +569,7 @@ describe('Table', function () {
       			title: "My Table",
       			source: "The Noun Project",
       			source_url: "https://thenounproject.com/my-table",
-      			layout: JSON.stringify( new Layout( this.table.columns ).model ),
+      			layout: JSON.stringify( new Layout({ items: this.table.columns }).model ),
       			columns: "First Name,Last Name,Hometown"
       		});
 		});
@@ -545,6 +591,100 @@ describe('Table', function () {
 			expect( this.table._emitUpdateFail ).toHaveBeenCalled();
 			expect( this.table._emitUpdateSuccess ).not.toHaveBeenCalled();
 		});
+	});
+
+	describe('Getting an existing table', function() {
+
+		beforeEach(function() {
+			spyOn( $, 'get' );
+			this.table = new Table();
+		});
+
+		it('should set the table id attribute on the Table model', function() {
+			spyOn( this.table, '_update' );
+			spyOn( this.table, '_openTable' );
+
+			this.table._onExistingTableChosen( null, { table_id: 2} );
+			expect( this.table._update ).toHaveBeenCalledWith({
+				id: 2
+			});
+			expect( this.table._openTable ).toHaveBeenCalledWith( 2 );
+		});
+
+		it('should download the correct table data', function() {
+			this.table._openTable( 2 );
+			expect( $.get.calls.mostRecent().args[0] ).toEqual( config.api.host + '/columns/table/2' );
+		});
+
+		it('should properly set the downloaded table attributes on the Table model on success', function() {
+			spyOn( this.table, '_update' );
+			// spyOn( this.table, '_emitOpenSuccess' );
+
+			var columns = "Rank,Movie Title (click to view),Studio,Total Gross / Theaters,,Opening / Theaters,2,Open,Close";
+			var layout = '{"type":"group","style":[{"property":"padding","value":"12px"}],"layout":[],"values":[{"type":"group","style":[],"layout":[{"property":"align-items","value":"flex-start"},{"property":"flex-direction","value":"column"}],"values":[{"type":"single","style":[{"property":"color","value":"#3a3a3a"},{"property":"font-size","value":"16px"}],"data":"rank"},{"type":"single","style":[{"property":"color","value":"#888"},{"property":"font-size","value":"14px"},{"property":"margin-top","value":"4px"}],"data":"movie_title_(click_to_view)"}]},{"type":"single","style":[{"property":"color","value":"#3a3a3a"},{"property":"font-size","value":"24px"}],"data":"studio"}]}';
+			var table_data = [{
+				"2": "4",
+				"_": "3,885",
+				"close": "-",
+				"movie_title_(click_to_view)": "American Sniper",
+				"open": "12/25/2015",
+				"opening_/_theaters": "$633,456",
+				"rank": "1",
+				"studio": "WB",
+				"total_gross_/_theaters": "$349,709,071"
+			}, {
+				"2": "4,151",
+				"_": "4,151",
+				"close": "3/19/2015",
+				"movie_title_(click_to_view)": "The Hunger Games: Mockingjay - Part 1",
+				"open": "11/21/2015",
+				"opening_/_theaters": "$121,897,634",
+				"rank": "2",
+				"studio": "LGF",
+				"total_gross_/_theaters": "$337,135,885"
+			}];
+			var data = {
+				status: "success",
+				data: {
+					columns: columns,
+					data: table_data,
+					source: "who",
+					source_url: "where",
+					title: "whut",
+					layout: layout
+				}
+			};
+
+			this.table._onOpenSuccess( data );
+
+			expect( this.table._update ).toHaveBeenCalledWith({
+				columns: columns.split(","),
+				data: table_data,
+				source: "who",
+				source_url: "where",
+				title: "whut",
+				layout: JSON.parse( layout )
+			});
+		});
+
+		it('should notify the app on success', function() {
+			spyOn( this.table, '_emitOpenSuccess' );
+
+			this.table._onOpenSuccess({ status: 'success' });
+
+			expect( this.table._emitOpenSuccess ).toHaveBeenCalled();
+		});
+
+		it('should notify the app on failure', function() {
+			spyOn( this.table, '_emitOpenFail' );
+			spyOn( this.table, '_emitOpenSuccess' );
+
+			this.table._onOpenSuccess({ status: 'fail', message: 'problemz' });
+
+			expect( this.table._emitOpenFail ).toHaveBeenCalled();
+			expect( this.table._emitOpenSuccess ).not.toHaveBeenCalled();
+		});
+
 	});
 
 	describe('Get Item for column name', function() {

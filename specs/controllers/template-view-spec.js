@@ -1495,6 +1495,35 @@ describe('Template View', function() {
 				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-75px' );
 			});
 		});
+
+		describe('Responding to the Table Detail View', function() {
+
+			it('should hide the template when the detail page opens on the preview table', function() {
+				var table = { preview: true };
+				ColumnsEvent.send('ColumnsTableDetailViewDidOpen', { table: table });
+				expect( this.$template ).toHaveClass('hidden');
+			});
+
+			it('should show the template when the detail page closes on the preview table', function() {
+				var table = { preview: true };
+				this.$template.addClass('hidden');
+				ColumnsEvent.send('ColumnsTableDetailViewDidClose', { table: table });
+				expect( this.$template ).not.toHaveClass('hidden');
+			});
+
+			it('should hide the template when the detail page opens on a non-preview table', function() {
+				var table = { preview: false };;
+				ColumnsEvent.send('ColumnsTableDetailViewDidOpen', { table: table });
+				expect( this.$template ).not.toHaveClass('hidden');
+			});
+
+			it('should show the template when the detail page closes on a non-preview table', function() {
+				var table = { preview: false };;
+				this.$template.addClass('hidden');
+				ColumnsEvent.send('ColumnsTableDetailViewDidClose', { table: table });
+				expect( this.$template ).toHaveClass('hidden');
+			});
+		});
 	});
 
 	describe('Emitting Change Events', function() {

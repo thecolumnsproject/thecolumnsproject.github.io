@@ -11,7 +11,8 @@ var ROW_GROUP_SELECTOR 		= '.layout-template-row-group',
 	ROW_VALUE_SELECTOR 		= '.layout-template-row-value',
 	DRAGGING_ITEM_SELECTOR 	= '.ui-draggable-dragging',
 	EXPANDED_CLASS 			= 'expanded',
-	DROPPABLE_CLASS 		= 'droppable';
+	DROPPABLE_CLASS 		= 'droppable',
+	HIDDEN_CLASS 			= 'hidden';
 
 TemplateView = function( layout )  {
 
@@ -353,6 +354,8 @@ TemplateView.prototype._setupTemplateEvents = function() {
 	ColumnsEvent.on('ColumnsTableDidExpand', this._onTableDidExpand.bind( this ) );
 	ColumnsEvent.on('ColumnsTableWillCollapse', this._onTableWillCollapse.bind( this ) );
 	ColumnsEvent.on('ColumnsTableDidCollapse', this._onTableDidCollapse.bind( this ) );
+	ColumnsEvent.on('ColumnsTableDetailViewDidOpen', this._onTableDetailViewDidOpen.bind( this ) );
+	ColumnsEvent.on('ColumnsTableDetailViewDidClose', this._onTableDetailViewDidClose.bind( this ) );
 
 	// Listen for updates to values and groups
 	ColumnsEvent.on( 'Columns.TemplateValueView.DidChange', this._onTemplateViewDidChange.bind( this ));
@@ -426,6 +429,22 @@ TemplateView.prototype._onTableDidScroll = function( event, data ) {
 
 	// Adjust the template
 	$.Velocity.hook( this.$template, "translateY", -55 + scroll + "px" );
+};
+
+TemplateView.prototype._onTableDetailViewDidOpen = function( event, data ) {
+
+	if ( data.table.preview ) {
+		this.$template.addClass( HIDDEN_CLASS );
+	}
+
+};
+
+TemplateView.prototype._onTableDetailViewDidClose = function( event, data ) {
+
+	if ( data.table.preview ) {
+		this.$template.removeClass( HIDDEN_CLASS );
+	}
+	
 };
  
 TemplateView.prototype._onItemDidBeginDrag = function( event, data ) {

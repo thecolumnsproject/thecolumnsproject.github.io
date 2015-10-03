@@ -14,10 +14,10 @@ module.exports = {
 			host: 'http://127.0.0.1:8080',
 			path: '/public/embed-table.js',
 			desktop: {
-				'feature-table': 129
+				'feature-table': 2
 			},
 			mobile: {
-				'feature-table': 129
+				'feature-table': 2
 			}
 		},
 		debug: parseUri( window.location ).queryKey["debug"]

@@ -56,6 +56,15 @@
 	top: 134px;
 	// @include transition( transform(translateY) 0.25s);
 	z-index: $layout-index;
+
+	/* 	Styling for when the template is hidden
+	due to the table detail page opening */
+	@include transition(opacity 0.2s);
+	opacity: 1;
+	&.hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
 }
 
 .layout-template-row {

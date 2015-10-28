@@ -380,16 +380,20 @@ TemplateView.prototype._onTableDidRenderData = function( event, data ) {
 	this.$template.find('.layout-template-row').css({
 		height: data.table.tallestRowHeight()
 	});
+
+	this.$template.css({
+		top: 49 + data.table.headerHeight()
+	});
 };
 
 TemplateView.prototype._onTableWillExpand = function( event, data ) {
 
 	// Move the template down below the header
-	this.$template.velocity({
-		translateY: -55
-	}, {
-		duration: 250
-	});
+	// this.$template.velocity({
+	// 	translateY: -55
+	// }, {
+	// 	duration: 250
+	// });
 };
 
 TemplateView.prototype._onTableDidExpand = function( event, data ) {
@@ -428,7 +432,7 @@ TemplateView.prototype._onTableDidScroll = function( event, data ) {
 	// console.log('Scroll: ' + scroll);
 
 	// Adjust the template
-	$.Velocity.hook( this.$template, "translateY", -55 + scroll + "px" );
+	// $.Velocity.hook( this.$template, "translateY", -55 + scroll + "px" );
 };
 
 TemplateView.prototype._onTableDetailViewDidOpen = function( event, data ) {

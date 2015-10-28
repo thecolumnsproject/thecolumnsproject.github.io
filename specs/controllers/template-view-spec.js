@@ -1453,14 +1453,31 @@ describe('Template View', function() {
 		});
 
 		describe('Table Did Render', function() {
+			var table;
+
+			beforeEach(function() {
+				loadFixtures('embed-table.html');
+
+				table = {
+					tallestRowHeight: function() {},
+					headerHeight: function() {}
+				};
+
+				spyOn( table, 'tallestRowHeight' ).and.returnValue( 186 );
+				spyOn( table, 'headerHeight' ).and.returnValue( 90 );
+
+				$(document).trigger('ColumnsTableDidRenderData', { table: table });
+			});
 
 			it('should adjust the template height to match the tallest row once the table renders', function() {
-				var table = { tallestRowHeight: function() {} };
-				loadFixtures('embed-table.html');
-				spyOn( table, 'tallestRowHeight' ).and.returnValue( 186 );
-				$(document).trigger('ColumnsTableDidRenderData', { table: table });
+				// $(document).trigger('ColumnsTableDidRenderData', { table: table });
 				expect( this.$template.find('.layout-template-row').height() ).toBe( 186 );
 
+			});
+
+			it('should adjust the template position to relfect to table header height', function() {
+				console.log( this.$template.attr('style') );
+				expect( this.$template ).toHaveCss({ 'top': (84  + 90) + 'px' });
 			});
 		});
 

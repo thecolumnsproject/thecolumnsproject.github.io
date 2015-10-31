@@ -345,7 +345,11 @@ describe('Table', function () {
 				.toBe('aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweud');
 			expect( table.cleanColumn( 'aherhaskflqoetickdneglticoelfotied cstufidosqleidcjflawudjftoweudci aherhaskflqoetickdneglticoelfotiedcstufidosqleidcjflawudjftoweudci') )
 				.toBe('aherhaskflqoetickdneglticoelfotied cstufidosqleidcjflawudjftoweu');
-		})
+		});
+
+		it('should replace commas with dashes', function() {
+			expect( table.cleanColumn('There was a will, there was a way') ).toBe('There was a will - there was a way');
+		});
 
 	});
 

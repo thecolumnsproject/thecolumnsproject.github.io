@@ -283,6 +283,9 @@ Table.prototype._openTable = function( table_id ) {
 
 Table.prototype._setupEventListeners = function() {
 
+	// Listen for file choice
+	ColumnsEvent.on( 'Columns.UploadView.DidChooseFile', this._onFileChosen.bind( this ));
+
 	// Listen for column names parsing
 	ColumnsEvent.on( 'Columns.UploadView.DidParseColumnNamesForFile', this._onColumnNamesParsed.bind( this ));
 
@@ -297,6 +300,16 @@ Table.prototype._setupEventListeners = function() {
 
 	// Listen for layout updates
 	ColumnsEvent.on( 'Columns.Layout.DidChange', this._onLayoutUpdate.bind( this ) );
+
+};
+
+Table.prototype._onFileChosen = function( event, data ) {
+
+	// Set the file name as the initial table name,
+	// but remove the .csv extension
+	this._update({
+		title: data.file.name.replace(/.csv/, '')
+	});
 
 };
 
@@ -348,6 +361,7 @@ Table.prototype._onUploadSuccess = function( data, status, request ) {
 		category: 'table',
 		action: 'upload',
 		label: 'success',
+		description: this.title,
 		table_id: this.id
 	});
 

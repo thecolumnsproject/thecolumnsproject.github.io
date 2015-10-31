@@ -354,6 +354,21 @@ describe('Table', function () {
 
 	});
 
+	describe('Responding to File Choice', function() {
+
+		beforeEach(function() {
+			this.table = new Table();
+		});
+
+		it('should set the table title to the file name, without extension', function() {
+			var file = { name: 'test.csv' };
+			spyOn( this.table, '_update' );
+			this.table._onFileChosen( null, { file: file } );
+
+			expect( this.table._update ).toHaveBeenCalledWith({ title:  'test' });
+		});
+	});
+
 	describe('Listening for Table Events', function() {
 
 		beforeEach(function() {
@@ -560,11 +575,12 @@ describe('Table', function () {
 		});
 
 		it('should send an analytics event on table upload success', function() {
+			this.table.title = 'My Table';
 			spyOn( ColumnsAnalytics, 'send' );
 			var data = {
 				status: 'success',
 				data: {
-					table_id: 4
+					table_id: 4	
 				}
 			};
 			this.table._onUploadSuccess( data );
@@ -573,6 +589,7 @@ describe('Table', function () {
 				category: 'table',
 				action: 'upload',
 				label: 'success',
+				description: 'My Table',
 				table_id: 4
 			});
 		});

@@ -1,4 +1,5 @@
 var ColumnsEvent 		= require('./ColumnsEvent.js');
+var ColumnsAnalytics	= require('./ColumnsAnalytics.js');
 var Layout 				= require('./Layout.js');
 var Item 				= require('./Item.js');
 var config 				= require('../config.js');
@@ -343,10 +344,25 @@ Table.prototype._onUploadSuccess = function( data, status, request ) {
 		id: data.data.table_id
 	});
 
+	ColumnsAnalytics.send({
+		category: 'table',
+		action: 'upload',
+		label: 'success',
+		table_id: this.id
+	});
+
 	this._emitUploadSuccess();
 };
 
 Table.prototype._onUploadFail = function( request, status, error ) {
+
+	ColumnsAnalytics.send({
+		category: 'table',
+		action: 'upload',
+		label: 'fail',
+		description: error,
+		table_id: this.id
+	});
 
 	this._emitUploadFail();
 };

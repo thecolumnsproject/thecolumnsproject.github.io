@@ -1,4 +1,5 @@
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Item 				= require('../../javascripts/models/Item.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
@@ -486,7 +487,7 @@ describe('Table', function () {
 
 	});
 
-	xdescribe('Uploading a File', function() {
+	describe('Uploading a File', function() {
 
 		beforeEach(function() {
       		jasmine.Ajax.install();
@@ -543,6 +544,37 @@ describe('Table', function () {
 			this.table._onUploadFail( 'request', 'status', 'problemz' );
 
 			expect( this.table._emitUploadFail ).toHaveBeenCalled();
+		});
+
+		it('should send an analytics event on upload fail', function() {
+			spyOn( ColumnsAnalytics, 'send' );
+			this.table._onUploadFail( 'request', 'status', "I have failed you." )
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'table',
+				action: 'upload',
+				label: 'fail',
+				description: 'I have failed you.',
+				table_id: undefined
+			});
+		});
+
+		it('should send an analytics event on table upload success', function() {
+			spyOn( ColumnsAnalytics, 'send' );
+			var data = {
+				status: 'success',
+				data: {
+					table_id: 4
+				}
+			};
+			this.table._onUploadSuccess( data );
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'table',
+				action: 'upload',
+				label: 'success',
+				table_id: 4
+			});
 		});
 
 	});

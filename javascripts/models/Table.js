@@ -194,9 +194,6 @@ Table.prototype.cleanColumn = function( column ) {
 	// Remove any periods within columns
 	cleanColumn = cleanColumn.replace(/[.]/g, '' );
 
-	// Replace any commas with dashes
-	cleanColumn = cleanColumn.replace( ",", " -" );
-
 	// Make sure it's not too long for the DB
 	cleanColumn = cleanColumn.substring( 0, MAX_COLUMN_LENGTH );
 

@@ -150,6 +150,22 @@ describe('Table', function () {
 
 			expect( this.table._emitChange ).not.toHaveBeenCalled();
 		});
+
+		it('should allow empty strings', function() {
+			this.table.title = "hello";
+			this.table.source = "the source";
+			this.table.source_url = "http://thesource.com/hello";
+
+			this.table._update({
+				title: '',
+				source: '',
+				source_url: ''
+			});
+
+			expect( this.table.title ).toBe('');
+			expect( this.table.source ).toBe('');
+			expect( this.table.source_url ).toBe('');
+		});
 	});
 
 	describe('Emitting Events', function() {

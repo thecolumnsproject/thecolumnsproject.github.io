@@ -25,9 +25,12 @@ Table.prototype._update = function( props ) {
 
 	if ( props ) {
 		this.data = props.data || this.data;
-		this.title = props.title || this.title;
-		this.source = props.source || this.source;
-		this.source_url = props.source_url || this.source_url;
+
+		// Allow empty strings for these properties
+		this.title = typeof props.title !== 'undefined' ? props.title : this.title;
+		this.source = typeof props.source !== 'undefined' ? props.source : this.source;
+		this.source_url = typeof props.source_url !== 'undefined' ? props.source_url : this.source_url;
+
 		this.id = props.id || this.id;
 
 		if ( props.layout && props.layout instanceof Layout ) {

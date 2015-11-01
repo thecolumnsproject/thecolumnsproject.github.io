@@ -150,6 +150,7 @@ describe('Embed Details View', function() {
 		beforeEach(function() {
 			appendLoadFixtures('header.html');
 			this.embed = new EmbedDetailsView( new Table({ id: 4 }));
+			spyOn( this.embed, '_emitChange' );
 			this.embed.render();
 		});
 

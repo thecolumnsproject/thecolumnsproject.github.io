@@ -43,7 +43,8 @@ Table.prototype._update = function( props ) {
 			this.columns = this.itemsFromColumnNames( props.columns );
 		}
 
-		if ( !this.layout ) {
+		// Only create a new layout if there are columns
+		if ( !this.layout && this.columns.length ) {
 			this.layout = new Layout( { items: this.columns } );
 		}
 

@@ -1,4 +1,5 @@
 var ColumnsEvent 		= require('./ColumnsEvent.js');
+var ColumnsAnalytics	= require('./ColumnsAnalytics.js');
 var Layout 				= require('./Layout.js');
 var Item 				= require('./Item.js');
 var config 				= require('../config.js');
@@ -24,9 +25,12 @@ Table.prototype._update = function( props ) {
 
 	if ( props ) {
 		this.data = props.data || this.data;
-		this.title = props.title || this.title;
-		this.source = props.source || this.source;
-		this.source_url = props.source_url || this.source_url;
+
+		// Allow empty strings for these properties
+		this.title = typeof props.title !== 'undefined' ? props.title : this.title;
+		this.source = typeof props.source !== 'undefined' ? props.source : this.source;
+		this.source_url = typeof props.source_url !== 'undefined' ? props.source_url : this.source_url;
+
 		this.id = props.id || this.id;
 
 		if ( props.layout && props.layout instanceof Layout ) {
@@ -282,6 +286,9 @@ Table.prototype._openTable = function( table_id ) {
 
 Table.prototype._setupEventListeners = function() {
 
+	// Listen for file choice
+	ColumnsEvent.on( 'Columns.UploadView.DidChooseFile', this._onFileChosen.bind( this ));
+
 	// Listen for column names parsing
 	ColumnsEvent.on( 'Columns.UploadView.DidParseColumnNamesForFile', this._onColumnNamesParsed.bind( this ));
 
@@ -296,6 +303,16 @@ Table.prototype._setupEventListeners = function() {
 
 	// Listen for layout updates
 	ColumnsEvent.on( 'Columns.Layout.DidChange', this._onLayoutUpdate.bind( this ) );
+
+};
+
+Table.prototype._onFileChosen = function( event, data ) {
+
+	// Set the file name as the initial table name,
+	// but remove the .csv extension
+	this._update({
+		title: data.file.name.replace(/.csv/, '')
+	});
 
 };
 
@@ -343,10 +360,26 @@ Table.prototype._onUploadSuccess = function( data, status, request ) {
 		id: data.data.table_id
 	});
 
+	ColumnsAnalytics.send({
+		category: 'table',
+		action: 'upload',
+		label: 'success',
+		description: this.title,
+		table_id: this.id
+	});
+
 	this._emitUploadSuccess();
 };
 
 Table.prototype._onUploadFail = function( request, status, error ) {
+
+	ColumnsAnalytics.send({
+		category: 'table',
+		action: 'upload',
+		label: 'fail',
+		description: error,
+		table_id: this.id
+	});
 
 	this._emitUploadFail();
 };

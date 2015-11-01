@@ -1,4 +1,5 @@
 var ColumnsEvent 		= require('../../javascripts/models/ColumnsEvent.js');
+var ColumnsAnalytics 	= require('../../javascripts/models/ColumnsAnalytics.js');
 var Item 				= require('../../javascripts/models/Item.js');
 var Table 				= require('../../javascripts/models/Table.js');
 var Layout 				= require('../../javascripts/models/Layout.js');
@@ -148,6 +149,22 @@ describe('Table', function () {
 			this.table._update();
 
 			expect( this.table._emitChange ).not.toHaveBeenCalled();
+		});
+
+		it('should allow empty strings', function() {
+			this.table.title = "hello";
+			this.table.source = "the source";
+			this.table.source_url = "http://thesource.com/hello";
+
+			this.table._update({
+				title: '',
+				source: '',
+				source_url: ''
+			});
+
+			expect( this.table.title ).toBe('');
+			expect( this.table.source ).toBe('');
+			expect( this.table.source_url ).toBe('');
 		});
 	});
 
@@ -353,6 +370,21 @@ describe('Table', function () {
 
 	});
 
+	describe('Responding to File Choice', function() {
+
+		beforeEach(function() {
+			this.table = new Table();
+		});
+
+		it('should set the table title to the file name, without extension', function() {
+			var file = { name: 'test.csv' };
+			spyOn( this.table, '_update' );
+			this.table._onFileChosen( null, { file: file } );
+
+			expect( this.table._update ).toHaveBeenCalledWith({ title:  'test' });
+		});
+	});
+
 	describe('Listening for Table Events', function() {
 
 		beforeEach(function() {
@@ -486,7 +518,7 @@ describe('Table', function () {
 
 	});
 
-	xdescribe('Uploading a File', function() {
+	describe('Uploading a File', function() {
 
 		beforeEach(function() {
       		jasmine.Ajax.install();
@@ -543,6 +575,39 @@ describe('Table', function () {
 			this.table._onUploadFail( 'request', 'status', 'problemz' );
 
 			expect( this.table._emitUploadFail ).toHaveBeenCalled();
+		});
+
+		it('should send an analytics event on upload fail', function() {
+			spyOn( ColumnsAnalytics, 'send' );
+			this.table._onUploadFail( 'request', 'status', "I have failed you." )
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'table',
+				action: 'upload',
+				label: 'fail',
+				description: 'I have failed you.',
+				table_id: undefined
+			});
+		});
+
+		it('should send an analytics event on table upload success', function() {
+			this.table.title = 'My Table';
+			spyOn( ColumnsAnalytics, 'send' );
+			var data = {
+				status: 'success',
+				data: {
+					table_id: 4	
+				}
+			};
+			this.table._onUploadSuccess( data );
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'table',
+				action: 'upload',
+				label: 'success',
+				description: 'My Table',
+				table_id: 4
+			});
 		});
 
 	});

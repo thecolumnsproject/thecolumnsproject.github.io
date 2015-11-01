@@ -377,8 +377,18 @@ TemplateView.prototype._onTemplateUpload = function( event, data ) {
 };
 
 TemplateView.prototype._onTableDidRenderData = function( event, data ) {
+	var table = data.table,
+		isExpanded = this.$preview.hasClass( EXPANDED_CLASS );
+
 	this.$template.find('.layout-template-row').css({
-		height: data.table.tallestRowHeight()
+		height: table.tallestRowHeight()
+	});
+
+	this.$template.css({
+		top: table.collapsedHeaderHeight( true ) + 82
+		// top: isExpanded ?
+		// 	 table.headerHeight( true ) + 82 - 30 : // Remove the extra padding on expanded headers 
+		// 	 table.headerHeight( true ) + 82
 	});
 };
 
@@ -386,7 +396,7 @@ TemplateView.prototype._onTableWillExpand = function( event, data ) {
 
 	// Move the template down below the header
 	this.$template.velocity({
-		translateY: -55
+		translateY: -53
 	}, {
 		duration: 250
 	});
@@ -428,7 +438,7 @@ TemplateView.prototype._onTableDidScroll = function( event, data ) {
 	// console.log('Scroll: ' + scroll);
 
 	// Adjust the template
-	$.Velocity.hook( this.$template, "translateY", -55 + scroll + "px" );
+	$.Velocity.hook( this.$template, "translateY", -53 + scroll + "px" );
 };
 
 TemplateView.prototype._onTableDetailViewDidOpen = function( event, data ) {

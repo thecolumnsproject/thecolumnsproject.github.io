@@ -1453,14 +1453,31 @@ describe('Template View', function() {
 		});
 
 		describe('Table Did Render', function() {
+			var table;
+
+			beforeEach(function() {
+				loadFixtures('embed-table.html');
+
+				table = {
+					tallestRowHeight: function() {},
+					collapsedHeaderHeight: function() {}
+				};
+
+				spyOn( table, 'tallestRowHeight' ).and.returnValue( 186 );
+				spyOn( table, 'collapsedHeaderHeight' ).and.returnValue( 90 );
+
+				$(document).trigger('ColumnsTableDidRenderData', { table: table });
+			});
 
 			it('should adjust the template height to match the tallest row once the table renders', function() {
-				var table = { tallestRowHeight: function() {} };
-				loadFixtures('embed-table.html');
-				spyOn( table, 'tallestRowHeight' ).and.returnValue( 186 );
-				$(document).trigger('ColumnsTableDidRenderData', { table: table });
+				// $(document).trigger('ColumnsTableDidRenderData', { table: table });
 				expect( this.$template.find('.layout-template-row').height() ).toBe( 186 );
 
+			});
+
+			it('should adjust the template position to relfect to table header height', function() {
+				console.log( this.$template.attr('style') );
+				expect( this.$template ).toHaveCss({ 'top': (82  + 90) + 'px' });
 			});
 		});
 
@@ -1476,7 +1493,7 @@ describe('Template View', function() {
 				$(document).trigger('ColumnsTableDidScroll');
 
 				expect( $.fn.scrollTop ).toHaveBeenCalled();
-				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-67px' );
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-65px' );
 			});
 
 			it('should have a maximum scroll position', function() {
@@ -1484,7 +1501,7 @@ describe('Template View', function() {
 				$(document).trigger('ColumnsTableDidScroll');
 
 				expect( $.fn.scrollTop ).toHaveBeenCalled();
-				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-55px' );
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-53px' );
 			});
 
 			it('should have a minimum scroll position', function() {
@@ -1492,7 +1509,7 @@ describe('Template View', function() {
 				$(document).trigger('ColumnsTableDidScroll');
 
 				expect( $.fn.scrollTop ).toHaveBeenCalled();
-				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-75px' );
+				expect( $.Velocity.hook( this.$template, "translateY" ) ).toBe( '-73px' );
 			});
 		});
 

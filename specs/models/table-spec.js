@@ -137,6 +137,24 @@ describe('Table', function () {
 			expect( this.table.id ).toBeUndefined();
 		});
 
+		it('should create a default layout if there are available columns', function() {
+			var columns = [ "hi", "there" ];
+			this.table._update({
+				columns: columns
+			});
+
+			expect( this.table.layout ).toBeDefined();
+		});
+
+		it('should not create a default layout if there are no available columns', function() {
+			var columns = [];
+			this.table._update({
+				columns: columns
+			});
+
+			expect( this.table.layout ).toBeUndefined();
+		});
+
 		it('should emit an update event', function() {
 			spyOn( this.table, '_emitChange' );
 			this.table._update( {} );

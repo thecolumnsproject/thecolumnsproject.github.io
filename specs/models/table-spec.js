@@ -403,6 +403,20 @@ describe('Table', function () {
 		});
 	});
 
+	describe('Responding to Sample Data Choice', function() {
+
+		beforeEach(function() {
+			this.table = new Table();
+		});
+
+		it('should set the table title to the sample data title', function() {
+			spyOn( this.table, '_update' );
+			this.table._onSampleDataChosen( null, { name: 'Sample Data' } );
+
+			expect( this.table._update ).toHaveBeenCalledWith({ title: 'Sample Data' } );
+		});
+	});
+
 	describe('Listening for Table Events', function() {
 
 		beforeEach(function() {

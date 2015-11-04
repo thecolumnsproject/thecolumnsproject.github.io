@@ -84,7 +84,9 @@ UploadView.prototype._setupEventListeners = function() {
 	// Listen for clicks on the upload button
 	this.$upload.find( UPLOAD_BUTTON_SELECTOR ).on( 'click', this._onUploadClick.bind( this ) );
 
-	this.$upload.find( SAMPLE_DATA_BUTTON_SELECTION ).on( 'click', this._onSampleDataClick.bind( this ) );
+	this.$upload.find( SAMPLE_DATA_BUTTON_SELECTION ).on( 'click', function( event ) {
+		this._onSampleDataClick( event );
+	}.bind( this ));
 
 	// Listen for file choices from the file picker
 	this.$upload.find('input[type="file"]').on( 'change', this._onFileChoice.bind( this ) );
@@ -124,33 +126,12 @@ UploadView.prototype._onSampleDataClick = function( event ) {
 
 	// Download the sample data file
 	$.get('/data/sample-data.csv', this._onSampleDataDownloaded.bind( this ) );
-		// var blob = new Blob( [data], { type : 'text/csv' } );
-
-		// var formData = new FormData();
-
-		// // Add any table meta-data to the form
-		// formData.append( "data", blob );
-		// formData.append( "title", "" );
-		// formData.append( "source", "" );
-		// formData.append( "source_url", "" );
-		// formData.append( "columns", "_,_,_,_,_,_,_" );
-
-		// $.ajax({
-	 //        url: config.api.host + '/columns/table',  //Server script to process data
-	 //        type: 'POST',
-	 //        contentType: false,
-	 //        processData: false,
-	 //        data: formData,
-	 //        success: function( data ) {
-	 //        	console.log( data );
-	 //        }
-	 //    });
-	// });
 
 	this._setLoading( true, '', 'Preparing sample data...' );
 
 	ColumnsEvent.send('Columns.UploadView.DidChooseSampleData', {
-		uploadView: 	this
+		uploadView: 	this,
+		name: 'Sample Data'
 	});
 
 	// Track this click
@@ -164,13 +145,6 @@ UploadView.prototype._onSampleDataClick = function( event ) {
 UploadView.prototype._onSampleDataDownloaded = function( data ) {
 	var blob, reader, csvString;
 
-	// var reader = new window.FileReader();
-	// reader.readAsDataURL( blob ); 
-	// reader.onloadend = function() {
-	//     base64data = reader.result;                
-	//     console.log( base64data );
-	// }
-
 	blob = new Blob( [data], { type : 'text/csv' } );
 	blob.lastModifiedDate = new Date();
 	blob.name = "Sample Data.csv";
@@ -181,9 +155,6 @@ UploadView.prototype._onSampleDataDownloaded = function( data ) {
 	    csvString = String.fromCharCode.apply(null, new Uint8Array(reader.result));
 		this._parseStringFromBlob( csvString, blob );
 	}.bind( this );
-
-	// var csv = Papa.unparse( blob )
-	// this._parseFile( blob );
 };
 
 UploadView.prototype._onFileChoice = function( event ) {

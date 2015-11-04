@@ -187,3 +187,12 @@ p.columns-upload-message {
 	margin-bottom: 40px;
 	max-width: 320px;
 }
+
+.columns-upload-sample-data-button {
+	
+	// Override the default teriary button color
+	color: #fff;
+
+	// Add space between this and upload button
+	margin-left: 16px;
+}

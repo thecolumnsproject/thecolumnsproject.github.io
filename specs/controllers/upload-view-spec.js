@@ -234,29 +234,76 @@ describe('Upload View', function() {
 	});
 
 	describe('Parsing a CSV', function() {
+		var step, complete;
 
 		beforeEach(function() {
-			spyOn( Papa, 'parse' );
+			Papa.parse = function( item, options ) {
+				step = options.step;
+				complete = options.complete;
+			};
+			spyOn( Papa, 'parse' ).and.callThrough();
+			// spyOn( Papa.parse, 'step' ).and.callThrough();
+			// spyOn( Papa.parse, 'complete' ).and.callThrough();
 		});
 
-		describe('Using Papa Parse', function() {
+		describe('Parsing a File', function() {
+			var file;
+
+			beforeEach(function() {
+				file = { name: 'test.csv' };
+			});
 
 			it('should pass the file', function() {
-				var file = { name: 'test.csv' };
 				this.upload._parseFile( file );
 				expect( Papa.parse.calls.argsFor(0)[0] ).toEqual( file );
 			});
 
-			xit('should pass the correct step callback', function() {
-				var file = { name: 'test.csv' };
-				var step = function( row, handle ) { this._parseRow( row, handle, fileName ) }.bind( this.upload );
+			it('should parse each row', function() {
+				spyOn( this.upload, '_parseRow' );
 				this.upload._parseFile( file );
-				expect( Papa.parse.calls.argsFor(0)[1].step ).toEqual( step );
+				step( 'row', 'handle' );
+
+				expect( this.upload._parseRow ).toHaveBeenCalledWith( 'row', 'handle', file.name );
 			});
 
-			xit('should pass the correct complete callback', function() {
+			it('should pass the correct complete callback', function() {
+				spyOn( this.upload, '_onParseComplete' );
+				this.upload._parseFile( file );
+				complete( 'results' );
 
+				expect( this.upload._onParseComplete ).toHaveBeenCalledWith( 'results', file );
 			});
+		});
+
+		describe('Parsing a String from a Blob', function() {
+			var string, blob;
+
+			beforeEach(function() {
+				string = 'hi,there';
+				blob = { name: 'name' };
+			});
+
+			it('should pass the string', function() {
+				this.upload._parseStringFromBlob( string, blob );
+				expect( Papa.parse.calls.argsFor(0)[0] ).toEqual( string );
+			});
+
+			it('should parse each row', function() {
+				spyOn( this.upload, '_parseRow' );
+				this.upload._parseStringFromBlob( string, blob );
+				step( 'row', 'handle' );
+
+				expect( this.upload._parseRow ).toHaveBeenCalledWith( 'row', 'handle', blob.name );
+			});
+
+			it('should pass the correct complete callback', function() {
+				spyOn( this.upload, '_onParseComplete' );
+				this.upload._parseStringFromBlob( string, blob );
+				complete( 'results' );
+
+				expect( this.upload._onParseComplete ).toHaveBeenCalledWith( 'results', blob );
+			});
+
 		});
 
 		describe('Parsing a Row', function() {
@@ -466,6 +513,60 @@ describe('Upload View', function() {
 				category: 'file',
 				action: 'chosen',
 			});
+		});
+	});
+
+	describe('Sample Data', function() {
+
+		beforeEach(function( done ) {
+			this.upload.render();
+			done();
+		});
+
+		it('should respond to clicks on the sample data button', function( done ) {
+			spyOn( this.upload, '_onSampleDataClick' );
+			$('.columns-upload-sample-data-button').trigger('click');
+			setTimeout(function() {
+				expect( this.upload._onSampleDataClick ).toHaveBeenCalled();
+				done();
+			}.bind( this ), 0);
+		});
+
+		it('should download the sample data', function() {
+			spyOn( $, 'get' );
+			this.upload._onSampleDataClick();
+			expect( $.get.calls.mostRecent().args[0].indexOf("/data/global-city-populations.csv") ).toBe( 0 );
+		});
+
+		it('should set the loading message', function() {
+			spyOn( this.upload, '_setLoading' );
+			this.upload._onSampleDataClick();
+			expect( this.upload._setLoading ).toHaveBeenCalledWith( true, '', 'Preparing sample data...' );
+		});
+
+		it('should emit an event', function() {
+			spyOn( ColumnsEvent, 'send' );
+			this.upload._onSampleDataClick();
+			expect( ColumnsEvent.send ).toHaveBeenCalledWith('Columns.UploadView.DidChooseSampleData', {
+				uploadView: this.upload,
+				title: "World's Most Populous Cities",
+				source: "United Nations, 2014"
+			});
+		});
+
+		it('should send an analytics event', function() {
+			this.upload._onSampleDataClick();
+
+			expect( ColumnsAnalytics.send ).toHaveBeenCalledWith({
+				category: 'button',
+				action: 'click',
+				label: 'sample data'
+			});
+		});
+
+		xit('should convert downloaded data to blob and csv string', function() {
+			this.upload._onSampleDataDownloaded( 'hi,there' );
+			expect(  )
 		});
 	});
 });

@@ -290,6 +290,9 @@ Table.prototype._setupEventListeners = function() {
 	// Listen for file choice
 	ColumnsEvent.on( 'Columns.UploadView.DidChooseFile', this._onFileChosen.bind( this ));
 
+	// Listen for sample data choice
+	ColumnsEvent.on( 'Columns.UploadView.DidChooseSampleData', this._onSampleDataChosen.bind( this ));
+
 	// Listen for column names parsing
 	ColumnsEvent.on( 'Columns.UploadView.DidParseColumnNamesForFile', this._onColumnNamesParsed.bind( this ));
 
@@ -315,6 +318,15 @@ Table.prototype._onFileChosen = function( event, data ) {
 		title: data.file.name.replace(/.csv/, '')
 	});
 
+};
+
+Table.prototype._onSampleDataChosen = function( event, data ) {
+
+	// Set the passed on name as the initial table name,
+	this._update({
+		title: data.title,
+		source: data.source
+	});
 };
 
 Table.prototype._onColumnNamesParsed = function( event, data ) {

@@ -125,13 +125,14 @@ UploadView.prototype._onUploadClick = function( event ) {
 UploadView.prototype._onSampleDataClick = function( event ) {
 
 	// Download the sample data file
-	$.get('/data/sample-data.csv', this._onSampleDataDownloaded.bind( this ) );
+	$.get('/data/global-city-populations.csv', this._onSampleDataDownloaded.bind( this ) );
 
 	this._setLoading( true, '', 'Preparing sample data...' );
 
 	ColumnsEvent.send('Columns.UploadView.DidChooseSampleData', {
 		uploadView: 	this,
-		name: 'Sample Data'
+		title: "World's Most Populous Cities",
+		source: "United Nations, 2014"
 	});
 
 	// Track this click
@@ -152,7 +153,7 @@ UploadView.prototype._onSampleDataDownloaded = function( data ) {
 	reader = new FileReader();
 	reader.readAsArrayBuffer( blob ); 
 	reader.onloadend = function() {
-	    csvString = String.fromCharCode.apply(null, new Uint8Array(reader.result));
+	    csvString = decodeURIComponent(escape(String.fromCharCode.apply(null, new Uint8Array(reader.result))));
 		this._parseStringFromBlob( csvString, blob );
 	}.bind( this );
 };

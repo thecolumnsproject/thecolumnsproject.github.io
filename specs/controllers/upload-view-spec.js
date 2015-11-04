@@ -535,7 +535,7 @@ describe('Upload View', function() {
 		it('should download the sample data', function() {
 			spyOn( $, 'get' );
 			this.upload._onSampleDataClick();
-			expect( $.get.calls.mostRecent().args[0].indexOf("/data/sample-data.csv") ).toBe( 0 );
+			expect( $.get.calls.mostRecent().args[0].indexOf("/data/global-city-populations.csv") ).toBe( 0 );
 		});
 
 		it('should set the loading message', function() {
@@ -549,7 +549,8 @@ describe('Upload View', function() {
 			this.upload._onSampleDataClick();
 			expect( ColumnsEvent.send ).toHaveBeenCalledWith('Columns.UploadView.DidChooseSampleData', {
 				uploadView: this.upload,
-				name: 'Sample Data'
+				title: "World's Most Populous Cities",
+				source: "United Nations, 2014"
 			});
 		});
 

@@ -411,9 +411,15 @@ describe('Table', function () {
 
 		it('should set the table title to the sample data title', function() {
 			spyOn( this.table, '_update' );
-			this.table._onSampleDataChosen( null, { name: 'Sample Data' } );
+			this.table._onSampleDataChosen( null, {
+				title: 'Sample Data',
+				source: "The source"
+			});
 
-			expect( this.table._update ).toHaveBeenCalledWith({ title: 'Sample Data' } );
+			expect( this.table._update ).toHaveBeenCalledWith({
+				title: 'Sample Data',
+				source: "The source"
+			});
 		});
 	});
 

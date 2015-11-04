@@ -324,7 +324,8 @@ Table.prototype._onSampleDataChosen = function( event, data ) {
 
 	// Set the passed on name as the initial table name,
 	this._update({
-		title: data.name
+		title: data.title,
+		source: data.source
 	});
 };
 

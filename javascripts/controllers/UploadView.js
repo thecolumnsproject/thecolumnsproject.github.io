@@ -124,6 +124,13 @@ UploadView.prototype._onUploadClick = function( event ) {
 
 UploadView.prototype._onSampleDataClick = function( event ) {
 
+	// Track this click
+	ColumnsAnalytics.send({
+		category: 'button',
+		action: 'click',
+		label: 'sample data'
+	});
+
 	// Download the sample data file
 	$.get('/data/global-city-populations.csv', this._onSampleDataDownloaded.bind( this ) );
 
@@ -133,13 +140,6 @@ UploadView.prototype._onSampleDataClick = function( event ) {
 		uploadView: 	this,
 		title: "World's Most Populous Cities",
 		source: "United Nations, 2014"
-	});
-
-	// Track this click
-	ColumnsAnalytics.send({
-		category: 'button',
-		action: 'click',
-		label: 'sample data'
 	});
 };
 
@@ -168,6 +168,11 @@ UploadView.prototype._onFileChoice = function( event ) {
 		this._setLoading( true, '', 'Uploading file...' );
 	}
 
+	ColumnsAnalytics.send({
+		category: 'file',
+		action: 'chosen'
+	});
+
 	// Announce file upload event
 	// Alert any listeners that the group has changed
 	// var columnsEvent = new CustomEvent( 'Columns.UploadView.DidChooseFile', {
@@ -183,11 +188,6 @@ UploadView.prototype._onFileChoice = function( event ) {
 	ColumnsEvent.send('Columns.UploadView.DidChooseFile', {
 		uploadView: 	this,
 		file: 			file
-	});
-
-	ColumnsAnalytics.send({
-		category: 'file',
-		action: 'chosen'
 	});
 };
 

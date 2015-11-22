@@ -34,7 +34,7 @@ $layout-column-width: 278px;
 }
 
 .layout-column {
-	height: 24px;
+	// height: 24px;
 	// @include flex-basis(24px);
 	@include flex-shrink(0);
 	width: $layout-column-width;
@@ -49,6 +49,12 @@ $layout-column-width: 278px;
 	@include align-items(center);
 	cursor: pointer;
 	@include transition(opacity 0.2s, border-color 0.2s);
+}
+
+.layout-column:hover:not(.inactive) {
+	// Add some indication that columns can be dragged
+	border-color: $primary-color;
+	cursor: move;
 }
 
 .layout-column.dragging {

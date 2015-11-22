@@ -24,7 +24,10 @@ module.exports = {
 			value: '#3a3a3a'
 		},{
 			property: 'font-size',
-			value: '24px'
+			value: '20px'
+		}, {
+			property: 'text-align',
+			value: 'right'
 		}]	
 	],
 	layouts: [

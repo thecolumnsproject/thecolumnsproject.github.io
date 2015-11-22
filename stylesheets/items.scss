@@ -46,7 +46,7 @@ $layout-column-width: 278px;
 	background-color: $gray-lightest;
 	color: $gray-75;
 	@include display(flex);
-	@include align-items(center);
+	// @include align-items(center);
 	cursor: pointer;
 	@include transition(opacity 0.2s, border-color 0.2s);
 }
@@ -77,6 +77,12 @@ $layout-column-width: 278px;
 	font-size: 20px;
 	color: $gray-30;
 	margin-right: $layout-column-spacing;
+}
+
+.layout-columns-text {
+	// Move the text down a bit so that the first line
+	// is always centered with the icon next to it
+	margin-top: 3px;
 }
 
 .layout-column.inactive {

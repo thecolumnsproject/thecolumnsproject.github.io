@@ -51,15 +51,17 @@ $layout-column-width: 278px;
 	@include transition(opacity 0.2s, border-color 0.2s);
 }
 
-.layout-column:hover:not(.inactive) {
+.layout-column:hover {
 	// Add some indication that columns can be dragged
+	// border-color: fade-out($primary-color, .6);
 	border-color: $primary-color;
 	cursor: move;
 }
 
 .layout-column.dragging {
-	border-color: $primary-color;
-	color: $gray-20;
+	// border-color: $primary-color;
+	// color: $gray-20;
+	background: none;
 }
 
 .layout-column.ui-draggable-dragging {
@@ -86,19 +88,30 @@ $layout-column-width: 278px;
 }
 
 .layout-column.inactive {
-	color: $gray-20;
-	cursor: pointer;
+	// color: $gray-20;
+	// cursor: pointer;
+
+	// Make the background empty to create the appearance
+	// that the original token has been removed
+	background: none;
 
 	.layout-column-icon {
-		color: $gray-10;
+		// color: $gray-10;
+		color: $primary-color;
+	}
+
+	&:hover {
+		// make sure it's clear that these cannot be dragged
+		// border-color: $gray-lighter;
+		cursor: pointer;
 	}
 }
 
 .layout-column.selected {
-	// border-color: fade-out($primary-color, .6);
-	.layout-column-icon {
-		color: $secondary-color;
-	}
+	border-color: $primary-color;
+	// .layout-column-icon {
+	// 	color: $primary-color;
+	// }
 }
 
 .layout-column.placeholder {

@@ -253,7 +253,7 @@ TemplateView.prototype.removeValue = function( valueView ) {
 // Animate the dragging helper to the position of its respective item
 TemplateView.prototype.removeDraggingValue = function( callback ) {
 	var $helper = $('.ui-draggable-dragging.ui-draggable-handle')
-		$clone = $helper.clone(),
+		$clone = $helper.clone()/*.removeClass('ui-draggable-handle'), // Remove handle class so that */
 		$item = $('#columns .layout-column').filter(function( i, item ) {
 			// console.log($( item ).text().trim());
 			return $clone.text().trim() === $( item ).text().trim();

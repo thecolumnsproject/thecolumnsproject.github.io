@@ -27,6 +27,7 @@ before_deploy:
   - rm -R specs
   - rm -R stylesheets
   - rm -R vendor
+  - gem install mime-types -v 2.6.2
 deploy:
   - provider: s3
     access_key_id: AKIAJ7BART2KY7QI45GA

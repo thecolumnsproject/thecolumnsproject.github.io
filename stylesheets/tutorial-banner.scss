@@ -1,0 +1,73 @@
+@import 'variables';
+@import 'keyframes';
+@import 'z-index';
+@import 'bower_components/bourbon/dist/bourbon';
+
+$tutorial-banner-height: 80px;
+
+#editor.tutorial-banner__active {
+	// Add bottom padding to offset the space
+	// taken by the tutorial banner
+	@include calc(height, '100% - ( 120px + #{$tutorial-banner-height} )');
+}
+
+#tutorial-banner {
+
+	// Lock to the bottom of the screen
+	position: absolute;
+    bottom: 0px;
+    left: 0;
+
+    // Make full width and reasonable height
+    width: 100%;
+    height: $tutorial-banner-height;
+
+    // Center the text vertically and horizontally
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // Bring in front of the editor phone
+    z-index: $tutorial-banner-index;
+
+    // Visuals
+    border-top: 1px solid $border-color;
+    background: white;
+
+    // Add some space between the bulb and the text
+    svg {
+		margin-right: $spacing * 2;
+    }
+}
+
+$close-button-size:  36px;
+.tutorial-banner-close-button {
+
+	// Make it a circle
+	height: $close-button-size;
+	width: $close-button-size;
+	border-radius: 50%;
+
+	// Center the icon
+	@include display(flex);
+	@include justify-content(center);
+	@include align-items(center);
+
+	// Give the icon a sublte color
+	color: $gray-30;
+
+	// Make it behave like a button on hover and active
+	cursor: pointer;
+	&:hover {
+		background: rgba(0,0,0,0.04);
+	}
+
+	&:active, &:focus {
+		background: rgba(0,0,0,0.08);
+	}
+
+	// Position it all the way to the right
+	position: absolute;
+	right: $spacing * 3;
+	top: ( $tutorial-banner-height - $close-button-size ) / 2;
+}

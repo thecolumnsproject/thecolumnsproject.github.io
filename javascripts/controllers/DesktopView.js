@@ -33,6 +33,7 @@ DesktopView.prototype.render = function() {
 	this.upload.render();
 
 	this._setupAnalytics();
+	this._setupEvents();
 	this._emitRender();
 
 	// Allow for a development mode
@@ -51,6 +52,44 @@ DesktopView.prototype._emitRender = function() {
 	ColumnsEvent.send( 'Columns.DesktopView.DidRender', {
 		desktopView: this
 	});
+};
+
+// Temporary hack!!! to test whether people use the tutorials
+DesktopView.prototype._setupEvents = function() {
+
+	// Track clicks on the tutorial banner link
+	this.$desktop.find(".tutorial-videos-link").click(function() {
+		ColumnsAnalytics.send({
+			category: 'link',
+			action: 'click',
+			label: 'tutorial banner'
+		});
+	});
+
+	// Track closes of the tutorial banner
+	this.$desktop.find(".tutorial-banner-close-button").click(function() {
+
+		// First actually close the banner
+		this.$desktop.find("#tutorial-banner").css({ "display": "none" });
+		$('#editor').removeClass('tutorial-banner__active');
+
+		ColumnsAnalytics.send({
+			category: 'button',
+			action: 'click',
+			label: 'close tutorial banner'
+		});
+
+		// SUPER HACK
+		// Manually change the height of the embed table
+		// -- if it's expanded --
+		// when banner is hidden
+		var $tableContainer = $('#layout .columns-table-container');
+		$tableContainer.css({
+			height: $tableContainer.height() + 80
+		});
+
+	}.bind( this ));
+
 };
 
 DesktopView.prototype._setupAnalytics = function() {
@@ -79,6 +118,8 @@ DesktopView.prototype._setupAnalytics = function() {
 			});
 		}
 	});
+
+
 };
 
 module.exports = DesktopView;

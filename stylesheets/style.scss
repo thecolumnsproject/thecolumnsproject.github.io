@@ -117,3 +117,25 @@ a.columns-button {
 	}
 }
 
+a.columns-link {
+	color: $primary-color;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+a.columns-link.columns-link--with-arrow:after {
+	content: '';
+
+	// Give some shape to the arrow
+	display: inline-block;
+	width: 6px;
+    height: 6px;
+
+	// Position to the right of the link text
+	margin-left: 4px;
+
+	// Use the angle svg as the background image
+    background-image: url('/images/tiny-angle-right.svg');
+
+}
+

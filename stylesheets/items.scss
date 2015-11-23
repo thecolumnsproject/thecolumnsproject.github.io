@@ -34,7 +34,7 @@ $layout-column-width: 278px;
 }
 
 .layout-column {
-	height: 24px;
+	// height: 24px;
 	// @include flex-basis(24px);
 	@include flex-shrink(0);
 	width: $layout-column-width;
@@ -46,14 +46,27 @@ $layout-column-width: 278px;
 	background-color: $gray-lightest;
 	color: $gray-75;
 	@include display(flex);
-	@include align-items(center);
+	// @include align-items(center);
 	cursor: pointer;
 	@include transition(opacity 0.2s, border-color 0.2s);
+
+	// Add a slight box shadow to make these look more
+	// interactive and indicate draggability
+	// box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+	border-color: $border-color;
+}
+
+.layout-column:hover {
+	// Add some indication that columns can be dragged
+	// border-color: fade-out($primary-color, .6);
+	border-color: $primary-color;
+	cursor: move;
 }
 
 .layout-column.dragging {
-	border-color: $primary-color;
-	color: $gray-20;
+	// border-color: $primary-color;
+	// color: $gray-20;
+	background: none;
 }
 
 .layout-column.ui-draggable-dragging {
@@ -73,20 +86,39 @@ $layout-column-width: 278px;
 	margin-right: $layout-column-spacing;
 }
 
+.layout-columns-text {
+	// Move the text down a bit so that the first line
+	// is always centered with the icon next to it
+	margin-top: 3px;
+}
+
 .layout-column.inactive {
-	color: $gray-20;
-	cursor: pointer;
+	// color: $gray-20;
+	// cursor: pointer;
+
+	// Make the background empty to create the appearance
+	// that the original token has been removed
+	background: none;
+	border-color: $border-color;
+	box-shadow: none;
 
 	.layout-column-icon {
-		color: $gray-10;
+		// color: $gray-10;
+		color: $primary-color;
+	}
+
+	&:hover {
+		// make sure it's clear that these cannot be dragged
+		// border-color: $gray-lighter;
+		cursor: pointer;
 	}
 }
 
 .layout-column.selected {
-	// border-color: fade-out($primary-color, .6);
-	.layout-column-icon {
-		color: $secondary-color;
-	}
+	border-color: $primary-color;
+	// .layout-column-icon {
+	// 	color: $primary-color;
+	// }
 }
 
 .layout-column.placeholder {

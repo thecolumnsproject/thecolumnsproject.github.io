@@ -65,7 +65,7 @@ Layout.prototype.getStyleForData = function( data ) {
 	if ( styleOptions.length ) {
 		return styleOptions[ 0 ];
 	} else {
-		return null;
+		return styleOptions;
 	}
 };
 

@@ -79,7 +79,7 @@ Style.prototype.get = function( property ) {
 
 	// Loop through each property until we find a match
 	this.styles.forEach(function( style, i ) {
-		if ( style.property === property ) {
+		if ( style && style.property === property ) {
 			value = style.value
 		}
 	});
@@ -105,16 +105,18 @@ Style.prototype._mergeCSS = function( css ) {
 	// Replace an existing property anytime a new one matches it
 	// and then remove that new property from the array.
 	// At the end, append any remaining new properties to the merged styles array.
-	css.forEach(function( newStyle, newIndex ) {
-		for ( oldIndex = 0 ; oldIndex < oldIndices ; oldIndex++ ) {
-			if ( this.styles[ oldIndex ].property == newStyle.property ) {
-				this.styles[ oldIndex ] = newStyle;
-				newStyles.splice( newStyles.indexOf( newStyle ), 1 );
-				break;
+	if ( this.styles ) {
+		css.forEach(function( newStyle, newIndex ) {
+			for ( oldIndex = 0 ; oldIndex < oldIndices ; oldIndex++ ) {
+				if ( this.styles[ oldIndex ].property == newStyle.property ) {
+					this.styles[ oldIndex ] = newStyle;
+					newStyles.splice( newStyles.indexOf( newStyle ), 1 );
+					break;
+				}
 			}
-		}
 
-	}.bind( this ));
+		}.bind( this ));
+	}
 
 	// Add all remaining new styles to the styles array
 	this.styles = this.styles.concat( newStyles );

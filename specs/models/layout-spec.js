@@ -289,7 +289,7 @@ describe('Layout', function() {
 			expect( this.layout.getStyleForData("first_item") ).toEqual( DEFAULTS.styles[ 0 ] );
 			expect( this.layout.getStyleForData("second_item") ).toEqual( DEFAULTS.styles[ 1 ] );
 			expect( this.layout.getStyleForData("third_item") ).toBeNull();
-			expect( this.layout.getStyleForData("fourth_item") ).toBeNull();
+			expect( this.layout.getStyleForData("fourth_item") ).toEqual([]);
 		});
 	});
 
